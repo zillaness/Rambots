@@ -1,5 +1,16 @@
 {
+  "pkg": "@rambots/design-system",
+  "globalName": "Rambots",
+  "shape": "package",
   "projectId": "428890f4-b0da-4b4c-861c-f5c920b104cd",
-  "projectName": "Rambots Brand Guidelines",
-  "shape": "package"
+  "buildCmd": "npm run build",
+  "cssEntry": "dist/styles.css",
+  "docsDir": "docs/components",
+  "guidelinesGlob": ["docs/*.md"],
+  "readmeHeader": ".design-sync/conventions.md",
+  "runtimeFontPrefixes": ["Helvetica"],
+  "overrides": {
+    "Button": { "cardMode": "column" },
+    "Input": { "cardMode": "column" }
+  }
 }

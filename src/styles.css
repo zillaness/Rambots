@@ -1,0 +1,357 @@
+/* ==========================================================================
+   Rambots Design System — tokens + component styles
+   Team 2204 "The Rambots"
+   Brand: Rambot Red #A31F36 · Rambot Yellow #F4A81C · Helvetica Neue
+   ========================================================================== */
+
+:root {
+  /* ---- Brand core ------------------------------------------------------- */
+  --rb-red: #a31f36;          /* Rambot Red — primary / school color        */
+  --rb-yellow: #f4a81c;       /* Rambot Yellow — accent, logo, highlights   */
+
+  /* ---- Red ramp --------------------------------------------------------- */
+  --rb-red-900: #4f0e19;
+  --rb-red-800: #6d1424;
+  --rb-red-700: #83182c;
+  --rb-red-600: #a31f36;      /* = brand red */
+  --rb-red-500: #bb3a50;
+  --rb-red-300: #d98394;
+  --rb-red-200: #ecc0c9;
+  --rb-red-100: #f7e3e7;
+  --rb-red-050: #fbf1f3;
+
+  /* ---- Yellow ramp ------------------------------------------------------ */
+  --rb-yellow-900: #6b4808;
+  --rb-yellow-800: #9c6708;
+  --rb-yellow-700: #c9860a;
+  --rb-yellow-600: #f4a81c;   /* = brand yellow */
+  --rb-yellow-500: #f6b843;
+  --rb-yellow-300: #fbd68c;
+  --rb-yellow-200: #fde7bd;
+  --rb-yellow-100: #fef4de;
+  --rb-yellow-050: #fffaf0;
+
+  /* ---- Neutrals (warm gray) -------------------------------------------- */
+  --rb-ink: #1c1a1b;
+  --rb-gray-900: #241f21;
+  --rb-gray-700: #4a4446;
+  --rb-gray-600: #635b5e;
+  --rb-gray-500: #7c7477;
+  --rb-gray-400: #a49ca0;
+  --rb-gray-300: #cfc9cb;
+  --rb-gray-200: #e5e1e2;
+  --rb-gray-100: #f2eff0;
+  --rb-gray-050: #faf8f8;
+  --rb-paper: #ffffff;
+
+  /* ---- Semantic --------------------------------------------------------- */
+  --rb-primary: var(--rb-red-600);
+  --rb-primary-hover: var(--rb-red-700);
+  --rb-primary-active: var(--rb-red-800);
+  --rb-on-primary: #ffffff;
+
+  --rb-accent: var(--rb-yellow-600);
+  --rb-accent-hover: var(--rb-yellow-700);
+  --rb-on-accent: var(--rb-ink);
+
+  --rb-bg: var(--rb-paper);
+  --rb-bg-muted: var(--rb-gray-050);
+  --rb-surface: var(--rb-paper);
+  --rb-border: var(--rb-gray-200);
+  --rb-border-strong: var(--rb-gray-300);
+
+  --rb-text: var(--rb-ink);
+  --rb-text-muted: var(--rb-gray-600);
+  --rb-text-subtle: var(--rb-gray-500);
+
+  --rb-success: #2e7d4f;
+  --rb-success-bg: #e7f4ec;
+  --rb-warning: var(--rb-yellow-700);
+  --rb-warning-bg: var(--rb-yellow-100);
+  --rb-danger: var(--rb-red-600);
+  --rb-danger-bg: var(--rb-red-100);
+  --rb-info: #2a5b8c;
+  --rb-info-bg: #e7eef6;
+
+  --rb-focus-ring: var(--rb-yellow-600);
+
+  /* ---- Typography ------------------------------------------------------- */
+  --rb-font-sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif;
+  --rb-font-heading: var(--rb-font-sans);
+
+  --rb-text-display: 48px;
+  --rb-text-h1: 36px;
+  --rb-text-h2: 28px;
+  --rb-text-h3: 22px;
+  --rb-text-h4: 18px;
+  --rb-text-body-lg: 18px;
+  --rb-text-body: 16px;
+  --rb-text-body-sm: 14px;
+  --rb-text-caption: 12.5px;
+
+  --rb-weight-regular: 400;
+  --rb-weight-medium: 500;
+  --rb-weight-bold: 700;
+
+  --rb-leading-tight: 1.1;
+  --rb-leading-snug: 1.3;
+  --rb-leading-normal: 1.55;
+
+  /* ---- Spacing (4px base) ---------------------------------------------- */
+  --rb-space-1: 4px;
+  --rb-space-2: 8px;
+  --rb-space-3: 12px;
+  --rb-space-4: 16px;
+  --rb-space-5: 24px;
+  --rb-space-6: 32px;
+  --rb-space-7: 48px;
+  --rb-space-8: 64px;
+
+  /* ---- Radius ----------------------------------------------------------- */
+  --rb-radius-sm: 4px;
+  --rb-radius-md: 8px;
+  --rb-radius-lg: 14px;
+  --rb-radius-pill: 999px;
+
+  /* ---- Elevation -------------------------------------------------------- */
+  --rb-shadow-sm: 0 1px 2px rgba(28, 26, 27, 0.08), 0 1px 3px rgba(28, 26, 27, 0.06);
+  --rb-shadow-md: 0 4px 12px rgba(28, 26, 27, 0.10);
+  --rb-shadow-lg: 0 12px 32px rgba(28, 26, 27, 0.14);
+
+  --rb-duration: 140ms;
+  --rb-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Base element defaults for anything opting in via the root class. */
+.rb-root {
+  font-family: var(--rb-font-sans);
+  color: var(--rb-text);
+  font-size: var(--rb-text-body);
+  line-height: var(--rb-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Button
+   ========================================================================== */
+.rb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rb-space-2);
+  font-family: var(--rb-font-sans);
+  font-weight: var(--rb-weight-bold);
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: var(--rb-radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--rb-duration) var(--rb-ease),
+    color var(--rb-duration) var(--rb-ease),
+    border-color var(--rb-duration) var(--rb-ease),
+    box-shadow var(--rb-duration) var(--rb-ease);
+}
+.rb-btn:focus-visible {
+  outline: 3px solid var(--rb-focus-ring);
+  outline-offset: 2px;
+}
+.rb-btn[disabled],
+.rb-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* sizes */
+.rb-btn--sm { height: 32px; padding: 0 var(--rb-space-3); font-size: var(--rb-text-body-sm); }
+.rb-btn--md { height: 40px; padding: 0 var(--rb-space-4); font-size: var(--rb-text-body); }
+.rb-btn--lg { height: 48px; padding: 0 var(--rb-space-5); font-size: var(--rb-text-body-lg); }
+.rb-btn--block { display: flex; width: 100%; }
+
+/* variants */
+.rb-btn--primary { background: var(--rb-primary); color: var(--rb-on-primary); }
+.rb-btn--primary:hover { background: var(--rb-primary-hover); }
+.rb-btn--primary:active { background: var(--rb-primary-active); }
+
+.rb-btn--secondary { background: var(--rb-accent); color: var(--rb-on-accent); }
+.rb-btn--secondary:hover { background: var(--rb-accent-hover); }
+
+.rb-btn--outline {
+  background: transparent;
+  color: var(--rb-primary);
+  border-color: var(--rb-primary);
+}
+.rb-btn--outline:hover { background: var(--rb-red-050); }
+
+.rb-btn--ghost { background: transparent; color: var(--rb-text); }
+.rb-btn--ghost:hover { background: var(--rb-gray-100); }
+
+/* ==========================================================================
+   Badge
+   ========================================================================== */
+.rb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--rb-font-sans);
+  font-weight: var(--rb-weight-bold);
+  font-size: var(--rb-text-caption);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 5px 10px;
+  border-radius: var(--rb-radius-pill);
+  border: 1px solid transparent;
+  text-transform: uppercase;
+}
+.rb-badge__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.rb-badge--red { background: var(--rb-red-600); color: #fff; }
+.rb-badge--yellow { background: var(--rb-yellow-600); color: var(--rb-ink); }
+.rb-badge--neutral { background: var(--rb-gray-200); color: var(--rb-gray-700); }
+.rb-badge--success { background: var(--rb-success-bg); color: var(--rb-success); }
+.rb-badge--outline { background: transparent; color: var(--rb-primary); border-color: var(--rb-primary); }
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+.rb-card {
+  background: var(--rb-surface);
+  border: 1px solid var(--rb-border);
+  border-radius: var(--rb-radius-lg);
+  box-shadow: var(--rb-shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.rb-card__accent { height: 6px; background: var(--rb-red-600); }
+.rb-card__accent--yellow { background: var(--rb-yellow-600); }
+.rb-card__body { padding: var(--rb-space-5); display: flex; flex-direction: column; gap: var(--rb-space-2); }
+.rb-card__eyebrow {
+  font-size: var(--rb-text-caption);
+  font-weight: var(--rb-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rb-primary);
+}
+.rb-card__title { font-size: var(--rb-text-h3); font-weight: var(--rb-weight-bold); line-height: var(--rb-leading-snug); margin: 0; }
+.rb-card__text { font-size: var(--rb-text-body); color: var(--rb-text-muted); margin: 0; }
+.rb-card__footer { padding: var(--rb-space-4) var(--rb-space-5); border-top: 1px solid var(--rb-border); display: flex; gap: var(--rb-space-3); align-items: center; }
+
+/* feature card — brand red surface */
+.rb-card--feature { background: var(--rb-red-600); border-color: var(--rb-red-700); }
+.rb-card--feature .rb-card__eyebrow { color: var(--rb-yellow-600); }
+.rb-card--feature .rb-card__title { color: #fff; }
+.rb-card--feature .rb-card__text { color: var(--rb-red-100); }
+.rb-card--feature .rb-card__footer { border-top-color: var(--rb-red-700); }
+
+/* ==========================================================================
+   Input / Field
+   ========================================================================== */
+.rb-field { display: flex; flex-direction: column; gap: 6px; font-family: var(--rb-font-sans); }
+.rb-field__label { font-size: var(--rb-text-body-sm); font-weight: var(--rb-weight-medium); color: var(--rb-text); }
+.rb-field__req { color: var(--rb-primary); margin-left: 2px; }
+.rb-input {
+  font-family: inherit;
+  font-size: var(--rb-text-body);
+  color: var(--rb-text);
+  background: var(--rb-paper);
+  border: 1px solid var(--rb-border-strong);
+  border-radius: var(--rb-radius-md);
+  padding: 0 var(--rb-space-3);
+  height: 40px;
+  width: 100%;
+  transition: border-color var(--rb-duration) var(--rb-ease), box-shadow var(--rb-duration) var(--rb-ease);
+}
+.rb-input::placeholder { color: var(--rb-text-subtle); }
+.rb-input:focus {
+  outline: none;
+  border-color: var(--rb-primary);
+  box-shadow: 0 0 0 3px var(--rb-red-100);
+}
+.rb-input[disabled] { background: var(--rb-gray-100); color: var(--rb-text-subtle); cursor: not-allowed; }
+.rb-field--error .rb-input { border-color: var(--rb-danger); }
+.rb-field--error .rb-input:focus { box-shadow: 0 0 0 3px var(--rb-red-100); }
+.rb-field__help { font-size: var(--rb-text-caption); color: var(--rb-text-muted); }
+.rb-field__help--error { color: var(--rb-danger); }
+
+/* ==========================================================================
+   Alert
+   ========================================================================== */
+.rb-alert {
+  display: flex;
+  gap: var(--rb-space-3);
+  align-items: flex-start;
+  padding: var(--rb-space-4);
+  border-radius: var(--rb-radius-md);
+  border: 1px solid transparent;
+  border-left-width: 4px;
+  font-family: var(--rb-font-sans);
+}
+.rb-alert__icon { flex: none; width: 20px; height: 20px; display: grid; place-items: center; font-weight: var(--rb-weight-bold); }
+.rb-alert__content { display: flex; flex-direction: column; gap: 2px; }
+.rb-alert__title { font-weight: var(--rb-weight-bold); font-size: var(--rb-text-body); margin: 0; }
+.rb-alert__text { font-size: var(--rb-text-body-sm); color: var(--rb-text-muted); margin: 0; }
+.rb-alert--info { background: var(--rb-info-bg); border-color: var(--rb-info); color: var(--rb-info); }
+.rb-alert--success { background: var(--rb-success-bg); border-color: var(--rb-success); color: var(--rb-success); }
+.rb-alert--warning { background: var(--rb-warning-bg); border-color: var(--rb-warning); color: var(--rb-yellow-900); }
+.rb-alert--error { background: var(--rb-danger-bg); border-color: var(--rb-danger); color: var(--rb-red-800); }
+
+/* ==========================================================================
+   NavBar
+   ========================================================================== */
+.rb-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rb-space-5);
+  padding: var(--rb-space-3) var(--rb-space-5);
+  background: var(--rb-red-600);
+  color: #fff;
+  font-family: var(--rb-font-sans);
+}
+.rb-navbar__brand { display: flex; align-items: center; gap: var(--rb-space-2); }
+.rb-navbar__links { display: flex; align-items: center; gap: var(--rb-space-5); list-style: none; margin: 0; padding: 0; }
+.rb-navbar__link {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: var(--rb-text-body-sm);
+  font-weight: var(--rb-weight-medium);
+  transition: color var(--rb-duration) var(--rb-ease);
+}
+.rb-navbar__link:hover { color: var(--rb-yellow-600); }
+.rb-navbar__link--active { color: var(--rb-yellow-600); }
+.rb-navbar__actions { display: flex; align-items: center; gap: var(--rb-space-3); }
+
+/* ==========================================================================
+   Logo
+   ========================================================================== */
+.rb-logo { display: inline-flex; align-items: center; gap: var(--rb-space-3); font-family: var(--rb-font-sans); }
+.rb-logo__mark { flex: none; display: grid; place-items: center; }
+.rb-logo__word {
+  font-weight: var(--rb-weight-bold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.rb-logo--onRed .rb-logo__word { color: var(--rb-yellow-600); }
+.rb-logo__word--ink { color: var(--rb-ink); }
+.rb-logo__word--red { color: var(--rb-red-600); }
+
+/* ==========================================================================
+   Foundations — ColorPalette
+   ========================================================================== */
+.rb-palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--rb-space-3); font-family: var(--rb-font-sans); }
+.rb-swatch { border: 1px solid var(--rb-border); border-radius: var(--rb-radius-md); overflow: hidden; background: var(--rb-paper); }
+.rb-swatch__chip { height: 72px; }
+.rb-swatch__meta { padding: var(--rb-space-2) var(--rb-space-3); display: flex; flex-direction: column; gap: 1px; }
+.rb-swatch__name { font-size: var(--rb-text-body-sm); font-weight: var(--rb-weight-bold); }
+.rb-swatch__hex { font-size: var(--rb-text-caption); color: var(--rb-text-muted); font-variant-numeric: tabular-nums; text-transform: uppercase; }
+.rb-swatch__note { font-size: var(--rb-text-caption); color: var(--rb-text-subtle); }
+
+/* ==========================================================================
+   Foundations — TypeSpecimen
+   ========================================================================== */
+.rb-typescale { display: flex; flex-direction: column; gap: var(--rb-space-4); font-family: var(--rb-font-sans); }
+.rb-typescale__row { display: flex; align-items: baseline; gap: var(--rb-space-4); border-bottom: 1px solid var(--rb-border); padding-bottom: var(--rb-space-3); }
+.rb-typescale__label { flex: none; width: 96px; font-size: var(--rb-text-caption); color: var(--rb-text-subtle); text-transform: uppercase; letter-spacing: 0.04em; }
+.rb-typescale__sample { color: var(--rb-text); margin: 0; }
