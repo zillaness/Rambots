@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fasteners — FIRST Robotics Study Sheet v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b27;
+  --surface2: #1c2133;
+  --border: #263050;
+  --accent: #f97316;
+  --accent2: #3b82f6;
+  --accent3: #22c55e;
+  --accent4: #a855f7;
+  --accent5: #06b6d4;
+  --warn: #ef4444;
+  --yellow: #eab308;
+  --text: #dde3f0;
+  --muted: #7c8aaa;
+  --dim: #3d4a6a;
+  --head: #ffffff;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --disp: 'Bebas Neue', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.65;}
+a{color:var(--accent2);text-decoration:none;}
+
+/* ── PAGE HEADER ── */
+.page-header{background:var(--surface);border-bottom:3px solid var(--accent);padding:2rem 2.5rem 1.5rem;display:flex;align-items:flex-end;gap:2rem;position:relative;overflow:hidden;}
+.page-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(249,115,22,.03) 18px,rgba(249,115,22,.03) 36px);}
+.hdr-title{position:relative;}
+.hdr-kicker{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.3rem;}
+h1{font-family:var(--disp);font-size:clamp(2.8rem,6vw,5.5rem);color:var(--head);letter-spacing:.04em;line-height:.9;}
+h1 span{color:var(--accent);}
+.hdr-sub{font-size:13px;color:var(--muted);margin-top:.5rem;font-style:italic;}
+.hdr-badge{margin-left:auto;position:relative;text-align:right;font-family:var(--mono);font-size:10px;color:var(--dim);line-height:2;}
+
+/* ── TOC ── */
+.toc{background:var(--surface2);border-left:4px solid var(--accent2);margin:1.5rem 2rem;padding:1rem 1.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.2rem 2rem;}
+.toc-title{grid-column:1/-1;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--accent2);text-transform:uppercase;margin-bottom:.5rem;}
+.toc a{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:.4rem;padding:.1rem 0;transition:color .15s;}
+.toc a:hover{color:var(--accent);}
+.toc a::before{content:'▸';color:var(--dim);font-size:10px;}
+
+/* ── WRAPPER ── */
+.wrap{max-width:1440px;margin:0 auto;padding:0 2rem 4rem;}
+
+/* ── SECTIONS ── */
+.section{margin-top:2.5rem;padding-top:1rem;border-top:2px solid var(--border);}
+.section-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.2rem;}
+.sec-num{font-family:var(--disp);font-size:2.6rem;color:var(--dim);line-height:1;min-width:2.5rem;}
+h2{font-family:var(--disp);font-size:1.75rem;color:var(--head);letter-spacing:.06em;line-height:1;}
+h2 .a{color:var(--accent);}
+h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin:1.1rem 0 .45rem;}
+h3.b{color:var(--accent2);}h3.g{color:var(--accent3);}h3.p{color:var(--accent4);}h3.c{color:var(--accent5);}h3.r{color:var(--warn);}h3.y{color:var(--yellow);}
+p{margin-bottom:.65rem;}
+ul,ol{padding-left:1.4rem;font-size:13px;line-height:1.9;}
+li{margin-bottom:.1rem;}
+strong{color:var(--head);}
+code{font-family:var(--mono);font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:2px;color:var(--accent3);}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start;}
+.ga{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem;}
+.ga2{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:.9rem 1rem;}
+.card.o{border-left:3px solid var(--accent);}
+.card.b{border-left:3px solid var(--accent2);}
+.card.g{border-left:3px solid var(--accent3);}
+.card.p{border-left:3px solid var(--accent4);}
+.card.c{border-left:3px solid var(--accent5);}
+.card.r{border-left:3px solid var(--warn);}
+.card.y{border-left:3px solid var(--yellow);}
+.ct{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.45rem;}
+.card.o .ct{color:var(--accent);}
+.card.b .ct{color:var(--accent2);}
+.card.g .ct{color:var(--accent3);}
+.card.p .ct{color:var(--accent4);}
+.card.c .ct{color:var(--accent5);}
+.card.r .ct{color:var(--warn);}
+.card.y .ct{color:var(--yellow);}
+
+/* ── CALLOUTS ── */
+.co{background:var(--surface2);border-left:4px solid var(--accent);padding:.75rem 1rem;margin:.7rem 0;border-radius:0 3px 3px 0;font-size:13px;}
+.co.tip{border-color:var(--accent3);}
+.co.warn{border-color:var(--warn);}
+.co.info{border-color:var(--accent2);}
+.co.p{border-color:var(--accent4);}
+.co.y{border-color:var(--yellow);}
+.co.c{border-color:var(--accent5);}
+.cl{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;font-weight:600;text-transform:uppercase;display:block;margin-bottom:.2rem;}
+.co .cl{color:var(--accent);}
+.co.tip .cl{color:var(--accent3);}
+.co.warn .cl{color:var(--warn);}
+.co.info .cl{color:var(--accent2);}
+.co.p .cl{color:var(--accent4);}
+.co.y .cl{color:var(--yellow);}
+.co.c .cl{color:var(--accent5);}
+
+/* ── TABLES ── */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:.7rem 0;}
+th{background:var(--surface2);color:var(--muted);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:.45rem .65rem;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:.4rem .65rem;border-bottom:1px solid rgba(38,48,80,.5);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.015);}
+
+/* ── MONO BLOCK ── */
+.mb{font-family:var(--mono);font-size:11.5px;background:var(--surface2);border:1px solid var(--border);padding:.7rem 1rem;border-radius:3px;margin:.5rem 0;line-height:1.9;white-space:pre-wrap;}
+
+/* ── TAGS ── */
+.tag{display:inline-block;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.07em;padding:2px 6px;border-radius:2px;text-transform:uppercase;white-space:nowrap;}
+.to{background:rgba(249,115,22,.15);color:var(--accent);}
+.tb{background:rgba(59,130,246,.15);color:var(--accent2);}
+.tg{background:rgba(34,197,94,.15);color:var(--accent3);}
+.tr{background:rgba(239,68,68,.15);color:var(--warn);}
+.tp{background:rgba(168,85,247,.15);color:var(--accent4);}
+.ty{background:rgba(234,179,8,.15);color:var(--yellow);}
+.tc{background:rgba(6,182,212,.15);color:var(--accent5);}
+
+/* ── CHECKLIST ── */
+.cl-list{list-style:none;}
+.cl-list li{padding:.3rem 0;display:flex;gap:.6rem;border-bottom:1px solid rgba(38,48,80,.4);font-size:13px;}
+.cl-list li::before{content:'□';color:var(--dim);font-size:14px;flex-shrink:0;line-height:1.4;}
+
+/* ── HISTORY QUOTE ── */
+.quote{border-left:4px solid var(--accent4);padding:.8rem 1.2rem;margin:.8rem 0;font-style:italic;color:var(--muted);font-size:13px;}
+.quote cite{display:block;margin-top:.3rem;font-style:normal;font-family:var(--mono);font-size:10px;color:var(--dim);}
+
+/* ── PRINT ── */
+@media print{
+  body{background:white;color:#111;font-size:11px;}
+  .page-header{background:#f5f5f5;border-bottom:3px solid #f97316;}
+  h1,h2{color:#111;}
+  .card,.co,.mb{background:#f9f9f9;border-color:#ccc;}
+  th{background:#eee;}
+  .section{page-break-inside:avoid;}
+}
+
+@media(max-width:900px){
+  .g2,.g3{grid-template-columns:1fr;}
+  .page-header{flex-direction:column;align-items:flex-start;}
+  .hdr-badge{margin-left:0;text-align:left;}
+  .wrap{padding:0 1rem 3rem;}
+  .toc{margin:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="hdr-title">
+    <div class="hdr-kicker">FIRST Robotics · Mechanical Systems · Complete Reference</div>
+    <h1>FAST<span>ENERS</span></h1>
+    <div class="hdr-sub">From the Industrial Revolution to your robot pit — threads, drives, grades, cutting, torque, locking &amp; everything else</div>
+  </div>
+  <div class="hdr-badge">Study / Reference Sheet v2<br>23 Sections · Print &amp; Laminate<br>Keep one in the kit box</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">Contents — each idea builds on the last</div>
+  <a href="#s1">1. Why Threads Matter — History</a>
+  <a href="#s2">2. Thread Forms</a>
+  <a href="#s3">3. Thread Anatomy &amp; Terms</a>
+  <a href="#s4">4. Gauge Numbering (#0–#14)</a>
+  <a href="#s5">5. Reading Thread Callouts</a>
+  <a href="#s6">6. Screw vs Bolt vs Stud</a>
+  <a href="#s7">7. Cutting Threads</a>
+  <a href="#s8">8. Tapping Guide &amp; Starrett Charts</a>
+  <a href="#s9">9. Hole Types &amp; 3D Print Sizing</a>
+  <a href="#s10">10. Head Styles — When to Use Each</a>
+  <a href="#s11">11. Drive Types</a>
+  <a href="#s12">12. Fastener Types by Function</a>
+  <a href="#s13">13. Washers — Types &amp; Why</a>
+  <a href="#s14">14. Bolt Grades &amp; Strength</a>
+  <a href="#s15">15. Nuts, Inserts &amp; Captives</a>
+  <a href="#s16">16. Torque, Preload &amp; Bolt Stretching</a>
+  <a href="#s17">17. Preventing Loosening &amp; Reuse Limits</a>
+  <a href="#s18">18. Rivets</a>
+  <a href="#s19">19. Force Directions</a>
+  <a href="#s20">20. Field Checks &amp; Pit Protocol</a>
+  <a href="#s21">21. Wood Fasteners</a>
+  <a href="#s22">22. Fasteners in CAD</a>
+  <a href="#s23">23. Which Fastener When?</a>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════════
+  §1  WHY THREADS MATTER — HISTORY
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-header"><div class="sec-num">01</div><h2>WHY THREADS <span class="a">MATTER</span> — HISTORY</h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>The Most Important Invention Nobody Talks About</h3>
+      <p>Before standardized threads, every bolt was a custom part. If a nut came from one workshop, it probably wouldn't fit a bolt from another. Machines broke, and parts couldn't be replaced. Manufacturing was slow, expensive, and deeply unreliable.</p>
+      <p>This wasn't just inconvenient — it was the fundamental bottleneck preventing large-scale industry from existing at all.</p>
+
+      <h3 class="p">Joseph Whitworth — 1841</h3>
+      <p>In 1841, British engineer <strong>Joseph Whitworth</strong> surveyed the screws in use across British workshops and found nearly every one was different. He proposed a single standard: a 55° thread form with defined pitches for each diameter. Parliament adopted it. For the first time, a nut made in Birmingham would fit a bolt made in Manchester.</p>
+      <div class="quote">
+        "The standard of measurement which has been neglected is that of perfect accuracy of workmanship."
+        <cite>— Joseph Whitworth, 1840</cite>
+      </div>
+      <p>This was the <strong>British Standard Whitworth (BSW)</strong> — the world's first national fastener standard. It still exists today (you'll see it on old British motorcycles and equipment).</p>
+
+      <h3 class="b">William Sellers — 1864 (The American Answer)</h3>
+      <p>American engineer William Sellers proposed a simpler system for the US: a <strong>60° thread angle</strong> (easier to manufacture than Whitworth's 55°), with flat crests and roots (easier to measure). The Franklin Institute adopted it in 1864 as the US Standard Thread — the ancestor of today's <strong>Unified National (UN)</strong> thread system used in all modern SAE fasteners.</p>
+    </div>
+    <div>
+      <h3 class="g">How Threads Enabled the Industrial Revolution</h3>
+      <p>The impact of standardized fasteners cascades through all of industrial history. Here's the chain:</p>
+
+      <div class="card g" style="margin-bottom:.7rem;">
+        <div class="ct">Water Wheels → Belt Drives → Lathes</div>
+        <p>Early factories used water wheels. Power was transmitted by long leather belts (called "buffalo belts" — often made from buffalo hide) running through the ceiling of a factory, with pulleys dropping power to individual machines. The lathe — a machine that spins material and cuts it — became the critical tool for making precision cylindrical parts.</p>
+      </div>
+
+      <div class="card b" style="margin-bottom:.7rem;">
+        <div class="ct">Lathes → Precision → Repeatability</div>
+        <p>A lathe could cut precise threads. A machine with a precise leadscrew could cut threads on another leadscrew. <strong>Precision bootstrapped itself</strong> — each precise machine could make more precise machines. This is called "scraping and lapping" up a standard — you can create a more accurate reference than any of your tools, using only those tools, through a process of comparison and correction.</p>
+      </div>
+
+      <div class="card o" style="margin-bottom:.7rem;">
+        <div class="ct">Precision → Standardized Parts → Steam Engine</div>
+        <p>James Watt's steam engine was only possible because of precise cylinder boring (done by John Wilkinson's boring machine). That boring machine used precision leadscrew technology. The pistons, valves, and fittings required standardized fasteners. Without threads and precision machining, the steam engine was physically impossible to build reliably.</p>
+      </div>
+
+      <div class="card p">
+        <div class="ct">The Big Picture</div>
+        <p>Standardized threads → interchangeable parts → factory assembly lines → mass production → the modern world. Every FRC robot you build is downstream of this chain. The reason you can order an M5×0.8 bolt from any supplier and know it will fit any M5 nut is because of Whitworth in 1841 and the standardization movement he started.</p>
+      </div>
+
+      <div class="co info" style="margin-top:.8rem;">
+        <span class="cl">Modern Standards</span>
+        Today's systems: <strong>ISO Metric</strong> (global standard, 60°), <strong>Unified National</strong> — UNC/UNF (USA/Canada/UK, 60°), and legacy systems like Whitworth (55°), ACME, and pipe threads. FIRST Robotics primarily uses metric and Unified National fasteners.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §2  THREAD FORMS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header"><div class="sec-num">02</div><h2>THREAD <span class="a">FORMS</span></h2></div>
+  <p>The "thread form" is the cross-sectional profile shape of the thread. Different forms exist for different purposes — power transmission, sealing, strength, or ease of manufacture.</p>
+
+  <div class="ga">
+    <div class="card o">
+      <div class="ct">Unified National (UN) / ISO Metric — 60°</div>
+      <p>The most common thread form in the world. <strong>60° included angle</strong>, with flat (or slightly rounded) crests and roots. UN is the SAE standard (UNC coarse, UNF fine). ISO Metric uses the identical 60° geometry but specifies pitch in mm. These two forms are <em>geometrically the same shape</em> — just different sizes and pitching systems.</p>
+      <p><span class="tag to">★ What 99% of your FRC bolts use</span></p>
+    </div>
+
+    <div class="card b">
+      <div class="ct">Whitworth (BSW / BSF) — 55°</div>
+      <p><strong>55° included angle</strong>, with rounded crests and roots. The original Whitworth standard. Slightly stronger root due to rounding. You'll encounter this on vintage British equipment, some motorcycles, and old tools. BSW = British Standard Whitworth (coarse). BSF = British Standard Fine. <em>Not interchangeable with UN or ISO threads even if they appear close in size.</em></p>
+    </div>
+
+    <div class="card g">
+      <div class="ct">ACME — 29°</div>
+      <p><strong>29° included angle</strong>, wide flat top and bottom. Designed for <strong>power transmission</strong> — lead screws, vises, jacks, anything converting rotation to linear motion. The wide, flat profile handles high axial loads better than 60° threads. Easier to engage under load. You'll see ACME on drill press quills, milling machine leadscrews, and large clamps.</p>
+    </div>
+
+    <div class="card p">
+      <div class="ct">Trapezoidal (ISO TR) — 30°</div>
+      <p>The metric equivalent of ACME. <strong>30° included angle</strong>. Used in machine tool leadscrews and linear actuators in metric countries. Same concept as ACME — optimized for power transmission, not clamping.</p>
+    </div>
+
+    <div class="card y">
+      <div class="ct">Buttress — 45°/0°</div>
+      <p>Asymmetric thread: one face is 45°, the other is nearly vertical (7° or 0°). Designed to handle <strong>very high loads in one direction only</strong>. The steep face carries the load; the shallow face is just for retraction. Used in gun breeches, hydraulic cylinders, and quick-release mechanisms where force is always in one direction.</p>
+    </div>
+
+    <div class="card r">
+      <div class="ct">Square Thread — 0°</div>
+      <p>Perfectly flat, square thread faces — <strong>no angle at all</strong>. The most efficient thread for power transmission (no radial force component), but very difficult and expensive to cut. Cannot be tightened with a standard die easily. Used in high-precision linear stages and old machine tools. Rarely encountered in modern practice.</p>
+    </div>
+
+    <div class="card c">
+      <div class="ct">NPT — National Pipe Taper — 60°</div>
+      <p>Tapered thread — the diameter increases along the thread, creating a wedge seal when tightened. <strong>Designed to seal, not clamp.</strong> The interference of the taper creates a pressure-tight joint. Requires Teflon tape (PTFE tape) or pipe dope to fully seal. 1° 47' taper per side. Used in all pneumatic plumbing, hydraulics, and gas lines. Common on FRC pneumatic systems.</p>
+      <p><span class="tag tr">Not interchangeable with structural threads</span></p>
+    </div>
+
+    <div class="card o">
+      <div class="ct">UNR / UNJ — Rounded Roots</div>
+      <p>Variants of the UN standard with <strong>rounded roots</strong> instead of flat. This reduces stress concentration at the thread root, improving <strong>fatigue life</strong> significantly. UNJ is the aerospace standard (MIL-spec). You likely won't buy these at a hardware store — they're for high-cycle, safety-critical applications. Good to know they exist when reading aerospace specs.</p>
+    </div>
+  </div>
+
+  <div class="co tip" style="margin-top:.8rem;">
+    <span class="cl">For FRC: Only UN/ISO and NPT Matter Day-to-Day</span>
+    UN/ISO for all structural fasteners. NPT for pneumatic plumbing. ACME if you're building a lead-screw linear actuator. Everything else is educational context.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §3  THREAD ANATOMY & TERMS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header"><div class="sec-num">03</div><h2>THREAD ANATOMY <span class="a">&amp; TERMS</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <!-- SVG Thread Diagram -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1rem;text-align:center;">
+        <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="220" fill="#161b27" rx="3"/>
+          <!-- Axis -->
+          <line x1="20" y1="110" x2="480" y2="110" stroke="#263050" stroke-width="1" stroke-dasharray="4,3"/>
+          <!-- Major diam lines -->
+          <line x1="40" y1="50" x2="460" y2="50" stroke="#f97316" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <line x1="40" y1="170" x2="460" y2="170" stroke="#f97316" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <!-- Minor diam lines -->
+          <line x1="40" y1="76" x2="460" y2="76" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="40" y1="144" x2="460" y2="144" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4,4"/>
+          <!-- Pitch diam line -->
+          <line x1="40" y1="63" x2="460" y2="63" stroke="#22c55e" stroke-width="0.8" stroke-dasharray="3,5"/>
+          <line x1="40" y1="157" x2="460" y2="157" stroke="#22c55e" stroke-width="0.8" stroke-dasharray="3,5"/>
+          <!-- Thread profile top -->
+          <polyline points="55,76 75,50 115,50 135,76 165,50 205,50 225,76 255,50 295,50 315,76 345,50 385,50 405,76 425,50 445,76"
+            fill="none" stroke="#dde3f0" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Thread profile bottom -->
+          <polyline points="55,144 75,170 115,170 135,144 165,170 205,170 225,144 255,170 295,170 315,144 345,170 385,170 405,144 425,170 445,144"
+            fill="none" stroke="#dde3f0" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Pitch arrow -->
+          <line x1="75" y1="192" x2="135" y2="192" stroke="#22c55e" stroke-width="1.5"/>
+          <polygon points="135,189 142,192 135,195" fill="#22c55e"/>
+          <polygon points="75,189 68,192 75,195" fill="#22c55e"/>
+          <text x="105" y="207" fill="#22c55e" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">PITCH</text>
+          <!-- Labels -->
+          <text x="455" y="46" fill="#f97316" font-size="9" font-family="IBM Plex Mono" text-anchor="end">MAJOR ⌀</text>
+          <text x="455" y="72" fill="#3b82f6" font-size="9" font-family="IBM Plex Mono" text-anchor="end">MINOR ⌀</text>
+          <text x="455" y="60" fill="#22c55e" font-size="9" font-family="IBM Plex Mono" text-anchor="end">PITCH ⌀</text>
+          <text x="93" y="40" fill="#e2e8f0" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">CREST</text>
+          <text x="134" y="90" fill="#7c8aaa" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">ROOT</text>
+          <!-- Angle indicator -->
+          <line x1="75" y1="50" x2="135" y2="76" stroke="#a855f7" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="135" y1="76" x2="165" y2="50" stroke="#a855f7" stroke-width="1" stroke-dasharray="2,2"/>
+          <text x="230" y="30" fill="#a855f7" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">60° FLANK ANGLE (UN/ISO)</text>
+        </svg>
+        <div style="font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:5px;">Thread cross-section — 60° UN/ISO form</div>
+      </div>
+    </div>
+
+    <div>
+      <table>
+        <tr><th>Term</th><th>Definition &amp; Why It Matters</th></tr>
+        <tr>
+          <td><strong style="color:var(--accent)">Major Diameter</strong></td>
+          <td>The <em>largest</em> diameter — measured across the crests of an external thread (bolt OD). This is the "nominal" size. A ¼" bolt has a major diameter of ≈0.250". An M8 bolt has a major diameter of 8.0mm.</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--accent2)">Minor Diameter</strong></td>
+          <td>The <em>smallest</em> diameter — measured at the roots of an external thread. Also called <em>root diameter</em> or <em>core diameter</em>. This is the cross-section that carries tensile load — the weakest point. This is approximately the tap drill size.</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--accent3)">Pitch Diameter</strong></td>
+          <td>The imaginary cylinder where thread thickness = gap between threads. This is the "functional" diameter used for tolerance and fit calculations. Thread wires measure this. Critical for manufacturing — tolerance is specified here.</td>
+        </tr>
+        <tr>
+          <td><strong>Pitch (metric)</strong></td>
+          <td>Distance in <em>millimeters</em> between adjacent thread crests. M8×1.25 has a 1.25mm pitch. Smaller pitch = finer thread.</td>
+        </tr>
+        <tr>
+          <td><strong>TPI (imperial)</strong></td>
+          <td>Threads Per Inch — the reciprocal of pitch. ¼-20 has 20 threads per inch (pitch = 1/20" = 0.050"). Higher TPI = finer thread.</td>
+        </tr>
+        <tr>
+          <td><strong>Lead</strong></td>
+          <td>Linear advance per full revolution. For <em>single-start</em> threads: lead = pitch. For <em>multi-start</em> threads: lead = pitch × number of starts. Multi-start threads advance faster per turn (used in pens, bottle caps, quick-release).</td>
+        </tr>
+        <tr>
+          <td><strong>Flank Angle</strong></td>
+          <td>Half the included angle of the thread cross-section. 30° for UN/ISO (60° included). 27.5° for Whitworth. The angle determines how much radial force is created when axial load is applied.</td>
+        </tr>
+        <tr>
+          <td><strong>Crest</strong></td>
+          <td>The peak (top) of the thread. Often slightly truncated — exact form matters for tolerance class.</td>
+        </tr>
+        <tr>
+          <td><strong>Root</strong></td>
+          <td>The valley (bottom) of the thread. <strong>Where fatigue cracks initiate under cyclic loading.</strong> Rounded roots (UNR, UNJ) significantly improve fatigue life. This is why you don't want threads in the shear plane of a joint.</td>
+        </tr>
+        <tr>
+          <td><strong>Hand</strong></td>
+          <td>Direction of advancement. RH (right-hand) = clockwise to tighten = standard. LH (left-hand) = counterclockwise to tighten. LH used where rotation would loosen a RH thread (left pedal on bicycle, some turnbuckles, propellers).</td>
+        </tr>
+        <tr>
+          <td><strong>Tolerance Class</strong></td>
+          <td>How tight or loose the fit is. <em>2A/2B</em> = standard fit (bolt/nut). <em>3A/3B</em> = precision/close fit. <em>1A/1B</em> = loose fit. For FRC, you never need to specify this — standard hardware is 2A/2B.</td>
+        </tr>
+      </table>
+
+      <div class="co info" style="margin-top:.6rem;">
+        <span class="cl">Coarse vs Fine</span>
+        <strong>Coarse (UNC/metric coarse):</strong> Fewer threads per inch, stronger and faster to assemble, more tolerant of damage. Default for most applications. <strong>Fine (UNF/metric fine):</strong> More threads, better vibration resistance, more torque for same wrench effort, easier to strip. Use fine where adjustment precision matters or in thin-walled sections.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §4  GAUGE NUMBERING #0-#14
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header"><div class="sec-num">04</div><h2>GAUGE NUMBERING <span class="a">#0 – #14</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Why Numbers Instead of Fractions?</h3>
+      <p>For screws smaller than ¼", imperial sizing uses a gauge number system inherited from wire gauge standards. The formula is simple:</p>
+      <div class="mb">Diameter (inches) = 0.060 + (N × 0.013)
+
+  Where N = the gauge number
+
+  #0  → 0.060 + (0×0.013) = 0.060"
+  #1  → 0.060 + (1×0.013) = 0.073"
+  #2  → 0.060 + (2×0.013) = 0.086"  ← smallest common machine screw
+  #4  → 0.060 + (4×0.013) = 0.112"
+  #6  → 0.060 + (6×0.013) = 0.138"
+  #8  → 0.060 + (8×0.013) = 0.164"
+  #10 → 0.060 + (10×0.013) = 0.190" ← most common in FRC
+  #12 → 0.060 + (12×0.013) = 0.216"
+  Then jumps to ¼" (0.250") for fractional sizes</div>
+      <p>Once you memorize this formula, you can work out any gauge size in your head. The key ones for FRC are <strong>#10 (0.190")</strong> and <strong>#6 (0.138")</strong>.</p>
+    </div>
+
+    <div>
+      <h3 class="b">Machine Screw Gauge Reference</h3>
+      <table>
+        <tr><th>#</th><th>Dia (in)</th><th>Dia (mm)</th><th>Coarse TPI</th><th>Fine TPI</th><th>FRC Use</th></tr>
+        <tr><td>#0</td><td>0.060"</td><td>1.52mm</td><td>80</td><td>—</td><td>Tiny electronics, servos</td></tr>
+        <tr><td>#1</td><td>0.073"</td><td>1.85mm</td><td>64</td><td>72</td><td>Very small electronics</td></tr>
+        <tr><td>#2</td><td>0.086"</td><td>2.18mm</td><td>56</td><td>64</td><td>Small electronics panels</td></tr>
+        <tr><td>#4</td><td>0.112"</td><td>2.84mm</td><td>40</td><td>48</td><td>Electronics, sensors</td></tr>
+        <tr><td>#6</td><td>0.138"</td><td>3.50mm</td><td>32</td><td>40</td><td>Light sheet metal, covers</td></tr>
+        <tr><td>#8</td><td>0.164"</td><td>4.16mm</td><td>32</td><td>36</td><td>Sheet metal, light structure</td></tr>
+        <tr><td><strong>#10</strong></td><td><strong>0.190"</strong></td><td><strong>4.82mm</strong></td><td><strong>24</strong></td><td><strong>32</strong></td><td><span class="tag to">★ Very common FRC</span></td></tr>
+        <tr><td>#12</td><td>0.216"</td><td>5.49mm</td><td>24</td><td>28</td><td>Uncommon, ¼" preferred</td></tr>
+        <tr><td colspan="6" style="color:var(--muted);font-family:var(--mono);font-size:10px;">↑ Fractional sizes begin at ¼" (0.250") ↑</td></tr>
+      </table>
+
+      <h3 class="g" style="margin-top:.8rem;">Wood Screw Gauge (Same Number System!)</h3>
+      <p>Wood screws use the same gauge numbering for the <em>shank diameter</em>, but the thread form, pitch, and tip geometry are completely different. The common wood screw sizes range from #4 to #14.</p>
+      <table>
+        <tr><th>#</th><th>Shank (in)</th><th>Typical Use</th></tr>
+        <tr><td>#6</td><td>0.138"</td><td>Thin wood, cabinet backs, trim</td></tr>
+        <tr><td>#8</td><td>0.164"</td><td>General woodworking, most common</td></tr>
+        <tr><td>#10</td><td>0.190"</td><td>Thicker stock, hardware mounting</td></tr>
+        <tr><td>#12</td><td>0.216"</td><td>Heavy joinery</td></tr>
+        <tr><td>#14</td><td>0.242"</td><td>Very heavy, near lag-screw territory</td></tr>
+      </table>
+      <div class="co tip" style="margin-top:.5rem;">
+        <span class="cl">Selecting Wood Screw Length</span>
+        Rule of thumb: ⅔ of the screw length should go into the receiving piece. For two equal boards: screw length ≈ 2.5× the top board thickness.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §5  READING THREAD CALLOUTS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header"><div class="sec-num">05</div><h2>READING THREAD <span class="a">CALLOUTS</span></h2></div>
+
+  <div class="g3">
+    <div>
+      <h3>SAE / Unified National (UN)</h3>
+      <div class="mb">¼  -  20  UNC  -  2A
+│       │    │      └── Tolerance class
+│       │    └───────── Series: C=Coarse F=Fine
+│       └────────────── TPI (threads per inch)
+└────────────────────── Major diameter
+
+Common examples:
+  #10-24  →  #10 diameter, 24 TPI coarse
+  #10-32  →  #10 diameter, 32 TPI fine
+  ¼-20    →  0.250", 20 TPI coarse  ★ most common FRC
+  ¼-28    →  0.250", 28 TPI fine
+  5/16-18 →  0.3125", 18 TPI coarse
+  ⅜-16    →  0.375", 16 TPI coarse
+  ½-13    →  0.500", 13 TPI coarse</div>
+    </div>
+    <div>
+      <h3 class="g">ISO Metric</h3>
+      <div class="mb">M  6  ×  1.0  -  6g
+│  │      │       └── Tolerance class (g=external)
+│  │      └────────── Pitch in mm
+│  └───────────────── Nominal diameter in mm
+└──────────────────── "Metric" designator
+
+Common examples:
+  M2×0.4   →  tiny, electronics
+  M3×0.5   →  small electronics, servos
+  M4×0.7   →  light structure
+  M5×0.8   →  ★ very common FRC
+  M6×1.0   →  ★ very common FRC
+  M8×1.25  →  structural
+  M10×1.5  →  heavy structural
+
+If pitch is omitted, assume coarse thread.
+M8 = M8×1.25 (coarse implied)</div>
+    </div>
+    <div>
+      <h3 class="p">NPT Pipe Thread</h3>
+      <div class="mb">¼  NPT  (or MNPT / FNPT)
+│   └── National Pipe Taper
+└────── Nominal size (NOT actual OD!)
+
+Nominal → Actual OD (confusing!):
+  ⅛ NPT  →  0.405" OD
+  ¼ NPT  →  0.540" OD
+  ⅜ NPT  →  0.675" OD
+  ½ NPT  →  0.840" OD  ★ common pneumatics
+
+M = male (external), F = female (internal)
+Taper: 1°47' per side (1/16" per inch)
+
+BSPP/BSPT (British):
+  Parallel or tapered, 55° Whitworth form
+  NOT interchangeable with NPT!</div>
+      <div class="co warn" style="margin-top:.5rem;">
+        <span class="cl">NPT Warning</span>
+        The nominal size (¼, ½) bears <em>no relation</em> to the actual pipe OD. This is a historical artifact. Always look up the actual dimensions.
+      </div>
+    </div>
+  </div>
+
+  <h3 class="b" style="margin-top:1rem;">Measuring an Unknown Thread — Field Methods</h3>
+  <div class="ga2">
+    <div class="card b"><div class="ct">Thread Pitch Gauge</div><p>Fan of blades, each with a thread profile. Drop into thread until one sits flush. Reads in TPI or mm pitch. Get a combo set. Fast and accurate for field identification.</p></div>
+    <div class="card g"><div class="ct">Calipers (Quick ID)</div><p>Measure major diameter → look up in table. Count threads in 1" (or over 10mm for metric). Not high precision but identifies the fastener for replacement.</p></div>
+    <div class="card o"><div class="ct">Known Nut Test</div><p>Try threading a nut you know. If it runs free and smooth: match. If it binds immediately: wrong size. If it starts then seizes: STOP — cross-threading (especially Metric vs SAE confusion).</p></div>
+    <div class="card r"><div class="ct">Metric vs SAE Confusion</div><p>#10-32 (0.190") and M5×0.8 (5mm=0.197") are very close. They will appear to engage and then seize. <strong>Never force.</strong> Use a pitch gauge on anything that "almost fits."</p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §6  SCREW vs BOLT vs STUD — DEFINITIONS & EXCEPTIONS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header"><div class="sec-num">06</div><h2>SCREW vs BOLT <span class="a">vs STUD</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>The Technical Definitions</h3>
+      <table>
+        <tr><th>Term</th><th>Proper Definition</th></tr>
+        <tr>
+          <td><strong>Bolt</strong></td>
+          <td>A fastener inserted through <em>clearance holes</em> in all mating parts and secured with a nut. The bolt itself does not thread into any material — only the nut does. The joint is clamped between head and nut.</td>
+        </tr>
+        <tr>
+          <td><strong>Screw</strong></td>
+          <td>A fastener that <em>threads into a hole</em> in one of the mating parts (tapped hole, wood, plastic, etc.). The screw itself creates or engages threads in the receiving material. May or may not have a nut.</td>
+        </tr>
+        <tr>
+          <td><strong>Stud</strong></td>
+          <td>Threaded on both ends (or all over), no head. One end threads permanently into a part; a nut goes on the other. Allows removing and replacing a component without unscrewing a bolt from a deep hole. Common in engines, suspension, and anywhere bolt-head clearance is unavailable.</td>
+        </tr>
+        <tr>
+          <td><strong>Set Screw / Grub Screw</strong></td>
+          <td>A screw with no head — threaded its entire length. Sits fully recessed when installed. Used to clamp one part against another (hub on shaft). Typically hex socket drive. <em>Grub screw</em> = British term for the same thing.</td>
+        </tr>
+        <tr>
+          <td><strong>Machine Screw</strong></td>
+          <td>A fully-machined, precision-threaded fastener intended for use with a tapped hole or a nut. Uniform thread from head to (near) tip. The workhorse of mechanical assembly.</td>
+        </tr>
+      </table>
+
+      <div class="co info" style="margin-top:.6rem;">
+        <span class="cl">Everyday Reality</span>
+        In a robotics shop, people call everything a "bolt" or "screw" interchangeably. What matters practically: <em>Does it need a nut?</em> (bolt behavior) or <em>does it thread into the part?</em> (screw behavior). The terminology matters when reading documentation, ordering hardware, or taking a machining class.
+      </div>
+    </div>
+
+    <div>
+      <h3 class="p">Names That Break the Rules</h3>
+      <p>Many common fastener names are technically wrong but universally used. You'll need to know both the name and the reality:</p>
+      <table>
+        <tr><th>Name</th><th>What It Really Is</th></tr>
+        <tr>
+          <td><strong>Lag Bolt</strong></td>
+          <td>Actually a <em>screw</em> — it threads into wood, never uses a nut. Called a bolt because it has a hex head driven with a wrench like a bolt. Technically: Lag Screw.</td>
+        </tr>
+        <tr>
+          <td><strong>Carriage Bolt</strong></td>
+          <td>A true bolt (goes through, uses a nut), but has an unusual head — round top with a square neck that bites into wood to prevent spinning. Cannot be driven from the head side.</td>
+        </tr>
+        <tr>
+          <td><strong>Eye Bolt</strong></td>
+          <td>Can be either — some thread into material (screw behavior), some use a nut. Context determines.</td>
+        </tr>
+        <tr>
+          <td><strong>J-Bolt / U-Bolt</strong></td>
+          <td>Curved bolts that embed in concrete or wrap around pipe. True bolts (use nuts).</td>
+        </tr>
+        <tr>
+          <td><strong>Hex Bolt vs Cap Screw</strong></td>
+          <td>A hex bolt typically has a washer face and is used with a nut. A cap screw has tighter tolerances and is typically threaded into a tapped hole. Often used interchangeably in practice.</td>
+        </tr>
+        <tr>
+          <td><strong>Machine Screw vs Bolt</strong></td>
+          <td>Machine screws are technically screws (thread into tapped holes), but they're constantly used with nuts (bolt behavior). ASME draws the line at ¼" — above ¼" diameter with a hex head = bolt; below = screw.</td>
+        </tr>
+      </table>
+
+      <div class="co" style="margin-top:.6rem;">
+        <span class="cl">The Practical FRC Rule</span>
+        Use the term your mentor, supplier, or documentation uses. Understand the underlying behavior (needs nut vs threads into part) and you'll always order the right hardware regardless of what it's called.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §7  CUTTING THREADS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header"><div class="sec-num">07</div><h2>CUTTING <span class="a">THREADS</span></h2></div>
+  <p>Threads can be cut three ways: single-point on a lathe, thread milling on a CNC, or with tap and die. Each has tradeoffs in speed, precision, flexibility, and equipment required.</p>
+
+  <div class="g3">
+    <div>
+      <h3>Single-Point Threading (Lathe)</h3>
+      <p>The most fundamental method — one tool with a ground tip cuts the thread profile in multiple passes. Slow, requires skill, but can produce any thread form, any size, any pitch, including left-hand, multi-start, and custom forms.</p>
+      <h3 class="b">Setup</h3>
+      <ul>
+        <li>Use a <strong>60° fishtail (center) gauge</strong> to align the threading tool perpendicular to the workpiece axis</li>
+        <li>Set the <strong>compound rest to 29.5°</strong> (for 60° threads) — you'll feed with the compound, not the cross-slide. This cuts on one face at a time, reducing chatter and giving better finish</li>
+        <li>Set the <strong>quick-change gearbox</strong> for the desired TPI (or configure the change gears on older lathes)</li>
+        <li>Turn the OD to the <strong>major diameter</strong> first</li>
+      </ul>
+      <h3 class="g">Procedure</h3>
+      <ul>
+        <li>Take a <strong>scratch pass</strong> — very light, count thread crests to verify TPI</li>
+        <li>Each pass: feed in with compound (not crossslide), engage half-nut at same mark on thread dial</li>
+        <li><strong>Thread dial</strong> tells you when to re-engage for even-numbered TPI (any line), odd TPI (same line only), fractional TPI (must not disengage)</li>
+        <li>Take ~0.005" per pass near finish, lighter as you approach final depth</li>
+        <li>Check fit with a nut or thread ring gauge</li>
+        <li>Final passes: spring cuts (same depth, just removes spring and deflection)</li>
+      </ul>
+      <div class="co tip">
+        <span class="cl">Threading Depth Formula</span>
+        For 60° UN threads: thread depth ≈ 0.6495 ÷ TPI. For M threads: depth ≈ 0.6495 × pitch (mm). This is the theoretical full depth — in practice stop about 0.010"–0.015" short and fit-check.
+      </div>
+    </div>
+
+    <div>
+      <h3>Thread Milling (CNC)</h3>
+      <p>A rotating thread-mill cutter traces a <strong>helical path</strong> around the bore or OD. The spindle rotates the cutter; simultaneously the X/Y axes trace a circle and the Z axis advances one pitch per revolution.</p>
+      <h3 class="b">Types of Thread Mills</h3>
+      <ul>
+        <li><strong>Single-form thread mill:</strong> One thread profile. Helical interpolation produces any length thread. Most flexible — one cutter makes many sizes.</li>
+        <li><strong>Full-form thread mill:</strong> Full-length of threads, one pass per thread zone. Faster but less flexible.</li>
+        <li><strong>Combined drill/thread mill:</strong> Drills and threads in one tool. Fast for production.</li>
+      </ul>
+      <h3 class="g">Advantages over Tapping</h3>
+      <ul>
+        <li>No risk of tap breakage in hard materials or blind holes</li>
+        <li>Can produce left-hand threads with the same cutter</li>
+        <li>Can produce partial threads at entry/exit</li>
+        <li>Better chip evacuation (no chip packing in blind holes)</li>
+        <li>One cutter = many thread sizes</li>
+      </ul>
+      <h3 class="p">Rigid Tapping (CNC)</h3>
+      <p>The spindle and Z-axis are synchronized — as the spindle turns, Z advances at exactly 1/TPI (or pitch mm) per revolution. Much faster than thread milling, equivalent quality to hand-tapping. Modern CNC machines do this automatically. The tap must be rigid — no floating chuck.</p>
+      <div class="co info">
+        <span class="cl">FRC Relevance</span>
+        If your team has a CNC mill or router, rigid tapping is the fastest way to put many threaded holes in aluminum plate. Thread milling is useful for large holes (riv-nut size and above) where taps are expensive.
+      </div>
+    </div>
+
+    <div>
+      <h3>Tap and Die (Hand Threading)</h3>
+      <p>The most common method in any shop — including your FRC pit. Simple, cheap, effective.</p>
+      <p><strong>Tap</strong> = cuts internal threads (in a hole). <strong>Die</strong> = cuts external threads (on a rod or shaft).</p>
+      <h3 class="b">Types of Taps</h3>
+      <table>
+        <tr><th>Tap</th><th>Taper at Tip</th><th>Best For</th></tr>
+        <tr><td>Taper/Starting</td><td>8–10 threads</td><td>Starting threads, harder materials</td></tr>
+        <tr><td>Plug</td><td>3–5 threads</td><td>Through holes — general use ★</td></tr>
+        <tr><td>Bottoming</td><td>1–2 threads</td><td>Threading to the bottom of blind holes</td></tr>
+        <tr><td>Spiral Point (Gun)</td><td>Angled flutes</td><td>Through holes — pushes chips forward, fastest</td></tr>
+        <tr><td>Spiral Flute</td><td>Helical flutes</td><td>Blind holes — pulls chips out upward</td></tr>
+        <tr><td>Form/Roll Tap</td><td>No flutes</td><td>Ductile materials — no chips, stronger threads</td></tr>
+      </table>
+      <h3 class="p">Types of Dies</h3>
+      <ul>
+        <li><strong>Round split die:</strong> Adjustable via center screw — most common for cutting new threads</li>
+        <li><strong>Round solid die:</strong> Fixed diameter, more precise but no adjustment</li>
+        <li><strong>Hex die nut:</strong> Driven by wrench — good for chasing (cleaning) existing damaged threads</li>
+      </ul>
+      <div class="co tip" style="margin-top:.5rem;">
+        <span class="cl">Die Tips</span>
+        Always chamfer or bevel the end of the rod before threading with a die — it helps the die start square. Start the die face (non-adjustable side) first. Use cutting oil. Back off ¼ turn every full turn to break chips.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §8  TAPPING GUIDE & STARRETT CHARTS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="section-header"><div class="sec-num">08</div><h2>TAPPING GUIDE <span class="a">&amp; DRILL CHARTS</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>The Process — Step by Step</h3>
+      <ol style="line-height:2.2;">
+        <li><strong>Select the tap drill size</strong> — use a Starrett chart, Machinery's Handbook, or the formula below. Drill too small = tap breaks. Too large = weak thread engagement.</li>
+        <li><strong>Drill the hole</strong> — use a sharp bit at the correct speed. Dull bits wander and make oversized holes. Use cutting fluid on aluminum and steel.</li>
+        <li><strong>Deburr</strong> — chamfer the top of the hole slightly with a larger drill bit or countersink. This starts the tap square and gives threads a clean entry.</li>
+        <li><strong>For blind holes</strong> — drill deeper than needed (roughly 3× the tap pitch extra) to give the tap room to clear chips before bottoming out.</li>
+        <li><strong>Apply cutting fluid</strong> — Tap Magic, WD-40 (aluminum), or Kool Mist work well. Always use <em>something</em> — dry tapping in steel will break your tap.</li>
+        <li><strong>Start the tap square</strong> — sight from two perpendicular directions. A tap started at an angle makes a crooked hole and will break.</li>
+        <li><strong>Two forward, half back</strong> — rotate 360–720° forward, then 180° back to break the chip. Repeat. In aluminum you can go further; in steel, be more conservative.</li>
+        <li><strong>Feel for resistance</strong> — increasing resistance = chip buildup. Back off, clear chips, add fluid, continue. Never force a tap. They are made of hardened HSS or carbide and are extremely brittle.</li>
+        <li><strong>For blind holes</strong> — switch from plug tap to bottoming tap to thread the last few threads near the bottom.</li>
+        <li><strong>Clear chips and inspect</strong> — flush with compressed air, check depth with a known bolt.</li>
+      </ol>
+    </div>
+    <div>
+      <h3 class="b">Common Tap Drill Sizes</h3>
+      <table>
+        <tr><th>Thread</th><th>Tap Drill</th><th>% Thread</th><th>Notes</th></tr>
+        <tr><td>#4-40</td><td>#43 (0.089")</td><td>75%</td><td>Electronics</td></tr>
+        <tr><td>#6-32</td><td>#36 (0.1065")</td><td>75%</td><td>Light structure</td></tr>
+        <tr><td>#8-32</td><td>#29 (0.136")</td><td>75%</td><td>Sheet metal</td></tr>
+        <tr><td>#10-24</td><td>#25 (0.1495")</td><td>75%</td><td>Structure</td></tr>
+        <tr><td><strong>#10-32</strong></td><td><strong>#21 (0.159")</strong></td><td>75%</td><td><span class="tag to">★ FRC</span></td></tr>
+        <tr><td><strong>¼-20</strong></td><td><strong>#7 (0.201")</strong></td><td>75%</td><td><span class="tag to">★ FRC</span></td></tr>
+        <tr><td>¼-28</td><td>#3 (0.213")</td><td>75%</td><td>Fine thread</td></tr>
+        <tr><td>5/16-18</td><td>F (0.257")</td><td>75%</td><td>Heavier</td></tr>
+        <tr><td>⅜-16</td><td>5/16" (0.3125")</td><td>75%</td><td>Structural</td></tr>
+        <tr><td><strong>M3×0.5</strong></td><td><strong>2.5mm</strong></td><td>—</td><td>Small metric</td></tr>
+        <tr><td><strong>M4×0.7</strong></td><td><strong>3.3mm</strong></td><td>—</td><td><span class="tag to">★ FRC</span></td></tr>
+        <tr><td><strong>M5×0.8</strong></td><td><strong>4.2mm</strong></td><td>—</td><td><span class="tag to">★ FRC</span></td></tr>
+        <tr><td><strong>M6×1.0</strong></td><td><strong>5.0mm</strong></td><td>—</td><td><span class="tag to">★ FRC</span></td></tr>
+        <tr><td>M8×1.25</td><td>6.8mm</td><td>—</td><td>Structural</td></tr>
+        <tr><td>M10×1.5</td><td>8.5mm</td><td>—</td><td>Heavy structural</td></tr>
+      </table>
+
+      <div class="co" style="margin-top:.6rem;">
+        <span class="cl">Metric Tap Drill Formula</span>
+        <strong>Tap drill (mm) = Major diameter − Pitch</strong><br>
+        M8×1.25: drill = 8.0 − 1.25 = 6.75mm (use 6.8mm). Simple and accurate for most applications. Gives approximately 75% thread engagement — the sweet spot for most materials. More than 75% rarely adds strength (threads fail in the bolt, not the tapped hole) but makes tapping much harder.
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-top:1rem;">
+    <div>
+      <h3 class="g">The Drill Press Fixture Trick</h3>
+      <p>Starting a tap perfectly perpendicular is the hardest part of hand tapping. A drill press can be your fixture even if you don't run the motor.</p>
+      <div class="card g">
+        <div class="ct">Setup</div>
+        <ol style="line-height:2.0;font-size:13px;">
+          <li>Drill your tap hole in the drill press as normal — this ensures it's perpendicular to the work surface.</li>
+          <li><strong>Without moving the workpiece</strong>, swap the drill bit for a <em>center punch</em> (or a dead center, or any blunt point) in the chuck. Remove the drill bit carefully and do not move the workpiece.</li>
+          <li>Lower the quill until the center punch just contacts the top of the tap (seated in the tap wrench, placed in the hole).</li>
+          <li>The quill spring provides downward pressure; the column keeps everything aligned 90° to the table.</li>
+          <li>Turn the tap wrench by hand while the quill maintains pressure and alignment.</li>
+          <li>Once the tap is 2–3 threads deep and self-guiding, you can remove from the drill press and finish by hand.</li>
+        </ol>
+      </div>
+      <div class="co tip" style="margin-top:.5rem;">
+        <span class="cl">Alternative Methods</span>
+        (1) Commercial tap guides — a machined bushing that holds the tap square. (2) Drill press with belt removed — use the quill for pressure and alignment, rotate the chuck by hand. (3) Tap extension / T-handle with a built-in guide bushing.
+      </div>
+    </div>
+
+    <div>
+      <h3 class="p">Reference Resources</h3>
+      <div class="card p" style="margin-bottom:.7rem;">
+        <div class="ct">Starrett Tap Drill Chart</div>
+        <p>L.S. Starrett Company publishes free drill and tap charts covering every common thread size, recommended drill size, and clearance drill size. Keep one printed in your pit. Available at starrett.com and from any tool supplier. Also posted in most machine shops.</p>
+      </div>
+      <div class="card b" style="margin-bottom:.7rem;">
+        <div class="ct">Machinery's Handbook</div>
+        <p>The machinist's bible. Has complete thread data, tolerance tables, material properties, torque specs, and virtually everything else. 30th edition is current. Heavy, expensive, and worth owning. Your school machine shop almost certainly has a copy.</p>
+      </div>
+      <div class="card o">
+        <div class="ct">Thread % Engagement Tradeoff</div>
+        <p>75% thread engagement is the standard target — it captures 95%+ of maximum thread strength. 100% engagement is harder to tap and increases tap breakage risk by ~3×, while adding only 5% strength. <strong>In aluminum and 3D prints especially, aim for 75%</strong> — and use helicoils or heatserts for better pullout strength in soft materials.</p>
+      </div>
+      <div class="co warn" style="margin-top:.6rem;">
+        <span class="cl">Broken Tap Recovery</span>
+        Broken taps are hard. Options: (1) EDM (spark erosion) removes it — requires a machine shop. (2) Tap extractors — work sometimes in large taps. (3) Drill it out with a carbide bit oversize and use a helicoil insert. (4) Move the hole. Prevention: never force, always use cutting fluid, back off regularly.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §9  HOLE TYPES & 3D PRINT SIZING
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="section-header"><div class="sec-num">09</div><h2>HOLE TYPES <span class="a">&amp; FIT</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Through Hole vs Blind Hole</h3>
+      <table>
+        <tr><th>Type</th><th>Definition</th><th>Considerations</th></tr>
+        <tr>
+          <td><strong>Through Hole</strong></td>
+          <td>Goes completely through the material. Bolt passes all the way through; nut on other side. OR tap goes all the way through.</td>
+          <td>Easier to tap (chips exit bottom). Requires two-sided access for nut. Preferred for structural bolts.</td>
+        </tr>
+        <tr>
+          <td><strong>Blind Hole</strong></td>
+          <td>Does not penetrate the far side. Has a flat or conical bottom (flat for end mill, conical for drill bit). Must be tapped with a bottoming tap for threads at the very bottom.</td>
+          <td>One-sided access. Chips must back out the way they came — use spiral-flute tap. Drill deeper than needed thread depth.</td>
+        </tr>
+        <tr>
+          <td><strong>Clearance Hole</strong></td>
+          <td>A through hole sized to pass the bolt shank freely, with NO threads. The bolt slides through; a nut or tapped hole on the far side does the gripping.</td>
+          <td>Clearance hole = major diameter + a small amount (see table below).</td>
+        </tr>
+        <tr>
+          <td><strong>Tap Hole</strong></td>
+          <td>A hole drilled to the minor diameter, then tapped to create internal threads. The threads grip the bolt.</td>
+          <td>Use correct tap drill size. Material hardness affects tap selection.</td>
+        </tr>
+      </table>
+
+      <h3 class="b" style="margin-top:.8rem;">Clearance Hole Sizes</h3>
+      <table>
+        <tr><th>Bolt</th><th>Close (in)</th><th>Normal (in)</th><th>Loose (in)</th></tr>
+        <tr><td>#8</td><td>0.1695"</td><td>0.177"</td><td>0.196"</td></tr>
+        <tr><td>#10</td><td>0.196"</td><td>0.201"</td><td>0.228"</td></tr>
+        <tr><td>¼"</td><td>0.257"</td><td>0.266"</td><td>0.281"</td></tr>
+        <tr><td>5/16"</td><td>0.323"</td><td>0.332"</td><td>0.344"</td></tr>
+        <tr><td>M4</td><td>4.1mm</td><td>4.3mm</td><td>4.5mm</td></tr>
+        <tr><td>M5</td><td>5.1mm</td><td>5.3mm</td><td>5.5mm</td></tr>
+        <tr><td>M6</td><td>6.1mm</td><td>6.4mm</td><td>6.6mm</td></tr>
+        <tr><td>M8</td><td>8.2mm</td><td>8.4mm</td><td>8.8mm</td></tr>
+      </table>
+    </div>
+
+    <div>
+      <h3 class="g">Counterbore vs Countersink vs Spotface</h3>
+      <table>
+        <tr><th>Feature</th><th>Shape</th><th>Purpose</th></tr>
+        <tr>
+          <td><strong>Counterbore (⌴)</strong></td>
+          <td>Flat-bottomed cylindrical recess with a perpendicular flat seat. Cut with an end mill or counterbore tool.</td>
+          <td>Allows a <em>socket head cap screw (SHCS) or button head</em> to sit flush with or below the surface. Also used for bolt heads in assemblies. The recess is concentric with the through hole. Sized to the head OD + small clearance.</td>
+        </tr>
+        <tr>
+          <td><strong>Countersink (⌵)</strong></td>
+          <td>Conical recess — typically 82° included angle (US) or 90° (some DIN standards). Cut with a countersink drill.</td>
+          <td>Allows a <em>flat-head (countersunk) screw</em> to sit perfectly flush with the surface. Must be the correct angle to match the screw head (verify — don't assume 82°). Commonly used in panels, plates, and anywhere a flush surface is needed.</td>
+        </tr>
+        <tr>
+          <td><strong>Spotface</strong></td>
+          <td>Shallow flat area milled around a hole — just enough to create a perpendicular bearing surface.</td>
+          <td>Used when the mating surface isn't flat (e.g., a bolt on a curved casting or rough surface). Ensures the bolt head seats perpendicular and doesn't strip on one side.</td>
+        </tr>
+      </table>
+
+      <div class="co info" style="margin-top:.6rem;">
+        <span class="cl">In CAD</span>
+        In Onshape and Fusion 360, you can specify counterbore and countersink automatically when using the Hole feature. Select the fastener type and the software calculates the correct geometry. Always model the actual feature — it matters for DXF export and manufacturing instructions.
+      </div>
+
+      <h3 class="p" style="margin-top:.8rem;">3D Print Hole Sizing — The ±½ Pitch Rule</h3>
+      <p>3D printers consistently produce holes smaller than designed due to material shrinkage and bead geometry. A rule that works well for metric threads:</p>
+      <div class="mb"><strong>Clearance/thru hole (bolt passes through freely):</strong>
+  Design diameter = nominal bolt diameter + (0.5 × pitch)
+  Example: M5×0.8 → design hole at 5 + 0.4 = 5.4mm
+  (prints to approximately 5.0–5.1mm = nice sliding fit)
+
+<strong>Interference fit / light press fit (no threads):</strong>
+  Design diameter = nominal bolt diameter − (0.5 × pitch)
+  Example: M5×0.8 → design hole at 5 − 0.4 = 4.6mm
+  (prints undersized, bolt self-taps or press-fits)
+
+<strong>For tapping (drill-press-tap after printing):</strong>
+  Use the standard tap drill diameter from Section 8.
+  Then actually tap it — PLA threads are weak, use heatserts instead.
+
+Note: Always print a test coupon first — your specific
+printer/material/settings will shift these numbers.</div>
+      <div class="co warn" style="margin-top:.4rem;">
+        <span class="cl">Best Practice for 3D Print Threads</span>
+        <strong>Always use heatserts</strong> (heat-set brass inserts) for any structural screw in a 3D print. Self-tapped plastic threads strip in one match under load. Heatserts convert the joint to metal-on-metal and can be reused many times.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §10  HEAD STYLES — WHEN TO USE EACH
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header"><div class="sec-num">10</div><h2>HEAD STYLES — <span class="a">WHEN TO USE EACH</span></h2></div>
+  <p>The head style determines how the fastener is driven, how much bearing area it has, whether it sits flush, and what clearance it needs. Choosing the right head style is as important as choosing the right grade.</p>
+
+  <div class="ga">
+    <div class="card o">
+      <div class="ct">Socket Head Cap Screw (SHCS)</div>
+      <p>Cylindrical head with a hex (Allen) socket. <strong>The FRC default.</strong> High torque capacity, no cam-out, compact head diameter. Typically Grade 12.9 / Grade 8 strength. Head is taller than button head but has more drive engagement. Use wherever high torque and precise fit matter.</p>
+      <p><span class="tag to">★ Use this by default for structure</span></p>
+    </div>
+
+    <div class="card b">
+      <div class="ct">Button Head Cap Screw (BHCS)</div>
+      <p>Low-profile dome-shaped head, hex socket drive. Wider bearing surface than SHCS for its diameter, but <em>less torque capacity</em> — the shallow socket can strip if overtightened. Use where head height clearance is limited, on panels and covers, or where a cleaner look is wanted. Don't use where high torque is required.</p>
+    </div>
+
+    <div class="card g">
+      <div class="ct">Flat / Countersunk Head (FHCS)</div>
+      <p>Conical underhead surface that seats in a countersunk hole — sits flush with or below the surface. 82° angle (US standard) — match your countersink cutter. Use on panels where flush surface is required, on guides and rails where a protruding head would catch, and on any sliding interface. Requires a countersink operation in the material.</p>
+    </div>
+
+    <div class="card p">
+      <div class="ct">Pan Head</div>
+      <p>Slightly rounded top with a flat bearing surface underneath — the "standard" machine screw head profile. Wider bearing area than SHCS for same diameter. Less torque than socket head. Common drive: Phillips, slotted, or Torx. Used in general electronics, enclosures, and any non-structural application where appearance and wide bearing matter.</p>
+    </div>
+
+    <div class="card y">
+      <div class="ct">Truss Head</div>
+      <p>Extra-wide, low-profile head — even wider than pan. Distributes clamping load over a very large area. Useful for thin, soft, or fragile materials (sheet plastic, thin aluminum, gaskets) where a standard head would punch through or pull through. Also looks clean on exposed panels.</p>
+    </div>
+
+    <div class="card c">
+      <div class="ct">Round Head</div>
+      <p>Classic domed head — the old-style machine screw shape before pan head became standard. Less common now but still found on older equipment and some specialty hardware. Similar bearing area to pan head.</p>
+    </div>
+
+    <div class="card o">
+      <div class="ct">Hex Head Bolt (HHB)</div>
+      <p>Six-sided external hex head — driven by wrench. Standard structural bolt. Available in Grade 2/5/8. Large bearing area. Easy to torque accurately with a socket or wrench. The head sticks up significantly — may need clearance. <em>This is the bolt you see in bridge and building construction.</em> Use in FRC for structural connections where you have wrench access.</p>
+    </div>
+
+    <div class="card b">
+      <div class="ct">Hex Washer Head</div>
+      <p>Hex head with an integrated washer flange below the hex. Larger bearing area, self-contained (no separate washer needed). Very common in sheet metal screws and self-drilling screws. Good for thin sheet metal where a regular hex head might pull through.</p>
+    </div>
+
+    <div class="card g">
+      <div class="ct">Hex Flange Head (Flange Bolt)</div>
+      <p>A standard hex bolt head with a wide circular flange below it. The flange acts as a built-in washer — spreads load, sits flat, and prevents loosening better than a plain hex head. Common in automotive (cam cover bolts, intake bolts). Serrated flange versions also grip and resist rotation.</p>
+    </div>
+
+    <div class="card p">
+      <div class="ct">Carriage Bolt Head</div>
+      <p>Smooth rounded dome on top, small square neck below. The square neck bites into wood (or aluminum plate) when the nut is tightened, preventing rotation — meaning you can tighten the nut without needing to hold the bolt head. No drive feature on the head. <em>Cannot be driven or removed from the head side without destroying it.</em> Used for wood-to-metal connections, handrails, and anywhere a smooth, anti-tamper head is wanted.</p>
+    </div>
+
+    <div class="card r">
+      <div class="ct">Oval / Raised Countersunk Head</div>
+      <p>Like a flat head but with a slightly domed top — sits flush at the base but has a decorative dome above. Used for aesthetics on covers, handles, and trim pieces where a fully flush surface isn't required but a flat head would look too industrial.</p>
+    </div>
+
+    <div class="card y">
+      <div class="ct">Fillister Head</div>
+      <p>Deep cylindrical head with a flat top and narrow OD — fits into recesses and counterbores. Less common, but used when you need a deep drive recess and a small head OD. Often used in electrical equipment.</p>
+    </div>
+  </div>
+
+  <div class="co tip" style="margin-top:1rem;">
+    <span class="cl">FRC Head Style Decision Tree</span>
+    Structural bolt (tapped or nut) → <strong>SHCS</strong>. Need flush with surface → <strong>FHCS + countersink</strong>. Space-constrained head height → <strong>BHCS</strong>. Wrench tightening preferred → <strong>Hex Head Bolt</strong>. Wood connection → <strong>Carriage Bolt or Lag Screw</strong>. Electronics/panel → <strong>Pan Head or SHCS</strong>.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §11  DRIVE TYPES
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s11">
+  <div class="section-header"><div class="sec-num">11</div><h2>DRIVE <span class="a">TYPES</span></h2></div>
+
+  <div class="ga">
+    <div class="card b">
+      <div class="ct">Hex Socket / Allen (Internal Hex)</div>
+      <p>Six-sided recess driven by hex keys or hex bit drivers. Best torque transfer, no cam-out, excellent engagement. Available in SAE (1/16" to ¾") and metric (1.5mm to 17mm+). The standard for SHCS, button head, and set screws. Get a full set of both SAE and metric hex keys — you'll use them constantly.</p>
+      <p><span class="tag tb">★ FRC primary driver</span></p>
+    </div>
+
+    <div class="card o">
+      <div class="ct">External Hex (Hex Head)</div>
+      <p>Standard bolt head with 6 flat sides driven by open-end, box, or socket wrench. Most structural hex bolts. Size = AF (across flats). ¼-20 bolt typically has 7/16" AF head. ⅜-16 has 9/16" AF. Metric M8 has 13mm AF, M10 has 17mm AF. High torque possible with a breaker bar or torque wrench.</p>
+      <p><span class="tag to">★ FRC structural hardware</span></p>
+    </div>
+
+    <div class="card g">
+      <div class="ct">Torx / Star (T-Drive)</div>
+      <p>Six-lobe star pattern. Higher torque than Phillips with <em>zero cam-out</em>. Used in automotive, deck screws, structural wood screws, and electronics. T10, T15, T20, T25, T27, T30, T40 are common. T25 covers most structural wood screws (GRK, Spax). Increasingly common in FRC for sheet metal screws.</p>
+      <p><span class="tag tg">Excellent — use for sheet metal and wood</span></p>
+    </div>
+
+    <div class="card p">
+      <div class="ct">External Torx (E-Torx)</div>
+      <p>Torx star shape on the outside of the fastener. Used where an internal recess isn't possible. E6, E8, E10, E12, E14, E16, E18, E20 are common sizes. Found in automotive suspension, some specialty bolts, and aircraft hardware. Requires E-Torx sockets (not interchangeable with standard Torx).</p>
+    </div>
+
+    <div class="card y">
+      <div class="ct">Phillips (#0–#4)</div>
+      <p>Cross-shaped drive <em>intentionally designed to cam out</em> at a set torque — originally to prevent overtightening on assembly lines. This is a feature that became a bug in repair contexts. #2 is the most common. Very low torque before cam-out, damages quickly. <strong>Avoid for structural robotics fasteners.</strong> Use only for electronics panels and other low-torque applications.</p>
+      <p><span class="tag tr">Designed to strip — avoid structural use</span></p>
+    </div>
+
+    <div class="card r">
+      <div class="ct">Slotted (Flat)</div>
+      <p>Single slot. Oldest drive type. Terrible torque, easy to slip. Still found on terminal screws, electrical boxes, and legacy equipment. Almost never a good choice for new construction. A flat-head screwdriver in a slotted screw under high torque will slip and damage surrounding material.</p>
+      <p><span class="tag tr">Avoid for anything new</span></p>
+    </div>
+
+    <div class="card b">
+      <div class="ct">Robertson (Square Drive)</div>
+      <p>Square recess — common in Canadian woodworking and some sheet metal screws. No cam-out, better than Phillips. R0 (orange), R1 (yellow), R2 (green), R3 (black). If you see a square hole in a screw head, this is it. Also found on some deck screws sold at US retailers.</p>
+    </div>
+
+    <div class="card c">
+      <div class="ct">12-Point / Double-Hex</div>
+      <p>Two overlapping hex patterns = 12 contact points. Only 30° of clearance needed to engage (vs 60° for standard hex). Used in high-torque aerospace and automotive fasteners where wrench swing is limited. Requires special sockets — standard 6-point sockets will work but may not fully engage.</p>
+    </div>
+
+    <div class="card o">
+      <div class="ct">Combination Heads</div>
+      <p>Some screws have two drive types: Phillips + slot, or Phillips + square. Useful when you're not sure which driver someone will have. Common in electrical panels, HVAC equipment, and budget hardware. Not a deliberate engineering choice — more of a manufacturing hedge.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §12  FASTENER TYPES BY FUNCTION
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s12">
+  <div class="section-header"><div class="sec-num">12</div><h2>FASTENER TYPES <span class="a">BY FUNCTION</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Machine Screws &amp; Bolts</h3>
+      <table>
+        <tr><th>Type</th><th>Key Features</th><th>When to Use</th></tr>
+        <tr>
+          <td><strong>Machine Screw</strong></td>
+          <td>Uniform precision thread, full range of head styles. Into tapped hole or with nut.</td>
+          <td>Everything structural in FRC. ¼-20 and #10-32 are your workhorse sizes.</td>
+        </tr>
+        <tr>
+          <td><strong>Hex Bolt</strong></td>
+          <td>Hex head, partially or fully threaded. Grade 2/5/8. Used with nut.</td>
+          <td>High-load joints where wrench access is available on both sides.</td>
+        </tr>
+        <tr>
+          <td><strong>Shoulder Bolt (Shoulder Screw)</strong></td>
+          <td>Precision ground smooth shank (shoulder) above the threads. The shoulder is the functional part — acts as a precision shaft or pivot.</td>
+          <td>Linkage pivots, bearing mounts, precision pivoting joints. The shoulder runs in the bore; the thread just holds it in.</td>
+        </tr>
+        <tr>
+          <td><strong>Carriage Bolt</strong></td>
+          <td>Round dome head, square neck bites into wood. Cannot be driven from head side.</td>
+          <td>Wood-to-metal joints. Exposed hardware (no sharp bolt head). Anti-tamper.</td>
+        </tr>
+        <tr>
+          <td><strong>Stud (Threaded Rod Section)</strong></td>
+          <td>No head. Threaded on one or both ends (or all over). Double-ended or fully threaded.</td>
+          <td>Where bolt-head clearance is unavailable. Engine work, jigs. Cut to length from threaded rod stock.</td>
+        </tr>
+        <tr>
+          <td><strong>Partially Threaded Bolt</strong></td>
+          <td>Smooth grip (shank) in the joint; threads only in the nut/tapped hole.</td>
+          <td>Any joint with a shear load — keep threads out of the shear plane. Also provides a more precise fit in the clearance hole. Default choice for structural bolts.</td>
+        </tr>
+        <tr>
+          <td><strong>Fully Threaded Bolt</strong></td>
+          <td>Threaded from head to tip. Usually shorter bolts only.</td>
+          <td>Short grip lengths where a smooth shank isn't practical. Clamping against a nut where shear isn't a concern.</td>
+        </tr>
+        <tr>
+          <td><strong>Eye Bolt / Ring Bolt</strong></td>
+          <td>Loop or ring head for attaching cable, rigging, or hooks.</td>
+          <td>Lifting points, cable anchor, anything you need to loop a hook through.</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <h3 class="b">Self-Tapping, Self-Drilling &amp; Sheet Metal Screws</h3>
+      <table>
+        <tr><th>Type</th><th>How It Works</th><th>Use</th></tr>
+        <tr>
+          <td><strong>Thread-Forming (Roll Tap)</strong></td>
+          <td>No cutting edges — displaces material, forming threads. No chips. Stronger threads than cut. Requires ductile material.</td>
+          <td>Aluminum, mild steel sheet metal. Creates very strong threads because material is work-hardened. Can't use in brittle materials.</td>
+        </tr>
+        <tr>
+          <td><strong>Thread-Cutting</strong></td>
+          <td>Has cutting edges that remove material to form threads. Produces chips.</td>
+          <td>Harder metals, plastics, brittle materials where forming would crack the part.</td>
+        </tr>
+        <tr>
+          <td><strong>Sheet Metal Screw (Type A/B/AB)</strong></td>
+          <td>Spaced, sharp thread designed to cut into thin metal. Sharp tip. Type A = coarser pitch (thicker metal). Type B = finer pitch (thinner metal, sheet, and harder materials).</td>
+          <td>Sheet metal enclosures, ductwork, thin plate. Common in pre-drilled electronics enclosures.</td>
+        </tr>
+        <tr>
+          <td><strong>Self-Drilling (Tek Screw)</strong></td>
+          <td>Drill-point tip that drills its own pilot hole and then threads. One step — no pre-drilling needed.</td>
+          <td>Sheet metal to sheet metal, light steel framing. Very fast installation. Common in construction. The drill tip limits effective thickness — check that the tip exits the metal before threads engage.</td>
+        </tr>
+      </table>
+
+      <h3 class="g" style="margin-top:.8rem;">Set Screws &amp; Grub Screws</h3>
+      <p>Set screws and grub screws are functionally the same thing — a <strong>headless screw</strong> threaded its entire length, designed to seat fully recessed when installed.</p>
+      <ul>
+        <li><strong>Set screw:</strong> General US term</li>
+        <li><strong>Grub screw:</strong> British term for the same thing</li>
+        <li>Standard drive: hex socket (Allen). Also available in slotted and Torx.</li>
+        <li><strong>Point types:</strong> Flat point (distributes load, for softer shafts), cone point (bites in, more positive grip, marks shaft), cup point (most common — a small cup that concentrates force), dog point (flat end pin sticks out, locates in a shaft groove), and knurled cup (extra grip in soft materials).</li>
+        <li><strong>Always use Loctite blue</strong> on set screws — they work by friction and will back out from vibration without retention.</li>
+        <li>For key shafts: use a set screw over the keyway AND one 90° offset for maximum retention.</li>
+      </ul>
+
+      <h3 class="p" style="margin-top:.8rem;">Lag Screws / Lag Bolts</h3>
+      <p>Large wood screw with a hex head. Driven by a wrench. Used for <strong>high-load structural wood connections</strong> — beam-to-post, ledger board to structure, heavy hardware mounting. Requires a pilot hole. Length in ¼" to 1" diameters, 1" to 12"+ lengths.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §13  WASHERS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s13">
+  <div class="section-header"><div class="sec-num">13</div><h2><span class="a">WASHERS</span> — Types &amp; Why</h2></div>
+  <p>Washers are often skipped or treated as optional. They're not. Each type solves a specific problem.</p>
+
+  <div class="ga">
+    <div class="card o">
+      <div class="ct">Flat Washer (Plain Washer)</div>
+      <p><strong>Why it exists:</strong> (1) Distributes bolt head load over a larger area — prevents the bolt head from pulling through or crushing soft material. (2) Provides a smooth, hardened bearing surface for the nut to torque against — important because rough surfaces waste torque as friction. (3) Bridges oversized clearance holes. (4) Protects surface finish from wrench marks. <strong>Always use one under the nut and one under the bolt head on structural joints.</strong></p>
+      <p>Sizes: Inner diameter (ID) ≈ bolt diameter + small clearance. Outer diameter (OD) determines bearing area.</p>
+      <p><span class="tag to">★ Use on almost every structural bolt</span></p>
+    </div>
+
+    <div class="card b">
+      <div class="ct">Fender Washer</div>
+      <p>A flat washer with an <em>extra-large OD</em> relative to the ID. Used when the material is very thin, soft, or has an oversized hole — the large OD prevents pullthrough. Named for automotive fender mounting. Very useful for mounting components to thin sheet metal, polycarbonate panels, or anywhere you need maximum bearing area.</p>
+    </div>
+
+    <div class="card g">
+      <div class="ct">Split Lock Washer</div>
+      <p>A ring cut and offset — looks like a spring coil cut open. Intended to bite into both the bolt head and the surface to resist rotation. <strong>In reality, these are largely ineffective</strong> — research (and NASA studies) shows they flatten immediately under proper torque and add little retention. A nylock nut or Loctite is vastly more effective. Still useful as a spacer or to provide a small spring load in delicate electronics. <em>Don't rely on these for vibration resistance.</em></p>
+      <p><span class="tag tr">Less effective than widely believed</span></p>
+    </div>
+
+    <div class="card p">
+      <div class="ct">Nord-Lock Washer</div>
+      <p>Two-piece washer system: two washers with radial teeth on the outside and cammed wedge surfaces on the inside. When the bolt tries to rotate loose, the wedge action actually increases clamping force. <strong>One of the most effective anti-loosening systems available</strong>, short of safety wire. Used in mining, rail, wind turbines, and critical machinery. More expensive than standard washers but worth it for critical FRC joints. The pair must remain together — they're useless separated.</p>
+      <p><span class="tag tg">Excellent vibration resistance</span></p>
+    </div>
+
+    <div class="card y">
+      <div class="ct">Belleville Washer (Disc Spring)</div>
+      <p>A conical washer that acts as a spring under compression. Maintains clamping load even when the joint relaxes slightly (thermal cycling, creep, etc.). Used in high-temperature applications, joints that cycle thermally, and precision assemblies where constant preload matters. Can be stacked to increase or vary spring rate. Used in aerospace, automotive valvetrain, and precision instruments.</p>
+    </div>
+
+    <div class="card c">
+      <div class="ct">Wave Washer</div>
+      <p>Corrugated in a wave pattern around the circumference. Acts as a spring — provides a specific spring force when compressed. Used to maintain bearing preload, take up axial play in shafts, and provide light clamping. Not for high-load structural joints — the wave collapses at high torque.</p>
+    </div>
+
+    <div class="card r">
+      <div class="ct">Serrated / Toothed Lock Washer</div>
+      <p>Internal or external teeth that bite into both surfaces. Better than split lock washers but still not as good as nylock or Loctite. Internal teeth (bite only the bolt head) are less damaging to the surface. External teeth are more aggressive. Used in electronics where conductivity through the joint is important (the teeth cut through anodizing or paint for ground connections).</p>
+    </div>
+
+    <div class="card o">
+      <div class="ct">Finishing Washer (Countersink Washer)</div>
+      <p>A small countersink washer used with flat-head (countersunk) screws in wood or thin materials. The washer's conical recess receives the screw head, distributing load and creating a clean, finished look. Common in furniture and cabinetry. Adds a professional look to exposed countersunk fasteners.</p>
+    </div>
+
+    <div class="card b">
+      <div class="ct">Reducing/Shoulder Washer</div>
+      <p>Has a cylindrical shoulder (boss) that fits into the hole, providing exact centering of the bolt. Used in precision assemblies and insulating bushings (the shoulder is often plastic, electrically isolating the bolt from the sheet). Important in electronics where bolt-to-chassis contact would cause a short circuit.</p>
+    </div>
+  </div>
+
+  <div class="co info" style="margin-top:1rem;">
+    <span class="cl">Washer Material Note</span>
+    Standard washers are low-carbon steel. Hardened washers (Grade 8 equivalent) should be used with Grade 8 bolts — a soft washer will crush and lose preload. Stainless washers for stainless bolts. Nylon or plastic washers for electrical isolation. Never mix metals that will galvanically corrode (aluminum washer on steel bolt in a salt environment = bad).
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §14  BOLT GRADES & STRENGTH
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s14">
+  <div class="section-header"><div class="sec-num">14</div><h2>BOLT GRADES <span class="a">&amp; STRENGTH</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>SAE / Imperial Grades — Head Markings</h3>
+      <p>Radial lines on the top of the bolt head. Count them. The lines are offset 30° from the flats (they point between corners).</p>
+      <table>
+        <tr><th>Grade</th><th>Marking</th><th>Min Tensile</th><th>Proof Load</th><th>Material</th></tr>
+        <tr><td>Grade 2</td><td>No lines (plain head)</td><td>74 ksi</td><td>55 ksi</td><td>Low-carbon steel. Hardware store bolts. Avoid structural use.</td></tr>
+        <tr><td>Grade 5</td><td>3 radial lines</td><td>120 ksi</td><td>85 ksi</td><td>Medium carbon, Q&amp;T. Standard automotive/structural. Good for most FRC.</td></tr>
+        <tr><td>Grade 8</td><td>6 radial lines</td><td>150 ksi</td><td>120 ksi</td><td>Medium alloy, Q&amp;T. High strength, more brittle. Use where G5 is marginal.</td></tr>
+        <tr><td>SHCS (12.9 equiv)</td><td>"12.9" on side</td><td>174 ksi</td><td>139 ksi</td><td>Alloy steel. Most socket head cap screws are this grade by default.</td></tr>
+      </table>
+
+      <h3 class="b" style="margin-top:.8rem;">Metric Property Classes</h3>
+      <p>Stamped directly on the bolt head as a number (e.g., "8.8"). The system: first digit × second digit × 10 = approximate tensile strength in MPa.</p>
+      <table>
+        <tr><th>Class</th><th>Marking</th><th>Tensile (MPa)</th><th>≈ SAE Equiv</th></tr>
+        <tr><td>4.8</td><td>4.8</td><td>400 MPa / 58 ksi</td><td>Below Grade 2</td></tr>
+        <tr><td>8.8</td><td>8.8</td><td>800 MPa / 116 ksi</td><td>≈ Grade 5</td></tr>
+        <tr><td>10.9</td><td>10.9</td><td>1000 MPa / 145 ksi</td><td>≈ Grade 8</td></tr>
+        <tr><td>12.9</td><td>12.9</td><td>1200 MPa / 174 ksi</td><td>Above Grade 8</td></tr>
+      </table>
+      <div class="co tip" style="margin-top:.5rem;">
+        <span class="cl">FRC Reality</span>
+        Most SHCS (Allen bolts) from reputable suppliers are 12.9 (or Grade 8 equivalent) — this is why SHCS is preferred. A cheap bag of hex bolts from a hardware store is probably Grade 2. Always buy structural fasteners from a known supplier (McMaster-Carr, Fastenal, etc.) and verify the grade marking.
+      </div>
+    </div>
+
+    <div>
+      <h3 class="g">Stainless Steel</h3>
+      <table>
+        <tr><th>Designation</th><th>Alloy</th><th>Strength</th><th>Notes</th></tr>
+        <tr><td>A2-70</td><td>304 SS</td><td>700 MPa / 102 ksi</td><td>Standard stainless. Most common. Good corrosion resistance.</td></tr>
+        <tr><td>A4-70</td><td>316 SS</td><td>700 MPa / 102 ksi</td><td>Marine grade. Better saltwater corrosion resistance.</td></tr>
+        <tr><td>A2-80 / A4-80</td><td>304 or 316</td><td>800 MPa / 116 ksi</td><td>Higher strength stainless — cold worked.</td></tr>
+      </table>
+      <div class="co warn">
+        <span class="cl">Stainless ≠ Strong</span>
+        A2/A4-70 stainless is roughly equivalent to Grade 5 / 8.8 class — <em>not</em> Grade 8. Do not substitute stainless thinking it's an upgrade over Grade 5 in terms of strength. Stainless resists corrosion; it does not add strength. And it <strong>galls</strong> (seizes metal-to-metal) easily — always use anti-seize on stainless-to-stainless joints.
+      </div>
+
+      <h3 class="p" style="margin-top:.8rem;">Proof Load, Yield, &amp; Tensile</h3>
+      <p>Three strength numbers matter for fasteners:</p>
+      <table>
+        <tr><th>Term</th><th>Definition</th><th>Why It Matters</th></tr>
+        <tr>
+          <td><strong>Proof Load</strong></td>
+          <td>The stress level the bolt can be loaded to without any permanent deformation. Approximately 85–90% of yield strength.</td>
+          <td><strong>Your target preload.</strong> Torque specs are set to achieve proof load. Stay below this and the bolt acts like a spring — release load, it returns to original length.</td>
+        </tr>
+        <tr>
+          <td><strong>Yield Strength</strong></td>
+          <td>The stress at which the bolt begins to permanently deform (stretch irreversibly).</td>
+          <td>Torque-to-yield (TTY) bolts are intentionally tightened to yield. They must be replaced after use.</td>
+        </tr>
+        <tr>
+          <td><strong>Tensile (Ultimate) Strength</strong></td>
+          <td>The maximum stress before fracture.</td>
+          <td>The bolt breaks here. The safety factor between proof load and tensile strength is your margin.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §15  NUTS, INSERTS & CAPTIVES
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s15">
+  <div class="section-header"><div class="sec-num">15</div><h2>NUTS, INSERTS <span class="a">&amp; CAPTIVES</span></h2></div>
+
+  <div class="ga">
+    <div class="card o"><div class="ct">Hex Nut</div><p>Standard nut. Six-sided. Match grade to your bolt — a Grade 2 nut on a Grade 8 bolt fails at the nut first. Grade 5 nuts = 3 lines on face. Grade 8 = 6 lines.</p></div>
+    <div class="card b"><div class="ct">Nylock Nut (Nylon Insert Lock)</div><p>Nylon ring deforms around threads, creating friction. Effective vibration resistance. <strong>Replace after every removal</strong> — nylon is permanently deformed and loses retention. Cannot be used above ~250°F (nylon melts). Single use recommended; 3–5 uses before replacement in non-critical applications. <span class="tag tg">★ FRC default</span></p></div>
+    <div class="card g"><div class="ct">All-Metal Lock Nut (Top Lock)</div><p>Metal-only lock nut — top is mechanically distorted to grip the bolt. Works at high temperatures (no nylon). Used in automotive exhaust, turbo systems, anywhere >250°F. Can be reused more times than nylock but still has finite life.</p></div>
+    <div class="card p"><div class="ct">Flange Nut / Serrated Flange</div><p>Built-in washer flange. Serrated version bites into surface and resists rotation. Self-contained — no separate washer needed. Very useful for sheet metal. <span class="tag tb">★ Good FRC choice for sheet metal</span></p></div>
+    <div class="card y"><div class="ct">Jam Nut</div><p>Thin nut tightened against a standard nut to lock both in place. Also used to lock a threaded rod end at a specific position (turnbuckle, rod end bearing, threaded adjuster). Requires two wrenches to install properly.</p></div>
+    <div class="card c"><div class="ct">Coupling Nut</div><p>Long hex nut for joining two threaded rods end-to-end. Used for adjustable-length struts, extending all-thread, and antenna mounts. Available in Grade 2 and 5.</p></div>
+    <div class="card r"><div class="ct">Castle Nut + Cotter Pin</div><p>Slotted top accepts a cotter pin through a drilled hole in the bolt — mechanical positive lock. Cannot back out without removing the pin. Used in safety-critical applications: steering, suspension, brake caliper pins. More effort to install but the gold standard for critical rotating joints.</p></div>
+    <div class="card o"><div class="ct">T-Nut (Wood Type)</div><p>Pronged nut driven into wood from one face — prongs bite in when bolt is tightened from the other side. Used in workbench fixture plates, climbing holds, and jig tables. Allows a bolt to be threaded in from the outside with no access to the nut side.</p></div>
+    <div class="card b"><div class="ct">T-Slot Nut (Extrusion Type)</div><p>Slides into the T-slot of aluminum extrusion (80/20, Misumi, Bosch Rexnord). Drop in from the end or roll into the slot. Rotate 90° to lock. Common in FRC for adjustable mounting on aluminum extrusion frames. Use a low-profile version for narrow slots.</p></div>
+    <div class="card g"><div class="ct">Riv-Nut (Rivet Nut / Nutsert)</div><p>Blind threaded insert — installed with a rivet-nut tool (mandrel pulls, body collapses, locks to backside). Creates a permanent threaded hole in sheet metal, hollow tube, or thin plate with <em>one-sided access only</em>. Available in ¼-20, #10-32, M5, M6 etc. Requires correct hole diameter. <span class="tag tg">★ Critical FRC tool</span></p></div>
+    <div class="card p"><div class="ct">Helicoil (Thread Insert)</div><p>Coiled wire insert in a specially-tapped hole. Expands when bolt engages. Stronger than the parent material (stainless coil in aluminum or plastic). Repairs stripped threads and strengthens tapped holes in soft materials. Requires a special oversize tap + installer tool. <span class="tag tb">Repair tool for stripped holes</span></p></div>
+    <div class="card y"><div class="ct">Heatsert (Heat-Set Insert)</div><p>Brass knurled insert melted into a 3D-printed part with a soldering iron. Provides metal-on-metal threads in plastic. Essential for any structural screw in FRC 3D prints. Iron temp: ~180–200°C (PLA), ~220–240°C (PETG/ABS). Push slowly and straight — don't wiggle. <span class="tag tg">★ Required for 3D print structure</span></p></div>
+    <div class="card r"><div class="ct">Weld Nut / Clinch (PEM) Nut</div><p>Permanently attached by welding (weld nut) or press-staking (clinch/PEM). Very clean installation. PEM nuts require a press or arbor press — the knurled shank is pressed into a precisely sized hole and displaces material. Common in production sheet metal assemblies, electronics enclosures, and robot frames where riv-nuts aren't preferred.</p></div>
+    <div class="card c"><div class="ct">Captive / Cage Nut</div><p>Nut captured in a stamped spring-steel cage that snaps into a square hole — common in rack-mount server equipment and some fabricated frames. Installs with a finger snap; bolt from the other side. Allows nuts to be installed in spaces you can't reach with a wrench later.</p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §16  TORQUE, PRELOAD & BOLT STRETCHING
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s16">
+  <div class="section-header"><div class="sec-num">16</div><h2>TORQUE, PRELOAD <span class="a">&amp; BOLT STRETCHING</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>The Physics of Bolt Preload</h3>
+      <p>A bolt doesn't hold things together by magic — it holds them together by <strong>stretching</strong>. When you torque a bolt, you're converting the rotation of your wrench into tensile load (stretch) in the bolt shank. The bolt acts like a very stiff spring, and the spring force is what clamps the joint.</p>
+
+      <div class="card o" style="margin-bottom:.7rem;">
+        <div class="ct">The Torque → Preload Chain</div>
+        <ol style="font-size:13px;line-height:2.1;">
+          <li>You apply torque T to the bolt head with a wrench.</li>
+          <li>~90% of that torque overcomes friction (under the head and in the threads). Only ~10% actually goes to stretching the bolt.</li>
+          <li>The bolt stretches elastically (like a spring) — this is <em>preload</em> or <em>clamp force</em>.</li>
+          <li>The preload compresses the joint. The joint is now in compression; the bolt is in tension.</li>
+          <li>External loads must first overcome the preload before they can separate the joint. Properly preloaded joints almost never fail — bolts that are finger-tight fail constantly.</li>
+        </ol>
+      </div>
+
+      <div class="mb">Torque-Preload Relationship:
+  T = K × d × F
+
+  T = applied torque (lb·in or N·m)
+  K = nut factor / friction coefficient
+      K ≈ 0.20 for dry steel-on-steel
+      K ≈ 0.15 for lubricated (oil or anti-seize)
+      K ≈ 0.12 for Teflon / molybdenum grease
+  d = bolt nominal diameter (in or m)
+  F = clamp force / preload (lb or N)
+
+Target preload ≈ 75% of Proof Load
+(Proof Load ≈ 85% of Yield Strength)</div>
+
+      <div class="co warn">
+        <span class="cl">Friction Dominates</span>
+        Because K (friction) is ~0.20, a 30% change in lubrication condition causes a 30% change in actual clamp force for the same torque. This is why you should <strong>always lubricate or always run dry</strong> — don't mix. Anti-seize or oil dramatically reduces friction and required torque.
+      </div>
+    </div>
+
+    <div>
+      <h3 class="b">Torque Specifications</h3>
+      <table>
+        <tr><th>Thread</th><th>Grade 5 / 8.8</th><th>Grade 8 / 10.9</th><th>12.9 / SHCS</th></tr>
+        <tr><td>#8-32</td><td>13 lb·in</td><td>18 lb·in</td><td>20 lb·in</td></tr>
+        <tr><td>#10-24</td><td>20 lb·in</td><td>28 lb·in</td><td>32 lb·in</td></tr>
+        <tr><td>#10-32</td><td>24 lb·in</td><td>34 lb·in</td><td>38 lb·in</td></tr>
+        <tr><td>¼-20</td><td>80 lb·in / 9 N·m</td><td>110 lb·in / 12.5 N·m</td><td>130 lb·in / 15 N·m</td></tr>
+        <tr><td>5/16-18</td><td>160 lb·in</td><td>225 lb·in</td><td>260 lb·in</td></tr>
+        <tr><td>M5×0.8</td><td>5.5 N·m</td><td>7.5 N·m</td><td>9 N·m</td></tr>
+        <tr><td>M6×1.0</td><td>9.5 N·m</td><td>13 N·m</td><td>15.5 N·m</td></tr>
+        <tr><td>M8×1.25</td><td>23 N·m</td><td>32 N·m</td><td>38 N·m</td></tr>
+      </table>
+      <p style="font-size:11px;color:var(--muted);">Values for dry clean steel-to-steel. Reduce ~25% with anti-seize or oil.</p>
+
+      <h3 class="g" style="margin-top:.8rem;">Torque Wrenches</h3>
+      <table>
+        <tr><th>Type</th><th>How It Works</th><th>Use</th></tr>
+        <tr><td><strong>Click Torque Wrench</strong></td><td>Clicks and gives when target torque reached. Set the dial before use.</td><td>Most common. Good for ½" drive structural bolts. Also available ⅜" and ¼" drive for smaller fasteners.</td></tr>
+        <tr><td><strong>Beam Torque Wrench</strong></td><td>Pointer indicates torque on a scale. No mechanism to set and forget.</td><td>Simple, never needs calibration. Less convenient. Good for occasional use.</td></tr>
+        <tr><td><strong>Digital Torque Wrench</strong></td><td>Electronic sensor. Beeps/vibrates at target. Can log values.</td><td>Professional inspection work. Expensive but very accurate.</td></tr>
+        <tr><td><strong>Torque Screwdriver</strong></td><td>Like a click wrench but for screwdrivers. For small fasteners (#4-#10).</td><td>Electronics assembly, delicate sensor mounts.</td></tr>
+        <tr><td><strong>Torque Angle</strong></td><td>Tighten to a snug torque, then rotate an additional angle (e.g., +90°). Bypasses friction variability.</td><td>Engine bolts, TTY bolts, critical aerospace joints. More repeatable than torque-only specs.</td></tr>
+      </table>
+
+      <div class="co p" style="margin-top:.5rem;">
+        <span class="cl">Torque Wrench Calibration</span>
+        Click torque wrenches lose calibration over time. Most should be checked every 12 months (or after being dropped). <strong>Store with the torque set to minimum</strong> — leaving it under spring load fatigues the mechanism. A wrench stored at max torque for months will read low and undertighten your critical bolts.
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-top:1rem;">
+    <div>
+      <h3 class="p">Bolt Stretching — The Engineering Details</h3>
+      <p>Bolts are designed to operate in their <em>elastic</em> region — stretch under load, return to original length when unloaded. This is the fundamental mechanism that makes them work.</p>
+      <div class="card p">
+        <div class="ct">Elastic Range = Safe Operating Zone</div>
+        <ul style="font-size:13px;line-height:1.9;">
+          <li><strong>Under proof load:</strong> Bolt behaves perfectly elastically. Torque it, it stretches. Remove torque, it returns. Can reuse many times.</li>
+          <li><strong>At yield strength:</strong> Permanent deformation begins. The bolt is now shorter at rest than it was — it has <em>relaxed</em>. Clamp force is permanently reduced.</li>
+          <li><strong>Torque-to-yield (TTY) bolts</strong> — intentionally tightened slightly past yield. One-time use. Very consistent clamp force. Used in automotive head bolts, main bearing caps. <strong>MUST be replaced if removed.</strong></li>
+          <li><strong>Fatigue:</strong> Even below yield, cyclic loading eventually causes crack initiation at thread roots. This is why aerospace bolts have a finite life in service.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 class="c">Field Torque Checks — When No Wrench Is Available</h3>
+      <p>You won't always have a torque wrench at competition. Some practical techniques:</p>
+      <div class="card c">
+        <div class="ct">Calibrated Feel</div>
+        <ul style="font-size:13px;line-height:1.9;">
+          <li><strong>Snug:</strong> The bolt compresses the joint — no movement, but no significant torque beyond that. Starting point.</li>
+          <li><strong>Firm:</strong> ~50% of spec torque. Takes conscious effort. Joint is definitively clamped.</li>
+          <li><strong>Tight:</strong> ~75–80% of spec. Takes real effort. Recommended minimum for non-critical FRC fasteners.</li>
+          <li><strong>Full torque:</strong> At spec. Requires a torque wrench to know for certain. Develop a feel by practicing with a wrench — tighten by feel, then check with the wrench.</li>
+          <li><strong>Paint stripe method:</strong> Apply stripe at correct torque. Inspect stripe at competition — moved stripe = loose bolt. This is faster than re-torquing everything between matches.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §17  PREVENTING LOOSENING & REUSE LIMITS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s17">
+  <div class="section-header"><div class="sec-num">17</div><h2>PREVENTING LOOSENING <span class="a">&amp; REUSE LIMITS</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Loctite Threadlocker</h3>
+      <div class="ga2">
+        <div class="card p"><div class="ct">Purple (222) — Low Strength</div><p>For screws #4 and smaller where blue would make removal very difficult. Small electronics, sensor screws, adjustment screws. Removable with hand tools.</p></div>
+        <div class="card b"><div class="ct">Blue (243) — Medium Strength ★</div><p><strong>FRC default.</strong> Removable with hand tools. Resists vibration well. Sets in 10 min, full cure 24 hr. One drop on threads — it wicks by capillary action. Works on clean, oil-free metal. <span class="tag tb">★ Use on all structural fasteners</span></p></div>
+        <div class="card r"><div class="ct">Red (271) — High Strength</div><p><strong>Permanent.</strong> Requires heat (250°F+, heat gun) to remove. Use only for permanently locked studs, press-fit inserts, things you truly never want to disassemble. FRC use: set screws on critical hubs, press-fit motor pinions.</p><p><span class="tag tr">Heat required to remove</span></p></div>
+        <div class="card g"><div class="ct">Green (290) — Wicking Grade</div><p>Very low viscosity — wicks into assembled joints by capillary action. Apply <em>after</em> assembly when you can't disassemble to add blue. Medium strength. Good for field repairs where disassembly isn't possible.</p></div>
+      </div>
+
+      <div class="co warn" style="margin-top:.6rem;">
+        <span class="cl">Loctite Doesn't Replace Torque</span>
+        Always torque to spec first. Loctite is the backup, not the primary retention method. Also: doesn't cure on stainless without primer. Doesn't work on plastics (can craze/crack). Doesn't work on oily or dirty threads.
+      </div>
+
+      <h3 class="g" style="margin-top:.8rem;">Mechanical Methods</h3>
+      <div class="ga2">
+        <div class="card g"><div class="ct">Nylock Nut</div><p>Nylon insert grips threads. Effective. Finite life. <span class="tag tg">★ FRC standard</span></p></div>
+        <div class="card b"><div class="ct">Nord-Lock Washer</div><p>Wedge action — loosening increases clamping force. Best mechanical retention. More expensive.</p></div>
+        <div class="card p"><div class="ct">Safety Wire</div><p>Wire through drilled bolt heads — any rotation tightens the wire. Aerospace gold standard. Requires pre-drilled bolts and safety wire pliers. Wire routing: loosening direction tightens the wire.</p></div>
+        <div class="card y"><div class="ct">Paint / Torque Stripe</div><p>Line across bolt head and surface after final torque. Visual indicator of any movement. Fast to inspect between matches. <span class="tag ty">★ Do this at build season end</span></p></div>
+        <div class="card r"><div class="ct">Split Lock Washer</div><p>Common but largely ineffective — flattens before providing meaningful resistance. Better than nothing, not better than nylock. NASA and military studies confirm limited effectiveness.</p></div>
+        <div class="card c"><div class="ct">Castle Nut + Cotter Pin</div><p>Positive mechanical lock. Cannot back off without removing the pin. Safety-critical pivots and wheel bearings.</p></div>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="p">Fastener Reuse Limits</h3>
+      <p>Every fastener has a finite life. Knowing when to replace is as important as proper installation.</p>
+      <table>
+        <tr><th>Fastener</th><th>Typical Reuse</th><th>When to Replace</th></tr>
+        <tr>
+          <td><strong>Nylock Nut</strong></td>
+          <td>1× by spec; 3–5× in practice</td>
+          <td>Replace if it spins freely without resistance (nylon is gone). Replace any nylock that has been backed off and re-installed more than a few times. In FRC: replace nylocks on critical joints every season.</td>
+        </tr>
+        <tr>
+          <td><strong>Standard Hex Nut</strong></td>
+          <td>Effectively unlimited if undamaged</td>
+          <td>Replace if threads are damaged (cross-threaded, stretched, stripped corners). Discard any nut that spins on with uneven resistance.</td>
+        </tr>
+        <tr>
+          <td><strong>Structural Bolt (Grade 5/8)</strong></td>
+          <td>Many times if properly torqued below proof load</td>
+          <td>Replace if: visually stretched (the threads near the shank look thinner/longer), head is rounded, threads are damaged, or it was ever over-torqued. When in doubt: replace. Bolts are cheap; failure is expensive.</td>
+        </tr>
+        <tr>
+          <td><strong>Torque-to-Yield (TTY) Bolt</strong></td>
+          <td><strong>One time only</strong></td>
+          <td>Replace after every removal, no exceptions. These are engine head bolts, flywheel bolts, some suspension fasteners. Usually marked on the head or in the service manual. Common in automotive; less common in FRC unless using production motor hardware.</td>
+        </tr>
+        <tr>
+          <td><strong>Safety Wire</strong></td>
+          <td><strong>One time only</strong></td>
+          <td>Single use — the wire permanently deforms when installed and can't be reliably reused. Always install fresh wire.</td>
+        </tr>
+        <tr>
+          <td><strong>Blind Rivet</strong></td>
+          <td><strong>One time</strong> — must drill out to remove</td>
+          <td>If you drill one out, inspect the hole carefully — it may need to be resized for the next rivet or repaired.</td>
+        </tr>
+        <tr>
+          <td><strong>Self-Tapping Screw (in same hole)</strong></td>
+          <td>1–3 times in sheet metal</td>
+          <td>Each removal slightly enlarges the hole. After 3+ insertions, consider a machine screw with riv-nut or helicoil.</td>
+        </tr>
+        <tr>
+          <td><strong>Loctite Blue Joint</strong></td>
+          <td>Unlimited (if re-applied)</td>
+          <td>Remove, clean threads with acetone or brake cleaner, apply fresh Loctite, reassemble. The joint is as good as new.</td>
+        </tr>
+        <tr>
+          <td><strong>Heatsert in 3D Print</strong></td>
+          <td>Many times (the insert is metal)</td>
+          <td>The insert itself is essentially permanent. Replace if the surrounding plastic has cracked or the insert has pulled loose from the plastic.</td>
+        </tr>
+        <tr>
+          <td><strong>Thread in 3D Print (no insert)</strong></td>
+          <td>1–3 times in PLA, fewer in PETG</td>
+          <td>Inspect threads — if any wiggle or cross-threading, the threads are gone. Install a heatsert.</td>
+        </tr>
+      </table>
+
+      <div class="co tip" style="margin-top:.6rem;">
+        <span class="cl">FRC Season Protocol</span>
+        At the start of every competition season: replace all nylocks on drivetrain, arm joints, and bumper mounting. Inspect all Grade 8 bolts visually. Re-apply Loctite blue wherever it was used if the joint was opened. Apply torque stripes before your first event. These 30 minutes prevent most in-match fastener failures.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §18  RIVETS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s18">
+  <div class="section-header"><div class="sec-num">18</div><h2><span class="a">RIVETS</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Blind (Pop) Rivets</h3>
+      <p>Two-part: body (rivet) + mandrel (pulling pin). Installed with a rivet gun from one side only. The mandrel is pulled, expanding the rivet body against the far surface, then the mandrel snaps. Name comes from the early squeezing sound ("pop").</p>
+
+      <div class="mb">Reading Rivet Size:
+  3/16" × ½"   →  dia × max grip length
+  OR
+  AD5-6         →  mil-spec designation
+    "AD" = aluminum/steel combination
+    "5"  = 5/32" diameter (N ÷ 16)
+    "6"  = grip range 6/16" = ⅜" max
+
+Common FRC sizes:
+  ⅛" (3.2mm) dia   → thin sheet, polycarbonate
+  3/16" (4.8mm) dia → standard aluminum sheet ★
+  ¼" dia            → heavy structural</div>
+
+      <table>
+        <tr><th>Body/Mandrel Material</th><th>Strength</th><th>Use</th></tr>
+        <tr><td>Aluminum / steel</td><td>Medium</td><td>Standard — most FRC sheet metal ★</td></tr>
+        <tr><td>All steel</td><td>High</td><td>Steel-to-steel, higher loads</td></tr>
+        <tr><td>Stainless / stainless</td><td>High</td><td>Corrosive environments, outdoor</td></tr>
+        <tr><td>Large flange head</td><td>Same body</td><td>Thin or soft materials — prevents pullthrough</td></tr>
+        <tr><td>Structural (Huck, Avdel)</td><td>Very High</td><td>Near-bolted strength. Needs pneumatic tool.</td></tr>
+      </table>
+
+      <div class="co tip" style="margin-top:.5rem;">
+        <span class="cl">Rivet Hole Prep</span>
+        Correct hole size is critical. Too small: rivet can't seat. Too large: rivet doesn't grip. Use a drill bit 0.003–0.005" over the rivet diameter. Deburr both sides. Clamp parts tightly together before riveting — the rivet doesn't pull parts together like a bolt; it just locks them in position.
+      </div>
+    </div>
+
+    <div>
+      <h3 class="g">Solid Rivets</h3>
+      <p>A solid metal cylinder inserted through aligned holes. A <em>bucking bar</em> supports the tail while the opposite end is hammered or squeezed to form a shop head. Both-sided access required. The gold standard for aircraft and heavy structural work.</p>
+      <p><strong>Hot rivets</strong> = heated before installation (traditional steel construction — the rivet contracts as it cools, creating enormous clamping force). Modern aircraft use cold aluminum solid rivets.</p>
+
+      <h3 class="p" style="margin-top:.8rem;">Comparison Table</h3>
+      <table>
+        <tr><th>Property</th><th>Blind/Pop</th><th>Structural Blind</th><th>Solid</th></tr>
+        <tr><td>One-sided access</td><td>✓ Yes</td><td>✓ Yes</td><td>✗ No</td></tr>
+        <tr><td>Tool</td><td>Hand puller</td><td>Pneumatic</td><td>Hammer + bar</td></tr>
+        <tr><td>Shear strength</td><td>Medium</td><td>High</td><td>Very High</td></tr>
+        <tr><td>Tension strength</td><td>Low</td><td>Medium</td><td>High</td></tr>
+        <tr><td>Removable</td><td>Drill out</td><td>Drill out</td><td>Drill/punch</td></tr>
+        <tr><td>FRC use</td><td>★ Very common</td><td>Rare</td><td>Very rare</td></tr>
+      </table>
+
+      <h3 class="b" style="margin-top:.8rem;">Rivets vs Bolts — When to Use Which</h3>
+      <table>
+        <tr><th>Situation</th><th>Use</th></tr>
+        <tr><td>Permanent joint, no access behind</td><td>Blind rivet or riv-nut</td></tr>
+        <tr><td>Need to remove for maintenance</td><td>Bolt + nut or riv-nut</td></tr>
+        <tr><td>Very thin sheet metal (shear joint)</td><td>Blind rivet — fast and strong in shear</td></tr>
+        <tr><td>High tension load (pulling apart)</td><td>Bolt — rivets are poor in tension</td></tr>
+        <tr><td>Permanent, high-load structural</td><td>Structural rivet or bolt</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §19  FORCE DIRECTIONS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s19">
+  <div class="section-header"><div class="sec-num">19</div><h2>FORCE <span class="a">DIRECTIONS</span></h2></div>
+
+  <div class="g3">
+    <div>
+      <h3>Tension (Axial Pull)</h3>
+      <p>Force pulling the fastener out along its axis — trying to separate the two parts.</p>
+      <table>
+        <tr><th>Fastener</th><th>Tension</th></tr>
+        <tr><td>Bolt + nut (properly torqued)</td><td>★★★★★</td></tr>
+        <tr><td>Helicoil or heatsert</td><td>★★★★</td></tr>
+        <tr><td>Riv-nut</td><td>★★★</td></tr>
+        <tr><td>Blind rivet</td><td>★★ (mandrel can push out)</td></tr>
+        <tr><td>Wood screw (along grain)</td><td>★★★</td></tr>
+        <tr><td>Nail</td><td>★ (withdraws easily)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 class="b">Shear (Transverse Load)</h3>
+      <p>Force perpendicular to the fastener axis — trying to cut the fastener in two. The unthreaded shank carries shear, not the threads.</p>
+      <table>
+        <tr><th>Fastener</th><th>Shear</th></tr>
+        <tr><td>Bolt (smooth shank in shear plane)</td><td>★★★★★</td></tr>
+        <tr><td>Solid rivet</td><td>★★★★★</td></tr>
+        <tr><td>Blind rivet</td><td>★★★★</td></tr>
+        <tr><td>Bolt (threads in shear plane)</td><td>★★★ (threads are stress risers)</td></tr>
+        <tr><td>Nail</td><td>★★★★ (why nails work in framing)</td></tr>
+        <tr><td>Set screw</td><td>★★ (point contact)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 class="g">Torque / Rotation</h3>
+      <p>Force trying to rotate one part relative to another around the bolt axis. Bolts resist this only via friction from clamping.</p>
+      <table>
+        <tr><th>Fastener</th><th>Anti-Rotation</th></tr>
+        <tr><td>Bolt + nut (high preload)</td><td>★★★ Friction only</td></tr>
+        <tr><td>Key + keyway</td><td>★★★★★</td></tr>
+        <tr><td>Carriage bolt (square neck)</td><td>★★★★</td></tr>
+        <tr><td>Set screw (cup point)</td><td>★★★</td></tr>
+        <tr><td>Set screw + Loctite</td><td>★★★★</td></tr>
+        <tr><td>Press fit (interference)</td><td>★★★★★</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="co tip" style="margin-top:1rem;">
+    <span class="cl">FRC Design Rule</span>
+    Design joints so bolts carry <strong>tension</strong> (their strength). Use structure, pins, shoulders, or keys to carry shear and torque. If a bolt must carry shear: use a shoulder bolt (precision shank) and make sure the shank spans the shear plane — never let threads sit in the shear plane.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §20  FIELD CHECKS & PIT PROTOCOL
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s20">
+  <div class="section-header"><div class="sec-num">20</div><h2>FIELD CHECKS <span class="a">&amp; PIT PROTOCOL</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Between-Match Inspection System — 2 Minutes</h3>
+      <div class="co" style="margin-bottom:.7rem;">
+        <span class="cl">Step 1 — Visual Stripe Scan (30 sec)</span>
+        Scan all paint stripes on critical fasteners. Broken or offset stripe = that bolt has moved. Mark any suspect bolt for immediate attention. One person can scan the entire robot this way while the other is connecting the battery.
+      </div>
+      <div class="co info" style="margin-bottom:.7rem;">
+        <span class="cl">Step 2 — Touch-Torque Check (60 sec)</span>
+        Designated person goes through P1 and P2 fasteners with a hex key or wrench. Snug any that move even slightly. If a nylock spins on with no resistance — the nylock is dead, replace it. Carry a bag of spare nylocks in your pit kit at all times.
+      </div>
+      <div class="co tip">
+        <span class="cl">Step 3 — Visual Damage Check (30 sec)</span>
+        Any cracked structure? Bent members? Missing fasteners? Report to mechanical lead immediately. A missing bolt usually means it's somewhere inside your robot — find it before it shorts electronics.
+      </div>
+
+      <h3 class="b" style="margin-top:.8rem;">Prioritized Inspection Order</h3>
+      <table>
+        <tr><th>Priority</th><th>Components</th><th>Frequency</th></tr>
+        <tr><td><span class="tag tr">P1</span></td><td>Drive wheels, gearbox, battery connector, main breaker</td><td>Every match</td></tr>
+        <tr><td><span class="tag to">P2</span></td><td>Arm/elevator pivots, game piece mechanism mounts, bumper bolts</td><td>Every match</td></tr>
+        <tr><td><span class="tag tb">P3</span></td><td>Electronics panel, pneumatic fittings, sensor mounts</td><td>Every 2–3 matches</td></tr>
+        <tr><td><span class="tag tg">P4</span></td><td>Frame structure, general sheet metal, covers</td><td>Daily</td></tr>
+      </table>
+    </div>
+
+    <div>
+      <h3 class="g">Pit Kit — Fastener Tools</h3>
+      <ul class="cl-list">
+        <li>Full hex key set — both SAE (1/16"–⅜") and metric (1.5–10mm)</li>
+        <li>T-handle hex drivers — 3/32", ⅛", 5/32", 3/16", ¼" (much faster than L-keys)</li>
+        <li>Socket set with ratchet — ¼" drive for small, ⅜" drive for structural</li>
+        <li>Combination wrenches — 7/16", ½", 9/16" SAE; 10mm, 13mm metric</li>
+        <li>Torque wrench — ⅜" drive, 0–50 lb·ft</li>
+        <li>Loctite Blue (243) — in pit apron pocket</li>
+        <li>Paint pens — orange AND yellow (contrasting colors)</li>
+        <li>Nylock nuts — assortment: #10-32, ¼-20, M5, M6</li>
+        <li>SHCS assortment — ¼-20 and #10-32 in ½", ¾", 1", 1¼", 1½"</li>
+        <li>Rivet gun + 3/16" aluminum rivets, ¼" pop rivets</li>
+        <li>Riv-nut tool + ¼-20 and #10-32 riv-nuts</li>
+        <li>Thread pitch gauge (combo SAE + metric)</li>
+        <li>Digital calipers</li>
+        <li>Anti-seize (small tube for stainless fasteners)</li>
+        <li>Tap set — ¼-20 and #10-32 plug taps at minimum</li>
+        <li>Heatserts + soldering iron (for 3D print repairs)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §21  WOOD FASTENERS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s21">
+  <div class="section-header"><div class="sec-num">21</div><h2>WOOD <span class="a">FASTENERS</span></h2></div>
+
+  <div class="g2">
+    <div>
+      <h3>Wood Screws — Design &amp; Selection</h3>
+      <p>Wood screws differ from machine screws in four key ways: (1) tapered/pointed tip for self-starting, (2) coarser pitch for wood fiber engagement, (3) partial threading (see below), and (4) variable root diameter (threads thicken from tip to shank — creates a wedge action for pullout resistance).</p>
+
+      <h3 class="b">Why Partial Threading?</h3>
+      <div class="co info">
+        <span class="cl">The Pull-Down Effect</span>
+        The smooth shank passes freely through the top board — no threads engage it. The threads only bite in the bottom board (the "receiver"). As you drive the screw, the threads advance faster than the shank, pulling the top board tight to the bottom. If the screw were fully threaded, the top board would lift. This is identical to a clamp. Always choose screw length so the smooth shank spans the top board, with all threads in the receiver piece.
+      </div>
+
+      <h3 class="g" style="margin-top:.7rem;">Wood Screw Types</h3>
+      <table>
+        <tr><th>Type</th><th>Drive</th><th>Features</th><th>Use</th></tr>
+        <tr><td>Drywall Screw</td><td>Phillips #2</td><td>Bugle head, phosphate coating, hardened but brittle</td><td>Drywall. Snaps under shear — don't use structurally.</td></tr>
+        <tr><td>Deck / Coated Screw</td><td>Torx or Phillips</td><td>Weather-resistant coating, larger shank</td><td>Exterior wood, decking, outdoor fixtures</td></tr>
+        <tr><td>GRK / Structural</td><td>Torx</td><td>Case-hardened, large thread, no cam-out</td><td>Heavy joinery, robot field elements, game tables ★</td></tr>
+        <tr><td>Pocket Hole Screw (Kreg)</td><td>Phillips or square</td><td>Coarse thread, course pitch, pan or modified head</td><td>Pocket hole joinery — angled blind joints in cabinets and frames</td></tr>
+        <tr><td>Cabinet Screw</td><td>Phillips or Torx</td><td>Various coatings, pan or flat head</td><td>Cabinet construction, furniture</td></tr>
+        <tr><td>Lag Screw</td><td>Hex head (wrench)</td><td>Very large diameter, hex-head for high torque</td><td>Heavy structural — beam-to-post, ledger mounting</td></tr>
+      </table>
+    </div>
+
+    <div>
+      <h3 class="p">Nails — When &amp; Why</h3>
+      <table>
+        <tr><th>Property</th><th>Nail</th><th>Screw</th></tr>
+        <tr><td>Shear strength</td><td>★★★★ Excellent (ductile, bends not breaks)</td><td>★★ Poor (brittle, snaps in shear)</td></tr>
+        <tr><td>Withdrawal (tension)</td><td>★★ Poor (smooth shank pulls out)</td><td>★★★★ Excellent (threads grip)</td></tr>
+        <tr><td>Installation speed</td><td>★★★★★ Very fast (nail gun)</td><td>★★★ Moderate</td></tr>
+        <tr><td>Removability</td><td>★ Very difficult</td><td>★★★★ Unscrew easily</td></tr>
+        <tr><td>Framing</td><td>★★★★★ Industry standard</td><td>Not used</td></tr>
+        <tr><td>Glue-up hold</td><td>★★★★★ Perfect for this</td><td>Overkill for temporary</td></tr>
+      </table>
+
+      <h3 class="c" style="margin-top:.8rem;">Nails in Robotics — The Glue-Up Trick</h3>
+      <div class="card c">
+        <div class="ct">Brad Nail as Clamp Substitute</div>
+        <p>When building field elements, game tables, or wooden practice field components:</p>
+        <ol style="font-size:13px;line-height:2.0;">
+          <li>Apply wood glue to joint surfaces</li>
+          <li>Align parts precisely</li>
+          <li>Shoot 2–3 brad nails (18 gauge finish nailer) to register the parts and hold position</li>
+          <li>Wipe squeeze-out immediately</li>
+          <li>Let cure — the <em>glue</em> provides all structural strength</li>
+          <li>The nails are just temporary clamps (that you leave in)</li>
+        </ol>
+        <p>This technique allows fast assembly without needing a dozen clamps. Wood glue in a good joint is stronger than the wood itself.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §22  FASTENERS IN CAD
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s22">
+  <div class="section-header"><div class="sec-num">22</div><h2>FASTENERS <span class="a">IN CAD</span></h2></div>
+
+  <div class="g3">
+    <div>
+      <h3>Onshape</h3>
+      <div class="card b">
+        <div class="ct">Hole Feature</div>
+        <p>The Hole feature generates counterbored, countersunk, clearance, and tap holes automatically from a standard size selection. Always use this rather than manually creating hole geometry — it's faster and produces correct tolerances. The feature also annotates the drawing automatically.</p>
+      </div>
+      <div class="card g" style="margin-top:.7rem;">
+        <div class="ct">Fastener Library (FeatureScript)</div>
+        <p>Onshape has a built-in standard part library and many community FeatureScripts that insert parametric fastener models. The Fastened Mate in assemblies automatically mates a bolt to a hole. Use the <strong>McMaster-Carr</strong> integration to drag real part numbers directly into your assembly — the geometry is exact and the part number is captured for ordering.</p>
+      </div>
+      <div class="card o" style="margin-top:.7rem;">
+        <div class="ct">Thread Representation</div>
+        <p>In CAD, threads are almost never modeled as actual helical geometry — it's too slow and adds no manufacturing value. Instead: model the minor diameter cylinder (what the hole looks like), add a cosmetic thread annotation. For 3D printing: model actual geometry if you're printing self-tapping threads.</p>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="g">Fusion 360</h3>
+      <div class="card g">
+        <div class="ct">Thread Feature</div>
+        <p>Fusion's Thread feature adds cosmetic or physical (modeled) threads to any cylindrical face. For 3D printing, use physical threads. For CNC and manufacturing documentation, use cosmetic threads — they generate proper thread callouts in drawings.</p>
+      </div>
+      <div class="card b" style="margin-top:.7rem;">
+        <div class="ct">McMaster-Carr Integration</div>
+        <p>Direct McMaster-Carr import — search by part number or description, drag the 3D model into your assembly. The model includes exact geometry and the part number saves to your BOM automatically. Same workflow works in Onshape. Get in the habit of using real hardware in assemblies — interference checks and clearance verification depend on it.</p>
+      </div>
+      <div class="card p" style="margin-top:.7rem;">
+        <div class="ct">Design for Manufacturability</div>
+        <p>Always check: Can I get a wrench in there? Is there enough clearance for the bolt head? Can the nut be installed? Does the counterbore depth clear the bolt head? Model the actual tool paths mentally — a perfectly designed joint on screen is useless if you can't tighten it in the real world.</p>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="p">General CAD Best Practices</h3>
+      <div class="card p" style="margin-bottom:.7rem;">
+        <div class="ct">Model Clearance Holes Correctly</div>
+        <p>Always model your clearance holes at the correct clearance diameter (not the bolt diameter). A ¼-20 bolt goes in a 0.266" hole — not a 0.250" hole. This matters for DXF export to a waterjet or laser, and for interference checking. Tap holes should be at minor diameter (the unthreaded hole diameter).</p>
+      </div>
+      <div class="card c" style="margin-bottom:.7rem;">
+        <div class="ct">Counterbore and Countersink</div>
+        <p>Model these features explicitly. In drawings they generate proper GD&T annotations. In assemblies they confirm the bolt head clears adjacent geometry. The counterbore depth should be the head height + 0.010–0.020" clearance. The countersink angle must match the screw (82° US, 90° DIN — verify before modeling).</p>
+      </div>
+      <div class="card o">
+        <div class="ct">Fastener Checklist Before Sending to Build</div>
+        <ul style="font-size:12px;line-height:1.9;">
+          <li>Every hole has a correct type and size</li>
+          <li>Every bolt head has wrench clearance</li>
+          <li>Every nut has installation access</li>
+          <li>Partially threaded bolts have correct grip length</li>
+          <li>Grade and material specified for critical fasteners</li>
+          <li>Loctite or nylock noted on vibration-critical joints</li>
+          <li>All fasteners are real McMaster/supplier part numbers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  §23  WHICH FASTENER WHEN?
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s23">
+  <div class="section-header"><div class="sec-num">23</div><h2>WHICH FASTENER <span class="a">WHEN?</span></h2></div>
+
+  <table>
+    <tr>
+      <th>Situation</th>
+      <th>Best Choice</th>
+      <th>Why</th>
+      <th>Avoid</th>
+    </tr>
+    <tr>
+      <td>Main structural bolt, removable</td>
+      <td>SHCS (Grade 12.9) + nylock + Loctite Blue</td>
+      <td>High strength, hex socket, belt-and-suspenders retention</td>
+      <td>Grade 2 hardware-store bolts</td>
+    </tr>
+    <tr>
+      <td>Bolt into aluminum tube/plate — no back access</td>
+      <td>Riv-nut + SHCS</td>
+      <td>Permanent thread, one-sided install</td>
+      <td>Self-tapping into aluminum (strips easily)</td>
+    </tr>
+    <tr>
+      <td>Thin sheet metal — permanent</td>
+      <td>3/16" aluminum blind rivet</td>
+      <td>Fast, one-sided, strong in shear</td>
+      <td>Sheet metal screws (back out from vibration)</td>
+    </tr>
+    <tr>
+      <td>Pivot point / linkage axis</td>
+      <td>Shoulder bolt (shoulder screw)</td>
+      <td>Precision ground shank = true bearing surface</td>
+      <td>Standard bolt with threads in pivot bore</td>
+    </tr>
+    <tr>
+      <td>Hub, sprocket, or pulley on shaft</td>
+      <td>Set screws (cup point) + Loctite Blue</td>
+      <td>Clamping grip, Loctite prevents vibration-out</td>
+      <td>Any mounting without retention — it WILL walk off</td>
+    </tr>
+    <tr>
+      <td>Structural screw in 3D print</td>
+      <td>Heatsert (brass insert) + machine screw</td>
+      <td>Metal-to-metal threads, won't strip after one match</td>
+      <td>Screwing directly into PLA (destroys in one use)</td>
+    </tr>
+    <tr>
+      <td>Stripped aluminum tapped hole (repair)</td>
+      <td>Helicoil insert</td>
+      <td>Stronger than original, saves the part</td>
+      <td>Re-tapping to larger size (weakens structure)</td>
+    </tr>
+    <tr>
+      <td>Field element / wood structure</td>
+      <td>GRK structural screw (Torx)</td>
+      <td>No cam-out, strong withdrawal, no pre-drilling</td>
+      <td>Drywall screws (brittle, snap in shear)</td>
+    </tr>
+    <tr>
+      <td>Flush surface needed</td>
+      <td>FHCS (flat head countersunk) + countersink</td>
+      <td>Sits flush; no snag hazard</td>
+      <td>SHCS without counterbore (head sticks up)</td>
+    </tr>
+    <tr>
+      <td>Temporary hold during glue-up</td>
+      <td>Brad nails (finish nailer)</td>
+      <td>Fast, holds while glue cures, invisible</td>
+      <td>Clamps only (limit quantity, slow)</td>
+    </tr>
+    <tr>
+      <td>Pneumatic fitting connection</td>
+      <td>NPT + PTFE tape or push-to-connect fitting</td>
+      <td>Designed to seal taper thread</td>
+      <td>NPT without sealant (will leak under pressure)</td>
+    </tr>
+    <tr>
+      <td>Wood-to-metal connection, clean look</td>
+      <td>Carriage bolt + nut + washer</td>
+      <td>Square neck prevents spinning, smooth head is clean</td>
+      <td>Hex bolt (needs wrenching both sides)</td>
+    </tr>
+    <tr>
+      <td>Adjustable mechanism stop or pivot preload</td>
+      <td>Shoulder bolt + jam nut + turning hex</td>
+      <td>Set preload, jam nut locks position</td>
+      <td>Set screw alone (imprecise)</td>
+    </tr>
+    <tr>
+      <td>Truly permanent joint, never to be removed</td>
+      <td>Loctite Red + bolt, or structural rivet</td>
+      <td>Chemical permanent or mechanically permanent</td>
+      <td>Blue Loctite (medium strength, removable)</td>
+    </tr>
+    <tr>
+      <td>Safety-critical, belt-and-suspenders</td>
+      <td>Torqued + Loctite Blue + nylock + paint stripe</td>
+      <td>Multiple independent retention methods</td>
+      <td>Any single retention method alone</td>
+    </tr>
+    <tr>
+      <td>Stainless hardware in any context</td>
+      <td>A2/A4 stainless + anti-seize paste</td>
+      <td>Prevents galling seizure during installation</td>
+      <td>Dry assembly of stainless-to-stainless (will seize)</td>
+    </tr>
+    <tr>
+      <td>High-temperature environment (>250°F)</td>
+      <td>All-metal lock nut + Loctite Red</td>
+      <td>No nylon components that melt</td>
+      <td>Nylock (nylon melts, loses retention)</td>
+    </tr>
+  </table>
+
+  <div class="co tip" style="margin-top:1rem;">
+    <span class="cl">The Five Golden Rules</span>
+    (1) Every structural bolt gets either a nylock OR Loctite blue — never neither. (2) Mark critical bolts with paint pen after final torque — inspect the stripe, not the bolt. (3) Torque to spec — finger-tight is not a spec. (4) Match fastener grade to the application — don't use hardware-store Grade 2 on a drivetrain. (5) The right fastener is the one designed for the job. Spend 30 seconds choosing it correctly rather than 30 minutes fixing a failure.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+  <div style="font-family:var(--mono);font-size:9.5px;color:var(--dim);">
+    FIRST Robotics — Mechanical Systems Reference<br>
+    Fasteners Complete Study Sheet — 23 Sections
+  </div>
+  <div style="font-family:var(--mono);font-size:9.5px;color:var(--dim);text-align:right;">
+    Reference: Machinery's Handbook · Starrett Tap Charts · McMaster-Carr<br>
+    Torque to spec. Loctite blue. Paint stripe. Then win.
+  </div>
+</div>
+
+</div><!-- end wrapper -->
+</body>
+</html>

@@ -1,0 +1,83 @@
+{
+ "sha256": "740ac2c692f5cca7a8b7d77b92540af3f85bdf30bc280bee1698ee16d684930b",
+ "pages": [
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "PUNK ROCK\nENGINEERING\nBuild Fast. Break Things. Learn Everything.\nAn FRC Engineering Lecture  |  Inspired by SuperfastMatt",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Two Ways to Build Rockets\nNASA\n\"Don't Fail\"\n\u2714  Define every requirement\n\u2714  Check every box\n\u2714  Simulate before building\n\u2714  Multiple review gates\n\u2714  Methodical iteration\nSpaceX\n\"Fail Fast, Fail Often\"\n\u26a1  Take an educated guess\n\u26a1  Build it quickly\n\u26a1  Strap on sensors\n\u26a1  Light it up and see\n\u26a1  Learn at warp speed\nVS\n2",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "What Is Punk Rock Engineering?\n\"Skip all the boring parts and just sort of guess what the final design will look like, then build it and test it. After which it should be pretty obvious why your design sucks. So you remake it. Then you're done.\"\n\u2014 SuperfastMatt\nThe punk rock ethos applied to engineering: skip the process, trust your gut, build it, find out it sucks, fix it.\n3",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The Traditional Engineering Design Cycle\n1. Define Goals\n2. Basic Designs\n3. Hand Calculations\n4. Iterate Designs\n5. Computer Simulation\n6. Iterate Designs\n7. Simple Mockups\n8. Prototypes\n9. Release Candidate\n10. Test & Iterate\nThis process is thorough, rigorous, and reduces expensive mistakes \u2014 but takes time.\n\u2191 iterate\n\u2191 iterate\n4",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The Punk Rock Engineering Cycle\nGuess the\nDesign\n\u2192\nBuild It\n\u2192\nTest It\n\u2192\n\"Oh. That\nSucks.\"\n\u2192\nRemake It\n\u2192\nDone! \u2713\nEngineering\nintuition\nWhatever\nyou can\nSee what\nhappens\nThis is the\nmoment of truth\nNow you know\nwhat you want\nShip it!\nThe whole cycle can take hours \u2014 not months.\nDisclaimer: \"intuition\" here is doing a LOT of heavy lifting.\n5",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "\u26a0  The Big Caveat\nEngineering intuition is to engineering...\n...as astrology is to astronomy.\n\u2014 SuperfastMatt\nAstrology\nLooks like science\nUses made-up patterns\nNo predictive rigor\nFeels right, might be wrong\nAstronomy\nThe real deal\nTestable hypotheses\nMeasured, verified\nPredictable results\nPunk rock engineering isn't fake \u2014 but your intuition must be earned through experience.\n6",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Side by Side: Two Approaches\nCategory\nTraditional Engineering\nPunk Rock Engineering\nStarting point\nClear requirements + specs\nGut feeling + rough idea\nFirst action\nResearch & calculate\nBuild something\nLearning style\nSimulate before building\nBuild to find out\nRisk tolerance\nMinimize failure\nEmbrace failure early\nIteration speed\nSlow & deliberate\nFast & frequent\nRequires\nSpecs, time, discipline\nTools, materials, intuition\nBest for\nHigh stakes, large teams\nGetting unstuck, learning\n7",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Why Building Early Can Be Smarter\nThere are things you simply cannot learn until you dive in.\nComplex Part Interactions\nHow your intake, conveyor, and shooter actually work together can't be fully simulated \u2014 only discovered.\nUnknown Unknowns\nYou don't know what you don't know. A physical prototype reveals constraints you never would have thought to simulate.\nClarifying Your Goals\n\"You might not know what you really want until you go for it and find out that's not what you want.\"  \u2014 SuperfastMatt\nThis is why prototyping fast is a legitimate engineering strategy \u2014 not just being impatient.\n8",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "In FRC: When to Use Which Approach\nTraditional Engineering\n\ud83d\udd35  Drivetrain chassis design\n\ud83d\udd35  Structural load calculations (arm, elevator)\n\ud83d\udd35  Game strategy and game piece analysis\n\ud83d\udd35  End-of-season design review for next year\n\ud83d\udd35  Anything that mounts motors or bears load\nPunk Rock Engineering\n\u26a1  Intake geometry (how many tries does it take?)\n\u26a1  Shooter angle and flywheel speed\n\u26a1  Gripper / end effector design\n\u26a1  Early-season brainstorming builds\n\u26a1  \"Does this concept even work?\" tests\n9",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "\u2705  WHEN TO GO PUNK ROCK\n\ud83d\ude80\nYou're stuck\nOverthinking it? Just build a rough version. You'll learn more in 20 minutes of testing than 2 hours of agonizing.\n\ud83e\udde0\nEarly prototyping\nWeek 1\u20132 of build season. The goal is to test if an idea is viable at all, not to build the final robot.\n\ud83c\udf93\nLearning something new\nBuilding a swerve drive for the first time? Build a bad one first. There's no shortcut to the first one.\n\ud83d\udee0\nPersonal / side projects\nNo budget review. No safety audit. Just you and a problem. This is where punk rock thrives.\n\u23f1\nWhen time is short\nSomething's broken at 9pm before a Saturday competition. Punk rock engineering is the only option.\n10",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "\ud83d\udeab  WHEN NOT TO GO PUNK ROCK\n\ud83e\udd16\nYour final competition robot\nYou've tested concepts. Now apply rigor. A robot that fails at competition due to sloppy design costs you qualification points.\n\ud83c\udfd7\nLoad-bearing / structural systems\nElevators, arms, climbers. If it could hit someone when it fails, run the calculations.\n\u26a1\nElectrical systems & wiring\nShorts, heat, fire. The engineering process exists here for very good reasons.\n\ud83d\udcbc\nYour real job (eventually)\nBoeing, SpaceX, your local hospital. Society depends on engineers who follow the process. Save punk rock for personal projects.\n\ud83d\udcb8\nExpensive or one-of-a-kind parts\nCustom machined parts, sponsored hardware, anything that takes 2 weeks to replace. Simulate first.\n11",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The Real Takeaway\n01\nHesitate less.\nOverthinking kills momentum. If you're stuck, build something \u2014 even if it's wrong. The build will tell you what to do next.\n02\nPrototype more.\nEvery prototype teaches you something a simulation won't. The physical world is the ultimate test environment.\n03\nKnow when to switch gears.\nPunk rock is for exploration. Traditional engineering is for execution. Great engineers do both \u2014 and know which mode they're in.\nBoth approaches are engineering. Neither one alone makes a great engineer.\n12",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Discussion & Activity\nGroup Exercise \u2014 5 Minutes\n1\nThink of a time you were stuck on a design decision. What was holding you back? How could a quick prototype have helped?\n2\nThis year's game: pick one subsystem. Which approach would you use first \u2014 traditional or punk rock? Why?\n3\nSuperfastMatt says he'd \"rather just build something and see what happens, even knowing he might have to build it twice.\" Agree or disagree?\nThen: as a team, write one sentence: \"We will use punk rock engineering when __________.\"\n13",
+   "overlays": []
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "sha256": "8e0489ee717db4ed6e9dbb830f87736ff21362dc64ab717a6dafb76e8322dc65",
+ "pages": [
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "FIRST ROBOTICS COMPETITION\nDrive Bases &\nMechanisms\nWhen to use them, how they work,\nand what they're best at\nDRIVE BASES\n& MECHANISMS\nTank \u00b7 WCD \u00b7 Mecanum\nSwerve \u00b7 H-Drive\nIntakes \u00b7 Elevators\nArms \u00b7 Shooters \u00b7 Climbers",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "What is a Drive Base?\nFUNDAMENTALS\nThe drive base (or drivetrain) is the foundation of every FRC robot. It determines how the robot moves, defends, and scores \u2014 making it one of the most critical design decisions each season.\n1\nTank Drive\nSkid-steer, left/right sides\n2\nWCD\nWest Coast Drive, dropped-center\n3\nMecanum\nHolonomic, diagonal rollers\n4\nSwerve\nIndependent steering modules\n5\nH-Drive\nOmni-wheel strafe assist",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Drive Bases\nThe five most common drivetrains in FRC competition",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Tank Drive  (Skid-Steer)\nDRIVE BASE\nTwo independently driven sides \u2014 left wheels and right wheels controlled separately. Turning is achieved by running sides at different speeds. The simplest and most reliable drivetrain in FRC.\nBEST USED WHEN\u2026\nGame involves direct defense or pushing matches\nTeam is new or has limited build resources\nReliability and repairability are top priority\nTYPICAL CONFIG\n4\u20136 traction or omni wheels\n8\u201312\" wheel base\nEXPERIENCE LEVEL\nBeginner\u2013\nIntermediate\n\u2713  PROS\nExtremely simple to build & maintain\nHigh pushing power \u2014 great for defense\nVery reliable, few failure points\nEasy to program (arcade or tank controls)\n\u2717  CONS\nCannot strafe \u2014 no lateral movement\nTurning radius limits agility\nCan be pushed sideways by holonomic bots\nSkids on traction wheels when turning",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "West Coast Drive (WCD)\nDRIVE BASE\nA refined tank drive with a 6-wheel \"dropped center\" design. The middle wheel sits ~1/16\" lower than the outer wheels, acting as a pivot point to reduce turning friction. Used by top teams worldwide.\nBEST USED WHEN\u2026\nDefense and field control are key game strategies\nTeam wants maximum pushing power + mobility\nLow-maintenance, season-long reliability is needed\nTYPICAL CONFIG\n6 traction wheels\nDropped center ~1/16\"\nEXPERIENCE LEVEL\nIntermediate\n\u2713  PROS\nExcellent pushing & defensive capability\nSmooth turning \u2014 dropped center reduces scrub\nRobust, battle-tested in high-competition play\nFamously used by top FRC teams (254, 1114, etc.)\n\u2717  CONS\nStill no lateral/strafing movement\nComplex CNC chassis requires machining skill\nOutclassed in agility by swerve in open games\nWeight distribution must be carefully tuned",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Mecanum Drive\nDRIVE BASE\nFour wheels each fitted with angled (45\u00b0) rollers. By independently controlling wheel speed and direction, the robot can strafe sideways, move diagonally, and rotate \u2014 all without turning.\nBEST USED WHEN\u2026\nGame requires precise lateral repositioning\nTight field layouts with limited turning space\nTeam wants holonomic motion without swerve cost\nTYPICAL CONFIG\n4 mecanum wheels\nX or H arrangement\nEXPERIENCE LEVEL\nIntermediate\n\u2713  PROS\nFull holonomic motion \u2014 strafes in any direction\nSimpler build than swerve, no steering mechanism\nGreat for game pieces needing precise alignment\nWidely understood \u2014 many team resources available\n\u2717  CONS\nReduced pushing force vs. traction wheels\nPoor on uneven or carpet-edge terrain\nRollers can wear \u2014 higher maintenance\nMore complex driver training needed",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Swerve Drive\nDRIVE BASE\nFour independently steerable and driveable modules. Each module can rotate 360\u00b0 and drive independently, giving full omnidirectional movement with maximum traction. The gold standard in modern FRC.\nBEST USED WHEN\u2026\nGame rewards speed, agility & field control\nTeam has experience to build & tune modules\nCompeting at high-level events (District/Worlds)\nTYPICAL CONFIG\nSDS MK4i / REV\n4 modules, 2 motors ea.\nEXPERIENCE LEVEL\nAdvanced\n\u2713  PROS\nFull omnidirectional movement + full traction\nExtremely fast \u2014 can outrun any other drive\nDominant in open-field games & auto routines\nModular \u2014 single bad module is replaceable\n\u2717  CONS\nVery expensive ($800\u2013$1500+ for modules alone)\nComplex programming \u2014 requires odometry & PID\nHigh build skill required \u2014 tolerances are tight\nMore failure points; heavier than simpler drives",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "H-Drive & Omni Variants\nDRIVE BASE\nH-Drive adds a center omni wheel perpendicular to the main drive axis. A simpler alternative to mecanum for basic strafing. Other variants include butterfly drive (switchable contact) and kiwi drive.\nBEST USED WHEN\u2026\nA simpler strafe option is needed over mecanum\nWeight or budget limits a full swerve build\nLateral movement needed only occasionally\nTYPICAL CONFIG\n4 traction + 1 center omni\nSingle strafe motor\nEXPERIENCE LEVEL\nIntermediate\n\u2713  PROS\nAdds strafing without full holonomic complexity\nRetains good forward pushing force\nSimpler than mecanum wheel timing\nLow cost strafe upgrade to a tank base\n\u2717  CONS\nCenter wheel must be perfectly weighted to contact\nStrafing power limited to center wheel\nStill inferior agility vs. swerve or mecanum\nRarely seen at high-level competition",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Drive Base Comparison\nSUMMARY\nDrive Type\nStrafe?\nPush Power\nAgility\nComplexity\nCost\nBest For\nTank Drive\n\u2717\n\u2605\u2605\u2605\u2605\u2605\n\u2605\u2605\u2606\u2606\u2606\nLow\n$\nDefense, new teams\nWCD\n\u2717\n\u2605\u2605\u2605\u2605\u2605\n\u2605\u2605\u2605\u2606\u2606\nMed\n$$\nDefense + speed\nMecanum\n\u2713\n\u2605\u2605\u2606\u2606\u2606\n\u2605\u2605\u2605\u2605\u2606\nMed\n$$\nPrecision scoring\nSwerve\n\u2713\n\u2605\u2605\u2605\u2605\u2606\n\u2605\u2605\u2605\u2605\u2605\nHigh\n$$$\nOpen field, elites\nH-Drive\n\u00b1\n\u2605\u2605\u2605\u2606\u2606\n\u2605\u2605\u2605\u2606\u2606\nMed\n$\nBudget strafe",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Common Mechanisms\nIntakes \u00b7 Elevators \u00b7 Arms \u00b7 Shooters \u00b7 Climbers",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Intake Systems\nMECHANISM\nIntakes collect game pieces from the floor, feeder stations, or the field. The design depends entirely on the game piece shape and how it needs to be transferred into the robot.\nRoller Intake\nOne or more spinning rollers grab pieces off the floor. Compliant (rubber) wheels grip game pieces and pull them in. Most common FRC intake type.\n4-Bar Linkage\nPivoting arm with rollers extends over the bumpers to reach game pieces, then retracts inside the frame perimeter. Very common for balls & discs.\nGround-Level Intake\nFixed position near the bumpers, no pivot needed. Works with funnel guides to channel pieces into rollers. Simple and fast.\n\u26a1  Key tip: Always use compliant (flex) wheels or rubber-covered rollers \u2014 rigid rollers bounce game pieces away rather than gripping them.",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Elevators & Arm Mechanisms\nMECHANISM\nELEVATOR / VERTICAL LIFT\nCascading Elevator\nMulti-stage, very high reach, compact footprint. Each stage rides on the previous one. Used when height is critical (grid scoring, high goals).\nContinuous/Single Stage\nSingle moving carriage. Simpler to build, less reach. Great for mid-height scoring tasks.\nPros: Very fast travel, predictable motion, great for repeated cycles\nCons: String/belt breaks are catastrophic; carriage can jam\nARM / PIVOT MECHANISM\nSingle-Joint Arm\nSimple pivot from a fixed point. Rotates to score at different heights. Easy to build, wide range of motion.\nDouble/Multi-Joint Arm\nElbow and wrist joints. Far more reach and flexibility but much harder to control. Requires advanced inverse kinematics.\nPros: Versatile reach, can extend over obstacles and walls\nCons: Torque demands are high; tipping risk if not counterweighted",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Shooters & Launchers\nMECHANISM\nUsed when game pieces must be propelled \u2014 into goals, over barriers, or into targets. The game design dictates which launch method is appropriate.\nFlywheel Shooter\nUsed for: Balls, frisbees, or ring-shaped game pieces. Any game with long-distance goal shooting.\n\u2713 Continuous fire, tunable velocity, very fast   \u2717 Wheel spin-up time, needs hood/angle control\nCatapult / Spring Launcher\nUsed for: Large or irregularly shaped pieces where flywheel is impractical.\n\u2713 Simple, powerful, low motor count   \u2717 Single shot per cycle, slow reset, inconsistent\nPneumatic Puncher\nUsed for: Small game pieces at short range \u2014 power cells, balls into low goals.\n\u2713 Very fast cycle, simple, reliable   \u2717 Limited range, air supply management needed",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Climber Mechanisms\nMECHANISM\nEnd-game climbers let robots hang from bars or platforms to earn bonus points. Design depends on the height, bar type, and how fast the robot needs to climb.\nHook + Winch\nA hook extends to catch the bar; a winch retracts a strap/rope to pull the robot up. Simple, high strength. Very common in FRC.\n\u2713 Simple, reliable, high force\n\u2717 Slow if winch is underpowered\nElevator Climber\nRepurposes the robot's elevator mechanism. Hooks at the top latch onto the bar, then the elevator retracts to lift the robot.\n\u2713 No extra mechanism needed\n\u2717 Depends on elevator strength\nTelescoping Arm\nExtends to reach high bars, hooks on, then retracts. Can reach multiple bar heights in traverse challenges (e.g., 2022 Rapid React).\n\u2713 Multi-height versatility\n\u2717 Complex \u2014 heavy and slow\nPneumatic Pop-Out\nPneumatic pistons quickly deploy hooks to latch on last-second. Used when speed matters most and air is available.\n\u2713 Extremely fast deployment\n\u2717 One-shot, air management needed",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Key Takeaways\nSUMMARY\n1\nRead the game first\nNo single drive base or mechanism is always best. Analyze the game's scoring, defense rules, and field layout before designing anything.\n2\nMatch complexity to skill\nSwerve and multi-joint arms are powerful but demand advanced build and programming skills. A reliable simpler design beats a broken complex one.\n3\nPrototype early\nMechanisms that sound good in CAD often fail in reality. Build quick cardboard/wood prototypes before committing to metal.\n4\nDesign for repairability\nFRC competition is brutal. Design with spare parts in mind, easy access for repairs, and robust fasteners that survive repeated impacts.",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Build Thoughtfully.\nIterate Relentlessly.\nCompete Hard.\nThe best robot is not the most complex \u2014 it's the one that does its job reliably, match after match, from qualification rounds all the way to the championship.\nFIRST Robotics Competition",
+   "overlays": []
+  }
+ ]
+}

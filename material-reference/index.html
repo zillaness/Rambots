@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC Material Selection Reference</title>
+<style>
+:root{
+  --bg0:#fff;--bg1:#f8f7f2;--bg2:#eeede8;
+  --t0:#1a1a18;--t1:#5a5955;--t2:#909087;
+  --b0:rgba(0,0,0,.1);--b1:rgba(0,0,0,.22);
+  --rmd:8px;--rlg:12px;
+  --ok-bg:#eaf3de;--ok-t:#3b6d11;
+  --wn-bg:#faeeda;--wn-t:#854f0b;
+  --er-bg:#fcebeb;--er-t:#a32d2d;
+  --in-bg:#e6f1fb;--in-t:#185fa5;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg0:#1e1e1c;--bg1:#252523;--bg2:#2e2e2c;
+  --t0:#f0efe8;--t1:#a8a79f;--t2:#686761;
+  --b0:rgba(255,255,255,.1);--b1:rgba(255,255,255,.22);
+  --ok-bg:#27500a;--ok-t:#c0dd97;
+  --wn-bg:#633806;--wn-t:#fac775;
+  --er-bg:#791f1f;--er-t:#f7c1c1;
+  --in-bg:#0c447c;--in-t:#b5d4f4;
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg0);color:var(--t0);line-height:1.6;max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem}
+h1{font-size:24px;font-weight:500;margin-bottom:.25rem}
+h2{font-size:20px;font-weight:500;margin-bottom:.25rem}
+.sub{font-size:13px;color:var(--t1);margin-bottom:2rem}
+select,button{background:var(--bg0);color:var(--t0);border:.5px solid var(--b1);border-radius:var(--rmd);cursor:pointer}
+select{padding:6px 10px;font-size:13px;outline:none}
+button{padding:5px 10px;font-size:11px}
+button:hover{background:var(--bg1)}
+.divider{height:.5px;background:var(--b0);margin:2.5rem 0}
+/* chart */
+.ctrl-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:1rem}
+.ctrl-grp{display:flex;flex-direction:column;gap:4px}
+.clbl{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--t2)}
+.presets{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:1px}
+.lgnd{display:flex;flex-wrap:wrap;gap:5px 16px;margin:8px 0}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t1);cursor:pointer;padding:2px 4px;border-radius:4px;user-select:none}
+.li:hover,.qopt:hover,.fab-mode-btn:hover{background:var(--bg1)}
+.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.det{background:var(--bg1);border:.5px solid var(--b0);border-radius:var(--rmd);padding:10px 14px;margin-top:10px;min-height:56px}
+.dstats{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.ds{font-size:11px;color:var(--t1)}
+.ds strong{color:var(--t0);font-weight:500}
+/* quiz */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:1rem 0}
+.qcard{background:var(--bg0);border:.5px solid var(--b0);border-radius:var(--rlg);padding:1rem 1.25rem}
+.qtitle{font-size:13px;font-weight:500;color:var(--t0);margin-bottom:8px}
+.qopts{display:flex;flex-direction:column;gap:4px}
+.qopt{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--t1);cursor:pointer;padding:4px 6px;border-radius:6px}
+.qopt input{margin-top:3px;flex-shrink:0;accent-color:#378ADD}
+.qrun{display:flex;align-items:center;gap:12px;margin-top:1rem}
+.qbtn,.fab-run-btn{font-size:13px;padding:8px 20px;background:var(--in-bg);color:var(--in-t);border-color:transparent;border-radius:var(--rmd);font-weight:500}
+.qbtn:hover,.fab-run-btn:hover{opacity:.85}
+.qhint{font-size:12px;color:var(--t2)}
+.rsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:1rem}
+.rscard{background:var(--bg0);border:.5px solid var(--b0);border-radius:var(--rlg);padding:.9rem 1rem}
+.rsrank{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);margin-bottom:4px}
+.rsname{font-size:14px;font-weight:500;color:var(--t0)}
+.rscat{font-size:11px;color:var(--t2);margin-bottom:6px}
+.rsbw{height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.rsb{height:100%;border-radius:3px;background:#378ADD}
+.rstags{display:flex;gap:5px;flex-wrap:wrap}
+.rstag{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--ok-bg);color:var(--ok-t)}
+/* fab guide */
+.fab-mode-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.fab-mode-btn{font-size:12px;padding:6px 14px}
+.fab-mode-btn.on{background:var(--in-bg);color:var(--in-t);border-color:transparent}
+.fab-sel-row{margin-bottom:1rem}
+.fab-cat-lbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);margin:1.25rem 0 .5rem;padding-bottom:4px;border-bottom:.5px solid var(--b0)}
+.fab-card{background:var(--bg0);border:.5px solid var(--b0);border-radius:var(--rlg);padding:.85rem 1rem;margin-bottom:8px}
+.fab-card.never{border-color:#a32d2d;background:var(--er-bg)}
+.fab-card-name{font-size:13px;font-weight:500;color:var(--t0);margin-bottom:2px}
+.fab-card.never .fab-card-name{color:var(--er-t)}
+.fab-card-meta{font-size:11px;color:var(--t2);margin-bottom:5px}
+.fab-card-note{font-size:12px;color:var(--t1);line-height:1.5}
+.fab-card.never .fab-card-note{color:var(--er-t)}
+.fab-intro-card{background:var(--bg1);border:.5px solid var(--b0);border-radius:var(--rlg);padding:.85rem 1rem;margin-bottom:1rem}
+/* reference */
+.rlgnd{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:1rem}
+.rli{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t1)}
+.rld{width:8px;height:8px;border-radius:50%}
+/* ratings scale table */
+.rtable{width:100%;border-collapse:collapse;font-size:12px;margin:1rem 0 1.5rem}
+.rtable th{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);padding:7px 10px;text-align:left;border-bottom:.5px solid var(--b1)}
+.rtable td{padding:7px 10px;border-bottom:.5px solid var(--b0);vertical-align:top;line-height:1.4}
+.rtable tr:last-child td{border-bottom:none}
+.rtable td:first-child{font-weight:500;white-space:nowrap;color:var(--t0)}
+.eg{display:block;margin-top:3px;font-size:11px;font-style:italic}
+.egb{color:var(--er-t)}.egg{color:var(--ok-t)}
+/* reference cards */
+.slbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);margin:2rem 0 .6rem}
+.sint{font-size:12px;color:var(--t1);margin-bottom:.75rem;line-height:1.5}
+.sublbl{font-size:12px;font-weight:500;color:var(--t1);margin:1rem 0 .5rem;padding-left:10px;border-left:2px solid var(--b1)}
+.fnote{font-size:12px;background:var(--in-bg);color:var(--in-t);border-radius:var(--rmd);padding:8px 12px;margin-bottom:.75rem}
+.card{background:var(--bg0);border:.5px solid var(--b0);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:10px}
+.card.feat{border:2px solid #185fa5}
+.ctop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:12px}
+.cname{font-size:15px;font-weight:500;color:var(--t0)}
+.csub{font-size:12px;color:var(--t1);margin-top:2px}
+.badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:var(--rmd);font-weight:500;white-space:nowrap;flex-shrink:0}
+.bc{background:var(--ok-bg);color:var(--ok-t)}
+.be{background:var(--wn-bg);color:var(--wn-t)}
+.bw{background:var(--er-bg);color:var(--er-t)}
+.bi{background:var(--in-bg);color:var(--in-t)}
+.ratings{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:8px}
+.ri{text-align:center}
+.rl{font-size:9px;color:var(--t2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;line-height:1.2}
+.rb{height:5px;border-radius:3px;background:var(--bg2);overflow:hidden}
+.rf{height:100%;border-radius:3px}
+.rv{font-size:11px;font-weight:500;color:var(--t1);margin-top:2px}
+.fmrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fmbadge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.fmd{background:var(--ok-bg);color:var(--ok-t)}
+.fms{background:var(--wn-bg);color:var(--wn-t)}
+.fmb{background:var(--er-bg);color:var(--er-t)}
+.notes{font-size:12px;color:var(--t1);line-height:1.5;border-top:.5px solid var(--b0);padding-top:8px}
+.notes strong{color:var(--t0);font-weight:500}
+@media print{.ctrl-row,.lgnd,.det,.divider:first-of-type,.quiz-sec,.fab-sec{display:none}body{padding:1rem}.card{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<h1>FRC material selection reference</h1>
+<p class="sub">Interactive selection chart · Material selection quiz · Fabrication method guide · Full reference sheet</p>
+
+<!-- ═══ CHART ═══ -->
+<div class="ctrl-row">
+  <div class="ctrl-grp">
+    <span class="clbl">X axis</span>
+    <select id="xSel">
+      <option value="s">Strength (5 = strongest)</option>
+      <option value="w">Light weight (5 = lightest)</option>
+      <option value="t">Ductility (5 = bends/deforms, 1 = shatters)</option>
+      <option value="f">Fabrication ease (5 = hand tools / trivial)</option>
+      <option value="c">Cost-effectiveness (5 = cheapest)</option>
+      <option value="fr">Friction / sliding (5 = best surface)</option>
+      <option value="ht">Heat resistance (5 = most heat-resistant)</option>
+    </select>
+  </div>
+  <div class="ctrl-grp">
+    <span class="clbl">Y axis</span>
+    <select id="ySel">
+      <option value="w">Light weight (5 = lightest)</option>
+      <option value="s">Strength (5 = strongest)</option>
+      <option value="t">Ductility (5 = bends/deforms, 1 = shatters)</option>
+      <option value="f">Fabrication ease (5 = hand tools / trivial)</option>
+      <option value="c">Cost-effectiveness (5 = cheapest)</option>
+      <option value="fr">Friction / sliding (5 = best surface)</option>
+      <option value="ht">Heat resistance (5 = most heat-resistant)</option>
+    </select>
+  </div>
+  <div class="ctrl-grp">
+    <span class="clbl">Quick views</span>
+    <div class="presets">
+      <button onclick="setAxes('s','w')">Strength vs weight</button>
+      <button onclick="setAxes('s','c')">Strength vs cost</button>
+      <button onclick="setAxes('f','c')">Fabrication vs cost</button>
+      <button onclick="setAxes('t','w')">Ductility vs weight</button>
+      <button onclick="setAxes('fr','ht')">Friction vs heat</button>
+      <button onclick="setAxes('s','t')">Strength vs ductility</button>
+    </div>
+  </div>
+</div>
+<div class="lgnd" id="lgnd"></div>
+<div style="position:relative;height:460px">
+  <canvas id="mc" role="img" aria-label="Scatter plot comparing two FRC material properties. All ratings are 1–5 where 5 is always most favorable for FRC use.">Material selection chart — 38 materials across 7 properties. 5/5 is always most favorable.</canvas>
+</div>
+<div class="det" id="det"><span style="font-size:12px;color:var(--t2)">Click any point to see material details</span></div>
+
+<!-- ═══ QUIZ ═══ -->
+<div class="divider"></div>
+<div class="quiz-sec">
+  <div style="margin-bottom:1rem">
+    <h2>Material selection quiz</h2>
+    <p style="font-size:13px;color:var(--t1)">Answer all questions to get material recommendations for your use case.</p>
+  </div>
+  <div class="qgrid" id="quizGrid"></div>
+  <div class="qrun">
+    <button class="qbtn" onclick="runQuiz()">Find best materials →</button>
+    <span class="qhint" id="quizHint"></span>
+  </div>
+  <div id="quizResults"></div>
+</div>
+
+<!-- ═══ FABRICATION GUIDE ═══ -->
+<div class="divider"></div>
+<div class="fab-sec">
+  <div style="margin-bottom:1rem">
+    <h2>Fabrication method guide</h2>
+    <p style="font-size:13px;color:var(--t1)">Find compatible fabrication methods for a material, or see which materials work with a given tool.</p>
+  </div>
+  <div class="fab-mode-row">
+    <button class="fab-mode-btn on" id="fabB1" onclick="setFabMode('mat')">Given a material → what tools work?</button>
+    <button class="fab-mode-btn" id="fabB2" onclick="setFabMode('fab')">Given a tool → what materials work?</button>
+  </div>
+  <div class="fab-sel-row">
+    <select id="fabSel" style="width:100%;max-width:420px" onchange="renderFabResults()">
+      <option value="">— select —</option>
+    </select>
+  </div>
+  <div id="fabResults"></div>
+</div>
+
+<!-- ═══ REFERENCE ═══ -->
+<div class="divider"></div>
+<div style="margin-bottom:.75rem">
+  <h2>Material reference</h2>
+  <p style="font-size:13px;color:var(--t1)">All ratings are 1–5. <strong>5/5 is always the most favorable for FRC use</strong> — strongest, lightest, cheapest, easiest to make, best sliding surface, etc. See the scale table below.</p>
+</div>
+
+<table class="rtable">
+  <thead><tr><th>Rating</th><th>1/5 — worst for FRC</th><th>5/5 — best for FRC</th></tr></thead>
+  <tbody>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#378ADD;margin-right:5px;vertical-align:1px"></span>Strength</td>
+    <td>Very weak — fails under typical robot loads<span class="eg egb">MDF crumbles, PLA brackets snap, HDPE sheet buckles</span></td>
+    <td>Handles extreme loads and impacts<span class="eg egg">Steel 1018, titanium, CFRP, 7075-T6 aluminum</span></td>
+  </tr>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1D9E75;margin-right:5px;vertical-align:1px"></span>Light weight</td>
+    <td>Very heavy — adds significant robot mass<span class="eg egb">Steel plate (~7.8 g/cm³), iron pipe, Unistrut</span></td>
+    <td>Very light — minimal weight penalty<span class="eg egg">CFRP (~1.6 g/cm³), aluminum 6061 (~2.7 g/cm³), HDPE (~0.95 g/cm³)</span></td>
+  </tr>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#D85A30;margin-right:5px;vertical-align:1px"></span>Ductility</td>
+    <td>Brittle — shatters or fractures with no warning<span class="eg egb">Acrylic, CFRP sheet, MDF, PLA — all snap suddenly</span></td>
+    <td>Highly plastic — bends substantially before failure<span class="eg egg">Mild steel, polycarbonate, HDPE, copper tube</span></td>
+  </tr>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BA7517;margin-right:5px;vertical-align:1px"></span>Fabrication ease</td>
+    <td>Specialist-only — needs advanced tooling or outsourcing<span class="eg egb">Titanium (work-hardens), DMLS parts (outsourced only), CFRP (diamond tooling, PPE)</span></td>
+    <td>Trivial — hand tools, no special setup, hardware store<span class="eg egg">PVC pipe (pipe cutter), wood (hand saw), HDPE (utility knife), PLA (FDM printer)</span></td>
+  </tr>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#7F77DD;margin-right:5px;vertical-align:1px"></span>Cost-effectiveness</td>
+    <td>Very expensive — high per-part or per-kg cost<span class="eg egb">DMLS titanium ($300–1000+/part), CFRP sheet ($50–200+/ft²), titanium stock</span></td>
+    <td>Very affordable — cheap and widely available<span class="eg egg">PVC pipe (~$5/length), MDF, acrylic, PLA filament (~$20/kg)</span></td>
+  </tr>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#D4537E;margin-right:5px;vertical-align:1px"></span>Friction / sliding</td>
+    <td>Poor sliding surface — high friction, wears or damages<span class="eg egb">PLA, acrylic, raw wood — game pieces drag and hang up</span></td>
+    <td>Excellent sliding surface — low friction, wear-resistant<span class="eg egg">HDPE is #1 (best stock sliding plastic), Delrin, nylon stock</span></td>
+  </tr>
+  <tr>
+    <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#5DCAA5;margin-right:5px;vertical-align:1px"></span>Heat resistance</td>
+    <td>Deforms or fails at surprisingly low temperatures<span class="eg egb">PLA softens at ~60°C, HDPE at ~80°C — both fail near motors</span></td>
+    <td>Handles high heat — well above any FRC operating temp<span class="eg egg">Steels, titanium, iron — melt points above 1400°C</span></td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="rlgnd">
+  <strong style="font-size:12px;color:var(--t1)">Bar colors:</strong>
+  <span class="rli"><span class="rld" style="background:#378ADD"></span>Strength</span>
+  <span class="rli"><span class="rld" style="background:#1D9E75"></span>Light weight</span>
+  <span class="rli"><span class="rld" style="background:#D85A30"></span>Ductility</span>
+  <span class="rli"><span class="rld" style="background:#BA7517"></span>Fabrication</span>
+  <span class="rli"><span class="rld" style="background:#7F77DD"></span>Cost</span>
+  <span class="rli"><span class="rld" style="background:#D4537E"></span>Friction</span>
+  <span class="rli"><span class="rld" style="background:#5DCAA5"></span>Heat res.</span>
+</div>
+<div id="refSheet"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── constants ────────────────────────────────────────────────────────────────
+const RKEYS=['s','w','t','f','c','fr','ht'];
+const RLBLS=['Strength','Light wt','Ductility','Fab ease','Cost','Friction','Heat res.'];
+const RCOLS=['#378ADD','#1D9E75','#D85A30','#BA7517','#7F77DD','#D4537E','#5DCAA5'];
+const AX={s:'Strength (5=strongest)',w:'Light weight (5=lightest)',t:'Ductility (5=bends, 1=shatters)',f:'Fabrication ease (5=easiest)',c:'Cost-effectiveness (5=cheapest)',fr:'Friction/sliding (5=best)',ht:'Heat resistance (5=most resistant)'};
+const CC={'Metal':'#378ADD','Metal tube':'#0C447C','Struct':'#888780','Plastic tube':'#1D9E75','Plastic stock':'#5DCAA5','FDM':'#D85A30','Powder bed':'#BA7517','Printed metal':'#7F77DD','Composite':'#D4537E','Wood':'#639922','Exotic':'#E24B4A'};
+
+// ── material data ─────────────────────────────────────────────────────────────
+// s=strength w=light-weight t=ductility(1=shatters,5=plastic-deform)
+// f=fabrication-ease c=cost-effectiveness fr=friction/sliding ht=heat-resistance
+// ALL ratings: 5/5 = most favorable for FRC
+const M=[
+{n:'Aluminum (6061-T6)',sn:'Al 6061-T6',cat:'Metal',grp:'metal',sub:'Plate, sheet, tube, angle, hex shaft — the FRC workhorse',badge:'c',btxt:'Most common',feat:true,s:4,w:5,t:4,f:4,c:4,fr:2,ht:4,best:'Frame structure, bellypans, brackets, tube stock, hex shafts.',warn:'Shears/bends under overload; non-ferromagnetic chips are hard to clean. Use cutting oil when machining.'},
+{n:'Aluminum (6063)',sn:'Al 6063',cat:'Metal',grp:'metal',sub:'Extrusions, decorative/structural profiles',badge:'c',btxt:'Common',feat:false,s:3,w:5,t:3,f:3,c:4,fr:2,ht:4,best:'Extrusion profiles, 80/20-style box tube.',warn:'Gums up when milled — drill only. Lower strength than 6061.'},
+{n:'Aluminum (7075-T6)',sn:'Al 7075-T6',cat:'Metal',grp:'metal',sub:'High-strength aerospace alloy',badge:'w',btxt:'Specialty',feat:false,s:5,w:5,t:2,f:3,c:2,fr:2,ht:4,best:'High-load brackets and drivetrain components. ~70% stronger than 6061 at same weight.',warn:'More brittle than 6061 — prone to crack propagation. Expensive, not weldable.'},
+{n:'Steel (1018 mild)',sn:'Steel 1018',cat:'Metal',grp:'metal',sub:'Gears, shafts, high-load hardware',badge:'c',btxt:'Common (targeted)',feat:false,s:5,w:1,t:5,f:3,c:4,fr:3,ht:5,best:'Versaplanetary internals, high-load shafts, ratchet/pawl mechanisms, wear parts, ballast.',warn:'Very heavy — use only where strength justifies it. Ferromagnetic chips clog vacuums.'},
+{n:'Steel (4130/4140)',sn:'Steel 4130/4140',cat:'Metal',grp:'metal',sub:'High-strength chromoly alloy steel',badge:'w',btxt:'Specialty',feat:false,s:5,w:2,t:4,f:2,c:2,fr:3,ht:5,best:'Extreme-load shafts and tubes; teams with sheet metal capability.',warn:'Difficult to machine, work-hardens. Hard to source in FRC-useful sizes.'},
+{n:'Steel (HRPO sheet)',sn:'Steel HRPO sheet',cat:'Metal',grp:'metal',sub:'Hot-rolled pickled & oiled flat sheet',badge:'w',btxt:'Specialty',feat:false,s:4,w:1,t:5,f:4,c:3,fr:2,ht:5,best:'Full sheet-metal robots; teams with press brakes and plasma/laser cutters.',warn:'Heavy — requires deliberate design. Requires sheet metal infrastructure most teams lack.'},
+{n:'Aluminum T-slot extrusion',sn:'T-slot extrusion',cat:'Struct',grp:'struct',sub:'Modular 6063 channel with sliding T-nut hardware (80/20, MiSUMI)',badge:'i',btxt:'Occasional use',feat:false,s:3,w:4,t:3,f:5,c:2,fr:1,ht:4,best:'Practice field structures, test benches, camera mounts, pit tables, and rigs needing quick reconfiguration.',warn:'Joints loosen under vibration without thread-locking. Heavier and more expensive per length than plain 6061 box tube.'},
+{n:'Unistrut (P1000 channel)',sn:'Unistrut',cat:'Struct',grp:'struct',sub:'Steel slotted channel framing system',badge:'i',btxt:'Occasional use',feat:false,s:4,w:2,t:5,f:5,c:3,fr:1,ht:5,best:'Practice field structure, cable trays, pit infrastructure, test stands.',warn:'Heavy steel — almost never the right choice for the robot itself.'},
+{n:'Aluminum box/round tube',sn:'Al box/round tube',cat:'Metal tube',grp:'mtube',sub:'6061-T6 square, rectangular, and round hollow extrusion',badge:'c',btxt:'Most common structural tube',feat:true,s:4,w:5,t:4,f:4,c:4,fr:2,ht:4,best:'Primary frame rails, superstructure, arm segments. 1×1 and 2×1 box tube are FRC staples.',warn:'Thin walls crack if overtorqued at fastener holes — use rivnuts or proper hole spacing.'},
+{n:'Steel tube (DOM/ERW)',sn:'Steel DOM/ERW',cat:'Metal tube',grp:'mtube',sub:'Drawn-over-mandrel or electric-resistance-welded round tube',badge:'w',btxt:'Specialty',feat:false,s:5,w:1,t:5,f:3,c:3,fr:3,ht:5,best:'High-load arm pivots, bumper support structure, high-impact zones.',warn:'Heavy — very difficult to justify over aluminum tube except in high-impact zones.'},
+{n:'Copper tube (Type L/M)',sn:'Copper tube',cat:'Metal tube',grp:'mtube',sub:'Soft copper plumbing tube',badge:'w',btxt:'Niche use',feat:false,s:2,w:2,t:5,f:5,c:2,fr:2,ht:4,best:'Pneumatic plumbing runs, wiring conduit. Cuts with a pipe cutter in seconds.',warn:'Heavy for its strength. Polyurethane push-to-connect tubing has largely replaced copper for FRC air lines.'},
+{n:'Iron pipe (black/galv.)',sn:'Iron pipe',cat:'Metal tube',grp:'mtube',sub:'Threaded schedule 40 iron pipe',badge:'w',btxt:'Avoid unless specific reason',feat:false,s:4,w:1,t:3,f:3,c:3,fr:2,ht:5,best:'Ballast, threaded fixture points, very high-load static compression members.',warn:'Extremely heavy. Galvanized pipe produces toxic fumes if welded. Rarely the right choice.'},
+{n:'Polycarbonate tube & rod',sn:'Polycarb tube/rod',cat:'Plastic tube',grp:'ptube',sub:'Round tube, square tube, and solid rod',badge:'c',btxt:'Most common plastic tube',feat:true,s:3,w:4,t:5,f:5,c:4,fr:2,ht:2,best:'Intake rollers, guide rails, lightweight arm segments. Transparent versions useful for game piece flow debug.',warn:'Same Loctite caution as sheet polycarb. Solid rod heavy at larger diameters. Not suitable for high-torque rotating shafts without a metal insert.'},
+{n:'PVC pipe (Sch 40/80)',sn:'PVC pipe',cat:'Plastic tube',grp:'ptube',sub:'Rigid thermoplastic pipe',badge:'c',btxt:'Common (prototyping)',feat:false,s:2,w:3,t:2,f:5,c:5,fr:3,ht:1,best:'Rapid prototyping frames, pneumatic manifold plumbing (Sch 80), intake chute guides.',warn:'Brittle below ~0°C. Not structural for competition. NEVER laser-cut PVC — releases chlorine gas.'},
+{n:'ABS pipe',sn:'ABS pipe',cat:'Plastic tube',grp:'ptube',sub:'Black thermoplastic pipe, commonly Sch 40',badge:'c',btxt:'Common (prototyping)',feat:false,s:2,w:3,t:3,f:5,c:5,fr:2,ht:2,best:'Intake chutes, game-piece guides, prototyping tube structures. Slightly tougher than PVC. Solvent-bondable.',warn:'Not structural for competition. Similar cold-brittleness to PVC but less severe.'},
+{n:'PETG tube',sn:'PETG tube',cat:'Plastic tube',grp:'ptube',sub:'Purchased extruded tube or printed hollow tube',badge:'c',btxt:'Common (printed)',feat:false,s:3,w:4,t:4,f:4,c:4,fr:2,ht:2,best:'Custom-printed hollow tubes, standoffs, light intake rollers, wire conduit.',warn:'Printed tubes are weaker perpendicular to layer lines. Wall thickness matters greatly.'},
+{n:'Fiberglass tube (GFRP)',sn:'Fiberglass tube',cat:'Plastic tube',grp:'ptube',sub:'Filament-wound round tube — pultruded or wound',badge:'e',btxt:'Uncommon',feat:false,s:4,w:4,t:2,f:3,c:3,fr:2,ht:3,best:'Lightweight arm extensions, telescoping tube systems, electrical isolation.',warn:'Glass fiber dust is a serious skin and lung irritant — respirator required. Brittle fracture under crushing loads.'},
+{n:'Polycarbonate (Lexan)',sn:'Polycarb sheet',cat:'Plastic stock',grp:'sheet',sub:'Flexible impact-resistant thermoplastic sheet',badge:'c',btxt:'Most common',feat:true,s:3,w:4,t:5,f:5,c:4,fr:2,ht:2,best:'Hoppers, intake walls, guards, bumper backs, curved/bent panels. Heat-gun bendable. CNC-routable.',warn:'Certain Loctite formulations cause shattering — use 243 only. Do NOT confuse with acrylic.'},
+{n:'HDPE',sn:'HDPE',cat:'Plastic stock',grp:'sheet',sub:'High-density polyethylene — slippery, tough sheet',badge:'c',btxt:'Common',feat:false,s:2,w:5,t:5,f:5,c:5,fr:5,ht:1,best:'Low-friction wear surfaces, hopper liners, bumper backing, ramps. Best stock sliding surface available. Very cheap.',warn:'Low stiffness — not structural. Nothing bonds to it (mechanical fasteners only). Softens at ~80°C. Cannot be laser-cut cleanly.'},
+{n:'Acrylic (PMMA)',sn:'Acrylic',cat:'Plastic stock',grp:'sheet',sub:'Clear thermoplastic sheet — laser-cutting favorite',badge:'w',btxt:'Use with caution',feat:false,s:2,w:4,t:1,f:5,c:5,fr:1,ht:1,best:'Prototyping, cosmetic non-load panels, driver station displays. Laser-cuts beautifully.',warn:'Extremely brittle — shatters on impact with no warning. Do NOT use for any structural component. Label your stock clearly.'},
+{n:'Carbon fiber (CFRP sheet)',sn:'CFRP sheet',cat:'Composite',grp:'compsheet',sub:'Woven continuous carbon fiber composite plate',badge:'e',btxt:'Exotic',feat:false,s:5,w:5,t:1,f:2,c:1,fr:3,ht:3,best:'Bellypans, superstructure plates, arm tubes on weight-critical robots. Best stiffness-to-weight of any common material.',warn:'Extremely brittle — catastrophic fracture under impact, no warning. Carbon fiber dust is a serious health hazard (respirator mandatory). Requires diamond or carbide tooling.'},
+{n:'Fiberglass (GFRP sheet)',sn:'Fiberglass sheet',cat:'Composite',grp:'compsheet',sub:'Woven glass fiber composite sheet (G10/FR4 or layup)',badge:'e',btxt:'Uncommon',feat:false,s:3,w:4,t:2,f:2,c:3,fr:2,ht:3,best:'Custom molded intake surfaces, curved panels, bumper backing alternative, electrical isolation.',warn:'Glass fiber dust is a serious skin and lung irritant — full PPE required. Brittle fracture mode.'},
+{n:'Delrin / Acetal (POM)',sn:'Delrin/Acetal',cat:'Plastic stock',grp:'stock',sub:'Machinable engineering thermoplastic — rod, sheet, bar',badge:'c',btxt:'Common',feat:false,s:3,w:4,t:2,f:5,c:4,fr:4,ht:2,best:'Laser-cut custom gears and pulleys, CNC gearbox plates, low-friction bushings, bearing blocks. Self-lubricating.',warn:'Relatively brittle for a plastic — fractures rather than bends. Emits formaldehyde when laser-cut — ventilate well.'},
+{n:'Nylon stock (PA6/PA66)',sn:'Nylon stock',cat:'Plastic stock',grp:'stock',sub:'Tough engineering plastic — rod, sheet, tube',badge:'c',btxt:'Common',feat:false,s:3,w:4,t:4,f:4,c:4,fr:3,ht:3,best:'Bushings, spacers, pulleys, impact-absorbing parts. More flexible and impact-resistant than Delrin.',warn:'Absorbs moisture causing dimensional changes — not ideal for precision fits in humid environments.'},
+{n:'PLA (FDM)',sn:'PLA',cat:'FDM',grp:'fdm',sub:'Polylactic acid — beginner-friendly filament',badge:'c',btxt:'Common',feat:false,s:2,w:4,t:1,f:5,c:5,fr:1,ht:1,best:'Rapid prototyping, non-load brackets, cable management, cosmetic parts.',warn:'Brittle — shatters rather than deforms. Softens at ~60°C (fails near motors). Not for competition structure.'},
+{n:'ABS (FDM)',sn:'ABS (FDM)',cat:'FDM',grp:'fdm',sub:'Acrylonitrile butadiene styrene filament',badge:'c',btxt:'Common',feat:false,s:3,w:4,t:3,f:3,c:4,fr:2,ht:2,best:'Functional parts needing some impact resistance and bend-before-break behavior.',warn:'Fumes are harmful — ventilate or enclose. Warps badly without an enclosure.'},
+{n:'PETG (FDM)',sn:'PETG (FDM)',cat:'FDM',grp:'fdm',sub:'Polyethylene terephthalate glycol — the balanced option',badge:'c',btxt:'Recommended starter structural',feat:true,s:3,w:4,t:4,f:4,c:4,fr:2,ht:2,best:'Motor mounts, light structural brackets, sensor mounts. Tougher than PLA, safer fumes than ABS, low warp.',warn:'Slightly flexible — not ideal for precision geometry. Strings during printing. ~80°C heat resistance.'},
+{n:'Nylon PA-CF / PA12-CF',sn:'PA-CF (FDM)',cat:'FDM',grp:'fdm',sub:'Carbon-fiber-reinforced nylon filament',badge:'e',btxt:'High performance',feat:false,s:5,w:4,t:3,f:3,c:2,fr:2,ht:3,best:'Structural printed parts, swerve modules (teams 125, 971), load-bearing brackets. Near-aluminum performance.',warn:'CF makes it stiffer but less ductile than plain nylon. Requires hardened nozzle, dry box, and enclosure.'},
+{n:'SLS — Nylon PA12/PA11',sn:'SLS PA12',cat:'Powder bed',grp:'powder',sub:'Selective laser sintering — fused nylon powder',badge:'e',btxt:'Outsourced',feat:true,s:4,w:4,t:4,f:4,c:2,fr:2,ht:2,best:'Complex structural brackets, snap-fit assemblies, latticed lightweight structures. Near-isotropic — no weak layer lines.',warn:'Lead time 2–5 days from bureau. Porous surface absorbs moisture — seal for precision parts.'},
+{n:'MJF — Nylon PA12',sn:'MJF PA12',cat:'Powder bed',grp:'powder',sub:'HP Multi Jet Fusion — fusing agent + heat',badge:'e',btxt:'Outsourced',feat:false,s:4,w:4,t:3,f:4,c:2,fr:3,ht:2,best:'Same use cases as SLS but better dimensional accuracy and finer detail. Smoother surface improves friction.',warn:'Parts come out nearly black — must be media-blasted. Slightly more brittle than SLS in thin sections.'},
+{n:'DMLS Al (AlSi10Mg)',sn:'DMLS Al',cat:'Printed metal',grp:'dmetal',sub:'Direct metal laser sintering — aluminum alloy powder',badge:'e',btxt:'Exotic / outsourced',feat:false,s:4,w:5,t:3,f:3,c:1,fr:2,ht:4,best:'Topology-optimized gearbox housings, complex brackets, lattice structures that cannot be machined.',warn:'$100–500+ per part. Requires stress-relief heat treatment. Less ductile than wrought 6061.'},
+{n:'DMLS Steel (17-4 PH)',sn:'DMLS Steel 17-4',cat:'Printed metal',grp:'dmetal',sub:'Printed stainless steel — gears, shafts, high-load parts',badge:'e',btxt:'Exotic / outsourced',feat:false,s:5,w:2,t:4,f:3,c:1,fr:3,ht:5,best:'Custom gears, shafts with integral features (splines, flanges) that would be expensive to machine.',warn:'Very heavy and expensive. Rough surface requires post-machining on mating surfaces.'},
+{n:'DMLS Titanium (Ti-6Al-4V)',sn:'DMLS Titanium',cat:'Printed metal',grp:'dmetal',sub:'Printed titanium — ultimate weight/strength combo',badge:'e',btxt:'Exotic / outsourced',feat:false,s:5,w:4,t:4,f:3,c:1,fr:2,ht:5,best:'Ultimate weight/strength structural parts — sidesteps the near-impossibility of machining titanium.',warn:'$300–1000+ per part. Requires HIP post-processing. Lead time 2–3 weeks.'},
+{n:'Baltic birch plywood',sn:'Baltic birch',cat:'Wood',grp:'wood',sub:'Multi-ply hardwood sheet — prototyping standard',badge:'c',btxt:'Common (prototyping)',feat:false,s:2,w:3,t:2,f:5,c:5,fr:1,ht:2,best:'Prototype mechanisms, bumper backing (rules-required), intake mockups. Laser-cuts with minimal splintering.',warn:'Not for competition structural parts. Watch for fire when laser-cutting. Drill incrementally to prevent splitting.'},
+{n:'MDF',sn:'MDF',cat:'Wood',grp:'wood',sub:'Medium-density fiberboard — avoid on robots',badge:'w',btxt:'Avoid for structure',feat:false,s:1,w:2,t:1,f:4,c:5,fr:1,ht:1,best:'Practice field surfaces, work surfaces, cosmetic non-load panels only.',warn:'Cracks catastrophically under load. Absorbs moisture and swells. Never use for robot structure.'},
+{n:'Carbon fiber (CFRP sheet)',sn:'CFRP (exotic)',cat:'Exotic',grp:'exotic',sub:'Continuous carbon fiber composite plate',badge:'e',btxt:'Exotic',feat:false,s:5,w:5,t:1,f:2,c:1,fr:3,ht:3,best:'Bellypans, superstructure plates, arm tubes. Best stiffness-to-weight of any common material. Also in composite sheet section.',warn:'Brittle — catastrophic fracture. Carbon fiber dust is a serious health hazard. Diamond/carbide tooling required.'},
+{n:'Titanium (Ti-6Al-4V)',sn:'Titanium (wrought)',cat:'Exotic',grp:'exotic',sub:'Aerospace-grade titanium alloy — wrought stock',badge:'e',btxt:'Exotic',feat:false,s:5,w:4,t:5,f:1,c:1,fr:2,ht:5,best:'Shafts and structural tubes where weight and strength both matter critically. ~45% lighter than steel.',warn:'Work-hardens rapidly, requires specialist tooling. Extremely expensive. Consider printed titanium if geometry allows.'},
+{n:'Fiberglass (GFRP sheet)',sn:'Fiberglass (exotic)',cat:'Exotic',grp:'exotic',sub:'Woven glass fiber composite sheet (G10/FR4 or layup)',badge:'e',btxt:'Uncommon',feat:false,s:3,w:4,t:2,f:2,c:3,fr:2,ht:3,best:'Custom molded panels, electrical isolation. Good heat resistance. Also in composite sheet section.',warn:'Glass fiber dust is a serious skin and lung irritant — full PPE required when cutting.'},
+];
+
+const GROUPS=[
+  {id:'metal',sec:'Metals',sub:null,intro:null},
+  {id:'struct',sec:'Structural systems & form factors',sub:null,
+   intro:'Not raw materials — pre-engineered building systems. Connection quality and assembly speed matter as much as the underlying material.',
+   note:'Ratings reflect the system as a whole.'},
+  {id:'mtube',sec:'Tubing, piping & hollow rod',sub:'Metal tube & pipe',
+   intro:'Materials specifically in tube or pipe form.'},
+  {id:'ptube',sec:'Tubing, piping & hollow rod',sub:'Plastic & composite tube',intro:null},
+  {id:'sheet',sec:'Plastics — sheet & stock',sub:'Sheet & plate',
+   intro:'Pre-formed material purchased as flat sheet, rod, or bar stock.'},
+  {id:'compsheet',sec:'Plastics — sheet & stock',sub:'Composite sheet',intro:null,
+   subnote:'High-performance fiber-reinforced composites in sheet form. Proper tooling and PPE are mandatory. Both materials also appear in the Exotic section.'},
+  {id:'stock',sec:'Plastics — sheet & stock',sub:'Rod, bar & machinable stock',intro:null},
+  {id:'fdm',sec:'3D printed plastics — FDM (in-house)',sub:null,
+   intro:'Properties vary significantly with orientation, infill, and settings. Layer lines are weak points.'},
+  {id:'powder',sec:'3D printed plastics — powder bed (outsourced)',sub:null,
+   intro:'No support structures needed — complex geometry is free. Outsource to bureaus (Xometry, Protolabs, etc.).'},
+  {id:'dmetal',sec:'3D printed metals (outsourced)',sub:null,
+   intro:'Extreme complexity at significant cost. Used by well-resourced or sponsored teams.'},
+  {id:'wood',sec:'Wood',sub:null,intro:null},
+  {id:'exotic',sec:'Exotic / advanced materials',sub:null,
+   intro:'CFRP and fiberglass sheet also appear in the Plastics — composite sheet section above.'},
+];
+
+// ── fabrication method data ──────────────────────────────────────────────────
+const FABS=[
+{id:'hand',name:'Hand tools',cat:'Basic',
+ desc:'Hacksaw, utility knife, pipe cutter, hand drill, file, score-and-snap',
+ notes:'The most accessible option. Great for on-the-spot repairs at competition with no power tools. Most plastics and wood are easy; metals take more effort.',
+ compat:[
+  {n:'Polycarbonate (Lexan)',note:'Score-and-snap for straight cuts; hacksaw or jigsaw for curves. Clean edges with a file. One of the easiest sheet plastics to hand-cut.'},
+  {n:'HDPE',note:'Score deeply with a utility knife and snap, or use a fine-tooth saw. Very easy — one of the most forgiving materials to hand-cut.'},
+  {n:'Acrylic (PMMA)',note:'Score-and-snap works well for straight lines. Pre-drill holes slowly to avoid cracking at the drill entry point.'},
+  {n:'PVC pipe (Sch 40/80)',note:'Pipe cutter gives the cleanest, squarest cut in seconds. Hacksaw also works well. Deburr the inside before use.'},
+  {n:'ABS pipe',note:'Pipe cutter or fine-tooth hacksaw. Smooth edges with sandpaper to prevent game piece snag.'},
+  {n:'Polycarbonate tube & rod',note:'Fine-tooth hacksaw. Deburr inside of tube with a round file after cutting.'},
+  {n:'PETG tube',note:'Fine-tooth hacksaw or hobby saw. Cut slowly to avoid heat melting.'},
+  {n:'Baltic birch plywood',note:'Hand saw or jigsaw. Tape the cut line with masking tape to minimize splintering on the exit face.'},
+  {n:'MDF',note:'Handsaw works. Wear a dust mask — MDF dust contains formaldehyde binders and is a health hazard.'},
+  {n:'Copper tube (Type L/M)',note:'Pipe cutter is ideal — gives a perfect square cut in seconds with no saw marks. Deburr inside.'},
+  {n:'Nylon stock (PA6/PA66)',note:'Hacksaw and file. Nylon cuts cleanly with basic tools and produces no hazardous dust.'},
+  {n:'Delrin / Acetal (POM)',note:'Hacksaw and file. Cuts cleanly similar to hard nylon. Good surface finish from file work.'},
+  {n:'Aluminum (6061-T6)',note:'Hacksaw with metal-cutting blade and cutting fluid. Slower than power tools but works for thin plate and tube. Use a vise.'},
+  {n:'Aluminum box/round tube',note:'Hacksaw with metal blade works well for tube stock. Use a miter box or vise for straight cuts. File to finish.'},
+ ]},
+
+{id:'bandsaw',name:'Band saw',cat:'Power tools',
+ desc:'Metal-blade or wood-blade band saw with appropriate blade selection',
+ notes:'Use a bimetal metal-cutting blade (14–18 TPI) for metals and plastics, a wood blade for wood. Never interchange — metal chips will ruin a wood blade.',
+ compat:[
+  {n:'Aluminum (6061-T6)',note:'Metal blade (10–14 TPI bimetal), slow feed rate, use cutting fluid (WD-40 works). Excellent results for plate and bar stock.'},
+  {n:'Aluminum (6063)',note:'Metal blade. Slightly softer than 6061. Same technique, slightly faster feed acceptable.'},
+  {n:'Aluminum (7075-T6)',note:'Metal blade with cutting fluid. Harder than 6061 — reduce feed rate and watch for blade dulling.'},
+  {n:'Steel (1018 mild)',note:'Bimetal blade, slow feed, cutting oil. Works well. More blade wear than aluminum.'},
+  {n:'Steel (4130/4140)',note:'Bimetal blade, cutting oil, slow feed. Harder alloy causes more blade wear — expect to replace blades.'},
+  {n:'Aluminum box/round tube',note:'Metal blade. Support the tube to prevent vibration chatter. Use a V-block or clamped guide.'},
+  {n:'Steel tube (DOM/ERW)',note:'Bimetal blade with cutting oil. Use a V-block to hold round tube securely.'},
+  {n:'Copper tube (Type L/M)',note:'Fine-tooth metal blade. Cuts easily and quickly. Watch for burrs on the inside.'},
+  {n:'Polycarbonate (Lexan)',note:'Fine-tooth blade (10–14 TPI), slow feed. Tape cut line to prevent chipping. Good results on thick sheet.'},
+  {n:'HDPE',note:'Wood blade. HDPE cuts cleanly but can melt/re-weld chips if blade speed is too high — keep feed moving.'},
+  {n:'Acrylic (PMMA)',note:'Fine-tooth blade, moderate speed to prevent chipping and edge melting. Slow feed.'},
+  {n:'Delrin / Acetal (POM)',note:'Wood or fine-tooth blade. Cuts cleanly with minimal effort — one of the most pleasant plastics to machine.'},
+  {n:'Nylon stock (PA6/PA66)',note:'Wood blade. May need to reduce speed to prevent heat melting at cut surface.'},
+  {n:'Baltic birch plywood',note:'Wood blade. Support the sheet fully to avoid tear-out at the exit face.'},
+  {n:'MDF',note:'Wood blade. Wear a dust mask — MDF dust is a health hazard. Blade dulls faster than with real wood.'},
+  {n:'Carbon fiber (CFRP sheet)',note:'Carbide-tooth blade, full respiratory PPE (N100 respirator, not just N95), eye protection. Cut wet if possible to suppress dust. Carbon fiber dust is a serious carcinogenic hazard.'},
+  {n:'Fiberglass (GFRP sheet)',note:'Carbide-tooth blade, respirator and eye protection required. Glass fiber dust is a serious skin and lung hazard. Cut wet where possible.'},
+ ]},
+
+{id:'cnc_router',name:'CNC router',cat:'CNC',
+ desc:'Spindle-based router using router bits or end mills — common in FRC build spaces',
+ notes:'Versatile for wood and plastics. Can machine aluminum with proper tooling setup. Key: single-flute or O-flute bits for plastics to prevent melting; two-flute carbide for aluminum with coolant.',
+ compat:[
+  {n:'Baltic birch plywood',note:'Standard upcut spiral bit. Excellent results — one of the best CNC materials. Use tabs or vacuum table to hold down.'},
+  {n:'MDF',note:'Upcut spiral bit. Very consistent results but generates fine hazardous dust — run full exhaust and wear protection when handling parts.'},
+  {n:'Polycarbonate (Lexan)',note:'Single-flute O-flute upcut bit, high RPM, fast feed to avoid heat buildup and edge melting. Tape material to spoilboard.'},
+  {n:'HDPE',note:'Single-flute upcut bit, very fast feed rate. HDPE melts easily if you pause — keep the cutter moving constantly.'},
+  {n:'Acrylic (PMMA)',note:'Single-flute O-flute bit gives the cleanest, clearest edge. Tape down, fast feed, avoid chip re-welding.'},
+  {n:'Delrin / Acetal (POM)',note:'Single or two-flute upcut bit. Machines beautifully with minimal chatter. Excellent dimensional accuracy.'},
+  {n:'Nylon stock (PA6/PA66)',note:'Single-flute upcut bit, fast feed. Nylon melts if feed is too slow. Good results with proper setup.'},
+  {n:'Aluminum (6061-T6)',note:'Two-flute carbide end mill, cutting fluid (WD-40 or dedicated mist), conservative depth of cut (0.03–0.06"), high RPM. Very achievable with practice.'},
+  {n:'Aluminum (6063)',note:'Same as 6061. Actually slightly softer but gums up more — keep feeds high and use cutting fluid.'},
+  {n:'Aluminum box/round tube',note:'Same as 6061 plate but fixture carefully. Common for making lightening patterns and custom tube profiles.'},
+  {n:'Fiberglass (GFRP sheet)',note:'Carbide compression bit or solid carbide, full respiratory PPE required. Glass fiber dust is a serious health hazard. Cut wet or with dust extraction.'},
+ ]},
+
+{id:'laser',name:'Laser cutter (CO2)',cat:'CNC',
+ desc:'CO2 laser cutter — very common in FRC build spaces and makerspaces',
+ notes:'Excellent for flat sheet cutting and engraving. Some materials produce extremely toxic fumes — always verify compatibility. The laser was essentially designed for acrylic and thin wood.',
+ compat:[
+  {n:'Baltic birch plywood',note:'Excellent — clean cuts and engraving. Watch for charring on thick sections and fire risk with thin material. Tape can help prevent scorch marks.'},
+  {n:'MDF',note:'Good cuts but significant smoke. Run exhaust at full power. Wear dust protection when handling freshly cut parts.'},
+  {n:'Acrylic (PMMA)',note:'Outstanding — clearest, cleanest edge of any material. The laser was practically designed for acrylic. Polished edge, precise cuts.'},
+  {n:'Delrin / Acetal (POM)',note:'Cuts well but emits formaldehyde fumes. Full exhaust ventilation required. Ventilate the workspace after use. Check local regulations.'},
+  {n:'Polycarbonate (Lexan)',note:'Possible but less ideal — tends to yellow/brown at cut edges and often has a lower quality edge than acrylic. Use low speed/high power to minimize thermal stress.'},
+ ],
+ never:[
+  {n:'PVC pipe (Sch 40/80)',note:'NEVER laser-cut PVC. Releases chlorine gas (HCl) which permanently damages the laser machine optics and is a serious health hazard. No exceptions.'},
+  {n:'ABS pipe',note:'Avoid — ABS releases styrene and other toxic fumes when laser-cut. CO2 laser is not recommended. Use hand tools or band saw instead.'},
+  {n:'ABS (FDM)',note:'Same as ABS pipe — releases toxic styrene fumes. Do not laser-cut printed ABS parts.'},
+  {n:'Carbon fiber (CFRP sheet)',note:'NEVER laser-cut CFRP. The epoxy matrix releases highly toxic fumes including cyanide compounds. Extremely serious health hazard. Use waterjet or wet hand cutting instead.'},
+  {n:'Fiberglass (GFRP sheet)',note:'Do not laser-cut fiberglass — releases toxic epoxy and glass fiber fumes. Use waterjet, wet cutting, or carbide tooling with PPE instead.'},
+  {n:'HDPE',note:'Avoid — HDPE melts rather than cuts, leaving a gummy smeared edge that is very difficult to clean up. Use CNC router or hand saw instead.'},
+ ]},
+
+{id:'mill_lathe',name:'Manual mill / lathe',cat:'Machine shop',
+ desc:'Bridgeport-style vertical mill and/or engine lathe',
+ notes:'Excellent for precision parts and custom features. Allows tight tolerances impossible with a router. Lathe is ideal for round parts (shafts, rollers, bushings).',
+ compat:[
+  {n:'Aluminum (6061-T6)',note:'Ideal material for the mill. Sharp HSS or carbide cutters, cutting fluid, conservative depth of cut. Excellent surface finish achievable.'},
+  {n:'Aluminum (6063)',note:'Similar to 6061 but gums up more on the cut edge — keep feed rates high and use cutting fluid liberally.'},
+  {n:'Aluminum (7075-T6)',note:'Mills very cleanly — harder and more brittle than 6061 but produces an excellent surface finish. Great lathe material.'},
+  {n:'Steel (1018 mild)',note:'HSS or carbide tooling, slower spindle speed, more cutting oil than aluminum. Good results on mill and lathe.'},
+  {n:'Steel (4130/4140)',note:'Carbide preferred, slower speeds, plenty of cutting fluid. Takes more time and tool changes than 1018.'},
+  {n:'Delrin / Acetal (POM)',note:'Excellent on the lathe — machines like metal, great surface finish, no coolant needed. One of the best plastics to turn.'},
+  {n:'Nylon stock (PA6/PA66)',note:'Machines well on both lathe and mill. Sharp tools, no coolant, moderate speeds. Slight flexibility can cause chatter on thin sections.'},
+  {n:'Polycarbonate (Lexan)',note:'Lathe works well for round parts. Sharp tools to prevent melting and smearing. Keep speeds moderate.'},
+  {n:'Titanium (Ti-6Al-4V)',note:'Possible but very demanding — sharp carbide, low speeds (100–200 SFM), lots of coolant, small depths. Work-hardens extremely rapidly if tool dulls. Consider waterjet instead.'},
+  {n:'Aluminum box/round tube',note:'Mill for precision flat features and holes. Lathe for facing tube ends, boring holes, and turning down OD.'},
+ ]},
+
+{id:'waterjet',name:'Waterjet cutter',cat:'Machine shop',
+ desc:'High-pressure abrasive water jet — cuts nearly any material with no heat',
+ notes:'No heat-affected zone makes it ideal for heat-sensitive composites and hard materials. Many FRC teams access these through sponsor shops or local job shops. File in DXF or STEP.',
+ compat:[
+  {n:'Aluminum (6061-T6)',note:'Excellent. Clean edges, no heat distortion or warping. One of the best methods for complex flat aluminum plate profiles.'},
+  {n:'Aluminum (7075-T6)',note:'Excellent. Same as 6061. Great for thick plate that would be hard to machine conventionally.'},
+  {n:'Steel (1018 mild)',note:'Good results. Slower than aluminum but very capable. Slight taper on thick sections at high traverse speeds.'},
+  {n:'Steel (HRPO sheet)',note:'Excellent for cutting sheet steel profiles — precise, clean, no press brake distortion.'},
+  {n:'Steel (4130/4140)',note:'Good. Waterjet handles hard steel effectively where conventional machining is difficult.'},
+  {n:'Titanium (Ti-6Al-4V)',note:'Excellent — waterjet bypasses the extreme difficulty of machining titanium conventionally. Great finish.'},
+  {n:'Carbon fiber (CFRP sheet)',note:'Very good — no heat means no epoxy burning or delamination. The wet process contains the hazardous carbon fiber dust. Best shop method for cutting CFRP safely.'},
+  {n:'Fiberglass (GFRP sheet)',note:'Good results. Wet process contains glass fiber dust, making this much safer than dry cutting methods.'},
+  {n:'Aluminum box/round tube',note:'Can cut tube profiles and pierce holes in tube walls. Useful for custom lightening patterns.'},
+ ]},
+
+{id:'fdm_printer',name:'FDM 3D printer',cat:'Additive',
+ desc:'Fused deposition modeling — team-owned desktop or industrial printers',
+ notes:'Enables complex geometry impossible with subtractive methods. Layer orientation strongly affects strength — orient load-bearing features to align with print layers where possible.',
+ compat:[
+  {n:'PLA (FDM)',note:'Easiest to print. Near-zero warping. Best for prototypes, cable management, and non-structural parts. Any basic FDM printer handles PLA.'},
+  {n:'ABS (FDM)',note:'Requires enclosure and good ventilation. Prone to warping without a heated build plate. Use a brim or raft for large flat parts.'},
+  {n:'PETG (FDM)',note:'Low warping, good layer adhesion, safe fumes. Best starting point for structural parts. Works on most mid-range printers.'},
+  {n:'Nylon PA-CF / PA12-CF',note:'Requires hardened/ruby nozzle (CF is highly abrasive), dry box for filament storage, and fully enclosed printer. Best results on industrial FDM like Markforged or Bambu.'},
+ ]},
+
+{id:'bureau',name:'Service bureau (outsourced)',cat:'Additive',
+ desc:'Professional outsourced manufacturing: SLS, MJF, DMLS, and CNC services (Xometry, Protolabs, Shapeways)',
+ notes:'Lead time is the main constraint — budget 3–10 business days. Submit STEP files with tolerances called out. Verify geometry with a cheap FDM prototype first before committing to expensive metal prints.',
+ compat:[
+  {n:'SLS — Nylon PA12/PA11',note:'Order as PA12 on any SLS-capable bureau. Keep wall thickness ≥1.5mm. Parts arrive as-sintered; specify dyeing if cosmetics matter.'},
+  {n:'MJF — Nylon PA12',note:'HP-certified bureaus. Better detail than SLS. Specify PA12-GB if you need extra stiffness. Parts arrive dark gray.'},
+  {n:'DMLS Al (AlSi10Mg)',note:'Specify AlSi10Mg. Request stress-relief annealing. Add 0.2–0.5mm machining stock on precision bore faces. Very expensive.'},
+  {n:'DMLS Steel (17-4 PH)',note:'Request H900 or H1025 precipitation hardening condition for maximum strength. Post-machine all mating surfaces. Budget carefully.'},
+  {n:'DMLS Titanium (Ti-6Al-4V)',note:'Request HIP post-processing for structural parts. Extremely expensive — verify geometry with a plastic FDM mockup first.'},
+ ]},
+
+{id:'pressbrake',name:'Press brake + shear',cat:'Sheet metal',
+ desc:'Sheet metal brake for bending, shear or guillotine for straight cuts',
+ notes:'Required for building full sheet-metal robot structures. Most FRC teams use these with aluminum sheet. Teams like 5817 use steel. The shear makes straight cuts; the brake makes precision bends.',
+ compat:[
+  {n:'Aluminum (6061-T6)',note:'Best results in 5052-H32 or 6061-T6 sheet (0.040″–0.125″). Use a proper inside radius (~1× material thickness minimum). 6061 is slightly harder to bend than 5052.'},
+  {n:'Steel (HRPO sheet)',note:'Works well in 16–20 gauge. Requires more brake tonnage than aluminum — verify your brake capacity. Use relief cuts at inside corners.'},
+  {n:'Polycarbonate (Lexan)',note:'Heat gun to ~120°C uniformly along the bend line first, then form over a radius block. Holds shape perfectly when cooled. Great for custom enclosures and guards.'},
+  {n:'HDPE',note:'Heat gun to ~80°C and form over a template or form block. More forgiving than polycarb — can reheat and adjust.'},
+ ]},
+
+{id:'heatgun',name:'Heat gun / forming',cat:'Basic',
+ desc:'Heat gun used to soften and bend thermoplastics over a form or template',
+ notes:'Simple and fast for one-off bent parts. Heat evenly along the bend line (not just one spot). Hold against a metal straight-edge as a bend guide and keep pressure until cooled.',
+ compat:[
+  {n:'Polycarbonate (Lexan)',note:'Best heat-gun plastic. Heat to ~120–130°C along the bend line, bend over a radius block or metal straight edge. Holds shape perfectly. Reheat to adjust.'},
+  {n:'PETG tube',note:'Softens around 80°C — use low heat gun setting or warm water bath. Good for gentle curves and custom angles.'},
+  {n:'ABS pipe',note:'Heat to ~100°C. Bends well and holds shape on cooling. Can also be heat-formed into custom chute shapes.'},
+  {n:'PVC pipe (Sch 40/80)',note:'Softens around 60–70°C. Fill with sand or pack with paper towels before bending to prevent kinking. Common for custom intake chute shapes.'},
+  {n:'HDPE',note:'Softens at ~80°C. Very forgiving — can reheat and adjust multiple times. Easy to form over templates for custom slide surfaces.'},
+ ]},
+];
+
+// ── chart ─────────────────────────────────────────────────────────────────────
+const isDark=matchMedia('(prefers-color-scheme:dark)').matches;
+const gc=isDark?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
+const tc=isDark?'#777':'#999';
+let xK='s',yK='w',hidden=new Set();
+function jitter(i,d){const p=[2.3,3.7,5.1,7.3,11.9,13.1];return((i*p[d%p.length]*1.7+d*4.3)%1)*0.55-0.275;}
+function buildDS(){return Object.entries(CC).map(([cat,color])=>{
+  const pts=M.map((m,i)=>m.cat===cat?{x:m[xK]+jitter(i,0),y:m[yK]+jitter(i,1),m}:null).filter(Boolean);
+  if(!pts.length)return null;
+  const a=hidden.has(cat)?'22':'CC';
+  return{label:cat,data:pts,backgroundColor:color+a,borderColor:hidden.has(cat)?color+'44':color,borderWidth:1.5,pointRadius:7,pointHoverRadius:10};
+}).filter(Boolean);}
+let chart;
+function initChart(){
+  chart=new Chart(document.getElementById('mc').getContext('2d'),{
+    type:'scatter',data:{datasets:buildDS()},
+    options:{
+      responsive:true,maintainAspectRatio:false,layout:{padding:16},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:isDark?'#2a2a28':'#fff',borderColor:isDark?'#444':'#ddd',borderWidth:1,
+          titleColor:isDark?'#f0efe8':'#111',bodyColor:isDark?'#aaa':'#555',padding:10,
+          callbacks:{title:c=>c[0].raw.m.n,label:c=>AX[xK].split('(')[0].trim()+': '+c[0].raw.m[xK]+'/5    '+AX[yK].split('(')[0].trim()+': '+c[0].raw.m[yK]+'/5'}}
+      },
+      scales:{
+        x:{title:{display:true,text:AX[xK],color:tc,font:{size:11}},grid:{color:gc},min:0.4,max:5.6,
+           ticks:{color:tc,stepSize:1,callback:v=>Number.isInteger(v)&&v>=1&&v<=5?['','★','★★','★★★','★★★★','★★★★★'][v]:''}},
+        y:{title:{display:true,text:AX[yK],color:tc,font:{size:11}},grid:{color:gc},min:0.4,max:5.6,
+           ticks:{color:tc,stepSize:1,callback:v=>Number.isInteger(v)&&v>=1&&v<=5?['','★','★★','★★★','★★★★','★★★★★'][v]:''}}
+      },
+      onClick:(e,els)=>{
+        if(!els.length)return;
+        const m=chart.data.datasets[els[0].datasetIndex].data[els[0].index].m;
+        const fm=fmInfo(m.t);
+        const dot=`<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${CC[m.cat]};margin-right:5px;vertical-align:2px"></span>`;
+        document.getElementById('det').innerHTML=
+          `<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+             <strong style="font-size:14px;color:var(--t0)">${dot}${m.n}</strong>
+             <span style="font-size:11px;color:var(--t2)">${m.cat}</span>
+             <span class="fmbadge ${fm.c}" style="font-size:10px;padding:1px 6px">${fm.l}</span>
+           </div>
+           <div style="font-size:12px;color:var(--t1);line-height:1.5;margin-bottom:6px">
+             <strong style="color:var(--t0)">Best for:</strong> ${m.best}<br>
+             <strong style="color:var(--t0)">Watch out:</strong> ${m.warn}
+           </div>
+           <div class="dstats">${RKEYS.map((k,i)=>`<span class="ds"><strong>${m[k]}/5</strong> ${RLBLS[i]}</span>`).join('')}</div>`;
+        document.getElementById('det').scrollIntoView({behavior:'smooth',block:'nearest'});
+      }
+    }
+  });
+}
+function updateChart(){chart.data.datasets=buildDS();chart.options.scales.x.title.text=AX[xK];chart.options.scales.y.title.text=AX[yK];chart.update('none');}
+function setAxes(x,y){xK=x;yK=y;document.getElementById('xSel').value=x;document.getElementById('ySel').value=y;updateChart();}
+function buildLegend(){document.getElementById('lgnd').innerHTML=Object.entries(CC).map(([cat,color])=>{
+  const cnt=M.filter(m=>m.cat===cat).length;if(!cnt)return'';
+  return`<div class="li" style="${hidden.has(cat)?'opacity:.35':''}" onclick="toggleCat('${cat}')"><div class="ld" style="background:${color}"></div>${cat} <span style="color:var(--t2);margin-left:2px">${cnt}</span></div>`;
+}).join('');}
+function toggleCat(cat){hidden.has(cat)?hidden.delete(cat):hidden.add(cat);buildLegend();updateChart();}
+document.getElementById('xSel').onchange=e=>{xK=e.target.value;updateChart();};
+document.getElementById('ySel').onchange=e=>{yK=e.target.value;updateChart();};
+
+// ── quiz ──────────────────────────────────────────────────────────────────────
+const Qs=[
+  {id:'app',q:"What is this part's primary function?",opts:[
+    {v:'struct',l:'Structural frame / chassis rails'},
+    {v:'mech',l:'Moving mechanism, linkage, or arm'},
+    {v:'contact',l:'Game piece contact / intake surface'},
+    {v:'wear',l:'Sliding wear surface (low friction needed)'},
+    {v:'plumb',l:'Pneumatic / fluid plumbing'},
+    {v:'proto',l:'Rapid prototype or test fixture'},
+    {v:'cosm',l:'Cosmetic panel or cover'},
+  ]},
+  {id:'wt',q:'How critical is keeping weight low?',opts:[
+    {v:'crit',l:'Critical — every gram matters'},
+    {v:'mod',l:'Moderate — prefer lighter when otherwise equal'},
+    {v:'none',l:'Not a priority'},
+  ]},
+  {id:'imp',q:'What loads or impacts will it face?',opts:[
+    {v:'high',l:'High impact — robot defense, collisions'},
+    {v:'cyc',l:'Cyclic / rotating loads'},
+    {v:'stat',l:'Static structural or bending loads'},
+    {v:'low',l:'Light loads only'},
+  ]},
+  {id:'fab',q:'What fabrication tools are available?',opts:[
+    {v:'basic',l:'Hand tools and drill press only'},
+    {v:'cnc',l:'CNC router, laser cutter, or band saw'},
+    {v:'full',l:'Full shop — mill, lathe, waterjet'},
+    {v:'out',l:'Can outsource to a service bureau'},
+  ]},
+  {id:'hf',q:'Heat or friction requirements?',opts:[
+    {v:'heat',l:'Near motors or high-heat environment'},
+    {v:'fric',l:'Sliding / low-friction surface needed'},
+    {v:'both',l:'Both heat and friction'},
+    {v:'none',l:'Neither — ambient temp, no sliding'},
+  ]},
+  {id:'bud',q:'Budget constraints?',opts:[
+    {v:'tight',l:'Tight — hardware store / what we have'},
+    {v:'std',l:'Standard FRC team budget'},
+    {v:'flex',l:'Well-funded or sponsor support'},
+  ]},
+];
+function buildQuiz(){
+  document.getElementById('quizGrid').innerHTML=Qs.map(q=>
+    `<div class="qcard"><div class="qtitle">${q.q}</div><div class="qopts">${
+      q.opts.map(o=>`<label class="qopt"><input type="radio" name="${q.id}" value="${o.v}"> ${o.l}</label>`).join('')
+    }</div></div>`
+  ).join('');
+}
+function scoreM(m,ans){
+  let s=0;const{app,wt,imp,fab,hf,bud}=ans;
+  if(app==='struct') s+=m.s*3+m.t*1.5;
+  if(app==='mech')   s+=m.s*2+m.f*2+m.w;
+  if(app==='contact')s+=m.t*2.5+m.fr*1.5+m.f;
+  if(app==='wear')   s+=m.fr*4+m.ht*1.5+m.t;
+  if(app==='plumb')  s+=m.f*3+m.c*2+(['Metal tube','Plastic tube'].includes(m.cat)?10:0);
+  if(app==='proto')  s+=m.f*3+m.c*3;
+  if(app==='cosm')   s+=m.f*2+m.c*2+m.w;
+  if(wt==='crit')s+=m.w*3; if(wt==='mod')s+=m.w;
+  if(imp==='high'){s+=m.t*3;if(m.t<=2)s-=10;}
+  if(imp==='cyc') s+=m.t*1.5+m.s;
+  if(imp==='stat')s+=m.s*2;
+  if(imp==='low') s+=m.f+m.c;
+  if(fab==='basic') s+=m.f>=4?10:m.f>=3?4:m.f>=2?-2:-8;
+  if(fab==='cnc')   s+=m.f>=3?7:m.f>=2?3:-2;
+  if(fab==='full')  s+=m.f*1.5;
+  if(fab==='out')   s+=m.f*0.5+3;
+  if(hf==='heat'){s+=m.ht*3;if(m.ht<=1)s-=8;}
+  if(hf==='fric'){s+=m.fr*3;if(m.fr<=1)s-=6;}
+  if(hf==='both'){s+=m.ht*2+m.fr*2;if(m.ht<=1||m.fr<=1)s-=5;}
+  if(bud==='tight')s+=m.c*3; if(bud==='std')s+=m.c*1.5; if(bud==='flex')s+=m.c*0.3+3;
+  return s;
+}
+function runQuiz(){
+  const ans={};
+  Qs.forEach(q=>{const el=document.querySelector(`input[name="${q.id}"]:checked`);if(el)ans[q.id]=el.value;});
+  const missing=Qs.filter(q=>!ans[q.id]).length;
+  if(missing){document.getElementById('quizHint').textContent=`Please answer ${missing} more question${missing>1?'s':''}`; return;}
+  document.getElementById('quizHint').textContent='';
+  const seen=new Set();
+  const pool=M.filter(m=>{if(seen.has(m.n))return false;seen.add(m.n);return true;});
+  const scored=pool.map(m=>({m,sc:scoreM(m,ans)})).sort((a,b)=>b.sc-a.sc);
+  const maxSc=scored[0].sc,minSc=scored[scored.length-1].sc,rng=maxSc-minSc||1;
+  const pm={s:'Strength',w:'Light weight',t:'Ductility',f:'Fab ease',c:'Low cost',fr:'Friction',ht:'Heat res.'};
+  document.getElementById('quizResults').innerHTML=
+    `<div class="rsgrid">${scored.slice(0,3).map((it,i)=>{
+      const pct=Math.round((it.sc-minSc)/rng*100);
+      const dot=`<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${CC[it.m.cat]};margin-right:4px;vertical-align:1px"></span>`;
+      const tags=RKEYS.filter(k=>it.m[k]>=4&&!(k==='fr'&&ans.hf==='none')&&!(k==='ht'&&ans.hf==='none')).sort((a,b)=>it.m[b]-it.m[a]).slice(0,3).map(k=>`<span class="rstag">${pm[k]}: ${it.m[k]}/5</span>`).join('');
+      return`<div class="rscard"><div class="rsrank">${['1st choice','2nd choice','3rd choice'][i]}</div><div class="rsname">${dot}${it.m.n}</div><div class="rscat">${it.m.cat}</div><div class="rsbw"><div class="rsb" style="width:${pct}%"></div></div><div class="rstags">${tags}</div></div>`;
+    }).join('')}</div>`;
+}
+
+// ── fabrication guide ─────────────────────────────────────────────────────────
+let fabMode='mat';
+function setFabMode(mode){
+  fabMode=mode;
+  document.getElementById('fabB1').classList.toggle('on',mode==='mat');
+  document.getElementById('fabB2').classList.toggle('on',mode==='fab');
+  buildFabSel();
+  document.getElementById('fabResults').innerHTML='';
+}
+function buildFabSel(){
+  const sel=document.getElementById('fabSel');
+  if(fabMode==='mat'){
+    const seen=new Set();
+    const opts=M.filter(m=>{if(seen.has(m.n))return false;seen.add(m.n);return true;})
+      .map(m=>`<option value="${m.n}">${m.n}</option>`);
+    sel.innerHTML='<option value="">— select a material —</option>'+opts.join('');
+  } else {
+    sel.innerHTML='<option value="">— select a fabrication method —</option>'+
+      FABS.map(f=>`<option value="${f.id}">${f.name} — ${f.cat}</option>`).join('');
+  }
+}
+function renderFabResults(){
+  const val=document.getElementById('fabSel').value;
+  if(!val){document.getElementById('fabResults').innerHTML='';return;}
+  fabMode==='mat'?renderFabForMat(val):renderFabForMethod(val);
+}
+function renderFabForMat(matName){
+  const results=[],never=[];
+  FABS.forEach(fab=>{
+    const ce=fab.compat&&fab.compat.find(c=>c.n===matName);
+    const ne=fab.never&&fab.never.find(c=>c.n===matName);
+    if(ce)results.push({fab,note:ce.note});
+    if(ne)never.push({fab,note:ne.note});
+  });
+  let html='';
+  if(!results.length&&!never.length){
+    html='<p style="font-size:13px;color:var(--t2);margin-top:1rem">No specific fabrication notes for this material. Check the reference card for general guidance.</p>';
+  }
+  const cats=[...new Set(results.map(r=>r.fab.cat))];
+  cats.forEach(cat=>{
+    html+=`<div class="fab-cat-lbl">${cat}</div>`;
+    results.filter(r=>r.fab.cat===cat).forEach(r=>{
+      html+=`<div class="fab-card"><div class="fab-card-name">${r.fab.name}</div><div class="fab-card-meta">${r.fab.desc}</div><div class="fab-card-note">${r.note}</div></div>`;
+    });
+  });
+  if(never.length){
+    html+=`<div class="fab-cat-lbl" style="color:var(--er-t)">Do not use — hazardous or incompatible</div>`;
+    never.forEach(r=>{
+      html+=`<div class="fab-card never"><div class="fab-card-name">⚠ Do not use: ${r.fab.name}</div><div class="fab-card-note">${r.note}</div></div>`;
+    });
+  }
+  document.getElementById('fabResults').innerHTML=html;
+}
+function renderFabForMethod(fabId){
+  const fab=FABS.find(f=>f.id===fabId);
+  if(!fab)return;
+  let html=`<div class="fab-intro-card"><div class="fab-card-name" style="font-size:15px">${fab.name}</div><div class="fab-card-meta" style="margin-top:2px">${fab.desc}</div><div class="fab-card-note" style="margin-top:6px">${fab.notes}</div></div>`;
+  const cats=[...new Set(fab.compat.map(c=>{const m=M.find(x=>x.n===c.n);return m?m.cat:'Other';}))];
+  cats.forEach(cat=>{
+    html+=`<div class="fab-cat-lbl">${cat}</div>`;
+    fab.compat.filter(c=>{const m=M.find(x=>x.n===c.n);return m?m.cat===cat:cat==='Other';}).forEach(c=>{
+      const m=M.find(x=>x.n===c.n);
+      const dot=m?`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${CC[m.cat]};margin-right:5px;vertical-align:1px"></span>`:'';
+      html+=`<div class="fab-card"><div class="fab-card-name">${dot}${c.n}</div><div class="fab-card-note">${c.note}</div></div>`;
+    });
+  });
+  if(fab.never&&fab.never.length){
+    html+=`<div class="fab-cat-lbl" style="color:var(--er-t)">Never use with this method</div>`;
+    fab.never.forEach(c=>{html+=`<div class="fab-card never"><div class="fab-card-name">⚠ ${c.n}</div><div class="fab-card-note">${c.note}</div></div>`;});
+  }
+  document.getElementById('fabResults').innerHTML=html;
+}
+document.getElementById('fabSel').onchange=renderFabResults;
+
+// ── reference renderer ────────────────────────────────────────────────────────
+function fmInfo(t){
+  if(t>=4)return{c:'fmd',l:'Ductile — bends / deforms plastically'};
+  if(t===3)return{c:'fms',l:'Semi-ductile — some yield before fracture'};
+  return{c:'fmb',l:'Brittle — fractures or shatters'};
+}
+function pct(v){return(v/5*100).toFixed(0)+'%';}
+function renderCard(m){
+  const fm=fmInfo(m.t);
+  const bmap={c:'bc',e:'be',w:'bw',i:'bi'};
+  const bars=RKEYS.map((k,i)=>`<div class="ri"><div class="rl">${RLBLS[i]}</div><div class="rb"><div class="rf" style="width:${pct(m[k])};background:${RCOLS[i]}"></div></div><div class="rv">${m[k]}/5</div></div>`).join('');
+  return`<div class="card${m.feat?' feat':''}">
+    <div class="ctop"><div><div class="cname">${m.n}</div><div class="csub">${m.sub}</div></div><span class="badge ${bmap[m.badge]}">${m.btxt}</span></div>
+    <div class="ratings">${bars}</div>
+    <div class="fmrow"><span class="fmbadge ${fm.c}">${fm.l}</span></div>
+    <div class="notes"><strong>Best for:</strong> ${m.best} <strong>Watch out:</strong> ${m.warn}</div>
+  </div>`;
+}
+function buildRefSheet(){
+  let html='',lastSec=null;
+  GROUPS.forEach(g=>{
+    const mats=M.filter(m=>m.grp===g.id);if(!mats.length)return;
+    if(g.sec!==lastSec){
+      if(lastSec!==null)html+='<div class="divider"></div>';
+      html+=`<div class="slbl">${g.sec}</div>`;
+      if(g.intro)html+=`<div class="sint">${g.intro}</div>`;
+      if(g.note) html+=`<div class="fnote">${g.note}</div>`;
+      lastSec=g.sec;
+    }
+    if(g.sub)html+=`<div class="sublbl">${g.sub}</div>`;
+    if(g.subnote)html+=`<div class="sint" style="margin-top:-4px;margin-bottom:.5rem">${g.subnote}</div>`;
+    mats.forEach(m=>{html+=renderCard(m);});
+  });
+  document.getElementById('refSheet').innerHTML=html;
+}
+
+// ── init ──────────────────────────────────────────────────────────────────────
+initChart(); buildLegend(); buildQuiz(); buildFabSel(); buildRefSheet();
+</script>
+</body>
+</html>

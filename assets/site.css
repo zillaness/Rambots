@@ -1,0 +1,250 @@
+/**
+ * file: site.css
+ * version: 1.2
+ * author: Sam Cao
+ * created: 2026-10-14
+ * last_updated: 2026-10-14
+ * description: Shared styles for the presentations index and the slide/page viewer.
+ * ai_update: Update last_updated and version. Append changelog comment at bottom.
+ */
+
+:root {
+  --bg: #f5f5f2;
+  --surface: #ffffff;
+  --ink: #18191c;
+  --muted: #5b5f66;
+  --line: #e2e2dd;
+  --accent: #0a7563;
+  --accent-ink: #ffffff;
+  --accent-soft: #d8f5ee;
+  --stage: #e9e9e4;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.06);
+  --radius: 12px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111214;
+    --surface: #1a1b1e;
+    --ink: #ececea;
+    --muted: #a3a7ad;
+    --line: #2b2d31;
+    --accent: #3fd9b8;
+    --accent-ink: #0b1210;
+    --accent-soft: #163a33;
+    --stage: #0b0c0d;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 var(--font);
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.sr-only, .skip:not(:focus) {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip { position: absolute; left: 16px; top: 8px; z-index: 10; background: var(--surface); padding: 6px 10px; border-radius: 8px; }
+.muted { color: var(--muted); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 8px;
+  background: var(--accent); color: var(--accent-ink);
+  border: 1px solid transparent; font: 600 14px/1.2 var(--font);
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.ghost:hover { border-color: var(--muted); }
+
+.foot {
+  max-width: 1200px; margin: 48px auto 0; padding: 24px 16px 40px;
+  color: var(--muted); font-size: 14px; border-top: 1px solid var(--line);
+}
+
+/* ---------------------------------------------------------------- index */
+.hero { max-width: 1200px; margin: 0 auto; padding: 48px 16px 8px; }
+.hero h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.1; margin: 0 0 10px; letter-spacing: -0.02em; }
+.lede { color: var(--muted); max-width: 62ch; margin: 0 0 6px; font-size: 18px; }
+.stats { margin: 0 0 22px; font-size: 14px; color: var(--muted); }
+.finder { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.search { flex: 1 1 280px; max-width: 440px; }
+.search input {
+  width: 100%; padding: 10px 14px; font: inherit;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px;
+}
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button {
+  font: 600 14px var(--font); padding: 8px 13px; border-radius: 999px; cursor: pointer;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+}
+.filters button:hover { border-color: var(--accent); }
+.filters button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.filters span { font-weight: 400; opacity: .75; margin-left: 2px; }
+.topic[hidden], .card[hidden] { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.chips a {
+  padding: 5px 12px; border-radius: 999px; font-size: 14px; text-decoration: none;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+}
+.chips a:hover { border-color: var(--accent); }
+
+main#main { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.topic { padding-top: 36px; scroll-margin-top: 8px; }
+.topic h2 { font-size: 22px; margin: 0 0 14px; letter-spacing: -0.01em; }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); }
+.card {
+  position: relative; display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow); transition: transform .15s ease, border-color .15s ease;
+}
+.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.thumb { aspect-ratio: 16 / 9; background: var(--stage); overflow: hidden; border-bottom: 1px solid var(--line); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb.portrait img { object-position: top; }
+.card-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.kind { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+.card h3 { margin: 0; font-size: 17px; line-height: 1.3; }
+.card h3 a { color: var(--ink); text-decoration: none; }
+.stretch::after { content: ""; position: absolute; inset: 0; }
+.desc { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+.dl { margin: auto 0 0; padding-top: 8px; font-size: 13px; color: var(--muted); position: relative; z-index: 1; }
+.dl a { margin-left: 4px; font-weight: 600; }
+.empty { color: var(--muted); padding: 32px 0; }
+.ext::after { content: " \2197"; }
+.arrow { color: var(--accent); font-weight: 400; }
+
+/* ---------------------------------------------------------------- viewer */
+.bar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 10px 16px; background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.back { text-decoration: none; font-weight: 600; white-space: nowrap; }
+.bar-title { flex: 1; min-width: 0; }
+.kicker { display: block; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.bar h1 { margin: 0; font-size: 18px; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; }
+.bar-actions { display: flex; gap: 8px; }
+
+.viewer main { max-width: 1400px; margin: 0 auto; padding: 12px 16px 0; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 4px 0 12px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.seg button { font: 600 14px var(--font); padding: 7px 12px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); cursor: pointer; }
+#fullscreen { margin-left: auto; }
+
+.deck { display: flex; flex-direction: column; gap: 22px; outline: none; }
+/* Horizontal swipes on a slide change slides; keep the browser from treating them as Back. */
+.mode-show .deck { touch-action: pan-y pinch-zoom; overscroll-behavior-x: contain; }
+.slide { margin: 0; }
+.frame {
+  position: relative; margin: 0 auto;
+  width: min(100%, 1100px);
+  background: #fff; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.frame > img:first-child { display: block; width: 100%; height: auto; }
+.frame .overlay { position: absolute; object-fit: fill; pointer-events: none; }
+.slide-text {
+  width: min(100%, 1100px); margin: 10px auto 0; padding: 10px 14px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  white-space: pre-line; font-size: 14px; color: var(--ink);
+}
+.slide-no { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
+body:not(.text-on) .slide-text {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0);
+}
+
+/* slideshow mode: one slide, sized to the viewport */
+.mode-show .slide { display: none; }
+.mode-show .slide.current { display: block; }
+.mode-show .frame { width: min(100%, calc((100svh - var(--chrome, 190px)) * var(--ar)), 1600px); cursor: pointer; }
+
+.controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 14px 0 6px; }
+.mode-scroll .controls { display: none; }
+.nav {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font-size: 20px; cursor: pointer;
+}
+.nav:disabled { opacity: .35; cursor: default; }
+.counter { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 70px; text-align: center; }
+
+.strip {
+  display: grid; gap: 10px; margin: 14px 0 0; padding: 4px 0;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+}
+.mode-scroll .strip { display: none; }
+.strip button {
+  padding: 0; border: 2px solid transparent; border-radius: 6px; overflow: hidden;
+  background: var(--surface); cursor: pointer; position: relative;
+}
+.strip button[aria-current="true"] { border-color: var(--accent); }
+.strip img { display: block; width: 100%; height: auto; }
+.strip span {
+  position: absolute; left: 4px; bottom: 4px; font-size: 11px; font-weight: 600;
+  background: rgb(0 0 0 / .6); color: #fff; padding: 0 5px; border-radius: 4px;
+}
+
+/* fullscreen */
+.deck:fullscreen { background: #000; justify-content: center; padding: 0; }
+.deck:fullscreen .slide.current { display: flex; align-items: center; justify-content: center; height: 100vh; }
+.deck:fullscreen .frame { width: min(100vw, calc(100vh * var(--ar))); border: 0; border-radius: 0; box-shadow: none; }
+.deck:fullscreen .slide-text { display: none; }
+
+@media (max-width: 640px) {
+  .hero { padding-top: 28px; }
+  .lede { font-size: 16px; }
+  .stats { margin-bottom: 16px; }
+  /* one swipeable row each instead of a wall of wrapped chips */
+  .filters, .chips {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    margin-left: -16px; margin-right: -16px; padding: 2px 16px;
+  }
+  .filters::-webkit-scrollbar, .chips::-webkit-scrollbar { display: none; }
+  .filters button, .chips a { flex: none; }
+  .search { flex-basis: 100%; max-width: none; }
+  .bar { gap: 8px 12px; }
+  .back span { display: none; }
+  .bar h1 { font-size: 16px; }
+  #fullscreen { margin-left: 0; }
+  .mode-show .frame { width: 100%; }
+}
+/* download gate and locked items (assets/unlock.js) */
+.gated[hidden] { display: none !important; }
+html:not(.unlocked) .card[data-locked] { display: none !important; }
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  z-index: 20; padding: 10px 18px; border-radius: 999px;
+  background: var(--ink); color: var(--bg); font-weight: 600; font-size: 15px;
+  box-shadow: var(--shadow); transition: opacity .4s ease;
+}
+.toast.out { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover { transform: none; }
+  .toast { transition: none; }
+}
+
+/** CHANGELOG
+ * v1.0 (2026-10-14): Initial release.
+ * v1.1 (2026-10-14): Hide locked cards until the Konami unlock.
+ * v1.2 (2026-10-14): Slide-area swipes no longer trigger browser Back navigation.
+ */

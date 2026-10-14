@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<!--
+  file: digital_fabrication_review_v1.1.html
+  version: 1.1
+  author: Sam Cao
+  created: 2026-10-14
+  last_updated: 2026-10-14
+  description: Review sheet for the Digital Fabrication lecture (CNC, 3D printing, laser cutting, number systems and color) with embedded interactives.
+  sections_total: 22
+  sections_complete: 22
+  interactives_total: 4
+  interactives_complete: 4
+  build_phase: 4-complete
+  ai_update: Update last_updated, version, sections_complete, interactives_complete, build_phase. Rename file. Append changelog.
+-->
+<!-- SECTION PLAN
+  01 | WHAT IS DIGITAL FABRICATION | CAD, CAM, machine, part        | Flow SVG + cards            | No
+  02 | CNC & NUMERICAL CONTROL     | CNC, punched tape, tracer mill | Figures + cards             | No
+  03 | MANUAL MACHINING VS CNC     | flexibility vs repeatability   | Two-col deco + callout      | No
+  04 | CNC COOLANT                 | flood, mist, MQL, air, oil, dry| Infographic + table         | No
+  05 | G-CODE BASICS               | motion, speed, CAM, slicers    | Flow SVG + code + table     | No
+  06 | WHAT IS 3D PRINTING         | additive, patents, MakerBot    | Timeline + figure           | No
+  07 | PRINTING TECHNOLOGIES       | FDM, SLA, SLS, MJF, binder, metal | Figures + table          | No
+  08 | SUPPORTS IN FDM             | overhangs, 45 deg, PVA, BVOH   | Angle SVG + cards           | No
+  09 | INFILL                      | patterns, %, tradeoffs         | Figures + bars + callout    | No
+  10 | ORIENTATION & LAYER STRENGTH| laminate, load path            | Figure + cards              | No
+  11 | MOTION SYSTEMS & PRINTERS   | Cartesian, CoreXY, Delta       | Figures + company cards     | No
+  12 | SLA VS MSLA                 | laser vs LCD                   | Figures + two-col           | No
+  13 | 3D PRINTER SAFETY           | ventilation, PPE, resin, powder| Cards                       | No
+  14 | INTRODUCTION TO LASER CUTTERS| focused light, CNC motion     | Figure + cards              | No
+  15 | THE ELECTROMAGNETIC SPECTRUM| radio to gamma, laser lines    | Figure + SVG + table        | No
+  16 | LASER TYPES & HOW THEY WORK | diode, CO2, fiber, beam path   | Table + SVG                 | No
+  17 | WHAT LASERS CUT, ENGRAVE & NEED | materials, exhaust, air assist | Table + cards          | No
+  18 | TOXIC MATERIALS & SAFETY    | PVC, ABS, PC, fiberglass       | Danger callout + cards      | Material lookup
+  19 | LASER CUT LINES & COLOR     | hairline, color mapping, RGB   | SVG + software table        | No
+  20 | BINARY, DECIMAL & HEX       | place value, rollover, bytes   | Cards + table               | Odometer
+  21 | COLOR IS THREE BYTES        | RGB, hex codes, 8 bits/channel | Cards + laser check         | Color mixer
+  22 | REVIEW QUIZ                 | all sections                   | Flashcards                  | Quiz
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Digital Fabrication Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:wght@300;400;600;700;900&family=Fira+Code:wght@400;500;600&family=Chakra+Petch:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --header-h: 60px;
+  --cyan:    oklch(0.64 0.14 233);
+  --cyan-dim:oklch(0.54 0.09 233);
+  --orange:  oklch(0.66 0.17 50);
+  --green:   oklch(0.64 0.15 150);
+  --yellow:  oklch(0.72 0.14 88);
+  --red:     oklch(0.60 0.21 25);
+  --purple:  oklch(0.58 0.18 300);
+  --on-fill: #ffffff;
+}
+:root,
+html[data-mode="study"]{
+  color-scheme: dark;
+  --bg:        #131316;
+  --card:      #1c1c20;
+  --card2:     #25252b;
+  --border:    #36363e;
+  --txt:       #ededf1;
+  --txt-muted: #a4a4ae;
+  --txt-dim:   #6c6c77;
+  --ink:       #ffffff;
+  --on-fill:   #ffffff;
+  --on-accent: #131316;
+  --header-bg: rgba(15,15,18,0.85);
+  --row-alt:   rgba(255,255,255,0.025);
+  --hover-tint:rgba(255,255,255,0.06);
+  --card-shadow: 0 1px 0 rgba(255,255,255,0.02);
+  --card-shadow-hover: 0 10px 34px -14px rgba(0,0,0,0.70);
+  --page-accent: none;
+}
+html[data-mode="present"]{
+  color-scheme: light;
+  --bg:        #fafafb;
+  --card:      #ffffff;
+  --card2:     #f1f1f4;
+  --border:    #e2e2e6;
+  --txt:       #17171a;
+  --txt-muted: #55555c;
+  --txt-dim:   #8a8a92;
+  --ink:       #09090b;
+  --on-fill:   #ffffff;
+  --on-accent: #ffffff;
+  --header-bg: rgba(255,255,255,0.88);
+  --row-alt:   rgba(0,0,0,0.035);
+  --hover-tint:rgba(0,0,0,0.05);
+  --card-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 12px 30px -16px rgba(0,0,0,0.14);
+  --card-shadow-hover: 0 4px 10px rgba(0,0,0,0.08), 0 20px 44px -18px rgba(0,0,0,0.20);
+  --page-accent: none;
+}
+body,.top-header,.sidebar,.main,.card,.company-card,.deco-card,.cc-card,
+.infill-card,.spec-box,.nozzle-col,.callout,.diagram-wrap,.tbl-wrap,table,
+thead tr,tbody tr,td,th,.bar-track,.glass-box,.mat-sel-card,.mode-toggle,
+code,.pill,.section-header,h2,h3,h4,p,li,svg rect,svg text,svg line,svg path{
+  transition: background-color .45s ease, border-color .45s ease,
+              color .45s ease, box-shadow .45s ease, fill .45s ease, stroke .45s ease;
+}
+.card,.company-card,.deco-card,.cc-card,.spec-box,.infill-card,
+.diagram-wrap,.tbl-wrap,.glass-box,.mat-sel-card,.nozzle-compare{
+  box-shadow: var(--card-shadow);
+}
+.card,.company-card,.deco-card,.cc-card{
+  transition: background-color .45s ease, border-color .45s ease,
+              color .45s ease, box-shadow .3s ease, transform .3s ease;
+}
+.card:hover,.company-card:hover,.deco-card:hover,.cc-card:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--card-shadow-hover);
+}
+html[data-mode="present"] .callout-tip{   background:rgba(18,147,106,0.10); }
+html[data-mode="present"] .callout-warn{  background:rgba(208,120,40,0.10); }
+html[data-mode="present"] .callout-data{  background:rgba(40,150,190,0.10); }
+html[data-mode="present"] .callout-danger{background:rgba(219,47,83,0.10); }
+.mode-toggle{display:inline-flex;align-items:center;gap:3px;background:var(--card2);border:1px solid var(--border);border-radius:999px;padding:3px;flex-shrink:0;}
+.mode-btn{display:inline-flex;align-items:center;gap:7px;border:none;background:transparent;color:var(--txt-dim);font-family:'Fira Code',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;padding:6px 14px;border-radius:999px;cursor:pointer;transition:color .2s, background-color .2s, box-shadow .2s;}
+.mode-btn:hover{ color:var(--txt); }
+.mode-btn .mode-ico{ font-size:13px; line-height:1; }
+html[data-mode="study"]   .mode-btn[data-mode-btn="study"],
+html[data-mode="present"] .mode-btn[data-mode-btn="present"]{background:var(--ink);color:var(--bg);box-shadow:none;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);background-image:var(--page-accent);background-attachment:fixed;color:var(--txt);font-family:'Nunito Sans',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;}
+.top-header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--header-bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;z-index:200;backdrop-filter:blur(12px);gap:16px;}
+.top-header .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--ink);white-space:nowrap;}
+.top-header .subtitle{font-size:11px;color:var(--txt-muted);letter-spacing:2px;text-transform:uppercase;border-left:1px solid var(--border);padding-left:16px;}
+.top-header .sources{margin-left:auto;font-size:11px;color:var(--txt-dim);letter-spacing:1px;}
+.top-header .sources span{color:var(--txt-muted);}
+.shell{display:flex;margin-top:var(--header-h);min-height:calc(100vh - var(--header-h));}
+.sidebar{width:260px;flex-shrink:0;position:sticky;top:var(--header-h);height:calc(100vh - var(--header-h));overflow-y:auto;background:var(--card);border-right:1px solid var(--border);padding:20px 0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.sidebar-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txt-dim);padding:0 20px 10px;font-family:'Fira Code',monospace;}
+.sidebar nav a{display:block;padding:7px 20px;font-size:12.5px;color:var(--txt-muted);text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.4;}
+.sidebar nav a:hover,.sidebar nav a.active{color:var(--ink);border-left-color:var(--ink);background:var(--hover-tint);}
+.sidebar nav a .num{font-family:'Fira Code',monospace;font-size:10px;color:var(--txt-dim);margin-right:6px;}
+.main{flex:1;padding:40px 48px 80px;max-width:1000px;min-width:0;}
+.section{margin-bottom:60px;scroll-margin-top:80px;}
+.section-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--ink);background:var(--card2);border:1px solid var(--border);padding:3px 8px;border-radius:4px;white-space:nowrap;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--txt);line-height:1;}
+h3{font-family:'Nunito Sans',sans-serif;font-size:17px;font-weight:900;color:var(--ink);margin:28px 0 10px;letter-spacing:.5px;}
+h4{font-size:14px;font-weight:700;color:var(--txt-muted);margin:20px 0 8px;text-transform:uppercase;letter-spacing:1px;}
+p{margin-bottom:12px;color:var(--txt);}
+ul,ol{padding-left:24px;margin-bottom:12px;}
+li{margin-bottom:5px;color:var(--txt);}
+code{font-family:'Fira Code',monospace;font-size:12.5px;background:var(--card2);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--ink);}
+strong{color:var(--ink);font-weight:700;}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin:20px 0;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--cyan));}
+.card-title{font-weight:900;font-size:14px;color:var(--ink);margin-bottom:8px;}
+.card-body{font-size:13px;color:var(--txt-muted);line-height:1.6;}
+.callout{border-radius:8px;padding:16px 20px;margin:20px 0;border-left:4px solid;font-size:14px;line-height:1.6;}
+.callout-tip{background:rgba(48,217,138,0.07);border-color:var(--green);}
+.callout-tip .callout-icon::before{content:"💡 ";}
+.callout-warn{background:rgba(196,150,96,0.07);border-color:var(--orange);}
+.callout-warn .callout-icon::before{content:"⚠️ ";}
+.callout-data{background:rgba(70,150,190,0.09);border-color:var(--cyan);}
+.callout-data .callout-icon::before{content:"📊 ";}
+.callout-danger{background:rgba(255,77,106,0.07);border-color:var(--red);}
+.callout-danger .callout-icon::before{content:"🚨 ";}
+.callout-icon{font-weight:900;color:var(--ink);margin-bottom:4px;font-size:13px;letter-spacing:.5px;text-transform:uppercase;}
+.tbl-wrap{overflow-x:auto;margin:20px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:var(--card2);}
+thead th{padding:12px 14px;text-align:left;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;color:var(--ink);border-bottom:2px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:nth-child(even){background:var(--row-alt);}
+tbody tr:hover{background:var(--hover-tint);}
+td{padding:10px 14px;color:var(--txt);vertical-align:top;}
+.tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.5px;}
+.tag-yes{background:rgba(255,77,106,0.15);color:var(--red);}
+.tag-req{background:rgba(196,150,96,0.15);color:var(--orange);}
+.tag-no{background:rgba(48,217,138,0.1);color:var(--green);}
+.tag-mod{background:rgba(255,209,102,0.12);color:var(--yellow);}
+.tag-ext{background:rgba(167,139,250,0.12);color:var(--purple);}
+.diagram-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:24px 0;overflow:hidden;}
+.diagram-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--txt-muted);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+svg text{font-family:'Nunito Sans',sans-serif;}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:13px;}
+.bar-label{width:160px;flex-shrink:0;color:var(--txt);font-weight:600;text-align:right;font-size:12px;}
+.bar-track{flex:1;height:22px;background:var(--card2);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;color:var(--on-fill);font-family:'Fira Code',monospace;transition:width 1s ease;}
+.bar-meta{width:120px;flex-shrink:0;font-size:11px;color:var(--txt-dim);font-family:'Fira Code',monospace;}
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:16px 0;}
+.spec-box{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
+.spec-val{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;color:var(--ink);line-height:1;}
+.spec-unit{font-size:13px;color:var(--txt-dim);margin-top:2px;}
+.spec-name{font-size:12px;font-weight:700;color:var(--txt);margin-top:6px;}
+.company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin:20px 0;}
+.company-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;border-top:3px solid var(--card-color,var(--cyan));}
+.company-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--ink);margin-bottom:3px;}
+.company-meta{font-size:11px;color:var(--txt-dim);font-family:'Fira Code',monospace;margin-bottom:12px;}
+.company-body{font-size:13px;color:var(--txt-muted);line-height:1.6;}
+.company-highlight{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--txt-dim);}
+.company-highlight strong{color:var(--ink);}
+.mat-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;margin:3px;border:1px solid;}
+.deco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:20px 0;}
+.deco-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px;border-left:4px solid var(--deco-color,var(--cyan));}
+.deco-title{font-weight:900;font-size:14px;color:var(--ink);margin-bottom:6px;}
+.deco-body{font-size:12.5px;color:var(--txt-muted);line-height:1.6;}
+.deco-warn{font-size:11px;color:var(--orange);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.cc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:20px 0;}
+.cc-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px;border-left:4px solid var(--cc-color,var(--cyan));}
+.cc-badge{display:inline-flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13px;font-family:'Fira Code',monospace;color:var(--cyan);margin-bottom:10px;}
+.cc-title{font-weight:900;font-size:14px;color:var(--ink);margin-bottom:6px;}
+.cc-icons{font-size:20px;letter-spacing:4px;margin-bottom:6px;}
+.cc-body{font-size:12.5px;color:var(--txt-muted);line-height:1.6;}
+.cc-use{font-size:11px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);color:var(--txt-dim);}
+.glass-box{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;font-family:'Fira Code',monospace;font-size:12.5px;}
+.glass-box .gl-title{color:var(--ink);font-size:14px;font-weight:700;margin-bottom:12px;letter-spacing:2px;}
+.glass-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--border);}
+.glass-key{color:var(--txt-muted);}
+.glass-val{color:var(--green);font-weight:700;text-align:right;}
+.timeline{position:relative;padding-left:24px;}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--txt-dim),var(--border),transparent);}
+.timeline-item{position:relative;margin-bottom:22px;}
+.timeline-item::before{content:'';position:absolute;left:-21px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--ink);border:2px solid var(--bg);}
+.timeline-year{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ink);letter-spacing:2px;}
+.timeline-event{font-size:14px;color:var(--txt);margin-top:2px;}
+.timeline-detail{font-size:12.5px;color:var(--txt-muted);margin-top:4px;line-height:1.5;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.two-col > *{min-width:0}
+@media(max-width:860px){.top-header .sources{display:none;}}
+@media(max-width:560px){.top-header .subtitle{display:none;}}
+@media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+.mono{font-family:'Fira Code',monospace;font-size:12px;color:var(--ink);}
+.pill{display:inline-block;background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--txt);margin:2px;font-weight:600;}
+hr.section-divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+.back-top{position:fixed;bottom:calc(28px + env(safe-area-inset-bottom, 0px));right:calc(28px + env(safe-area-inset-right, 0px));width:44px;height:44px;background:var(--ink);color:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.35);transition:opacity .3s,transform .3s;opacity:0;transform:translateY(10px);text-decoration:none;font-weight:900;z-index:300;}
+.back-top.visible{opacity:1;transform:translateY(0);}
+.back-top:hover{transform:scale(1.1) translateY(0);}
+.doc-meta{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:40px;overflow:hidden;font-family:'Fira Code',monospace;}
+.doc-meta-header{display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;user-select:none;flex-wrap:wrap;}
+.doc-meta-header:hover{background:var(--hover-tint);}
+.doc-meta-logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:var(--ink);}
+.doc-meta-ver{font-size:10px;color:var(--cyan);background:rgba(70,150,190,0.12);border:1px solid rgba(70,150,190,0.35);border-radius:4px;padding:1px 7px;letter-spacing:1px;}
+.doc-meta-status{font-size:10px;color:var(--txt-muted);letter-spacing:.5px;}
+.doc-meta-caret{margin-left:auto;font-size:9px;color:var(--txt-dim);transition:transform .2s;}
+.doc-meta.open .doc-meta-caret{transform:rotate(180deg);}
+.doc-meta-body{display:none;border-top:1px solid var(--border);padding:14px 18px;}
+.doc-meta.open .doc-meta-body{display:block;}
+.doc-meta-row{display:flex;gap:12px;padding:4px 0;border-bottom:1px solid var(--border);font-size:11.5px;}
+.doc-meta-row:last-of-type{border-bottom:none;}
+.dm-key{color:var(--txt-muted);width:140px;flex-shrink:0;}
+.dm-val{color:var(--ink);}
+.dm-complete{color:var(--green);}
+.dm-partial{color:var(--yellow);}
+.dm-pending{color:var(--txt-dim);}
+.doc-meta-cl{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.doc-meta-cl-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);margin-bottom:8px;}
+.cl-entry{display:grid;grid-template-columns:52px 92px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;line-height:1.5;}
+.cl-entry:last-child{border-bottom:none;}
+.cl-ver{color:var(--cyan);}
+.cl-date{color:var(--txt-dim);}
+.cl-note{color:var(--txt-muted);}
+html[data-mode="present"] .doc-meta{display:none;}
+html[data-mode="present"] .main{max-width:min(1840px, 100%);padding:50px 76px 120px;}
+html[data-mode="present"] body{ font-size: 18.5px; font-weight: 500; }
+html[data-mode="present"] p,
+html[data-mode="present"] li{ font-size: 18.5px; font-weight: 500; line-height: 1.6; }
+html[data-mode="present"] .section-title{ font-size: 54px; }
+html[data-mode="present"] .section-num{ font-size: 15px; padding: 4px 10px; }
+html[data-mode="present"] h3{ font-size: 27px; font-weight: 900; }
+html[data-mode="present"] h4{ font-size: 18.5px; font-weight: 800; }
+html[data-mode="present"] .card-title,
+html[data-mode="present"] .deco-title,
+html[data-mode="present"] .cc-title,
+html[data-mode="present"] .company-name{ font-size: 18px; }
+html[data-mode="present"] .card-body,
+html[data-mode="present"] .company-body,
+html[data-mode="present"] .deco-body,
+html[data-mode="present"] .cc-body{ font-size: 16px; font-weight: 500; line-height: 1.58; }
+html[data-mode="present"] .callout{ font-size: 19px; line-height: 1.6; }
+html[data-mode="present"] .callout-icon{ font-size: 15px; }
+html[data-mode="present"] thead th{ font-size: 18px; }
+html[data-mode="present"] td{ font-size: 16.5px; }
+html[data-mode="present"] strong{ font-weight: 800; }
+html[data-mode="present"] code{ font-size: 15px; }
+html[data-mode="present"] .spec-val{ font-size: 38px; }
+html[data-mode="present"] .spec-name{ font-size: 14px; }
+html[data-mode="present"] .bar-label,
+html[data-mode="present"] .bar-meta{ font-size: 13.5px; }
+html[data-mode="present"] .tag,
+html[data-mode="present"] .pill,
+html[data-mode="present"] .mat-badge{ font-size: 13.5px; }
+html[data-mode="present"] .top-header .logo{ font-size: 33px; }
+html[data-mode="present"] .sidebar nav a{ font-size: 13.5px; }
+
+/* ══════════════════════════════════════════════════════
+   ADDED COMPONENTS (not in boilerplate)
+   Figures, code blocks, interactive shell and controls,
+   odometer + color instrument, material lookup, quiz,
+   phone layout, print, footer.
+   ══════════════════════════════════════════════════════ */
+
+/* Figures (deck images) */
+.fig{margin:20px 0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--card-shadow);}
+.fig img{display:block;width:100%;height:auto;max-width:100%;}
+.fig figcaption{font-family:'Fira Code',monospace;font-size:11.5px;letter-spacing:.3px;color:var(--txt-muted);padding:9px 14px;border-top:1px solid var(--border);}
+.fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin:20px 0;}
+.fig-grid .fig{margin:0;}
+.fig-white img{background:#ffffff;padding:12px;height:220px;object-fit:contain;}
+.fig-narrow{max-width:520px;}
+.fig-tall img{max-height:420px;object-fit:contain;background:var(--card2);}
+.co-img{display:block;width:100%;height:170px;object-fit:contain;background:#ffffff;border-radius:8px;padding:8px;margin-bottom:12px;}
+.svg-scroll{overflow-x:auto;}
+.svg-scroll svg{display:block;width:100%;height:auto;}
+
+/* Process flow (HTML so it wraps on phones) */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:20px 0;}
+.flow-step{flex:1 1 150px;min-width:0;background:var(--card2);border:1px solid var(--border);border-top:3px solid var(--step,var(--cyan));border-radius:10px;padding:14px 16px;}
+.flow-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--ink);line-height:1;}
+.flow-sub{font-size:12.5px;color:var(--txt-muted);margin-top:6px;line-height:1.5;}
+.flow-arrow{align-self:center;font-family:'Fira Code',monospace;color:var(--txt-dim);font-size:18px;}
+html[data-mode="present"] .flow-name{font-size:30px;}
+html[data-mode="present"] .flow-sub{font-size:16px;}
+@media (max-width:600px){.flow-arrow{display:none;}}
+html[data-mode="present"] .fig figcaption{font-size:14px;}
+
+/* Code block */
+.code-block{font-family:'Fira Code',monospace;font-size:13.5px;line-height:1.7;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:16px 0;overflow-x:auto;white-space:pre;color:var(--ink);}
+.code-block .cm{color:var(--txt-dim);}
+html[data-mode="present"] .code-block{font-size:17px;}
+
+/* Interactive shell */
+.interactive-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin:24px 0;box-shadow:var(--card-shadow);min-width:0;}
+.interactive-title{font-family:'Fira Code',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-muted);margin-bottom:14px;}
+.ctl-row{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;margin:14px 0;}
+.ctl-group{display:grid;gap:6px;min-width:0;}
+.ctl-label{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);}
+.ctl-btn{font-family:'Fira Code',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:500;height:40px;padding:0 14px;border-radius:8px;cursor:pointer;background:var(--card2);color:var(--txt);border:1px solid var(--border);}
+.ctl-btn:hover{border-color:var(--txt-dim);color:var(--ink);}
+.ctl-btn:active{transform:translateY(1px);}
+.ctl-btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);height:48px;padding:0 24px;font-size:14px;font-weight:600;}
+.ctl-btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.ctl-btn:focus-visible,.seg-ctl button:focus-visible,.ctl-input:focus-visible,.ctl-select:focus-visible,input[type=range]:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+.seg-ctl{display:flex;flex-wrap:wrap;gap:3px;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:3px;}
+.seg-ctl button{font-family:'Fira Code',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;border:0;background:transparent;color:var(--txt-dim);padding:7px 10px;border-radius:6px;cursor:pointer;}
+.seg-ctl button:hover{color:var(--txt);}
+.seg-ctl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);}
+.ctl-input,.ctl-select{height:40px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--ink);font-family:'Fira Code',monospace;font-size:14px;padding:0 10px;}
+.ctl-input{width:11ch;}
+.ctl-msg{font-family:'Fira Code',monospace;font-size:12px;color:var(--red);min-height:1.4em;flex-basis:100%;margin:0;}
+.ctl-hint{font-family:'Fira Code',monospace;font-size:11.5px;color:var(--txt-dim);margin:6px 0 0;}
+.ctl-hint kbd{font-family:'Fira Code',monospace;font-size:11px;padding:1px 5px;border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;background:var(--card2);color:var(--ink);}
+.speed{display:flex;align-items:center;gap:8px;font-family:'Fira Code',monospace;font-size:12px;color:var(--txt-muted);}
+.speed input{width:100px;accent-color:var(--ink);}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+html[data-mode="present"] .ctl-btn{font-size:14px;height:46px;}
+html[data-mode="present"] .ctl-btn.primary{font-size:17px;height:56px;}
+html[data-mode="present"] .seg-ctl button{font-size:13px;}
+
+/* Odometer instrument (data display: keeps its own dash palettes in both modes) */
+.cluster{--dw:clamp(26px,6.4vw,54px);--dh:calc(var(--dw) * 1.42);--wgap:4px;--ggap:14px;--sb:2px;--sp:5px;--g0:#f2b134;--g1:#4cc3ff;
+  border-radius:18px;padding:clamp(14px,2.6vw,24px);display:grid;gap:6px;color:var(--odo-label);background:var(--odo-bezel);
+  box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 18px 40px -22px rgba(0,0,0,.55);min-width:0;margin:6px 0;}
+.cl-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding-bottom:6px;}
+.cl-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;color:var(--odo-label-dim);}
+.lamp-wrap{display:flex;align-items:center;gap:10px;}
+.lamp{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;padding:4px 10px;border-radius:6px;border:1px solid var(--odo-label-dim);color:var(--odo-label-dim);transition:background-color .15s,color .15s,box-shadow .15s,border-color .15s;}
+.lamp.lit{background:#f2a51a;color:#1b1102;border-color:#f2a51a;box-shadow:0 0 18px rgba(242,165,26,.65);}
+.lamp-note{font-family:'Fira Code',monospace;font-size:11.5px;color:var(--odo-label);opacity:0;transition:opacity .2s;}
+.lamp-note.show{opacity:1;}
+.rows{display:grid;grid-template-columns:minmax(0,1fr);}
+.row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 16px;align-items:start;padding:14px 0;border-top:1px solid var(--odo-sep);}
+.row:first-child{border-top:0;}
+.row-label{display:grid;gap:2px;padding-top:4px;}
+.row-tag{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;line-height:1;color:var(--odo-label);}
+.row-sub{font-family:'Fira Code',monospace;font-size:11px;line-height:1.35;color:var(--odo-label-dim);}
+.row-sub .br{display:block;font-style:normal;}
+.row-main{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:0;}
+.slot,.places,.brackets{display:flex;gap:var(--ggap);justify-content:flex-end;}
+.slot{padding:var(--sp);border:var(--sb) solid var(--odo-slot-border);border-radius:7px;background:var(--odo-face);box-shadow:var(--odo-slot-shadow);}
+.places,.brackets{padding-inline:calc(var(--sp) + var(--sb));}
+.grp{display:flex;gap:var(--wgap);}
+.wheel{position:relative;width:var(--dw);height:var(--dh);overflow:hidden;border:0;padding:0;margin:0;cursor:pointer;border-radius:3px;background:transparent;color:var(--odo-ink);-webkit-tap-highlight-color:transparent;}
+.wheel:hover{filter:brightness(1.18);}
+.wheel:focus-visible{outline:2px solid var(--odo-label);outline-offset:2px;}
+.wheel.linked{box-shadow:0 0 0 2px var(--g);}
+.strip{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;will-change:transform;}
+.cell{display:block;height:var(--dh);line-height:var(--dh);text-align:center;font-size:calc(var(--dh) * .74);font-variant-numeric:tabular-nums;}
+.wheel svg{display:block;width:100%;height:100%;}
+.wheel polygon{fill:var(--odo-ghost);}
+.wheel polygon.on{fill:var(--odo-ink);}
+.wheel.flash{animation:relight .22s ease-out;}
+@keyframes relight{from{opacity:.45}to{opacity:1}}
+.place{width:var(--dw);text-align:center;font-family:'Fira Code',monospace;font-size:10.5px;line-height:1.2;color:var(--odo-label-dim);white-space:nowrap;}
+.places .grp{gap:var(--wgap);}
+.place sup{font-size:.72em;line-height:0;}
+.bracket{display:grid;justify-items:center;gap:3px;width:calc(var(--k) * var(--dw) + (var(--k) - 1) * var(--wgap));}
+.bk-line{width:100%;height:8px;border:2px solid var(--g);border-top:0;border-radius:0 0 3px 3px;}
+.bk-label{font-family:'Fira Code',monospace;font-size:12px;line-height:1;color:var(--g);}
+.sum{font-family:'Fira Code',monospace;font-size:12px;line-height:1.6;color:var(--odo-label-dim);text-align:right;max-width:100%;overflow-wrap:anywhere;}
+.sum .term{color:var(--odo-label);white-space:nowrap;}
+.sum .term.zero{color:var(--odo-label-dim);opacity:.7;}
+.sum small{font-size:.85em;}
+.sum .plus{margin:0 .45em;opacity:.6;}
+.sum .eq{margin-left:.6em;color:var(--odo-label);font-weight:500;white-space:nowrap;}
+.cluster[data-odo="classic"]{--odo-bezel:linear-gradient(170deg,#1c1d20,#0b0c0d 60%,#141518);--odo-face:#040404;--odo-ink:#f2eee3;--odo-label:#efe9da;--odo-label-dim:#8d887c;--odo-sep:rgba(255,255,255,.07);--odo-slot-border:#5d6166;--odo-slot-shadow:inset 0 3px 8px rgba(0,0,0,.95),0 0 0 3px #17181a,0 0 0 4px #777b80;--bit-off:#161616;--bit-off-ink:#5a5750;}
+.cluster[data-odo="classic"] .wheel{background:linear-gradient(#050505,#1b1b1b 50%,#050505);font-family:'Bebas Neue',sans-serif;}
+.cluster[data-odo="classic"] .wheel.ones{background:linear-gradient(#bdb8ab,#f4f0e5 50%,#bdb8ab);color:#121212;}
+.cluster[data-odo="classic"] .wheel::after,.cluster[data-odo="modern"] .wheel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.72),rgba(0,0,0,0) 30%,rgba(255,255,255,.04) 50%,rgba(0,0,0,0) 70%,rgba(0,0,0,.72));}
+.cluster[data-odo="red"]{--odo-bezel:linear-gradient(170deg,#150707,#070202);--odo-face:#060101;--odo-ink:#ff3a2b;--odo-ghost:rgba(255,58,43,.08);--odo-label:#ff7a6e;--odo-label-dim:#8a3a33;--odo-sep:rgba(255,90,80,.10);--odo-slot-border:#2c0e0b;--odo-slot-shadow:inset 0 2px 10px rgba(0,0,0,.9);--bit-off:#1a0705;--bit-off-ink:#6a2a25;}
+.cluster[data-odo="red"] .wheel svg{filter:drop-shadow(0 0 5px rgba(255,40,25,.7));}
+.cluster[data-odo="green"]{--odo-bezel:linear-gradient(170deg,#061109,#020603);--odo-face:#010402;--odo-ink:#3dff7c;--odo-ghost:rgba(61,255,124,.07);--odo-label:#6dffa0;--odo-label-dim:#2e7446;--odo-sep:rgba(80,255,140,.09);--odo-slot-border:#0b2414;--odo-slot-shadow:inset 0 2px 10px rgba(0,0,0,.9);--bit-off:#04140a;--bit-off-ink:#255c37;}
+.cluster[data-odo="green"] .wheel svg{filter:drop-shadow(0 0 5px rgba(40,255,110,.6));}
+.cluster[data-odo="lcd"]{--odo-bezel:linear-gradient(170deg,#43474a,#2c2f31);--odo-face:linear-gradient(#b5c1a7,#a2ae93);--odo-ink:#1b2317;--odo-ghost:rgba(27,35,23,.075);--odo-label:#eef0f1;--odo-label-dim:#a7adb2;--odo-sep:rgba(255,255,255,.10);--odo-slot-border:#1f2123;--odo-slot-shadow:inset 0 3px 7px rgba(0,0,0,.28);--bit-off:rgba(27,35,23,.08);--bit-off-ink:rgba(27,35,23,.4);}
+.cluster[data-odo="lcd"] .wheel svg{filter:drop-shadow(1.4px 1.8px 0 rgba(0,0,0,.17));}
+.cluster[data-odo="modern"]{--odo-bezel:linear-gradient(160deg,#141b25,#070a0f 70%);--odo-face:rgba(255,255,255,.025);--odo-ink:#f4f8fc;--odo-label:#93d3ff;--odo-label-dim:#4e6579;--odo-sep:rgba(147,211,255,.10);--odo-slot-border:rgba(147,211,255,.16);--odo-slot-shadow:inset 0 1px 0 rgba(255,255,255,.05);--bit-off:rgba(255,255,255,.05);--bit-off-ink:#4e6579;}
+.cluster[data-odo="modern"] .wheel{font-family:'Chakra Petch','Bebas Neue',sans-serif;font-weight:600;}
+.cluster[data-odo="modern"] .wheel::after{background:linear-gradient(to bottom,rgba(8,11,16,.95),rgba(8,11,16,0) 32%,rgba(8,11,16,0) 68%,rgba(8,11,16,.95));}
+.cluster[data-odo="modern"] .wheel.ones{color:#93d3ff;}
+.cluster[data-odo="modern"] .cell{font-size:calc(var(--dh) * .6);}
+
+/* Color instrument */
+.color-cluster{--dw:clamp(23px,4.6vw,38px);}
+.color-grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:22px;align-items:start;}
+.color-left{display:grid;gap:12px;min-width:0;}
+.picker{display:grid;gap:10px;user-select:none;-webkit-user-select:none;}
+.sv{position:relative;aspect-ratio:4/3;max-width:100%;border-radius:10px;cursor:crosshair;touch-action:none;background-color:#f00;}
+.sv-w,.sv-b{position:absolute;inset:0;pointer-events:none;border-radius:inherit;}
+.sv-w{background:linear-gradient(to right,#fff,rgba(255,255,255,0));}
+.sv-b{background:linear-gradient(to top,#000,rgba(0,0,0,0));}
+.hue{position:relative;height:20px;border-radius:10px;cursor:ew-resize;touch-action:none;background:linear-gradient(to right,#f00 0%,#ff0 16.667%,#0f0 33.333%,#0ff 50%,#00f 66.667%,#f0f 83.333%,#f00 100%);}
+.handle{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.55);pointer-events:none;background:#f00;transition:left .45s cubic-bezier(.3,.8,.3,1),top .45s cubic-bezier(.3,.8,.3,1);}
+.hue .handle{top:50%;}
+.picker.dragging .handle{transition:none;}
+.swatch{height:88px;border-radius:10px;border:1px solid var(--odo-sep);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);background:#f00;}
+.codes{display:grid;gap:5px;}
+.code-cap{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2.5px;color:var(--odo-label-dim);}
+.code-hex{font-family:'Fira Code',monospace;font-size:clamp(26px,4vw,34px);font-weight:600;line-height:1;color:var(--odo-label);}
+.code-hex .hash{color:var(--odo-label-dim);}
+.code-rgb{font-family:'Fira Code',monospace;font-size:15px;color:var(--odo-label);}
+.bits24{font-family:'Fira Code',monospace;font-size:12px;line-height:1.5;overflow-wrap:anywhere;}
+.bits24 span{white-space:nowrap;}
+.c-r{color:#ff6b63;}.c-g{color:#45e07b;}.c-b{color:#6ea2ff;}
+.ch-list{display:grid;grid-template-columns:minmax(0,1fr);}
+.ch-row{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px 14px;padding:13px 0;border-top:1px solid var(--odo-sep);align-items:start;}
+.ch-row:first-child{border-top:0;padding-top:2px;}
+.ch-label{display:grid;gap:2px;padding-top:2px;}
+.ch-tag{font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;color:var(--ch);}
+.ch-name{font-family:'Fira Code',monospace;font-size:11px;color:var(--odo-label-dim);}
+.ch-body{display:grid;gap:10px;min-width:0;}
+.ch-units{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-start;}
+.ch-unit{display:grid;gap:5px;justify-items:start;}
+.ch-cap{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2.5px;color:var(--odo-label-dim);}
+.ch-unit .slot{justify-content:flex-start;}
+.bits{display:flex;gap:3px;align-items:center;padding:var(--sp);border:var(--sb) solid var(--odo-slot-border);border-radius:7px;background:var(--odo-face);box-shadow:var(--odo-slot-shadow);height:calc(var(--dh) + 2 * var(--sp) + 2 * var(--sb));}
+.bit{width:calc(var(--dw) * .52);height:calc(var(--dh) * .62);border-radius:3px;display:grid;place-items:center;font-family:'Fira Code',monospace;font-size:11px;font-weight:600;background:var(--bit-off);color:var(--bit-off-ink);transition:background-color .15s,box-shadow .15s,color .15s;}
+.bit.on{background:var(--ch);color:#0b0b0b;box-shadow:0 0 9px var(--ch);}
+.ch-slider{width:100%;accent-color:var(--ch);margin:0;}
+.preset::before{content:"";display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:7px;vertical-align:-1px;background:var(--sw);box-shadow:0 0 0 1px var(--border);}
+.laser-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+.laser-tile{display:grid;gap:3px;font-family:'Fira Code',monospace;font-size:12.5px;color:var(--txt);}
+.laser-sw{height:56px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);margin-bottom:4px;}
+.laser-tile b{font-size:15px;color:var(--ink);}
+.laser-tile .diff{color:var(--orange);font-weight:600;}
+
+/* Material lookup */
+.mat-grid{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 16px;}
+.mat-grid .ctl-btn{height:36px;font-size:11.5px;text-transform:none;letter-spacing:.3px;}
+.mat-result{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:18px;border-top:3px solid var(--mat-color,var(--cyan));}
+.mat-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;}
+.mat-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--ink);line-height:1;}
+.mat-lasers{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px;}
+.mat-laser{font-family:'Fira Code',monospace;font-size:11.5px;padding:3px 9px;border-radius:12px;border:1px solid var(--border);color:var(--txt-muted);}
+.mat-laser b{color:var(--ink);font-weight:600;}
+.mat-why{font-size:14px;color:var(--txt);margin:0 0 6px;}
+.mat-tip{font-size:13px;color:var(--txt-muted);margin:0;}
+html[data-mode="present"] .mat-why{font-size:18px;}
+html[data-mode="present"] .mat-tip{font-size:16px;}
+
+[hidden]{display:none !important;}
+/* Quiz */
+.quiz-bar{height:6px;background:var(--card2);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:14px;}
+.quiz-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .3s ease;}
+.quiz-meta{font-family:'Fira Code',monospace;font-size:11px;letter-spacing:1.5px;color:var(--txt-dim);margin-bottom:8px;text-transform:uppercase;}
+.quiz-q{font-size:19px;font-weight:700;color:var(--ink);line-height:1.4;margin-bottom:14px;}
+.quiz-a{background:var(--card2);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:8px;padding:14px 16px;font-size:14.5px;color:var(--txt);margin-bottom:14px;}
+.quiz-a .from{display:block;margin-top:6px;font-family:'Fira Code',monospace;font-size:11px;color:var(--txt-dim);}
+html[data-mode="present"] .quiz-q{font-size:28px;}
+html[data-mode="present"] .quiz-a{font-size:19px;}
+
+/* Phone layout */
+@media (max-width:860px){
+  .sidebar{display:none;}
+  .main,html[data-mode="present"] .main{padding:28px max(16px, env(safe-area-inset-right, 0px)) 72px max(16px, env(safe-area-inset-left, 0px));}
+  .top-header{padding:0 max(14px, env(safe-area-inset-right, 0px)) 0 max(14px, env(safe-area-inset-left, 0px));}
+  .color-grid{grid-template-columns:minmax(0,1fr);}
+  .color-left{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+  .picker{grid-row:span 2;}
+}
+@media (max-width:600px){
+  .mode-btn .lbl{display:none;}
+  .mode-btn{padding:6px 10px;}
+  .row{grid-template-columns:minmax(0,1fr);gap:10px;}
+  .row-label{display:flex;align-items:baseline;gap:10px;padding-top:0;}
+  .row-sub .br{display:inline;}
+  .row-sub .br::before{content:" · ";}
+  .row-sub{white-space:nowrap;}
+  .row-tag{font-size:24px;}
+  .cluster{--ggap:10px;--wgap:3px;}
+  .color-left{grid-template-columns:minmax(0,1fr);}
+  .picker{grid-row:auto;}
+  .ch-row{grid-template-columns:minmax(0,1fr);}
+  .ch-label{display:flex;align-items:baseline;gap:10px;}
+  .ch-tag{font-size:26px;}
+  .bar-label{width:92px;}
+  .bar-meta{display:none;}
+  .ctl-btn.primary{flex:1 1 100%;}
+  html[data-mode="present"] .section-title{font-size:38px;}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  .wheel.flash{animation:none;}
+  .lamp,.lamp-note,.bit,.handle,.quiz-fill{transition:none;}
+}
+
+/* Print */
+@media print {
+  body                             { background: white !important; color: #111; font-size: 11px; }
+  .top-header, .sidebar, .back-top { display: none !important; }
+  .shell                           { display: block; }
+  .main                            { max-width: 100%; padding: 0; }
+  .card, .callout, .diagram-wrap   { background: #f9f9f9 !important; border-color: #ccc !important; color: #111 !important; }
+  th                               { background: #eee !important; color: #111 !important; }
+  .section                         { page-break-inside: avoid; }
+  a                                { color: #111; text-decoration: underline; }
+}
+
+/* Footer */
+.footer{margin-top:64px;padding:24px 48px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-family:'Fira Code',monospace;font-size:10.5px;color:var(--txt-muted);}
+.footer-right{text-align:right;color:var(--txt-dim);}
+@media(max-width:600px){.footer{padding:20px 16px;flex-direction:column;align-items:flex-start;}.footer-right{text-align:left;}}
+</style>
+<script>(function(){try{var m=localStorage.getItem('digifab-mode');if(m!=='present')m='study';document.documentElement.setAttribute('data-mode',m);}catch(e){document.documentElement.setAttribute('data-mode','study');}})();</script>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="logo">DIGITAL FAB // REVIEW</div>
+  <div class="subtitle">Digital Fabrication Lecture</div>
+  <div class="sources">Source: <span>Digital Fabrication lecture deck</span> · <span>Sam Cao</span></div>
+  <div class="mode-toggle" role="group" aria-label="Reading mode" title="Toggle reading mode (shortcut: M)">
+    <button type="button" class="mode-btn" data-mode-btn="study"><span class="mode-ico" aria-hidden="true">◐</span><span class="lbl">Study</span></button>
+    <button type="button" class="mode-btn" data-mode-btn="present"><span class="mode-ico" aria-hidden="true">☀</span><span class="lbl">Present</span></button>
+  </div>
+</header>
+
+<div class="shell">
+<aside class="sidebar">
+  <div class="sidebar-label">// Navigation</div>
+  <nav>
+    <div style="padding:8px 20px 3px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);font-family:'Fira Code',monospace;margin-top:4px;">// Foundations</div>
+    <a href="#s1"><span class="num">01</span>What Is Digital Fabrication</a>
+    <a href="#s2"><span class="num">02</span>CNC &amp; Numerical Control</a>
+    <a href="#s3"><span class="num">03</span>Manual Machining vs CNC</a>
+    <a href="#s4"><span class="num">04</span>CNC Coolant</a>
+    <a href="#s5"><span class="num">05</span>G-Code Basics</a>
+    <div style="padding:14px 20px 3px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);font-family:'Fira Code',monospace;">// 3D Printing</div>
+    <a href="#s6"><span class="num">06</span>What Is 3D Printing</a>
+    <a href="#s7"><span class="num">07</span>Printing Technologies</a>
+    <a href="#s8"><span class="num">08</span>Supports in FDM</a>
+    <a href="#s9"><span class="num">09</span>Infill</a>
+    <a href="#s10"><span class="num">10</span>Orientation &amp; Layer Strength</a>
+    <a href="#s11"><span class="num">11</span>Motion Systems &amp; Printers</a>
+    <a href="#s12"><span class="num">12</span>SLA vs MSLA</a>
+    <a href="#s13"><span class="num">13</span>3D Printer Safety</a>
+    <div style="padding:14px 20px 3px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);font-family:'Fira Code',monospace;">// Laser Cutting</div>
+    <a href="#s14"><span class="num">14</span>Introduction to Laser Cutters</a>
+    <a href="#s15"><span class="num">15</span>The Electromagnetic Spectrum</a>
+    <a href="#s16"><span class="num">16</span>Laser Types &amp; How They Work</a>
+    <a href="#s17"><span class="num">17</span>Cut, Engrave &amp; Machine Needs</a>
+    <a href="#s18"><span class="num">18</span>Toxic Materials &amp; Safety</a>
+    <a href="#s19"><span class="num">19</span>Laser Cut Lines &amp; Color</a>
+    <div style="padding:14px 20px 3px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt-dim);font-family:'Fira Code',monospace;">// Number Systems</div>
+    <a href="#s20"><span class="num">20</span>Binary, Decimal &amp; Hex</a>
+    <a href="#s21"><span class="num">21</span>Color Is Three Bytes</a>
+    <a href="#s22"><span class="num">22</span>Review Quiz</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+<div class="doc-meta" id="docMeta">
+  <div class="doc-meta-header" onclick="this.closest('.doc-meta').classList.toggle('open')">
+    <span class="doc-meta-logo">DIGITAL FAB // REVIEW</span>
+    <span class="doc-meta-ver" id="dmVer">v1.1</span>
+    <span class="doc-meta-status" id="dmStatus">22 / 22 sections &nbsp;·&nbsp; 4 / 4 interactives</span>
+    <span class="doc-meta-caret">&#9660;</span>
+  </div>
+  <div class="doc-meta-body">
+    <div class="doc-meta-row"><span class="dm-key">Author</span><span class="dm-val">Sam Cao</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Created</span><span class="dm-val">2026-10-14</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Last Updated</span><span class="dm-val" id="dmUpdated">2026-10-14</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Version</span><span class="dm-val" id="dmVersion">1.1</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Sections</span><span class="dm-val dm-complete" id="dmSections">22 / 22 complete</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Interactives</span><span class="dm-val dm-complete" id="dmInteractives">4 / 4 complete</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Disclaimer</span><span class="dm-val" style="font-size:10.5px;line-height:1.5;color:var(--txt-muted);">AI-assisted with human editorial review. Errors may exist &mdash; verify critical information before relying on it.</span></div>
+    <div class="doc-meta-cl">
+      <div class="doc-meta-cl-title">// Changelog</div>
+      <div class="cl-entry"><span class="cl-ver">v1.1</span><span class="cl-date">2026-10-14</span><span class="cl-note">Complete: 22 sections and 4 interactives. Deck text and images reused, duplicate slides merged, MJF, infill, and hairline fixes applied, electromagnetic spectrum section added.</span></div>
+      <div class="cl-entry"><span class="cl-ver">v1.0.4</span><span class="cl-date">2026-10-14</span><span class="cl-note">Interactives: Can I laser this material lookup (16 materials) and 20-card review quiz with missed-card retry.</span></div>
+      <div class="cl-entry"><span class="cl-ver">v1.0.3</span><span class="cl-date">2026-10-14</span><span class="cl-note">Interactives: base odometer (BIN, DEC, HEX, five display styles) and color mixer (picker, channel odometers, presets, send-to-channel), keyboard shortcuts scoped to the odometer box.</span></div>
+      <div class="cl-entry"><span class="cl-ver">v1.0.2</span><span class="cl-date">2026-10-14</span><span class="cl-note">Sections 12-22 filled: SLA vs MSLA, safety, laser intro, new electromagnetic spectrum section, laser types and beam path, cut and engrave, toxic materials, cut lines with software table (hairline fix), number systems and color text.</span></div>
+      <div class="cl-entry"><span class="cl-ver">v1.0.1</span><span class="cl-date">2026-10-14</span><span class="cl-note">Sections 01-11 filled: foundations, CNC, coolant, G-code, 3D printing history, technologies (MJF and binder jet split), supports, infill (extrusion note added), orientation, motion systems.</span></div>
+      <div class="cl-entry"><span class="cl-ver">v1.0</span><span class="cl-date">2026-10-14</span><span class="cl-note">Frame: navigation, CSS, 22 section stubs, 4 interactive placeholders.</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="s1">
+  <div class="section-header"><span class="section-num">01</span><div><h2 class="section-title">What Is Digital Fabrication</h2></div></div>
+  <p><strong>Turning digital designs into physical objects.</strong> Digital fabrication combines <strong>CAD</strong> (Computer Aided Design) and <strong>CAM</strong> (Computer Aided Manufacturing).</p>
+  <p>Examples: CNC mills, 3D printers, laser cutters, waterjets, vinyl cutters.</p>
+
+  <h4>Digital design → real object</h4>
+  <div class="flow" role="list">
+    <div class="flow-step" role="listitem" style="--step:var(--cyan)"><div class="flow-name">CAD</div><div class="flow-sub">Draw the part's geometry. Fusion 360, Onshape, SolidWorks.</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step" role="listitem" style="--step:var(--green)"><div class="flow-name">CAM</div><div class="flow-sub">Turn geometry into machine paths. Fusion CAM, MasterCAM, a slicer, laser software.</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step" role="listitem" style="--step:var(--orange)"><div class="flow-name">Machine</div><div class="flow-sub">Follows the instructions (usually G-code) to move and cut, print, or burn.</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step" role="listitem" style="--step:var(--purple)"><div class="flow-name">Part</div><div class="flow-sub">The physical object you hold, check, and fix in CAD if needed.</div></div>
+  </div>
+
+  <h4>Three ways machines make parts</h4>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">Additive</div><div class="card-body">Builds material up layer by layer. 3D printers.</div></div>
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Subtractive</div><div class="card-body">Removes material from a solid block. CNC mills and routers.</div></div>
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">2D cutting</div><div class="card-body">Cuts profiles out of flat sheets. Laser cutters, waterjets, vinyl cutters.</div></div>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-header"><span class="section-num">02</span><div><h2 class="section-title">CNC &amp; Numerical Control</h2></div></div>
+  <h3>What is CNC?</h3>
+  <ul>
+    <li><strong>CNC = Computer Numerical Control</strong></li>
+    <li>Machines follow coded instructions to move precisely.</li>
+    <li>Automates cutting, milling, drilling, and additive processes.</li>
+    <li>Usually referring to CNC mills, but can be routers, welders, benders, wire EDM machines, etc.</li>
+  </ul>
+  <figure class="fig">
+    <img src="img/cnc_mill.webp" alt="CNC mill cutting an aluminum part with a spindle and coolant lines" width="1200" height="675" loading="lazy" decoding="async">
+    <figcaption>CNC mill: programmed motion</figcaption>
+  </figure>
+  <div class="spec-grid">
+    <div class="spec-box"><div class="spec-val">X</div><div class="spec-unit">left ↔ right</div><div class="spec-name">Table or gantry</div></div>
+    <div class="spec-box"><div class="spec-val">Y</div><div class="spec-unit">front ↔ back</div><div class="spec-name">Table or gantry</div></div>
+    <div class="spec-box"><div class="spec-val">Z</div><div class="spec-unit">up ↔ down</div><div class="spec-name">Spindle or toolhead</div></div>
+  </div>
+
+  <h3>Before CNC: Numerical Control</h3>
+  <div class="two-col">
+    <div>
+      <ul>
+        <li>Early systems used punched cards/tape.</li>
+        <li>Machines followed pre-set paths mechanically.</li>
+        <li>No digital computers — limited flexibility.</li>
+        <li>Multiple spindles</li>
+      </ul>
+      <p>A tracer mill follows a physical template with a stylus, and the cutting spindles copy that motion. With several spindles, it can cut several copies of the same part at once. Changing the part means making a new template, which is the flexibility CNC later solved: changing a part became editing a program.</p>
+      <p>NC machines appeared in the 1950s. Adding a computer to the controller (CNC) became common in the 1970s.</p>
+    </div>
+    <figure class="fig fig-tall" style="margin-top:0">
+      <img src="img/tracer_mill.webp" alt="Vintage tracer controlled milling machine" width="750" height="1000" loading="lazy" decoding="async">
+      <figcaption>Tracer controlled mill</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-header"><span class="section-num">03</span><div><h2 class="section-title">Manual Machining vs CNC</h2></div></div>
+  <div class="deco-grid">
+    <div class="deco-card" style="--deco-color:var(--orange)">
+      <div class="deco-title">Manual Machining</div>
+      <div class="deco-body">
+        <ul style="margin:0">
+          <li>Fast(er) setup</li>
+          <li>Easy(er) changes</li>
+          <li>Great for prototypes</li>
+        </ul>
+      </div>
+      <div class="deco-warn" style="color:var(--txt-dim)">Manual: human guides each move</div>
+    </div>
+    <div class="deco-card" style="--deco-color:var(--cyan)">
+      <div class="deco-title">CNC Machining</div>
+      <div class="deco-body">
+        <ul style="margin:0">
+          <li>Automated repeatability</li>
+          <li>Ideal(er) for production</li>
+          <li>Precise (or at least as precise as the machine)</li>
+        </ul>
+      </div>
+      <div class="deco-warn" style="color:var(--txt-dim)">CNC: program repeats same path</div>
+    </div>
+  </div>
+
+  <div class="diagram-wrap">
+    <div class="diagram-title">Part 1 · Part 2 · Part 3</div>
+    <div class="svg-scroll">
+      <svg viewBox="0 0 640 170" style="min-width:460px" role="img" aria-label="Manual parts vary slightly in size, CNC parts come out identical">
+        <text x="0" y="34" fill="var(--txt-muted)" font-size="14" font-weight="700">MANUAL</text>
+        <rect x="120" y="12" width="132" height="40" rx="5" fill="var(--card2)" stroke="var(--orange)" stroke-width="2"/>
+        <rect x="290" y="14" width="124" height="36" rx="5" fill="var(--card2)" stroke="var(--orange)" stroke-width="2"/>
+        <rect x="452" y="10" width="140" height="43" rx="5" fill="var(--card2)" stroke="var(--orange)" stroke-width="2"/>
+        <text x="186" y="37" fill="var(--ink)" font-size="13" text-anchor="middle">Part 1</text>
+        <text x="352" y="37" fill="var(--ink)" font-size="13" text-anchor="middle">Part 2</text>
+        <text x="522" y="37" fill="var(--ink)" font-size="13" text-anchor="middle">Part 3</text>
+        <text x="0" y="114" fill="var(--txt-muted)" font-size="14" font-weight="700">CNC</text>
+        <rect x="120" y="92" width="132" height="40" rx="5" fill="var(--card2)" stroke="var(--cyan)" stroke-width="2"/>
+        <rect x="286" y="92" width="132" height="40" rx="5" fill="var(--card2)" stroke="var(--cyan)" stroke-width="2"/>
+        <rect x="452" y="92" width="132" height="40" rx="5" fill="var(--card2)" stroke="var(--cyan)" stroke-width="2"/>
+        <text x="186" y="117" fill="var(--ink)" font-size="13" text-anchor="middle">Part 1</text>
+        <text x="352" y="117" fill="var(--ink)" font-size="13" text-anchor="middle">Part 2</text>
+        <text x="518" y="117" fill="var(--ink)" font-size="13" text-anchor="middle">Part 3</text>
+        <text x="120" y="160" fill="var(--txt-dim)" font-size="12">Manual parts drift a little each time. CNC parts repeat the same path.</text>
+      </svg>
+    </div>
+  </div>
+  <div class="callout callout-tip">
+    <div class="callout-icon">Key tradeoff</div>
+    Flexibility vs repeatability. One part tomorrow is often faster on a manual machine. Twenty identical parts favor CNC, because programming time is paid once.
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-header"><span class="section-num">04</span><div><h2 class="section-title">CNC Coolant</h2></div></div>
+  <p>Cutting makes heat and chips. Coolant and lubrication methods trade cooling, lubrication, chip clearing, and mess against each other.</p>
+  <figure class="fig">
+    <img src="img/coolant_methods.webp" alt="Infographic of six machining coolant and lubrication methods" width="1600" height="900" loading="lazy" decoding="async">
+    <figcaption>Machining coolant types &amp; their purposes</figcaption>
+  </figure>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Method</th><th>Purpose</th><th>Best for</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Flood coolant</strong></td><td>Cooling + lubrication + chip flushing</td><td>Heavy cutting, deep pockets, drilling, enclosed CNC mills</td><td>Great heat removal, best chip evacuation, messy / requires maintenance</td></tr>
+        <tr><td><strong>Mist coolant</strong></td><td>Light cooling + lubrication + air-assisted chip clearing</td><td>Light milling, aluminum, open machines</td><td>Uses less fluid, easier on open machines, airborne mist needs ventilation</td></tr>
+        <tr><td><strong>MQL</strong> (Minimum Quantity Lubrication)</td><td>Mostly lubrication with a very small amount of fluid</td><td>Aluminum, CNC routers, cleaner machining setups</td><td>Cleaner than flood, low fluid use, less cooling than flood</td></tr>
+        <tr><td><strong>Air blast</strong></td><td>Chip clearing</td><td>Plastics, wood, some light aluminum machining</td><td>No liquid mess, no lubrication, limited cooling</td></tr>
+        <tr><td><strong>Cutting oil</strong></td><td>High lubrication</td><td>Tapping, drilling, reaming, manual machining</td><td>Excellent for threads and holes, less cooling, oily / messy</td></tr>
+        <tr><td><strong>Dry machining</strong></td><td>No coolant used</td><td>Wood, foam, some plastics, select coated-tool applications</td><td>Simplest setup, no fluid maintenance, more heat and tool wear</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="glass-box">
+    <div class="gl-title">// QUICK RULE OF THUMB</div>
+    <div class="glass-row"><span class="glass-key">Flood</span><span class="glass-val">best cooling and chip evacuation</span></div>
+    <div class="glass-row"><span class="glass-key">Mist / MQL</span><span class="glass-val">less mess, better for open machines</span></div>
+    <div class="glass-row"><span class="glass-key">Air blast</span><span class="glass-val">chip removal only</span></div>
+    <div class="glass-row"><span class="glass-key">Cutting oil</span><span class="glass-val">lubrication-focused</span></div>
+    <div class="glass-row"><span class="glass-key">Dry</span><span class="glass-val">no fluid, but more heat</span></div>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-header"><span class="section-num">05</span><div><h2 class="section-title">G-Code Basics</h2></div></div>
+  <ul>
+    <li><strong>Machine language for CNC.</strong></li>
+    <li>Commands include: Motion (X, Y, Z), Speed &amp; Tool Changes.</li>
+    <li>Shared across printers, mills, and cutters.</li>
+    <li>CAM (MasterCAM, Fusion 360, Slicers) writes it for you.</li>
+  </ul>
+  <div class="flow" role="list">
+    <div class="flow-step" role="listitem" style="--step:var(--cyan)"><div class="flow-name">Model</div><div class="flow-sub">The CAD part.</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step" role="listitem" style="--step:var(--green)"><div class="flow-name">Toolpath</div><div class="flow-sub">CAM or the slicer plans where the tool goes.</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step" role="listitem" style="--step:var(--yellow)"><div class="flow-name">G-Code</div><div class="flow-sub">The path written as text commands.</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step" role="listitem" style="--step:var(--orange)"><div class="flow-name">Motion</div><div class="flow-sub">Motors execute each line in order.</div></div>
+  </div>
+  <div class="code-block">G1 X40 Y20 F3000   <span class="cm">; move in a straight line to X40 Y20 at 3000 mm/min</span>
+M104 S210          <span class="cm">; set hotend to 210 °C (printer)</span>
+G1 Z0.2            <span class="cm">; lower to 0.2 mm, the first layer height</span>
+G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Meaning</th><th>Used on</th></tr></thead>
+      <tbody>
+        <tr><td><code>G0</code> / <code>G1</code></td><td>Rapid move / straight-line move at feed rate</td><td>Every CNC machine</td></tr>
+        <tr><td><code>X Y Z</code></td><td>Target position on each axis</td><td>Every CNC machine</td></tr>
+        <tr><td><code>F</code></td><td>Feed rate (speed), usually mm/min</td><td>Every CNC machine</td></tr>
+        <tr><td><code>E</code></td><td>Extruder position (filament pushed)</td><td>3D printers</td></tr>
+        <tr><td><code>M104</code> / <code>M109</code></td><td>Set hotend temperature / set and wait</td><td>3D printers</td></tr>
+        <tr><td><code>M3</code> / <code>M5</code>, <code>S</code></td><td>Spindle or laser on / off, and its speed or power</td><td>Mills, routers, many lasers</td></tr>
+        <tr><td><code>M6 T2</code></td><td>Tool change to tool 2</td><td>Mills with tool changers</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-data">
+    <div class="callout-icon">Same language, different dialects</div>
+    G1 means the same move everywhere, but M-codes vary by machine and firmware. G-code written for one printer or mill can do the wrong thing on another, so always slice or post-process for the exact machine.
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-header"><span class="section-num">06</span><div><h2 class="section-title">What Is 3D Printing</h2></div></div>
+  <ul>
+    <li><strong>Additive process:</strong> builds objects layer by layer.</li>
+    <li>Turns digital models into real parts.</li>
+    <li>Expiration of patents mid 2000s to 2010s (2009).</li>
+  </ul>
+  <div class="two-col">
+    <div>
+      <div class="deco-card" style="--deco-color:var(--cyan);margin-bottom:14px">
+        <div class="deco-title">MakerBot &amp; the Open-Source Revolution</div>
+        <div class="deco-body">
+          <ul style="margin:0">
+            <li>Founded in 2009 by former RepRap community members.</li>
+            <li>Early printers like the Cupcake CNC and Thing-O-Matic were open-source kits.</li>
+            <li>Helped popularize FDM/FFF printing for hobbyists.</li>
+            <li>Later moved toward closed-source designs with the Replicator series.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="deco-card" style="--deco-color:var(--purple)">
+        <div class="deco-title">Formlabs &amp; Desktop Resin Printing</div>
+        <div class="deco-body">
+          <ul style="margin:0">
+            <li>Founded in 2011 from MIT Media Lab.</li>
+            <li>Form 1 introduced affordable SLA resin printing to consumers.</li>
+            <li>Brought high-resolution printing from industrial labs to desktops.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <figure class="fig fig-tall" style="margin-top:0">
+      <img src="img/makerbot_cupcake.webp" alt="Early wooden-frame MakerBot open-source kit printer" width="682" height="1024" loading="lazy" decoding="async">
+      <figcaption>Early MakerBot kit printer · FDM builds layer by layer</figcaption>
+    </figure>
+  </div>
+  <h4>Timeline</h4>
+  <div class="timeline">
+    <div class="timeline-item"><div class="timeline-year">2009</div><div class="timeline-event">Key FDM patent expires · MakerBot founded · Cupcake CNC kit</div><div class="timeline-detail">With the core extrusion patent gone, open-source RepRap-style printers could be sold cheaply.</div></div>
+    <div class="timeline-item"><div class="timeline-year">2010</div><div class="timeline-event">Thing-O-Matic</div><div class="timeline-detail">MakerBot's second open kit, with a heated build platform option.</div></div>
+    <div class="timeline-item"><div class="timeline-year">2011</div><div class="timeline-event">Formlabs founded out of the MIT Media Lab</div></div>
+    <div class="timeline-item"><div class="timeline-year">2012</div><div class="timeline-event">MakerBot Replicator · Form 1 launches on Kickstarter</div><div class="timeline-detail">MakerBot shifts toward closed designs; desktop resin printing arrives.</div></div>
+  </div>
+</section>
+
+<section class="section" id="s7">
+  <div class="section-header"><span class="section-num">07</span><div><h2 class="section-title">Printing Technologies</h2></div></div>
+  <h3>Common 3D printing technologies</h3>
+  <ul>
+    <li><strong>FDM/FFF:</strong> Fused Deposition Modeling™ / Fused Filament Fabrication. (FDM is Stratasys's trademark, which is why the open community says FFF.)</li>
+    <li><strong>SLA/MSLA:</strong> Stereolithography or Masked Stereolithography (curing resin by UV)</li>
+    <li><strong>SLS:</strong> Selective Laser Sintering (Powder Printing)</li>
+    <li><strong>MJF:</strong> HP Multi Jet Fusion (powder + inkjet agents, fused by heat)</li>
+    <li><strong>Binder Jet:</strong> powder + inkjet-printed liquid binder (glue)</li>
+    <li><strong>Emerging:</strong> Volumetric &amp; Gel Printing</li>
+  </ul>
+  <div class="fig-grid">
+    <figure class="fig"><img src="img/fdm_printer.webp" alt="FDM printer printing a blue part" width="1200" height="675" loading="lazy" decoding="async"><figcaption>FDM</figcaption></figure>
+    <figure class="fig"><img src="img/msla_printer.webp" alt="Resin printer with a part rising from the vat under UV light" width="1200" height="675" loading="lazy" decoding="async"><figcaption>SLA/MSLA</figcaption></figure>
+    <figure class="fig"><img src="img/sls_metal.webp" alt="Powder bed printer with a laser fusing powder" width="1200" height="675" loading="lazy" decoding="async"><figcaption>SLS/Metal</figcaption></figure>
+    <figure class="fig"><img src="img/laser_cutter.webp" alt="Laser cutter engraving a tree design into wood" width="1200" height="675" loading="lazy" decoding="async"><figcaption>CNC cousins</figcaption></figure>
+  </div>
+
+  <h3>MJF vs Binder Jet</h3>
+  <p>Both spread a thin layer of powder and use inkjet heads, like a paper printer, to mark each layer. What the ink does is different.</p>
+  <div class="deco-grid">
+    <div class="deco-card" style="--deco-color:var(--orange)">
+      <div class="deco-title">MJF · HP Multi Jet Fusion</div>
+      <div class="deco-body">Inkjet heads print a <strong>fusing agent</strong> where the part goes, so that powder absorbs the heat from an infrared lamp and melts together. A <strong>detailing agent</strong> printed along the edges keeps the neighboring powder from fusing, for crisp edges. Usually nylon (PA12).</div>
+    </div>
+    <div class="deco-card" style="--deco-color:var(--purple)">
+      <div class="deco-title">Binder Jet</div>
+      <div class="deco-body">Inkjet heads print a <strong>liquid binder</strong> that glues powder together. No heat while printing, so parts come out fragile ("green"). Metal parts are then sintered in a furnace, where they shrink. Also used for sand molds and full-color models.</div>
+    </div>
+  </div>
+
+  <h3>Advantages &amp; disadvantages</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Tech</th><th>Cost</th><th>Known for</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>FDM</strong></td><td class="mono">$</td><td><span class="pill">Strength</span><span class="pill">Support</span></td><td>Cheap, strong, lower resolution, support material</td></tr>
+        <tr><td><strong>SLA</strong></td><td class="mono">$$</td><td><span class="pill">Detail</span><span class="pill">Messy</span></td><td>High resolution, can be very fast. Resin is messy, smelly, toxic, needs wash &amp; cure, some resins can be brittle (prototype injection molds)</td></tr>
+        <tr><td><strong>SLS</strong></td><td class="mono">$$$$</td><td><span class="pill">Strength</span><span class="pill">Powder</span></td><td>Pricey, not consumer friendly (breathing hazard)</td></tr>
+        <tr><td><strong>MJF</strong></td><td class="mono">$$$</td><td><span class="pill">Strength</span><span class="pill">Powder</span></td><td>Fast and durable, inefficient unless print volume is filled (relatively affordable commercially) (can be dyed)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mono" style="color:var(--txt-dim)">Cost • Strength • Detail • Cleanup</p>
+  <figure class="fig fig-narrow">
+    <img src="img/sls_part.webp" alt="Gray nylon powder-bed printed bracket" width="1200" height="750" loading="lazy" decoding="async">
+    <figcaption>Powder-bed nylon part (SLS / MJF finish)</figcaption>
+  </figure>
+
+  <h3>Metal 3D printing</h3>
+  <div class="two-col">
+    <div>
+      <ul>
+        <li><strong>Methods:</strong> Binder Jet, SLM, DMLS</li>
+        <li><strong>Pros:</strong> High strength, real metal</li>
+        <li><strong>Cons:</strong> Shrinkage, expensive post-processing</li>
+      </ul>
+      <div class="glass-box" style="margin-top:8px">
+        <div class="gl-title">// METHODS</div>
+        <div class="glass-row"><span class="glass-key">SLM</span><span class="glass-val">laser fully melts metal powder</span></div>
+        <div class="glass-row"><span class="glass-key">DMLS</span><span class="glass-val">laser powder bed (EOS's name)</span></div>
+        <div class="glass-row"><span class="glass-key">Binder Jet</span><span class="glass-val">glue, then furnace sinter (shrinks)</span></div>
+      </div>
+    </div>
+    <figure class="fig" style="margin-top:0">
+      <img src="img/metal_part.webp" alt="Close-up of a metal powder-bed printed part" width="1024" height="576" loading="lazy" decoding="async">
+      <figcaption>Powder-bed metal printing</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="s8">
+  <div class="section-header"><span class="section-num">08</span><div><h2 class="section-title">Supports in FDM</h2></div></div>
+  <ul>
+    <li>Prevent overhangs and sagging.</li>
+    <li>Avoid supports: design ≤45° angles.</li>
+  </ul>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Supports hold up steep overhangs</div>
+    <div class="svg-scroll">
+      <svg viewBox="0 0 660 230" style="min-width:500px" role="img" aria-label="Overhang angles from vertical: 0, 30 and 45 degrees print without support, 60 degrees sags and needs support">
+        <line x1="10" y1="180" x2="650" y2="180" stroke="var(--border)" stroke-width="2"/>
+        <line x1="40" y1="180" x2="40" y2="70" stroke="var(--green)" stroke-width="16" stroke-linecap="butt"/>
+        <line x1="140" y1="180" x2="203" y2="70" stroke="var(--green)" stroke-width="16"/>
+        <line x1="270" y1="180" x2="380" y2="70" stroke="var(--yellow)" stroke-width="16"/>
+        <line x1="440" y1="180" x2="630" y2="70" stroke="var(--red)" stroke-width="16"/>
+        <path d="M560 112 q6 14 0 22 M590 96 q6 14 0 22 M615 82 q6 14 0 22" stroke="var(--red)" stroke-width="3" fill="none"/>
+        <line x1="530" y1="180" x2="530" y2="126" stroke="var(--txt-dim)" stroke-width="3" stroke-dasharray="4 4"/>
+        <line x1="580" y1="180" x2="580" y2="100" stroke="var(--txt-dim)" stroke-width="3" stroke-dasharray="4 4"/>
+        <line x1="620" y1="180" x2="620" y2="78" stroke="var(--txt-dim)" stroke-width="3" stroke-dasharray="4 4"/>
+        <line x1="140" y1="180" x2="140" y2="70" stroke="var(--txt-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="270" y1="180" x2="270" y2="70" stroke="var(--txt-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="440" y1="180" x2="440" y2="70" stroke="var(--txt-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="40" y="204" fill="var(--ink)" font-size="14" text-anchor="middle" font-weight="700">0°</text>
+        <text x="40" y="222" fill="var(--txt-muted)" font-size="12" text-anchor="middle">wall</text>
+        <text x="172" y="204" fill="var(--ink)" font-size="14" text-anchor="middle" font-weight="700">30°</text>
+        <text x="172" y="222" fill="var(--txt-muted)" font-size="12" text-anchor="middle">prints fine</text>
+        <text x="325" y="204" fill="var(--ink)" font-size="14" text-anchor="middle" font-weight="700">45°</text>
+        <text x="325" y="222" fill="var(--txt-muted)" font-size="12" text-anchor="middle">usual limit</text>
+        <text x="535" y="204" fill="var(--ink)" font-size="14" text-anchor="middle" font-weight="700">60°</text>
+        <text x="535" y="222" fill="var(--txt-muted)" font-size="12" text-anchor="middle">sags · add supports (dashed)</text>
+        <text x="10" y="40" fill="var(--txt-dim)" font-size="12">Angle measured from vertical. Each layer must rest at least halfway on the one below.</text>
+      </svg>
+    </div>
+  </div>
+  <div class="callout callout-tip">
+    <div class="callout-icon">Aim for ≤45° when possible</div>
+    At 45° each new layer still sits about half on the layer below. Steeper than that, the plastic hangs in the air and droops. Chamfers instead of flat ceilings, and short bridges between two posts, often avoid supports entirely.
+  </div>
+  <h4>Types</h4>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Breakaway</div><div class="card-body">Same material as the part, snapped off by hand. Leaves marks where it touched.</div></div>
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">Dissolvable</div><div class="card-body">PVA, BVOH, PETG/PLA for each other. PVA and BVOH dissolve in water. PETG and PLA barely stick to each other, so each one peels cleanly off the other.</div></div>
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">Interface layers</div><div class="card-body">Denser layers at the top of the support, so the underside of the part comes out smoother.</div></div>
+  </div>
+</section>
+
+<section class="section" id="s9">
+  <div class="section-header"><span class="section-num">09</span><div><h2 class="section-title">Infill</h2></div></div>
+  <div class="two-col">
+    <div>
+      <h4 style="margin-top:0">What is infill?</h4>
+      <ul>
+        <li>The internal structure of a 3D print between outer walls.</li>
+        <li>Balances strength, weight, and print time.</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="margin-top:0">General tips</h4>
+      <ul>
+        <li>Higher infill % = stronger but heavier. (with exceptions)</li>
+        <li>15–25% is typical for general use.</li>
+        <li>Solid (100%) infill is uncommon on consumer 3D printers due to inconsistent extrusion.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout callout-warn">
+    <div class="callout-icon">Why 100% infill goes wrong</div>
+    With a solid inside, every small over-extrusion has nowhere to go. The extra plastic piles up into blobs, the nozzle scrapes the print, and top surfaces come out rough or bulging. Time and filament also climb fast, while the strength gain is small, because the walls and top and bottom layers carry most of the load.
+  </div>
+  <div class="fig-grid">
+    <figure class="fig"><img src="img/infill_samples.webp" alt="Grid of blue printed infill pattern samples" width="1120" height="630" loading="lazy" decoding="async"><figcaption>Infill pattern samples</figcaption></figure>
+    <figure class="fig"><img src="img/infill_patterns.webp" alt="Gyroid, triangle, and honeycomb infill at 5 to 25 percent" width="675" height="346" loading="lazy" decoding="async"><figcaption>Gyroid · Triangles · Honeycomb at 5–25%</figcaption></figure>
+  </div>
+
+  <h3>Infill tradeoffs</h3>
+  <p>Infill changes weight, print time, and internal support — but walls and orientation often matter more.</p>
+  <div class="bar-row"><div class="bar-label">10% infill</div><div class="bar-track"><div class="bar-fill" style="width:10%;background:linear-gradient(90deg,var(--cyan),var(--green))"></div></div><div class="bar-meta">fast / light</div></div>
+  <div class="bar-row"><div class="bar-label">25% infill</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:linear-gradient(90deg,var(--green),var(--yellow))"></div></div><div class="bar-meta">balanced</div></div>
+  <div class="bar-row"><div class="bar-label">60% infill</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:linear-gradient(90deg,var(--yellow),var(--orange))">60%</div></div><div class="bar-meta">stronger / slow</div></div>
+  <div class="bar-row"><div class="bar-label">100% infill</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,var(--orange),var(--red))">100%</div></div><div class="bar-meta">solid-ish</div></div>
+  <div class="callout callout-tip">
+    <div class="callout-icon">Teaching cue</div>
+    Ask students when "more infill" is actually the wrong answer. Good answers: adding walls (perimeters) beats adding infill for bending strength and screw holes; extra infill on a robot or drone part is just extra mass; flexible TPU parts get stiffer as infill goes up.
+  </div>
+  <h4>Common patterns</h4>
+  <div class="deco-grid">
+    <div class="deco-card" style="--deco-color:var(--cyan)"><div class="deco-title">Grid / Rectilinear</div><div class="deco-body">Fast, simple default. Fine for most parts.</div></div>
+    <div class="deco-card" style="--deco-color:var(--green)"><div class="deco-title">Gyroid</div><div class="deco-body">Wavy 3D pattern, similar strength in every direction, prints smoothly.</div></div>
+    <div class="deco-card" style="--deco-color:var(--yellow)"><div class="deco-title">Triangles</div><div class="deco-body">Stiff in the layer plane. Good for flat panels.</div></div>
+    <div class="deco-card" style="--deco-color:var(--orange)"><div class="deco-title">Honeycomb</div><div class="deco-body">Stiff and good-looking, but slower because of all the direction changes.</div></div>
+  </div>
+</section>
+
+<section class="section" id="s10">
+  <div class="section-header"><span class="section-num">10</span><div><h2 class="section-title">Orientation &amp; Layer Strength</h2></div></div>
+  <h3>Print orientation</h3>
+  <ul>
+    <li>Affects surface finish, strength, and supports.</li>
+    <li>Choose orientation based on function and appearance.</li>
+  </ul>
+  <h3>Layer direction &amp; strength</h3>
+  <p>FDM prints behave like laminated material: the part is usually weaker between layers than within a layer.</p>
+  <figure class="fig">
+    <img src="img/layer_strength.webp" alt="Diagrams of tension and bending loads normal and parallel to print layers" width="931" height="525" loading="lazy" decoding="async">
+    <figcaption>Layers stacked in Z · Pulling apart layers = weaker · Pulling along layers = stronger</figcaption>
+  </figure>
+  <p>Example: a hook printed standing up can snap along a layer line. The same hook printed lying flat carries the load along its layers and holds much more.</p>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">Orient for load path</div><div class="card-body">Run layers along the direction the part gets pulled or bent.</div></div>
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">Minimize supports</div><div class="card-body">Put large flat faces on the bed and keep overhangs under 45°.</div></div>
+    <div class="card" style="--card-accent:var(--yellow)"><div class="card-title">Hide layer lines on show faces</div><div class="card-body">Faces that point up or sideways look different. Put the face people see where it prints cleanest.</div></div>
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Reduce print time</div><div class="card-body">Shorter parts in Z usually print faster, since fewer layers means fewer layer changes.</div></div>
+  </div>
+  <div class="callout callout-data">
+    <div class="callout-icon">Design decision</div>
+    Function first, appearance second.
+  </div>
+</section>
+
+<section class="section" id="s11">
+  <div class="section-header"><span class="section-num">11</span><div><h2 class="section-title">Motion Systems &amp; Printers</h2></div></div>
+  <h3>Motion systems in FDM</h3>
+  <figure class="fig">
+    <img src="img/motion_systems.webp" alt="Blueprint drawing of Cartesian, CoreXY, Delta, and Polar printers" width="800" height="471" loading="lazy" decoding="async">
+    <figcaption>Cartesian · CoreXY · Delta · Polar</figcaption>
+  </figure>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">Cartesian</div><div class="card-body">Simple, reliable, Z wobble.</div></div>
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">CoreXY</div><div class="card-body">Fast, rigid.</div></div>
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Delta</div><div class="card-body">Tall prints, complex.</div></div>
+  </div>
+
+  <h3>Common printers</h3>
+  <div class="two-col">
+    <div>
+      <h4 style="margin-top:0">Cartesian / Bedslinger printers</h4>
+      <ul>
+        <li>Examples: Prusa MK3, Ender 3</li>
+        <li>Build plate (bed) moves in Y-axis while the toolhead moves in X and Z.</li>
+        <li>Simple, affordable, and easy to maintain.</li>
+        <li>The Prusa lineage traces back to the RepRap Project — an open-source movement to create self-replicating 3D printers.</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="margin-top:0">CoreXY printers</h4>
+      <ul>
+        <li>Examples: Bambu P1S, Voron 2.4</li>
+        <li>The bed moves only in Z, while two belts control X and Y together.</li>
+        <li>Allows faster, more rigid motion with less vibration.</li>
+        <li>Popular for speed, accuracy, and compact frames.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="company-grid">
+    <div class="company-card" style="--card-color:var(--cyan)"><img class="co-img" src="img/ender3.webp" alt="Creality Ender 3 printer" width="224" height="224" loading="lazy" decoding="async"><div class="company-name">Ender 3</div><div class="company-meta">// Cartesian · bedslinger</div><div class="company-body">Low-cost workhorse. Easy to repair and modify.</div></div>
+    <div class="company-card" style="--card-color:var(--cyan)"><img class="co-img" src="img/prusa_mk3.webp" alt="Prusa MK3 printer" width="300" height="339" loading="lazy" decoding="async"><div class="company-name">Prusa MK3</div><div class="company-meta">// Cartesian · bedslinger</div><div class="company-body">RepRap descendant, known for reliability and open designs.</div></div>
+    <div class="company-card" style="--card-color:var(--green)"><img class="co-img" src="img/bambu_p1s.webp" alt="Bambu Lab P1S printer" width="700" height="700" loading="lazy" decoding="async"><div class="company-name">Bambu P1S</div><div class="company-meta">// CoreXY · enclosed</div><div class="company-body">Fast out of the box, enclosure helps with ABS and ASA.</div></div>
+    <div class="company-card" style="--card-color:var(--green)"><img class="co-img" src="img/voron24.webp" alt="Voron 2.4 printer" width="1200" height="1250" loading="lazy" decoding="async"><div class="company-name">Voron 2.4</div><div class="company-meta">// CoreXY · open-source kit</div><div class="company-body">Built from a kit by the owner. Very fast and rigid.</div></div>
+  </div>
+  <div class="callout callout-warn">
+    <div class="callout-icon">Acceleration ≠ print speed</div>
+    High acceleration helps with cornering and quick direction changes, but print speed also depends on flow rate, cooling, and stability. Faster movement isn't always faster printing — balance is key.
+  </div>
+
+  <h3>CoreXY kinematics</h3>
+  <div class="two-col">
+    <div>
+      <p>This design allows both motors to remain stationary on the frame, reducing moving mass and improving acceleration response.</p>
+      <p>Because no motor moves with the toolhead, inertia is greatly reduced — allowing faster, smoother, and more precise printing.</p>
+      <div class="glass-box">
+        <div class="gl-title">// TWO MOTORS, TWO AXES</div>
+        <div class="glass-row"><span class="glass-key">X move</span><span class="glass-val">ΔX = ½ (ΔA + ΔB)</span></div>
+        <div class="glass-row"><span class="glass-key">Y move</span><span class="glass-val">ΔY = ½ (ΔA − ΔB)</span></div>
+        <div class="glass-row"><span class="glass-key">Both motors same way</span><span class="glass-val">pure X</span></div>
+        <div class="glass-row"><span class="glass-key">Motors opposite ways</span><span class="glass-val">pure Y</span></div>
+      </div>
+    </div>
+    <figure class="fig" style="margin-top:0">
+      <img src="img/corexy.webp" alt="CoreXY belt diagram with two stationary motors A and B" width="520" height="552" loading="lazy" decoding="async">
+      <figcaption>Stationary motors reduce moving mass</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="s12">
+  <div class="section-header"><span class="section-num">12</span><div><h2 class="section-title">SLA vs MSLA</h2></div></div>
+  <div class="deco-grid">
+    <div class="deco-card" style="--deco-color:var(--purple)"><div class="deco-title">SLA</div><div class="deco-body">Laser traces each layer. Slower, excellent quality.</div></div>
+    <div class="deco-card" style="--deco-color:var(--cyan)"><div class="deco-title">MSLA</div><div class="deco-body">LCD projects whole layer. Faster, depends on screen resolution.</div></div>
+  </div>
+  <div class="two-col">
+    <figure class="fig" style="margin-top:0">
+      <img src="img/sla_vs_msla.webp" alt="Diagram: SLA laser steered by a mirror versus MSLA LCD exposing the whole layer" width="800" height="587" loading="lazy" decoding="async">
+      <figcaption>SLA: laser draws · MSLA: LCD flashes whole layer</figcaption>
+    </figure>
+    <figure class="fig" style="margin-top:0">
+      <img src="img/msla_printer.webp" alt="Desktop resin printer" width="1200" height="675" loading="lazy" decoding="async">
+      <figcaption>Resin printing</figcaption>
+    </figure>
+  </div>
+  <div class="callout callout-tip">
+    <div class="callout-icon">Full plate, same time</div>
+    An MSLA printer exposes a whole layer at once, so print time depends on the number of layers, not how much is on the plate. Ten small parts take about as long as one. On SLA, the laser has to trace every part, so more parts means more time.
+  </div>
+</section>
+
+<section class="section" id="s13">
+  <div class="section-header"><span class="section-num">13</span><div><h2 class="section-title">3D Printer Safety</h2></div></div>
+  <p>FDM focused, plus resin and powder.</p>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Ventilation</div><div class="card-body">Use filters or enclosures for ABS, ASA, Nylon.</div></div>
+    <div class="card" style="--card-accent:var(--yellow)"><div class="card-title">Electrical</div><div class="card-body">Inspect wiring and PSUs.</div></div>
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">Maintenance</div><div class="card-body">Keep nozzles and hotends clean.</div></div>
+    <div class="card" style="--card-accent:var(--purple)"><div class="card-title">SLA safety</div><div class="card-body">Handle resin with gloves, cure properly, dispose waste correctly.</div></div>
+    <div class="card" style="--card-accent:var(--red)"><div class="card-title">SLS safety</div><div class="card-body">Wear masks and goggles, avoid powder inhalation.</div></div>
+  </div>
+  <p><strong>Safety systems matter:</strong> <span class="pill">Ventilate</span><span class="pill">Inspect wiring</span><span class="pill">PPE</span><span class="pill">Dispose waste</span></p>
+  <div class="callout callout-danger">
+    <div class="callout-icon">Resin is a skin sensitizer</div>
+    Allergic reactions can build up with repeated contact, even if the first few exposures seem fine. Wear nitrile gloves every time. Never pour uncured resin or used IPA wash down a drain: cure it under UV or sunlight first, then dispose of it as solid waste.
+  </div>
+</section>
+
+<section class="section" id="s14">
+  <div class="section-header"><span class="section-num">14</span><div><h2 class="section-title">Introduction to Laser Cutters</h2></div></div>
+  <ul>
+    <li>Use focused light to cut or engrave materials.</li>
+    <li>Motion is CNC-controlled, like 3D printers.</li>
+  </ul>
+  <figure class="fig">
+    <img src="img/laser_cutter.webp" alt="Laser cutter head engraving a tree design into a wood sheet" width="1200" height="675" loading="lazy" decoding="async">
+    <figcaption>CO₂-style laser cutting/engraving</figcaption>
+  </figure>
+  <p>A laser cutter is a two-axis CNC machine whose tool is a beam of light. The head moves in X and Y, the laser switches on and off along the path, and Z only sets the focus height. Everything from section 05 about toolpaths still applies.</p>
+</section>
+
+<section class="section" id="s15">
+  <div class="section-header"><span class="section-num">15</span><div><h2 class="section-title">The Electromagnetic Spectrum</h2></div></div>
+  <p>Radio, microwaves, infrared, visible light, ultraviolet, X-rays, and gamma rays are all the same thing: electromagnetic waves. The only difference is wavelength. Long waves (radio) carry little energy per photon; short waves (UV, X-ray) carry a lot.</p>
+  <figure class="fig">
+    <img src="img/em_spectrum.webp" alt="Electromagnetic spectrum chart from radio waves to gamma rays with the visible spectrum expanded" width="1024" height="584" loading="lazy" decoding="async">
+    <figcaption>Electromagnetic spectrum, from building-size radio waves to atom-size gamma rays</figcaption>
+  </figure>
+
+  <div class="diagram-wrap">
+    <div class="diagram-title">Zoom in: where the lasers and resin printers sit</div>
+    <div class="svg-scroll">
+      <svg viewBox="0 0 660 190" style="min-width:540px" role="img" aria-label="Log scale from 300 nanometers to 20 micrometers. Resin UV at 405 nm and diode laser at 450 nm are in violet and blue visible light. Fiber laser at 1064 nm is near infrared. CO2 laser at 10.6 micrometers is far into infrared.">
+        <defs>
+          <linearGradient id="visGrad" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#7a00ff"/><stop offset=".18" stop-color="#2b5cff"/><stop offset=".36" stop-color="#00c8ff"/>
+            <stop offset=".5" stop-color="#22d060"/><stop offset=".65" stop-color="#ffe000"/><stop offset=".8" stop-color="#ff8a00"/><stop offset="1" stop-color="#ff1a1a"/>
+          </linearGradient>
+        </defs>
+        <rect x="20" y="96" width="35" height="26" fill="var(--purple)" opacity=".35"/>
+        <rect x="55" y="96" width="90" height="26" fill="url(#visGrad)"/>
+        <rect x="145" y="96" width="495" height="26" fill="var(--red)" opacity=".18"/>
+        <text x="37" y="140" fill="var(--txt-muted)" font-size="11" text-anchor="middle">UV</text>
+        <text x="100" y="140" fill="var(--txt-muted)" font-size="11" text-anchor="middle">visible</text>
+        <text x="392" y="140" fill="var(--txt-muted)" font-size="11" text-anchor="middle">infrared</text>
+        <line x1="64" y1="62" x2="64" y2="122" stroke="var(--purple)" stroke-width="2"/>
+        <text x="64" y="40" fill="var(--ink)" font-size="12" font-weight="700" text-anchor="middle">405 nm</text>
+        <text x="64" y="55" fill="var(--txt-muted)" font-size="11" text-anchor="middle">resin UV</text>
+        <line x1="80" y1="84" x2="80" y2="122" stroke="var(--cyan)" stroke-width="2"/>
+        <text x="96" y="78" fill="var(--ink)" font-size="12" font-weight="700" text-anchor="start">450 nm diode</text>
+        <line x1="207" y1="62" x2="207" y2="122" stroke="var(--orange)" stroke-width="2"/>
+        <text x="207" y="40" fill="var(--ink)" font-size="12" font-weight="700" text-anchor="middle">1064 nm</text>
+        <text x="207" y="55" fill="var(--txt-muted)" font-size="11" text-anchor="middle">fiber laser</text>
+        <line x1="546" y1="62" x2="546" y2="122" stroke="var(--red)" stroke-width="2"/>
+        <text x="546" y="40" fill="var(--ink)" font-size="12" font-weight="700" text-anchor="middle">10.6 µm</text>
+        <text x="546" y="55" fill="var(--txt-muted)" font-size="11" text-anchor="middle">CO₂ laser</text>
+        <line x1="20" y1="156" x2="640" y2="156" stroke="var(--border)" stroke-width="1"/>
+        <g fill="var(--txt-dim)" font-size="10.5" text-anchor="middle">
+          <text x="20" y="174">300 nm</text><text x="145" y="174">700 nm</text><text x="207" y="174">1 µm</text><text x="416" y="174">5 µm</text><text x="546" y="174">10 µm</text><text x="640" y="174">20 µm</text>
+        </g>
+        <g stroke="var(--txt-dim)" stroke-width="1"><line x1="145" y1="152" x2="145" y2="160"/><line x1="207" y1="152" x2="207" y2="160"/><line x1="416" y1="152" x2="416" y2="160"/><line x1="546" y1="152" x2="546" y2="160"/></g>
+      </svg>
+    </div>
+    <p class="ctl-hint">Log scale: each step to the right is a longer wavelength. The visible band is a sliver even at this zoom.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Band</th><th>Wavelength</th><th>Everyday examples</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Radio</strong></td><td class="mono">over 1 m</td><td>AM and FM radio (FM is about 3 m), TV broadcast</td></tr>
+        <tr><td><strong>Microwave</strong></td><td class="mono">1 mm – 1 m</td><td>Microwave ovens (about 12 cm), Wi-Fi, radar</td></tr>
+        <tr><td><strong>Infrared</strong></td><td class="mono">700 nm – 1 mm</td><td>TV remotes (about 940 nm), heat, <strong>fiber</strong> and <strong>CO₂</strong> lasers</td></tr>
+        <tr><td><strong>Visible</strong></td><td class="mono">380 – 700 nm</td><td>Light bulbs, screen pixels (red, green, blue), <strong>diode</strong> lasers (blue)</td></tr>
+        <tr><td><strong>Ultraviolet</strong></td><td class="mono">10 – 380 nm</td><td>Sunburn, black lights. Resin printers use 405 nm, at the violet edge of visible, usually called UV</td></tr>
+        <tr><td><strong>X-ray</strong></td><td class="mono">0.01 – 10 nm</td><td>Medical and security imaging</td></tr>
+        <tr><td><strong>Gamma</strong></td><td class="mono">under 0.01 nm</td><td>Radioactive decay</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="deco-grid">
+    <div class="deco-card" style="--deco-color:var(--red)"><div class="deco-title">Why wavelength picks the material</div><div class="deco-body">Each material absorbs some wavelengths and reflects or passes others. CO₂ light (10.6 µm) soaks into wood, acrylic, and leather but bounces off bare metal. Fiber light (1064 nm) is absorbed by metal but passes through clear acrylic. Blue diode light is absorbed by dark materials and passes through clear or blue ones.</div></div>
+    <div class="deco-card" style="--deco-color:var(--yellow)"><div class="deco-title">Safety glasses are wavelength-specific</div><div class="deco-body">Laser glasses are rated for certain wavelengths. Glasses made for a blue diode do not protect against a fiber or CO₂ laser, and the reverse. Check the rating printed on the lens.</div></div>
+  </div>
+</section>
+
+<section class="section" id="s16">
+  <div class="section-header"><span class="section-num">16</span><div><h2 class="section-title">Laser Types &amp; How They Work</h2></div></div>
+  <h3>Types of laser cutters</h3>
+  <div class="spec-grid">
+    <div class="spec-box"><div class="spec-val">450</div><div class="spec-unit">nm · visible blue</div><div class="spec-name">Diode</div></div>
+    <div class="spec-box"><div class="spec-val">10.6</div><div class="spec-unit">µm · far infrared</div><div class="spec-name">CO₂</div></div>
+    <div class="spec-box"><div class="spec-val">1064</div><div class="spec-unit">nm · near infrared</div><div class="spec-name">Fiber</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Laser</th><th>Wavelength</th><th>Lecture notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Diode</strong></td><td class="mono">~450 nm</td><td>Compact, engraves wood/leather.</td></tr>
+        <tr><td><strong>CO₂</strong></td><td class="mono">10.6 µm</td><td>Common, cuts wood, acrylic, leather.</td></tr>
+        <tr><td><strong>Fiber</strong></td><td class="mono">1064 nm</td><td>For metals, industrial applications.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Different lasers interact with different materials. Section 15 shows why.</p>
+
+  <h3>How laser cutters work</h3>
+  <ul>
+    <li>Focused beam vaporizes or burns material.</li>
+    <li>Controlled by mirrors, lenses, and stepper motors.</li>
+    <li>Engraving = shallow burn, Cutting = full penetration.</li>
+  </ul>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Beam path in a CO₂ laser</div>
+    <div class="svg-scroll">
+      <svg viewBox="0 0 680 300" style="min-width:540px" role="img" aria-label="Beam leaves the laser tube, turns at three mirrors, passes through a focusing lens in the head, and focuses on the material. A shallow engrave and a full cut are shown in the material.">
+        <rect x="20" y="40" width="270" height="36" rx="18" fill="var(--card2)" stroke="var(--cyan)" stroke-width="2"/>
+        <text x="155" y="63" fill="var(--ink)" font-size="13" font-weight="700" text-anchor="middle">Laser tube</text>
+        <line x1="290" y1="58" x2="340" y2="58" stroke="var(--red)" stroke-width="3"/>
+        <line x1="340" y1="58" x2="340" y2="140" stroke="var(--red)" stroke-width="3"/>
+        <line x1="340" y1="140" x2="560" y2="140" stroke="var(--red)" stroke-width="3"/>
+        <line x1="560" y1="140" x2="560" y2="194" stroke="var(--red)" stroke-width="3"/>
+        <line x1="327" y1="45" x2="353" y2="71" stroke="var(--ink)" stroke-width="5"/>
+        <line x1="327" y1="153" x2="353" y2="127" stroke="var(--ink)" stroke-width="5"/>
+        <line x1="547" y1="127" x2="573" y2="153" stroke="var(--ink)" stroke-width="5"/>
+        <text x="362" y="52" fill="var(--txt-muted)" font-size="12">Mirror 1</text>
+        <text x="270" y="166" fill="var(--txt-muted)" font-size="12">Mirror 2 (rides the gantry)</text>
+        <rect x="528" y="114" width="64" height="96" rx="6" fill="none" stroke="var(--txt-dim)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="600" y="128" fill="var(--txt-muted)" font-size="12">Head</text>
+        <text x="600" y="143" fill="var(--txt-muted)" font-size="12">Mirror 3</text>
+        <ellipse cx="560" cy="196" rx="20" ry="6" fill="var(--card2)" stroke="var(--cyan)" stroke-width="2"/>
+        <text x="600" y="200" fill="var(--txt-muted)" font-size="12">Lens</text>
+        <line x1="546" y1="199" x2="560" y2="244" stroke="var(--red)" stroke-width="2"/>
+        <line x1="574" y1="199" x2="560" y2="244" stroke="var(--red)" stroke-width="2"/>
+        <rect x="380" y="244" width="280" height="30" fill="var(--card2)" stroke="var(--orange)" stroke-width="2"/>
+        <rect x="420" y="244" width="56" height="7" fill="var(--txt-dim)"/>
+        <rect x="557" y="244" width="6" height="30" fill="var(--bg)"/>
+        <text x="448" y="292" fill="var(--txt-muted)" font-size="12" text-anchor="middle">Engrave: shallow</text>
+        <text x="600" y="292" fill="var(--txt-muted)" font-size="12" text-anchor="middle">Cut: through</text>
+        <text x="330" y="264" fill="var(--txt-muted)" font-size="12" text-anchor="end">Material</text>
+        <text x="20" y="206" fill="var(--txt-dim)" font-size="12">Stepper motors move the gantry and head.</text>
+        <text x="20" y="222" fill="var(--txt-dim)" font-size="12">The mirrors keep the beam lined up</text>
+        <text x="20" y="238" fill="var(--txt-dim)" font-size="12">wherever the head goes.</text>
+      </svg>
+    </div>
+  </div>
+  <div class="callout callout-data">
+    <div class="callout-icon">Focus sets the cut</div>
+    The lens brings the beam to its smallest spot at the focal distance. Set the material surface at that distance for the narrowest cut (kerf, often around 0.1–0.2 mm on a CO₂). Out of focus, the spot spreads out, so cuts get wider and may not go through.
+  </div>
+  <p class="ctl-hint">Diode and fiber machines usually put the laser source right in the head or deliver it through a fiber cable, so they skip the mirror chain.</p>
+</section>
+
+<section class="section" id="s17">
+  <div class="section-header"><span class="section-num">17</span><div><h2 class="section-title">Cut, Engrave &amp; Machine Needs</h2></div></div>
+  <div class="two-col">
+    <div>
+      <h3 style="margin-top:0">What they can cut</h3>
+      <ul>
+        <li><strong>CO₂:</strong> Wood, acrylic, leather, cardboard.</li>
+        <li><strong>Fiber:</strong> Metals.</li>
+        <li><strong>Diode:</strong> Thin dark materials, paper, leather.</li>
+      </ul>
+      <p><span class="pill">Wood</span><span class="pill">Acrylic</span><span class="pill">Leather</span><span class="pill">Cardboard</span><span class="pill">Metal*</span></p>
+      <p class="ctl-hint">*with fiber laser or marking coating</p>
+    </div>
+    <div>
+      <h3 style="margin-top:0">What they can engrave</h3>
+      <p>Wood, acrylic, anodized aluminum, coated metals, leather, glass (with coatings).</p>
+      <p>Engraving changes the surface. <strong>Engrave = surface mark, not full cut.</strong></p>
+      <p class="ctl-hint">CO₂ lasers frost bare glass directly. Diode and fiber lasers need a coating or marking paste to mark glass.</p>
+    </div>
+  </div>
+
+  <h3>What laser cutters need</h3>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Exhaust</div><div class="card-body">Ventilation/exhaust system. Pulls smoke and fumes out of the machine and the room.</div></div>
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">Air assist</div><div class="card-body">Air assist for clean cuts. Blows smoke and flame away from the cut, so there is less charring and fewer flare-ups.</div></div>
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">Clean optics</div><div class="card-body">Optics cleaning and focus alignment. A dirty lens absorbs power, heats up, and can crack.</div></div>
+    <div class="card" style="--card-accent:var(--yellow)"><div class="card-title">Focus + settings</div><div class="card-body">Proper power settings and calibration. Run a small test grid on new material before the real job.</div></div>
+  </div>
+</section>
+
+<section class="section" id="s18">
+  <div class="section-header"><span class="section-num">18</span><div><h2 class="section-title">Toxic Materials &amp; Safety</h2></div></div>
+  <div class="callout callout-danger">
+    <div class="callout-icon">Toxic or unsafe materials</div>
+    Never cut PVC, vinyl, ABS, polycarbonate, fiberglass, or unknown plastics. Polycarbonate melts instead of vaporizing. They release toxic gases or damage optics.
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Material</th><th>What goes wrong</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PVC / vinyl</strong></td><td>Releases chlorine compounds (hydrochloric acid in the air). Harmful to breathe and corrodes the machine's metal parts and optics.</td></tr>
+        <tr><td><strong>ABS</strong></td><td>Melts into gooey edges and gives off toxic fumes, including hydrogen cyanide.</td></tr>
+        <tr><td><strong>Polycarbonate</strong></td><td>Melts and catches fire instead of vaporizing. Edges turn yellow and black.</td></tr>
+        <tr><td><strong>Fiberglass</strong></td><td>Burning epoxy fumes plus glass fibers that do not cut cleanly.</td></tr>
+        <tr><td><strong>Unknown plastics</strong></td><td>No way to know which of the above it is.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-warn">
+    <div class="callout-icon">When in doubt</div>
+    Do not cut until identified. Polycarbonate (Lexan) is common in robotics, so it shows up in scrap bins. Cut it with a router, saw, or shear instead.
+  </div>
+  <div class="interactive-wrap" id="int-material">
+    <div class="interactive-title">// Can I laser this? · pick a material</div>
+    <div class="mat-grid" id="matGrid" role="group" aria-label="Materials"></div>
+    <div class="mat-result" id="matResult" aria-live="polite"></div>
+    <p class="ctl-hint">General guidance for hobby and school machines. Your shop's material list and the machine's manual come first.</p>
+  </div>
+  <h3>Laser cutter safety</h3>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--red)"><div class="card-title">Monitor</div><div class="card-body">Always monitor while cutting.</div></div>
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Exhaust + extinguisher</div><div class="card-body">Use proper exhaust and fire extinguisher.</div></div>
+    <div class="card" style="--card-accent:var(--yellow)"><div class="card-title">Glasses</div><div class="card-body">Wear safety glasses for open-frame lasers, rated for that laser's wavelength.</div></div>
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">Test cut</div><div class="card-body">Test materials before full cuts.</div></div>
+  </div>
+  <div class="callout callout-danger">
+    <div class="callout-icon">Watch the job + keep fire controls ready</div>
+    A laser cut is a controlled fire. Flare-ups happen in seconds, especially on slow cuts, thick wood, and paper. Never walk away from a running job.
+  </div>
+</section>
+
+<section class="section" id="s19">
+  <div class="section-header"><span class="section-num">19</span><div><h2 class="section-title">Laser Cut Lines &amp; Color</h2></div></div>
+  <h3>Defining laser cut lines</h3>
+  <ul>
+    <li>Set line width to hairline for laser cutting.</li>
+    <li>When you print from CorelDRAW or Illustrator to our Universal Laser Systems driver (and Epilog's), a hairline stroke tells the laser it's a vector cut, not an engraving.</li>
+    <li>Use color to define operations. Different colors = different power/speed passes.</li>
+  </ul>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Hairline + color = laser operation</div>
+    <div class="svg-scroll">
+      <svg viewBox="0 0 660 210" style="min-width:500px" role="img" aria-label="Red hairline circle is a vector cut, blue hairline star is a vector engrave, black filled square is raster engraved line by line">
+        <circle cx="110" cy="90" r="60" fill="none" stroke="#FF0000" stroke-width="1.5"/>
+        <polygon points="330,30 345,72 390,72 353,98 367,142 330,116 293,142 307,98 270,72 315,72" fill="none" stroke="#0000FF" stroke-width="1.5"/>
+        <rect x="490" y="32" width="116" height="116" fill="var(--ink)"/>
+        <g stroke="var(--bg)" stroke-width="1" opacity=".5">
+          <line x1="490" y1="44" x2="606" y2="44"/><line x1="490" y1="56" x2="606" y2="56"/><line x1="490" y1="68" x2="606" y2="68"/><line x1="490" y1="80" x2="606" y2="80"/><line x1="490" y1="92" x2="606" y2="92"/><line x1="490" y1="104" x2="606" y2="104"/><line x1="490" y1="116" x2="606" y2="116"/><line x1="490" y1="128" x2="606" y2="128"/><line x1="490" y1="140" x2="606" y2="140"/>
+        </g>
+        <text x="110" y="180" fill="var(--ink)" font-size="14" font-weight="700" text-anchor="middle">Vector Cut</text>
+        <text x="110" y="198" fill="var(--txt-muted)" font-size="12" text-anchor="middle">red hairline · cuts through</text>
+        <text x="330" y="180" fill="var(--ink)" font-size="14" font-weight="700" text-anchor="middle">Vector Engrave</text>
+        <text x="330" y="198" fill="var(--txt-muted)" font-size="12" text-anchor="middle">blue hairline · low power score</text>
+        <text x="548" y="180" fill="var(--ink)" font-size="14" font-weight="700" text-anchor="middle">Raster Engrave</text>
+        <text x="548" y="198" fill="var(--txt-muted)" font-size="12" text-anchor="middle">filled shape · scanned line by line</text>
+      </svg>
+    </div>
+  </div>
+  <p>Red for cut and blue for score is a common shop convention, not a rule. Your shop's color chart is what counts.</p>
+
+  <h3>Hairline depends on the software</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Software</th><th>How it picks cut, score, or engrave</th><th>Line width matters?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Universal Laser Systems</strong> (our machine)</td><td>Print driver. Hairline strokes run as vectors; fills and thick lines raster. Each color gets its own power and speed in the driver's color settings.</td><td><span class="tag tag-req">Yes</span></td></tr>
+        <tr><td><strong>Epilog</strong></td><td>Print driver. Hairline (about 0.001 in) runs as vector; everything else rasters. Color mapping is optional.</td><td><span class="tag tag-req">Yes</span></td></tr>
+        <tr><td><strong>LightBurn</strong></td><td>Each color is a layer. You set each layer's mode (line, fill, image), power, and speed.</td><td><span class="tag tag-no">No</span></td></tr>
+        <tr><td><strong>Glowforge</strong></td><td>Groups the design by color into steps. You pick cut, score, or engrave for each step.</td><td><span class="tag tag-no">No</span></td></tr>
+        <tr><td><strong>xTool Creative Space</strong></td><td>You pick cut, score, or engrave for each object or layer. Imported colors can become layers.</td><td><span class="tag tag-no">No</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Understanding color spaces</h3>
+  <div class="two-col">
+    <ul>
+      <li><strong>RGB color space:</strong> Red, Green, Blue (light-based).</li>
+      <li>For full red: R = 255, G = 0, B = 0 → Hex: <code>#FF0000</code></li>
+      <li>Hexadecimal system: base-16 counting (0–9, A–F).</li>
+      <li><code>#FF0000</code> = 255 red intensity, 0 green, 0 blue.</li>
+    </ul>
+    <ul>
+      <li><strong>8-bit color depth:</strong> each RGB channel uses 8 bits (0–255 values).</li>
+      <li>256³ = 16,777,216 possible colors.</li>
+      <li><strong>RGB vs CMYK:</strong> RGB = additive (used for screens, light). CMYK = subtractive (used for print).</li>
+    </ul>
+  </div>
+  <div class="callout callout-warn">
+    <div class="callout-icon">CMYK files break color mapping</div>
+    An Illustrator document set to CMYK can turn pure red into something like <code>#ED1C24</code> when it prints, which no longer matches the laser's red setting. Set laser files to RGB color mode. Sections 20 and 21 cover what these hex numbers mean.
+  </div>
+</section>
+
+<section class="section" id="s20">
+  <div class="section-header"><span class="section-num">20</span><div><h2 class="section-title">Binary, Decimal &amp; Hex</h2></div></div>
+  <p>Hex codes like <code>#FF0000</code> are numbers written in base 16. To read them, start with how counting works in any base.</p>
+  <div class="callout callout-tip">
+    <div class="callout-icon">The rollover rule</div>
+    When a position goes past its largest digit, it resets to 0 and bumps the position on its left by one. It's the same rule as a car odometer and the printed binary counter. Only the largest digit changes between bases, so in every base, "10" means the base itself.
+  </div>
+  <div class="spec-grid">
+    <div class="spec-box"><div class="spec-val">1 + 1 = 10</div><div class="spec-unit">largest digit 1</div><div class="spec-name">Binary · base 2</div></div>
+    <div class="spec-box"><div class="spec-val">9 + 1 = 10</div><div class="spec-unit">largest digit 9</div><div class="spec-name">Decimal · base 10</div></div>
+    <div class="spec-box"><div class="spec-val">F + 1 = 10</div><div class="spec-unit">largest digit F (15)</div><div class="spec-name">Hex · base 16</div></div>
+  </div>
+  <p>Each position is worth the base times the position to its right. In binary that's 1, 2, 4, 8 … 128. In hex it's 1, 16, 256. One binary digit is a <strong>bit</strong>; eight bits make a <strong>byte</strong>, which holds 0 to 255. Four bits make exactly one hex digit, so a byte is always two hex digits.</p>
+  <div class="interactive-wrap" id="int-odometer">
+    <div class="interactive-title">// Base odometer · one count, three ways</div>
+    <div class="ctl-row" style="margin-top:0">
+      <div class="ctl-group"><span class="ctl-label" id="lbl-display">Display</span>
+        <div class="seg-ctl" role="group" aria-labelledby="lbl-display" id="themeCtl">
+          <button type="button" data-v="classic">Classic</button><button type="button" data-v="red">Red LED</button><button type="button" data-v="green">Green LED</button><button type="button" data-v="lcd">LCD</button><button type="button" data-v="modern">Modern</button>
+        </div></div>
+      <div class="ctl-group"><span class="ctl-label" id="lbl-group">Group bits in 4s</span>
+        <div class="seg-ctl" role="group" aria-labelledby="lbl-group" id="groupCtl">
+          <button type="button" data-v="off">Off</button><button type="button" data-v="hex">On · hex</button>
+        </div></div>
+      <div class="ctl-group"><span class="ctl-label" id="lbl-place">Place values</span>
+        <div class="seg-ctl" role="group" aria-labelledby="lbl-place" id="placeCtl">
+          <button type="button" data-v="num">Numbers</button><button type="button" data-v="pow">Powers</button>
+        </div></div>
+    </div>
+    <div class="cluster" id="cluster" data-odo="classic" role="group" aria-label="Odometer">
+      <div class="cl-head">
+        <span class="cl-title">8-bit counter · 0 to 255</span>
+        <span class="lamp-wrap"><span class="lamp-note" id="lampNote"></span><span class="lamp" id="lamp">Overflow</span></span>
+      </div>
+      <div class="rows" id="rows"></div>
+    </div>
+    <p class="sr" id="odoLive" aria-live="polite"></p>
+    <div class="ctl-row">
+      <button type="button" class="ctl-btn primary" id="odoInc">Flip +1</button>
+      <button type="button" class="ctl-btn" id="odoDec">−1</button>
+      <button type="button" class="ctl-btn" id="odoPlay" aria-pressed="false">Auto-count</button>
+      <label class="speed" for="speed">Speed <input type="range" id="speed" min="0" max="5" step="1" value="2"><output id="speedOut" for="speed">2/s</output></label>
+      <button type="button" class="ctl-btn" id="odoReset">Reset</button>
+    </div>
+    <form class="ctl-row" id="setForm" novalidate>
+      <label class="ctl-label" for="setValue">Set value</label>
+      <input class="ctl-input" id="setValue" type="text" autocomplete="off" spellcheck="false" placeholder="FF" aria-describedby="setMsg">
+      <label class="sr" for="setBase">Written in</label>
+      <select class="ctl-select" id="setBase"><option value="16">hex (base 16)</option><option value="10">decimal (base 10)</option><option value="2">binary (base 2)</option></select>
+      <button type="submit" class="ctl-btn">Set</button>
+      <p class="ctl-msg" id="setMsg" role="status"></p>
+    </form>
+    <p class="ctl-hint">Click any wheel to add its place value (Shift-click subtracts). With focus inside this box: <kbd>Space</kbd> or <kbd>↑</kbd> flip +1 · <kbd>↓</kbd> −1 · <kbd>P</kbd> auto-count · <kbd>R</kbd> reset · <kbd>T</kbd> next display.</p>
+  </div>
+  <h4>Try this</h4>
+  <ol>
+    <li>Set <strong>1</strong>, then flip. The binary ones wheel rolls from 1 to 0 and bumps its neighbor, so 01 becomes 10.</li>
+    <li>Set <strong>15</strong>, then flip. Four binary wheels roll at once, and hex goes from 0F to 10 at the same moment.</li>
+    <li>Turn on <strong>Group bits</strong>. Each group of four binary wheels spells exactly one hex digit.</li>
+    <li>Click the <strong>128</strong> wheel. One click on a high position adds its whole place value.</li>
+    <li>Set <strong>255</strong>, then flip. Binary and hex run out of wheels, so the count overflows to 0.</li>
+  </ol>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Base</th><th>Digits</th><th>Places (right to left)</th><th>255 is</th><th>Where you see it</th></tr></thead>
+      <tbody>
+        <tr><td>2 · binary</td><td class="mono">0 1</td><td class="mono">1 2 4 8 … 128</td><td class="mono">11111111</td><td>Logic and data. Every bit is a switch: on or off.</td></tr>
+        <tr><td>10 · decimal</td><td class="mono">0–9</td><td class="mono">1 10 100</td><td class="mono">255</td><td>Everyday counting.</td></tr>
+        <tr><td>16 · hex</td><td class="mono">0–9 A–F</td><td class="mono">1 16</td><td class="mono">FF</td><td>Color codes and memory addresses.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="s21">
+  <div class="section-header"><span class="section-num">21</span><div><h2 class="section-title">Color Is Three Bytes</h2></div></div>
+  <p>A screen color stores red, green, and blue as one byte each. A hex code is those three bytes written as six hex digits: <code>#FF0000</code> is <code>FF</code> red, <code>00</code> green, <code>00</code> blue, the same as <code>rgb(255, 0, 0)</code>.</p>
+  <div class="interactive-wrap" id="int-color">
+    <div class="interactive-title">// Color mixer · drag the picker, slide a channel, or click a wheel</div>
+    <div class="cluster color-cluster" id="colorCluster" data-odo="classic" role="group" aria-label="Color mixer">
+      <div class="cl-head"><span class="cl-title">24-bit color · 8 bits per channel</span></div>
+      <div class="color-grid">
+        <div class="color-left">
+          <div class="picker" id="picker" aria-hidden="true">
+            <div class="sv" id="sv"><div class="sv-w"></div><div class="sv-b"></div><span class="handle" id="svHandle"></span></div>
+            <div class="hue" id="hue"><span class="handle" id="hueHandle"></span></div>
+          </div>
+          <div class="swatch" id="swatch" role="img"></div>
+          <div class="codes">
+            <span class="code-cap">Hex code</span><div class="code-hex" id="codeHex"></div>
+            <span class="code-cap">RGB</span><div class="code-rgb" id="codeRgb"></div>
+            <span class="code-cap">All 24 bits</span><div class="bits24" id="bits24"></div>
+          </div>
+        </div>
+        <div class="ch-list" id="chList"></div>
+      </div>
+    </div>
+    <div class="ctl-row">
+      <div class="ctl-group"><span class="ctl-label">Presets</span>
+        <div class="ctl-row" style="margin:0;gap:6px">
+          <button type="button" class="ctl-btn preset" data-hex="FF0000" style="--sw:#FF0000">Red</button>
+          <button type="button" class="ctl-btn preset" data-hex="00FF00" style="--sw:#00FF00">Green</button>
+          <button type="button" class="ctl-btn preset" data-hex="0000FF" style="--sw:#0000FF">Blue</button>
+          <button type="button" class="ctl-btn preset" data-hex="FFFF00" style="--sw:#FFFF00">Yellow</button>
+          <button type="button" class="ctl-btn preset" data-hex="FF8000" style="--sw:#FF8000">Orange</button>
+          <button type="button" class="ctl-btn preset" data-hex="808080" style="--sw:#808080">Gray</button>
+          <button type="button" class="ctl-btn preset" data-hex="FFFFFF" style="--sw:#FFFFFF">White</button>
+          <button type="button" class="ctl-btn preset" data-hex="000000" style="--sw:#000000">Black</button>
+        </div></div>
+      <div class="ctl-group"><span class="ctl-label">Send odometer value <span id="sendVal">0</span> to</span>
+        <div class="seg-ctl" id="sendCtl"><button type="button" data-ch="0">Red</button><button type="button" data-ch="1">Green</button><button type="button" data-ch="2">Blue</button></div></div>
+    </div>
+  </div>
+  <h3>Why 8 bits per channel</h3>
+  <div class="cards">
+    <div class="card" style="--card-accent:var(--red)"><div class="card-title">One channel is one byte</div><div class="card-body">8 bits give 2<sup>8</sup> = 256 levels, numbered 0 to 255. The same byte the odometer rolls through.</div></div>
+    <div class="card" style="--card-accent:var(--green)"><div class="card-title">One byte is two hex digits</div><div class="card-body">16 × 16 = 256, so FF is 255. Six hex digits hold all three channels.</div></div>
+    <div class="card" style="--card-accent:var(--cyan)"><div class="card-title">Three channels, 24 bits</div><div class="card-body">256 × 256 × 256 = 16,777,216 colors.</div></div>
+    <div class="card" style="--card-accent:var(--yellow)"><div class="card-title">Why stop at 8?</div><div class="card-body">Computers store data in bytes, and 256 steps is fine enough that neighboring shades are hard to tell apart. Smooth gradients can still show bands, which is why HDR video uses 10 bits (1,024 levels) per channel.</div></div>
+    <div class="card" style="--card-accent:var(--orange)"><div class="card-title">Light adds up</div><div class="card-body">All three at 255 is white, all at 0 is black. Red plus green light makes yellow.</div></div>
+    <div class="card" style="--card-accent:var(--purple)"><div class="card-title">Naming trap</div><div class="card-body">"24-bit color" and "8 bits per channel" mean the same thing. Old "8-bit color" used one byte for the whole color: only 256 colors total.</div></div>
+  </div>
+
+  <h3>Laser check: one bit off</h3>
+  <div class="laser-pair">
+    <div class="laser-tile"><div class="laser-sw" style="background:#FF0000"></div><b>#FF0000</b><span>rgb(255, 0, 0)</span><span>red byte 1111111<span class="diff">1</span></span></div>
+    <div class="laser-tile"><div class="laser-sw" style="background:#FE0000"></div><b>#FE0000</b><span>rgb(254, 0, 0)</span><span>red byte 1111111<span class="diff">0</span></span></div>
+  </div>
+  <p>These differ by one bit and look identical on screen. Software that assigns settings by exact color, like a print driver's color mapping, treats <code>#FE0000</code> as a different color, so that line can be skipped or cut with the wrong power. Some programs snap to the nearest color instead, so check what yours does.</p>
+  <div class="ctl-row">
+    <button type="button" class="ctl-btn" data-hex="FF0000">Load #FF0000</button>
+    <button type="button" class="ctl-btn" data-hex="FE0000">Load #FE0000</button>
+  </div>
+</section>
+
+<section class="section" id="s22">
+  <div class="section-header"><span class="section-num">22</span><div><h2 class="section-title">Review Quiz</h2></div></div>
+  <p>Twenty questions across the whole lecture. Think of your answer, reveal it, then mark whether you got it. Missed cards come back at the end.</p>
+  <div class="interactive-wrap" id="int-quiz">
+    <div class="interactive-title">// Flashcard quiz</div>
+    <div class="quiz-bar"><div class="quiz-fill" id="qFill" style="width:0%"></div></div>
+    <div class="quiz-meta" id="qMeta"></div>
+    <div class="quiz-q" id="qQ" aria-live="polite"></div>
+    <div class="quiz-a" id="qA" hidden></div>
+    <div class="ctl-row">
+      <button type="button" class="ctl-btn primary" id="qReveal">Reveal answer</button>
+      <button type="button" class="ctl-btn" id="qGot" hidden>Got it</button>
+      <button type="button" class="ctl-btn" id="qMiss" hidden>Missed it</button>
+      <button type="button" class="ctl-btn" id="qRestart">Start over</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div>DIGITAL FAB // REVIEW &nbsp;·&nbsp; CNC, 3D printing, laser cutting, number systems &nbsp;·&nbsp; Educational Reference</div>
+  <div class="footer-right">
+    Source: Digital Fabrication lecture deck (Sam Cao)<br>
+    Review sheet edition of the lecture
+  </div>
+  <div style="width:100%;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--txt-dim);">
+    AI-assisted draft with human editorial review &nbsp;&middot;&nbsp; Errors may exist &nbsp;&middot;&nbsp; Verify critical information from authoritative sources before relying on it.
+  </div>
+</footer>
+
+</main>
+</div>
+
+<a href="#" class="back-top" id="backTop" aria-label="Back to top">↑</a>
+
+<script>
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.sidebar nav a');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.sidebar nav a[href="#${entry.target.id}"]`);
+      if (active) { active.classList.add('active'); active.scrollIntoView({ block: 'nearest' }); }
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+navLinks.forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const id = a.getAttribute('href').replace('#', '');
+    const target = document.getElementById(id);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => { backTop.classList.toggle('visible', window.scrollY > 400); });
+backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+(function(){
+  const root = document.documentElement;
+  const KEY = 'digifab-mode';
+  function setMode(m){
+    if(m !== 'present') m = 'study';
+    root.setAttribute('data-mode', m);
+    try{ localStorage.setItem(KEY, m); }catch(e){}
+  }
+  document.querySelectorAll('[data-mode-btn]').forEach(btn => {
+    btn.addEventListener('click', () => setMode(btn.getAttribute('data-mode-btn')));
+  });
+  document.addEventListener('keydown', e => {
+    const t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.key === 'm' || e.key === 'M'){
+      setMode(root.getAttribute('data-mode') === 'present' ? 'study' : 'present');
+    }
+  });
+})();
+</script>
+<script>
+/* ── Odometer + color mixer (sections 20 and 21) ───────────────── */
+(function(){
+  'use strict';
+  var SYM = '0123456789ABCDEF', MAX = 256;
+  var BASES = [
+    {b:2,  tag:'BIN', sub:'base 2<i class="br"></i>digits 0–1',  n:8, name:'Binary'},
+    {b:10, tag:'DEC', sub:'base 10<i class="br"></i>digits 0–9', n:3, name:'Decimal'},
+    {b:16, tag:'HEX', sub:'base 16<i class="br"></i>digits 0–F', n:2, name:'Hex'}
+  ];
+  var THEMES = {classic:'drum', red:'seg', green:'seg', lcd:'seg', modern:'drum'};
+  var THEME_ORDER = ['classic','red','green','lcd','modern'];
+  var RATES = [0.5, 1, 2, 4, 8, 16];
+  var GCOL = ['var(--g0)','var(--g1)'];
+  var CH = [{k:'R',name:'red',col:'#ff5a52',cls:'c-r'},{k:'G',name:'green',col:'#3ddc6a',cls:'c-g'},{k:'B',name:'blue',col:'#4c8dff',cls:'c-b'}];
+  function sget(k, d){ try{ var v = localStorage.getItem('digifab-odo-' + k); return v == null ? d : v; }catch(e){ return d; } }
+  function sset(k, v){ try{ localStorage.setItem('digifab-odo-' + k, v); }catch(e){} }
+
+  var value = 0, rgb = [255, 0, 0], hsv = {h:0, s:1, v:1};
+  var theme = sget('theme', 'classic'); if(!THEMES[theme]) theme = 'classic';
+  var grouping = sget('group', 'off'); if(grouping !== 'hex') grouping = 'off';
+  var placeMode = sget('place', 'num'); if(placeMode !== 'pow') placeMode = 'num';
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var playing = false, timer = null, rateIdx = 2, lampTimer = null;
+  function $(id){ return document.getElementById(id); }
+  var cluster = $('cluster'), colorCluster = $('colorCluster'), rowsEl = $('rows'), chList = $('chList');
+  var lamp = $('lamp'), lampNote = $('lampNote'), live = $('odoLive'), sendVal = $('sendVal');
+  var rows = [], chRows = [];
+
+  function el(tag, cls){ var e = document.createElement(tag); if(cls) e.className = cls; return e; }
+  function digitsOf(v, b, n){ var out = []; for(var i = 0; i < n; i++){ out.unshift(v % b); v = Math.floor(v / b); } return out; }
+  function pow(b, e){ return Math.pow(b, e); }
+  function wrap(v){ return ((v % MAX) + MAX) % MAX; }
+  function hex2(v){ return SYM[v >> 4] + SYM[v & 15]; }
+  function bin8(v){ return digitsOf(v, 2, 8).join(''); }
+  function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
+
+  /* Seven-segment digit geometry */
+  var T = 10, H = T / 2, G = 1.6;
+  function hseg(cx, cy, L){ return [[cx-L/2,cy],[cx-L/2+H,cy-H],[cx+L/2-H,cy-H],[cx+L/2,cy],[cx+L/2-H,cy+H],[cx-L/2+H,cy+H]]; }
+  function vseg(cx, cy, L){ return [[cx,cy-L/2],[cx+H,cy-L/2+H],[cx+H,cy+L/2-H],[cx,cy+L/2],[cx-H,cy+L/2-H],[cx-H,cy-L/2+H]]; }
+  var X0 = 8, X1 = 52, Y0 = 8, Y1 = 50, Y2 = 92;
+  var SEGS = {a:hseg(30,Y0,X1-X0-2*G), b:vseg(X1,(Y0+Y1)/2,Y1-Y0-2*G), c:vseg(X1,(Y1+Y2)/2,Y2-Y1-2*G), d:hseg(30,Y2,X1-X0-2*G), e:vseg(X0,(Y1+Y2)/2,Y2-Y1-2*G), f:vseg(X0,(Y0+Y1)/2,Y1-Y0-2*G), g:hseg(30,Y1,X1-X0-2*G)};
+  var SEGMAP = ['abcdef','bc','abdeg','abcdg','bcfg','acdfg','acdefg','abc','abcdefg','abcdfg','abcefg','cdefg','adef','bcdeg','adefg','aefg'];
+  var SEG_SVG = (function(){
+    var s = '<svg viewBox="0 0 66 100" aria-hidden="true" focusable="false"><g transform="translate(8 0) skewX(-6)">';
+    'abcdefg'.split('').forEach(function(k){ s += '<polygon data-s="' + k + '" points="' + SEGS[k].map(function(p){ return p[0].toFixed(2) + ',' + p[1].toFixed(2); }).join(' ') + '"/>'; });
+    return s + '</g></svg>';
+  })();
+
+  function placeStrip(w, idx, animate, dur){
+    w.strip.style.transition = animate ? 'transform ' + dur + 'ms cubic-bezier(.25,.8,.25,1)' : 'none';
+    w.strip.style.transform = 'translateY(calc(' + (-idx) + ' * var(--dh)))';
+    if(!animate) void w.strip.offsetHeight;
+  }
+  function showSeg(w, d){ var on = SEGMAP[d]; for(var i = 0; i < w.polys.length; i++){ var p = w.polys[i]; p.classList.toggle('on', on.indexOf(p.getAttribute('data-s')) >= 0); } }
+  function flash(w){ if(reduceMotion) return; w.el.classList.remove('flash'); void w.el.offsetWidth; w.el.classList.add('flash'); }
+  function makeWheel(kind, b, n, p, d, label){
+    var btn = el('button', 'wheel' + (p === n - 1 ? ' ones' : '')); btn.type = 'button';
+    var pv = pow(b, n - 1 - p);
+    btn.setAttribute('aria-label', label + ' ' + pv + 's place. Click to add ' + pv + '.');
+    btn.title = 'Click: +' + pv + '    Shift-click: −' + pv;
+    var w = {el:btn, kind:kind, b:b, shown:d, target:d, timers:[], snapTo:null};
+    if(kind === 'drum'){
+      var strip = el('span', 'strip');
+      for(var i = 0; i <= b; i++){ var c = el('span', 'cell'); c.textContent = SYM[i % b]; strip.appendChild(c); }
+      btn.appendChild(strip); w.strip = strip; placeStrip(w, d, false);
+    } else { btn.innerHTML = SEG_SVG; w.polys = btn.querySelectorAll('polygon'); showSeg(w, d); }
+    return w;
+  }
+  function setDigit(w, d, dir, delay, dur){
+    w.timers.forEach(clearTimeout); w.timers = [];
+    if(w.snapTo != null){ placeStrip(w, w.snapTo, false); w.snapTo = null; }
+    w.target = d;
+    function run(){
+      var from = w.shown; if(from === d) return; w.shown = d;
+      if(w.kind === 'seg'){ showSeg(w, d); flash(w); return; }
+      if(dur === 0){ placeStrip(w, d, false); return; }
+      var b = w.b;
+      if(dir > 0 && d === 0 && from === b - 1){
+        placeStrip(w, b, true, dur); w.snapTo = 0;
+        w.timers.push(setTimeout(function(){ placeStrip(w, 0, false); w.snapTo = null; }, dur + 20));
+      } else if(dir < 0 && d === b - 1 && from === 0){ placeStrip(w, b, false); placeStrip(w, b - 1, true, dur); }
+      else placeStrip(w, d, true, dur);
+    }
+    if(delay > 0) w.timers.push(setTimeout(run, delay)); else run();
+  }
+  function timing(fast){
+    if(reduceMotion) return {dur:0, stagger:0};
+    if(fast) return {dur:110, stagger:16};
+    var iv = playing ? 1000 / RATES[rateIdx] : 420;
+    return {dur:Math.max(40, Math.min(300, iv * 0.7)), stagger:Math.min(95, iv * 0.15)};
+  }
+  function rollRow(row, v, dir, t){
+    var nd = digitsOf(v, row.b, row.n), k = 0;
+    for(var p = row.n - 1; p >= 0; p--){ var w = row.wheels[p]; if(nd[p] !== w.target){ setDigit(w, nd[p], dir, k * t.stagger, t.dur); k++; } }
+  }
+
+  /* Main counter */
+  function groupsFor(B){ var all = []; for(var i = 0; i < B.n; i++) all.push(i); if(B.b !== 2 || grouping === 'off') return [all]; return [[0,1,2,3],[4,5,6,7]]; }
+  function placeLabel(b, e){ return placeMode === 'pow' ? b + '<sup>' + e + '</sup>' : String(pow(b, e)); }
+  function sumHTML(row){
+    var d = digitsOf(value, row.b, row.n);
+    return d.map(function(x, p){
+      var pv = pow(row.b, row.n - 1 - p);
+      return '<span class="term' + (x ? '' : ' zero') + '">' + SYM[x] + (x > 9 ? '<small>(' + x + ')</small>' : '') + '×' + pv + '</span>';
+    }).join('<span class="plus">+</span>') + '<span class="eq">= ' + value + '</span>';
+  }
+  function updateBrackets(){ rows.forEach(function(row){ if(!row.bkLabels) return; var d = digitsOf(value, 16, 2); row.bkLabels.forEach(function(lab, gi){ lab.textContent = '= ' + SYM[d[gi]]; }); }); }
+  function buildMain(kind){
+    rowsEl.innerHTML = ''; rows = [];
+    BASES.forEach(function(B, ri){
+      var row = {b:B.b, n:B.n, wheels:[], bkLabels:null};
+      var rowEl = el('div', 'row'), lab = el('div', 'row-label');
+      lab.innerHTML = '<span class="row-tag">' + B.tag + '</span><span class="row-sub">' + B.sub + '</span>';
+      var main = el('div', 'row-main'), slot = el('div', 'slot'), places = el('div', 'places');
+      var groups = groupsFor(B), digs = digitsOf(value, B.b, B.n), linked = grouping === 'hex' && B.b === 16, brackets = null;
+      if(groups.length > 1){ brackets = el('div', 'brackets'); row.bkLabels = []; }
+      groups.forEach(function(g, gi){
+        var sg = el('div', 'grp'), pg = el('div', 'grp');
+        g.forEach(function(p){
+          var w = makeWheel(kind, B.b, B.n, p, digs[p], B.name);
+          if(linked){ w.el.classList.add('linked'); w.el.style.setProperty('--g', GCOL[p]); }
+          w.el.addEventListener('click', function(e){ var s = e.shiftKey ? -1 : 1; update(value + s * pow(B.b, B.n - 1 - p), s); });
+          sg.appendChild(w.el); row.wheels[p] = w;
+          var pl = el('div', 'place'); pl.innerHTML = placeLabel(B.b, B.n - 1 - p); pg.appendChild(pl);
+        });
+        slot.appendChild(sg); places.appendChild(pg);
+        if(brackets){
+          var bk = el('div', 'bracket'); bk.style.setProperty('--k', g.length); bk.style.setProperty('--g', GCOL[gi]);
+          var line = el('span', 'bk-line'), txt = el('span', 'bk-label'); bk.appendChild(line); bk.appendChild(txt);
+          brackets.appendChild(bk); row.bkLabels.push(txt);
+        }
+      });
+      var sum = el('div', 'sum'); row.sumEl = sum; sum.innerHTML = sumHTML(row);
+      main.appendChild(slot); main.appendChild(places); if(brackets) main.appendChild(brackets); main.appendChild(sum);
+      rowEl.appendChild(lab); rowEl.appendChild(main); rowsEl.appendChild(rowEl); rows.push(row);
+    });
+    updateBrackets();
+  }
+  function showLamp(note){
+    lamp.classList.add('lit'); lampNote.textContent = note; lampNote.classList.add('show');
+    clearTimeout(lampTimer); lampTimer = setTimeout(function(){ lamp.classList.remove('lit'); lampNote.classList.remove('show'); }, 1100);
+  }
+  function announce(){ live.textContent = 'Value ' + value + '. Binary ' + bin8(value) + ', decimal ' + value + ', hex ' + hex2(value) + '.'; }
+  function update(raw, dir, quiet){
+    if(dir > 0 && raw >= MAX) showLamp('255 + 1 needs a 9th bit');
+    else if(dir < 0 && raw < 0) showLamp('0 − 1 borrows from a 9th bit');
+    value = wrap(raw);
+    var t = timing(false);
+    rows.forEach(function(row){ rollRow(row, value, dir, t); row.sumEl.innerHTML = sumHTML(row); });
+    updateBrackets(); sendVal.textContent = value;
+    if(!quiet) announce();
+  }
+
+  /* Color mixer */
+  var swatch = $('swatch'), codeHex = $('codeHex'), codeRgb = $('codeRgb'), bits24 = $('bits24');
+  var picker = $('picker'), sv = $('sv'), hue = $('hue'), svHandle = $('svHandle'), hueHandle = $('hueHandle');
+  function rgb2hsv(r, g, b){
+    r /= 255; g /= 255; b /= 255;
+    var mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, h = 0;
+    if(d){ if(mx === r) h = ((g - b) / d) % 6; else if(mx === g) h = (b - r) / d + 2; else h = (r - g) / d + 4; h *= 60; if(h < 0) h += 360; }
+    return {h:h, s:mx ? d / mx : 0, v:mx};
+  }
+  function hsv2rgb(h, s, v){
+    var c = v * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = v - c, r, g, b;
+    if(h < 60){ r = c; g = x; b = 0; } else if(h < 120){ r = x; g = c; b = 0; } else if(h < 180){ r = 0; g = c; b = x; }
+    else if(h < 240){ r = 0; g = x; b = c; } else if(h < 300){ r = x; g = 0; b = c; } else { r = c; g = 0; b = x; }
+    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+  }
+  function placeHandles(){
+    svHandle.style.left = (hsv.s * 100) + '%'; svHandle.style.top = ((1 - hsv.v) * 100) + '%';
+    hueHandle.style.left = (hsv.h / 360 * 100) + '%';
+    var hc = 'hsl(' + hsv.h.toFixed(1) + ' 100% 50%)'; sv.style.backgroundColor = hc; hueHandle.style.background = hc;
+  }
+  function syncHsv(){
+    var n = rgb2hsv(rgb[0], rgb[1], rgb[2]);
+    if(n.v === 0){ hsv.v = 0; } else if(n.s === 0){ hsv.s = 0; hsv.v = n.v; } else { hsv = n; }
+    placeHandles();
+  }
+  function paintColor(){
+    var css = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
+    swatch.style.background = css; svHandle.style.background = css;
+    codeHex.innerHTML = '<span class="hash">#</span>' + rgb.map(function(v, i){ return '<span class="' + CH[i].cls + '">' + hex2(v) + '</span>'; }).join('');
+    codeRgb.innerHTML = 'rgb(' + rgb.map(function(v, i){ return '<span class="' + CH[i].cls + '">' + v + '</span>'; }).join(', ') + ')';
+    bits24.innerHTML = rgb.map(function(v, i){ return '<span class="' + CH[i].cls + '">' + bin8(v) + '</span>'; }).join(' ');
+    swatch.setAttribute('aria-label', 'Color #' + rgb.map(hex2).join('') + ', ' + css);
+  }
+  function paintBits(ch){ var b = digitsOf(rgb[ch.i], 2, 8); ch.bits.forEach(function(bt, p){ bt.classList.toggle('on', b[p] === 1); bt.textContent = b[p]; }); }
+  function applyColor(arr, dir, src, fast){
+    var t = timing(fast);
+    arr.forEach(function(v, i){
+      v = wrap(v); var ch = chRows[i]; rgb[i] = v;
+      rollRow(ch.hex, v, dir, t); rollRow(ch.dec, v, dir, t); paintBits(ch);
+      if(+ch.slider.value !== v) ch.slider.value = v;
+      ch.slider.setAttribute('aria-valuetext', v + ', hex ' + hex2(v));
+    });
+    paintColor(); if(src !== 'picker') syncHsv();
+  }
+  function setChannel(i, raw, dir, src, fast){ var arr = rgb.slice(); arr[i] = raw; applyColor(arr, dir, src, fast); }
+  function buildColor(kind){
+    chList.innerHTML = ''; chRows = [];
+    CH.forEach(function(c, i){
+      var row = el('div', 'ch-row'); row.style.setProperty('--ch', c.col);
+      var lab = el('div', 'ch-label'); lab.innerHTML = '<span class="ch-tag">' + c.k + '</span><span class="ch-name">' + c.name + '</span>';
+      var body = el('div', 'ch-body'), units = el('div', 'ch-units'), ch = {i:i, bits:[]};
+      [['HEX', 16, 2], ['DEC', 10, 3]].forEach(function(u){
+        var unit = el('div', 'ch-unit'), slot = el('div', 'slot'), grp = el('div', 'grp'), r = {b:u[1], n:u[2], wheels:[]}, digs = digitsOf(rgb[i], u[1], u[2]);
+        for(var p = 0; p < u[2]; p++){ (function(p){
+          var w = makeWheel(kind, u[1], u[2], p, digs[p], c.name + ' ' + u[0].toLowerCase());
+          w.el.addEventListener('click', function(e){ var s = e.shiftKey ? -1 : 1; setChannel(i, rgb[i] + s * pow(u[1], u[2] - 1 - p), s, 'wheel', false); });
+          grp.appendChild(w.el); r.wheels[p] = w;
+        })(p); }
+        slot.appendChild(grp); unit.appendChild(slot);
+        var cap = el('span', 'ch-cap'); cap.textContent = u[0]; unit.appendChild(cap); units.appendChild(unit);
+        if(u[0] === 'HEX') ch.hex = r; else ch.dec = r;
+      });
+      var bu = el('div', 'ch-unit'), bits = el('div', 'bits'); bits.setAttribute('aria-hidden', 'true');
+      for(var k = 0; k < 8; k++){ var bt = el('span', 'bit'); bits.appendChild(bt); ch.bits.push(bt); }
+      bu.appendChild(bits); var bcap = el('span', 'ch-cap'); bcap.textContent = 'BIN'; bu.appendChild(bcap); units.appendChild(bu);
+      var slider = el('input', 'ch-slider'); slider.type = 'range'; slider.min = 0; slider.max = 255; slider.step = 1; slider.value = rgb[i];
+      slider.id = 'ch-' + c.k; slider.setAttribute('aria-label', c.name + ' channel, 0 to 255');
+      slider.addEventListener('input', function(){ setChannel(i, +slider.value, 0, 'slider', true); });
+      ch.slider = slider; body.appendChild(units); body.appendChild(slider);
+      row.appendChild(lab); row.appendChild(body); chList.appendChild(row); chRows.push(ch); paintBits(ch);
+    });
+    paintColor();
+  }
+  function loadHex(h){ applyColor([parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)], 0, 'preset', false); }
+  function dragSurface(target, onMove){
+    target.addEventListener('pointerdown', function(e){
+      if(e.button > 0) return; e.preventDefault();
+      try{ target.setPointerCapture(e.pointerId); }catch(err){}
+      picker.classList.add('dragging'); onMove(e);
+      function mv(ev){ onMove(ev); }
+      function up(){ picker.classList.remove('dragging'); target.removeEventListener('pointermove', mv); target.removeEventListener('pointerup', up); target.removeEventListener('pointercancel', up); }
+      target.addEventListener('pointermove', mv); target.addEventListener('pointerup', up); target.addEventListener('pointercancel', up);
+    });
+  }
+  dragSurface(sv, function(e){ var r = sv.getBoundingClientRect(); hsv.s = clamp01((e.clientX - r.left) / r.width); hsv.v = 1 - clamp01((e.clientY - r.top) / r.height); placeHandles(); applyColor(hsv2rgb(hsv.h, hsv.s, hsv.v), 0, 'picker', true); });
+  dragSurface(hue, function(e){ var r = hue.getBoundingClientRect(); hsv.h = clamp01((e.clientX - r.left) / r.width) * 359.9; placeHandles(); applyColor(hsv2rgb(hsv.h, hsv.s, hsv.v), 0, 'picker', true); });
+  document.querySelectorAll('[data-hex]').forEach(function(b){ b.addEventListener('click', function(){ loadHex(b.getAttribute('data-hex')); }); });
+  $('sendCtl').addEventListener('click', function(e){ var b = e.target.closest('button[data-ch]'); if(!b) return; setChannel(+b.getAttribute('data-ch'), value, 0, 'send', false); });
+
+  /* Build, controls */
+  function syncButtons(){
+    [['themeCtl', theme], ['groupCtl', grouping], ['placeCtl', placeMode]].forEach(function(pair){
+      document.querySelectorAll('#' + pair[0] + ' button').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-v') === pair[1] ? 'true' : 'false'); });
+    });
+  }
+  function build(){ var kind = THEMES[theme]; cluster.setAttribute('data-odo', theme); colorCluster.setAttribute('data-odo', theme); buildMain(kind); buildColor(kind); syncButtons(); }
+  function bindSeg(id, set){ $(id).addEventListener('click', function(e){ var btn = e.target.closest('button[data-v]'); if(btn) set(btn.getAttribute('data-v')); }); }
+  function setTheme(v){ theme = v; sset('theme', v); build(); }
+  bindSeg('themeCtl', setTheme);
+  bindSeg('groupCtl', function(v){ grouping = v; sset('group', v); build(); });
+  bindSeg('placeCtl', function(v){ placeMode = v; sset('place', v); build(); });
+
+  var playBtn = $('odoPlay'), speed = $('speed'), speedOut = $('speedOut');
+  function rateText(){ var r = RATES[rateIdx]; return r < 1 ? '1 per 2s' : r + '/s'; }
+  function startTimer(){ clearInterval(timer); timer = setInterval(function(){ update(value + 1, 1, true); }, 1000 / RATES[rateIdx]); }
+  function setPlaying(on){ playing = on; playBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); playBtn.textContent = on ? 'Pause' : 'Auto-count'; if(on) startTimer(); else { clearInterval(timer); announce(); } }
+  speed.addEventListener('input', function(){ rateIdx = +speed.value; speedOut.textContent = rateText(); if(playing) startTimer(); });
+  speedOut.textContent = rateText();
+  playBtn.addEventListener('click', function(){ setPlaying(!playing); });
+  $('odoInc').addEventListener('click', function(){ update(value + 1, 1); });
+  $('odoDec').addEventListener('click', function(){ update(value - 1, -1); });
+  $('odoReset').addEventListener('click', function(){ setPlaying(false); update(0, 0); });
+
+  var setValue = $('setValue'), setBase = $('setBase'), setMsg = $('setMsg');
+  var VALID = {2:/^[01]+$/, 10:/^[0-9]+$/, 16:/^[0-9A-F]+$/}, BNAME = {2:'binary', 10:'decimal', 16:'hex'}, DIGITS = {2:'0 and 1', 10:'0 through 9', 16:'0 through 9 and A through F'};
+  setBase.addEventListener('change', function(){ setValue.placeholder = {16:'FF', 10:'255', 2:'11111111'}[setBase.value]; setMsg.textContent = ''; });
+  $('setForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var b = +setBase.value, s = setValue.value.trim().toUpperCase().replace(/^#|^0X|^0B/, '').replace(/[\s_]/g, '');
+    if(!s){ setMsg.textContent = 'Type a number first.'; return; }
+    if(!VALID[b].test(s)){ setMsg.textContent = BNAME[b].charAt(0).toUpperCase() + BNAME[b].slice(1) + ' only uses the digits ' + DIGITS[b] + '.'; return; }
+    var v = parseInt(s, b);
+    if(v > 255){ setMsg.textContent = s + ' in ' + BNAME[b] + ' is ' + v + '. One byte only goes up to 255 (FF in hex).'; return; }
+    setMsg.textContent = ''; setPlaying(false); update(v, 0);
+  });
+
+  /* Shortcuts only while focus is inside the odometer box, so page scrolling keeps working */
+  $('int-odometer').addEventListener('keydown', function(e){
+    var t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return;
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if(t && t.tagName === 'BUTTON' && (k === ' ' || k === 'Enter')) return;
+    if(k === ' ' || k === 'ArrowUp'){ e.preventDefault(); update(value + 1, 1); }
+    else if(k === 'ArrowDown'){ e.preventDefault(); update(value - 1, -1); }
+    else if(k === 'p' || k === 'P'){ setPlaying(!playing); }
+    else if(k === 'r' || k === 'R'){ setPlaying(false); update(0, 0); }
+    else if(k === 't' || k === 'T'){ setTheme(THEME_ORDER[(THEME_ORDER.indexOf(theme) + 1) % THEME_ORDER.length]); }
+  });
+
+  build(); syncHsv(); announce();
+})();
+</script>
+<script>
+/* ── Can I laser this? (section 18) ───────────────────────────── */
+(function(){
+  'use strict';
+  var V = {
+    ok:    {label:'Safe to cut', tag:'tag-no', color:'var(--green)'},
+    limit: {label:'Engrave or mark only / with care', tag:'tag-mod', color:'var(--yellow)'},
+    never: {label:'Never laser', tag:'tag-yes', color:'var(--red)'}
+  };
+  var M = [
+    {n:'Plywood & hardwood', v:'ok', co2:'cut + engrave', diode:'thin cut + engrave', fiber:'no', why:'Vaporizes cleanly, leaving dark brown edges.', tip:'Glue layers in plywood can stop a cut partway. Use air assist and watch for flare-ups.'},
+    {n:'MDF', v:'ok', co2:'cut + engrave', diode:'thin cut + engrave', fiber:'no', why:'Cuts well, but the resin binder makes heavy smoke.', tip:'Needs strong exhaust. Edges come out dark and sooty.'},
+    {n:'Cardboard & paper', v:'ok', co2:'cut', diode:'cut', fiber:'no', why:'Cuts fast at low power.', tip:'Catches fire easily. Use low power and high speed, and never leave the job.'},
+    {n:'Cast acrylic', v:'ok', co2:'cut + engrave', diode:'dark opaque only', fiber:'no', why:'CO₂ light is absorbed and leaves a flame-polished edge. Engraves frosty white.', tip:'Clear and blue acrylic let diode and fiber light pass straight through. Extruded acrylic cuts fine but engraves poorly.'},
+    {n:'Veg-tan leather', v:'ok', co2:'cut + engrave', diode:'thin cut + engrave', fiber:'no', why:'Cuts and engraves cleanly with a sealed edge.', tip:'Use vegetable-tanned leather. Chrome-tanned leather can release toxic chromium compounds, and faux leather is often vinyl (PVC).'},
+    {n:'Delrin (acetal, POM)', v:'limit', co2:'cut', diode:'test first', fiber:'no', why:'Cuts cleanly but releases formaldehyde gas.', tip:'Only with strong exhaust. Popular for gears and robot parts.'},
+    {n:'Anodized aluminum', v:'limit', co2:'engrave', diode:'engrave', fiber:'engrave', why:'The laser removes or bleaches the colored anodized layer, leaving a bright mark.', tip:'Hobby lasers can mark it but cannot cut aluminum.'},
+    {n:'Bare steel & stainless', v:'limit', co2:'mark with spray', diode:'mark with spray', fiber:'mark / engrave', why:'Bare metal reflects CO₂ and diode light. A marking spray or paste fuses onto the surface instead.', tip:'Cutting sheet metal takes an industrial fiber cutter, not a hobby machine.'},
+    {n:'Glass', v:'limit', co2:'engrave', diode:'needs coating', fiber:'needs coating', why:'CO₂ light frosts the surface. It cannot cut glass.', tip:'Cover the glass with wet paper or masking tape to reduce chipping.'},
+    {n:'Slate, stone & tile', v:'limit', co2:'engrave', diode:'engrave (dark stone)', fiber:'test first', why:'Engraving lightens the surface for a high-contrast mark.', tip:'Cannot be cut. Wipe dust off before and after.'},
+    {n:'PVC & vinyl', v:'never', co2:'no', diode:'no', fiber:'no', why:'Releases chlorine compounds (hydrochloric acid in the air).', tip:'Harmful to breathe and corrodes the machine. Many signs, stickers, and faux leathers are vinyl.'},
+    {n:'ABS', v:'never', co2:'no', diode:'no', fiber:'no', why:'Melts into gooey edges and gives off toxic fumes, including hydrogen cyanide.', tip:'Cut ABS sheet with a saw or router.'},
+    {n:'Polycarbonate (Lexan)', v:'never', co2:'no', diode:'no', fiber:'no', why:'Melts and catches fire instead of vaporizing. Edges turn yellow and black.', tip:'Common in robotics. Use a router, saw, or shear.'},
+    {n:'Fiberglass, carbon fiber, FR4', v:'never', co2:'no', diode:'no', fiber:'no', why:'Burning epoxy gives off toxic fumes, and the fibers do not cut cleanly.', tip:'FR4 is circuit board material. Cut composites on a router with dust collection.'},
+    {n:'HDPE & polypropylene', v:'never', co2:'no', diode:'no', fiber:'no', why:'Melts into a messy edge and catches fire easily.', tip:'Cut with a saw, router, or knife.'},
+    {n:'Unknown plastic', v:'never', co2:'no', diode:'no', fiber:'no', why:'It could be any of the materials above.', tip:'Do not cut until identified. Check the label, the supplier sheet, or ask.'}
+  ];
+  var grid = document.getElementById('matGrid'), out = document.getElementById('matResult'), btns = [];
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function show(i){
+    var m = M[i], v = V[m.v];
+    btns.forEach(function(b, j){ b.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+    out.style.setProperty('--mat-color', v.color);
+    out.innerHTML = '<div class="mat-head"><span class="mat-name">' + esc(m.n) + '</span><span class="tag ' + v.tag + '">' + v.label + '</span></div>' +
+      '<div class="mat-lasers"><span class="mat-laser">CO₂ · <b>' + m.co2 + '</b></span><span class="mat-laser">Diode · <b>' + m.diode + '</b></span><span class="mat-laser">Fiber · <b>' + m.fiber + '</b></span></div>' +
+      '<p class="mat-why">' + esc(m.why) + '</p><p class="mat-tip">' + esc(m.tip) + '</p>';
+  }
+  M.forEach(function(m, i){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'ctl-btn'; b.textContent = m.n;
+    b.addEventListener('click', function(){ show(i); }); grid.appendChild(b); btns.push(b);
+  });
+  show(0);
+})();
+
+/* ── Review quiz (section 22) ─────────────────────────────────── */
+(function(){
+  'use strict';
+  var Q = [
+    ['What do CAD and CAM stand for, and what does each do?', 'Computer Aided Design draws the geometry. Computer Aided Manufacturing turns it into machine paths, usually G-code.', '01'],
+    ['How were machines controlled before computers?', 'Numerical Control from punched cards or tape, or tracer mills that copy a physical template.', '02'],
+    ['What is the key tradeoff between manual machining and CNC?', 'Flexibility vs repeatability.', '03'],
+    ['Which coolant method is best for tapping threads?', 'Cutting oil. It is lubrication-focused.', '04'],
+    ['In G1 X40 Y20 F3000, what does F3000 mean?', 'Feed rate: move at 3000 mm per minute.', '05'],
+    ['Why did cheap desktop 3D printers take off around 2009?', 'Key FDM patents expired, so open-source printers like RepRap and MakerBot kits could be sold.', '06'],
+    ['How does MJF fuse its powder?', 'Inkjet heads print a fusing agent where the part goes, so that powder absorbs heat from the lamp and melts. A detailing agent at the edges keeps nearby powder from fusing.', '07'],
+    ['What overhang angle can usually print without supports?', 'Up to about 45° from vertical.', '08'],
+    ['Why is 100% infill uncommon on consumer printers?', 'Inconsistent extrusion: extra plastic has nowhere to go and builds into blobs and rough tops. It also costs much more time and filament for little strength gain.', '09'],
+    ['Is an FDM part stronger pulled along its layers or pulled apart between them?', 'Along its layers. Between layers is the weak direction.', '10'],
+    ['Why can CoreXY printers accelerate faster than bedslingers?', 'Both motors stay fixed on the frame, so the moving mass is small. The bed only moves in Z.', '11'],
+    ['SLA or MSLA: which one exposes a whole layer at once?', 'MSLA, with an LCD screen. SLA traces each layer with a laser.', '12'],
+    ['What wavelength is a CO₂ laser, and which part of the spectrum is that?', '10.6 µm, in the infrared.', '15'],
+    ['Why can’t a CO₂ laser cut bare metal?', 'Bare metal reflects 10.6 µm light instead of absorbing it. Metals need a fiber laser at 1064 nm.', '15'],
+    ['Name three materials you must never laser cut.', 'Any three of: PVC/vinyl, ABS, polycarbonate, fiberglass, unknown plastics.', '18'],
+    ['Why is PVC especially bad in a laser cutter?', 'It releases chlorine compounds (hydrochloric acid in the air) that are harmful to breathe and corrode the machine.', '18'],
+    ['On our Universal Laser Systems driver, what line setting makes a vector cut?', 'A hairline stroke. LightBurn, Glowforge, and xTool choose the operation by color or layer instead.', '19'],
+    ['What is binary 1111 in decimal and in hex?', '15 in decimal, F in hex.', '20'],
+    ['Why does each RGB channel stop at 255?', 'Each channel is one byte: 8 bits give 256 levels, 0 to 255.', '21'],
+    ['Will a laser set to cut #FF0000 always treat #FE0000 the same?', 'No. They differ by one bit. Exact color mapping sees a different color, so the line can be skipped or run with the wrong power.', '21']
+  ];
+  function $(id){ return document.getElementById(id); }
+  var fill = $('qFill'), meta = $('qMeta'), qEl = $('qQ'), aEl = $('qA'), reveal = $('qReveal'), got = $('qGot'), miss = $('qMiss'), restart = $('qRestart');
+  var queue, done, firstTry, tried, cur;
+  function start(){ queue = Q.map(function(_, i){ return i; }); done = 0; firstTry = 0; tried = {}; next(); }
+  function next(){
+    aEl.hidden = true; got.hidden = true; miss.hidden = true;
+    fill.style.width = (done / Q.length * 100) + '%';
+    if(!queue.length){
+      cur = null;
+      meta.textContent = 'Finished';
+      qEl.textContent = 'You got ' + firstTry + ' of ' + Q.length + ' on the first try.';
+      reveal.hidden = true; return;
+    }
+    cur = queue[0]; reveal.hidden = false;
+    meta.textContent = 'Card ' + (done + 1) + ' of ' + Q.length + ' · ' + firstTry + ' right on first try' + (tried[cur] ? ' · retry' : '');
+    qEl.textContent = Q[cur][0];
+  }
+  reveal.addEventListener('click', function(){
+    if(cur == null) return;
+    aEl.innerHTML = '';
+    aEl.appendChild(document.createTextNode(Q[cur][1]));
+    var s = document.createElement('span'); s.className = 'from'; s.textContent = 'See section ' + Q[cur][2]; aEl.appendChild(s);
+    aEl.hidden = false; reveal.hidden = true; got.hidden = false; miss.hidden = false; got.focus();
+  });
+  got.addEventListener('click', function(){ if(!tried[cur]) firstTry++; queue.shift(); done++; next(); });
+  miss.addEventListener('click', function(){ tried[cur] = true; queue.push(queue.shift()); next(); });
+  restart.addEventListener('click', start);
+  start();
+})();
+</script>
+
+<!-- CHANGELOG
+  v1.1 (2026-10-14): Complete: 22 sections and 4 interactives. Deck text and images reused, duplicate slides merged, MJF, infill, and hairline fixes applied, electromagnetic spectrum section added.
+  v1.0.4 (2026-10-14): Interactives: Can I laser this material lookup (16 materials) and 20-card review quiz with missed-card retry.
+  v1.0.3 (2026-10-14): Interactives: base odometer (BIN, DEC, HEX, five display styles) and color mixer (picker, channel odometers, presets, send-to-channel), keyboard shortcuts scoped to the odometer box.
+  v1.0.2 (2026-10-14): Sections 12-22 filled: SLA vs MSLA, safety, laser intro, new electromagnetic spectrum section, laser types and beam path, cut and engrave, toxic materials, cut lines with software table (hairline fix), number systems and color text.
+  v1.0.1 (2026-10-14): Sections 01-11 filled: foundations, CNC, coolant, G-code, 3D printing history, technologies (MJF and binder jet split), supports, infill (extrusion note added), orientation, motion systems.
+  v1.0 (2026-10-14): Frame. Navigation, CSS, 22 section stubs, 4 interactive placeholders.
+-->
+</body>
+</html>

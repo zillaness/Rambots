@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC Jeopardy!</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{background:#04091E;color:#fff;font-family:Georgia,'Times New Roman',serif}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield}
+
+/* ── Score Bar ──────────────────────────────────────────────── */
+.sbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(2,6,30,0.97);
+  border-bottom:2px solid rgba(212,175,55,0.2);
+  padding:5px 10px;display:flex;gap:5px;flex-wrap:wrap;justify-content:center;
+}
+.schip{
+  display:flex;flex-direction:column;align-items:center;
+  padding:3px 12px;border-radius:7px;min-width:82px;max-width:130px;
+  background:rgba(255,255,255,0.04);border:2px solid transparent;transition:all .2s;
+}
+.schip.active{background:rgba(212,175,55,0.13);border-color:#D4AF37}
+.chip-name{
+  font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:.03em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  width:100%;text-align:center;
+}
+.schip.active .chip-name{color:#D4AF37}
+.chip-score{font-weight:bold;color:#fff;font-size:15px;font-variant-numeric:tabular-nums}
+.chip-score.neg{color:#f87171}
+
+/* ── Screens ────────────────────────────────────────────────── */
+.screen{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:85vh;padding:1.5rem 1rem;text-align:center;
+}
+.fullscreen{min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#1a1060 0%,#04091E 55%)}
+.back-btn{
+  position:absolute;top:12px;left:12px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);
+  border-radius:7px;color:rgba(255,255,255,0.45);font-size:13px;
+  cursor:pointer;padding:6px 12px;font-family:Georgia,serif;
+  transition:all .15s;letter-spacing:.03em;
+}
+.back-btn:hover{background:rgba(255,255,255,0.11);color:#fff;border-color:rgba(255,255,255,0.3)}
+
+/* ── Setup ──────────────────────────────────────────────────── */
+.setup-card{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:16px;padding:2rem;width:100%;max-width:440px;
+}
+.field-label{
+  display:block;color:#D4AF37;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.nrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.nbtn{
+  width:44px;height:44px;border-radius:8px;
+  border:2px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.04);color:#fff;
+  font-size:1.1rem;cursor:pointer;font-weight:bold;
+  font-family:Georgia,serif;transition:all .15s;
+}
+.nbtn:hover{border-color:rgba(212,175,55,0.5)}
+.nbtn.active{background:#D4AF37;color:#04091E;border-color:#D4AF37}
+.name-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.75rem}
+.pinput{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px;padding:9px 14px;color:#fff;font-size:15px;
+  outline:none;width:100%;font-family:Georgia,serif;transition:border-color .15s;
+}
+.pinput:focus{border-color:rgba(212,175,55,0.5)}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn-gold{
+  background:#D4AF37;color:#04091E;border:none;border-radius:10px;
+  font-size:15px;font-weight:bold;cursor:pointer;font-family:Georgia,serif;
+  letter-spacing:.05em;padding:12px 28px;transition:opacity .15s;
+}
+.btn-gold:hover{opacity:.88}
+.btn-gold.wide{width:100%;padding:14px;font-size:16px}
+.btn-outline{
+  background:transparent;border:2px solid #D4AF37;border-radius:10px;
+  color:#D4AF37;font-size:15px;cursor:pointer;font-family:Georgia,serif;
+  letter-spacing:.05em;padding:11px 28px;transition:background .15s;
+}
+.btn-outline:hover{background:rgba(212,175,55,0.08)}
+.btn-ghost{
+  padding:5px 12px;background:rgba(212,175,55,0.08);
+  border:1px solid rgba(212,175,55,0.3);border-radius:6px;
+  color:#D4AF37;cursor:pointer;font-size:13px;font-family:Georgia,serif;
+  transition:background .12s;
+}
+.btn-ghost:hover{background:rgba(212,175,55,0.15)}
+
+/* ── Board ──────────────────────────────────────────────────── */
+.board-wrap{padding:12px}
+.board-hint{
+  text-align:center;color:rgba(255,255,255,0.35);
+  font-size:12px;margin-bottom:10px;letter-spacing:.06em;
+}
+.board{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:5px;max-width:960px;margin:0 auto;
+}
+.cat-hdr{
+  background:#060CE9;padding:12px 6px;text-align:center;border-radius:8px;
+  color:#fff;font-weight:bold;font-size:clamp(10px,1.3vw,15px);line-height:1.3;
+  text-transform:uppercase;letter-spacing:.04em;
+  box-shadow:0 3px 14px rgba(0,0,0,0.6);
+  min-height:60px;display:flex;align-items:center;justify-content:center;
+}
+.cell{
+  background:#060CE9;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;min-height:72px;box-shadow:0 3px 14px rgba(0,0,0,0.6);
+  transition:background .12s;user-select:none;
+}
+.cell:hover{background:#1622fa}
+.cell.done{background:rgba(6,12,233,0.12);cursor:default;box-shadow:none}
+.cell.done:hover{background:rgba(6,12,233,0.12)}
+.cell-val{
+  color:#D4AF37;font-weight:bold;
+  font-size:clamp(14px,2.2vw,22px);
+  font-family:Impact,'Arial Black',Georgia,serif;
+  text-shadow:1px 2px 8px rgba(0,0,0,0.7);
+}
+
+/* ── Question Screen ────────────────────────────────────────── */
+.q-label{
+  font-size:11px;letter-spacing:.18em;color:#D4AF37;
+  text-transform:uppercase;margin-bottom:12px;opacity:.85;
+}
+.clue-box{
+  max-width:720px;width:100%;background:#060CE9;border-radius:16px;
+  padding:36px 28px;margin-bottom:20px;box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+.clue-text{font-size:clamp(15px,2.6vw,22px);line-height:1.85;color:#fff}
+.answer-box{
+  background:rgba(34,197,94,0.08);border:2px solid rgba(34,197,94,0.3);
+  border-radius:12px;padding:14px 20px;margin-bottom:20px;
+  font-size:clamp(14px,2.2vw,18px);color:#4ade80;font-style:italic;
+  max-width:720px;width:100%;
+}
+.score-section{width:100%;max-width:720px}
+.score-hint{
+  color:rgba(255,255,255,0.4);font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;
+}
+.prows{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.prow{
+  display:flex;align-items:center;gap:8px;padding:8px 14px;
+  background:rgba(255,255,255,0.04);border-radius:9px;
+  border:1px solid rgba(255,255,255,0.07);
+  flex-wrap:wrap;justify-content:space-between;
+}
+.prow.active-p{background:rgba(212,175,55,0.06);border-color:rgba(212,175,55,0.2)}
+.prow-info{color:#fff;font-size:14px;text-align:left}
+.prow-info.bold{font-weight:bold}
+.prow-sub{color:rgba(255,255,255,0.3);font-size:12px;margin-left:6px;font-variant-numeric:tabular-nums}
+.prow-wager{color:#D4AF37;font-size:12px;margin-left:6px}
+.btn-pair{display:flex;gap:5px}
+.btn-ok,.btn-no{
+  padding:5px 11px;border-radius:7px;cursor:pointer;border:2px solid;
+  font-size:13px;font-family:Georgia,serif;transition:all .12s;white-space:nowrap;
+}
+.btn-ok{border-color:rgba(34,197,94,0.3);background:transparent;color:rgba(74,222,128,0.55)}
+.btn-ok:hover{border-color:rgba(34,197,94,0.6)}
+.btn-ok.on{border-color:#22c55e;background:rgba(34,197,94,0.2);color:#4ade80;font-weight:bold}
+.btn-no{border-color:rgba(239,68,68,0.3);background:transparent;color:rgba(248,113,113,0.55)}
+.btn-no:hover{border-color:rgba(239,68,68,0.6)}
+.btn-no.on{border-color:#ef4444;background:rgba(239,68,68,0.17);color:#f87171;font-weight:bold}
+
+/* ── Daily Double ───────────────────────────────────────────── */
+.dd-title{
+  font-family:Impact,'Arial Black',sans-serif;
+  font-size:clamp(2.8rem,10vw,6rem);color:#D4AF37;
+  letter-spacing:.08em;line-height:1;margin-bottom:.4rem;
+  text-shadow:0 0 40px rgba(212,175,55,0.5),0 0 80px rgba(212,175,55,0.2);
+}
+.wager-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:6px}
+.winput{
+  padding:11px 16px;font-size:22px;text-align:center;
+  background:rgba(255,255,255,0.07);border:2px solid #D4AF37;
+  border-radius:10px;color:#fff;font-family:Georgia,serif;
+  width:200px;outline:none;
+}
+.winput:focus{box-shadow:0 0 0 3px rgba(212,175,55,0.2)}
+.werr{color:#f87171;font-size:13px;margin-bottom:4px;min-height:18px}
+.wager-presets{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+
+/* ── Final Jeopardy ─────────────────────────────────────────── */
+.fj-title{
+  font-family:Impact,'Arial Black',sans-serif;
+  font-size:clamp(2.5rem,8vw,5.5rem);color:#D4AF37;
+  letter-spacing:.1em;line-height:1;margin-bottom:.5rem;
+  text-shadow:0 0 50px rgba(212,175,55,0.45);
+}
+.fj-cat-label{font-size:12px;letter-spacing:.18em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:.5rem}
+.fj-cat-box{
+  background:#060CE9;border-radius:14px;padding:20px 40px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.6);margin-bottom:2rem;
+}
+.fj-cat-name{
+  font-family:Impact,'Arial Black',sans-serif;
+  font-size:clamp(1.4rem,4vw,2.5rem);color:#fff;letter-spacing:.06em;
+}
+
+/* ── Game Over ──────────────────────────────────────────────── */
+.podium{width:100%;max-width:400px;margin-bottom:2rem}
+.final-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;margin-bottom:8px;border-radius:10px;
+  background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.09);
+}
+.final-row.gold{background:rgba(212,175,55,0.1);border-color:#D4AF37}
+.final-name{color:#fff;font-size:15px}
+.final-row.gold .final-name{color:#D4AF37}
+.final-pts{font-weight:bold;color:#fff;font-size:19px;font-variant-numeric:tabular-nums}
+.final-pts.neg{color:#f87171}
+
+/* ── Typography ─────────────────────────────────────────────── */
+.game-title{
+  font-family:Impact,'Arial Black',sans-serif;
+  font-size:clamp(3rem,10vw,5.5rem);color:#D4AF37;
+  letter-spacing:.1em;line-height:1;text-align:center;margin-bottom:.2rem;
+  text-shadow:0 0 40px rgba(212,175,55,0.4);
+}
+.kicker{font-size:13px;letter-spacing:.25em;color:#D4AF37;text-transform:uppercase;margin-bottom:.4rem}
+.subtitle{color:rgba(255,255,255,0.35);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:2.5rem}
+.muted{color:rgba(255,255,255,0.45);font-size:14px}
+.label-sm{font-size:11px;letter-spacing:.22em;color:rgba(212,175,55,0.55);text-transform:uppercase;margin-bottom:.75rem}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+
+// ═══════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════
+
+const CATS = ['Hand Tools','Power Tools','Thread Anatomy','Fastener Hardware','Torque & Loctite'];
+const VALS = [200,400,600,800,1000];
+
+const QS = [
+  /* 0 — Hand Tools */
+  [
+    {clue:"This hand tool delivers the cleanest, squarest cut on PVC pipe in seconds — no saw marks, no fuss.",
+     answer:"What is a pipe cutter?"},
+    {clue:"When hand-cutting aluminum with a hacksaw, always secure the workpiece in this device before applying cutting fluid.",
+     answer:"What is a vise?"},
+    {clue:"Score-and-snap works for straight cuts in polycarbonate (Lexan), but pre-drill holes slowly to prevent this defect at the entry point.",
+     answer:"What is cracking?"},
+    {clue:"Before hand-sawing Baltic birch plywood, tape the cut line with this common material to minimize splintering on the exit face.",
+     answer:"What is masking tape?"},
+    {clue:"Always wear this when hand-sawing MDF — the dust contains formaldehyde binders and is a documented health hazard.",
+     answer:"What is a dust mask (respirator)?"},
+  ],
+  /* 1 — Power Tools */
+  [
+    {clue:"This power tool uses a continuous-loop blade and is the primary machine for cutting metal bar stock and tube in an FRC shop.",
+     answer:"What is a band saw?"},
+    {clue:"When cutting aluminum on a band saw, this common shop penetrant doubles as an effective cutting fluid.",
+     answer:"What is WD-40?"},
+    {clue:"For metals and plastics on the band saw, always use a bimetal blade in this tooth-per-inch range.",
+     answer:"What is 14–18 TPI?"},
+    {clue:"Use this V-shaped holding accessory when band-sawing round tube to prevent vibration chatter.",
+     answer:"What is a V-block?"},
+    {clue:"Cutting carbon fiber requires this grade of respirator — NOT an N95 — because the dust is a serious carcinogenic hazard.",
+     answer:"What is an N100 respirator?"},
+  ],
+  /* 2 — Thread Anatomy */
+  [
+    {clue:"In the thread callout '¼-20 UNC', this number represents the threads per inch.",
+     answer:"What is 20 (TPI)?"},
+    {clue:"The smallest thread diameter — measured at the roots of an external thread — also called the root or core diameter.",
+     answer:"What is the minor diameter?"},
+    {clue:"The simple metric tap drill formula: drill diameter (mm) = major diameter minus this.",
+     answer:"What is the pitch?"},
+    {clue:"The included angle of the thread cross-section for both UN and ISO metric standard threads.",
+     answer:"What is 60 degrees?"},
+    {clue:"This American engineer standardized the 60° thread form in 1864, creating the basis for today's UNC/UNF thread system.",
+     answer:"Who is William Sellers?"},
+  ],
+  /* 3 — Fastener Hardware */
+  [
+    {clue:"This nut uses a nylon insert to resist vibration-induced loosening — replace it immediately when it spins on with zero resistance.",
+     answer:"What is a nylock (nylon insert) nut?"},
+    {clue:"The FRC default structural fastener: cylindrical head, hex socket drive, high torque capacity, zero cam-out risk.",
+     answer:"What is a Socket Head Cap Screw (SHCS)?"},
+    {clue:"An SAE Grade 8 bolt is identified by exactly this many radial lines stamped into its head.",
+     answer:"What is 6 radial lines?"},
+    {clue:"This threaded insert is installed from ONE side into thin sheet metal — a mandrel is pulled, expanding a flange behind the sheet.",
+     answer:"What is a riv-nut (rivet nut)?"},
+    {clue:"The standard drill number for the tap drill of #10-32 — the most common FRC machine thread.",
+     answer:'What is #21 (0.159")?'},
+  ],
+  /* 4 — Torque & Loctite */
+  [
+    {clue:"The FRC default Loctite threadlocker — medium strength, product #243, fully removable with hand tools.",
+     answer:"What is Loctite Blue (243)?"},
+    {clue:"Loctite threadlocker will NOT cure on this metal type without special primer — and also fails on oily or dirty threads.",
+     answer:"What is stainless steel?"},
+    {clue:"The chip-breaking tapping rhythm 'two forward, half back' means rotating the tap this many degrees forward, then this many degrees back.",
+     answer:"What is 360–720° forward, 180° back?"},
+    {clue:"This Loctite grade has ultra-low viscosity and wicks into already-assembled joints by capillary action — ideal for field repairs.",
+     answer:"What is Loctite Green (290)?"},
+    {clue:"Permanent fastener retention requiring a heat gun at 250°F+ to remove — used only for set screws on critical hubs and press-fit motor pinions.",
+     answer:"What is Loctite Red (271)?"},
+  ],
+];
+
+const FJ = {
+  category: 'Fastener History',
+  clue: "Working in 1841, this British engineer proposed the first-ever standardized national thread system — using a 55° thread angle — directly motivating William Sellers to create the competing 60° American standard 23 years later.",
+  answer: "Who is Joseph Whitworth?",
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════
+
+const S = {
+  phase: 'setup',
+  numPlayers: 2,
+  names: Array.from({length:8}, (_,i) => `Player ${i+1}`),
+  players: [],       // [{name, score}]
+  active: 0,
+  board: null,       // board[ci][ri] = cell obj
+  sel: null,         // {ci, ri}
+  wager: '',
+  wagerErr: '',
+  answerShown: false,
+  scoreMap: {},      // idx -> 'correct'|'incorrect'
+  fjWagers: {},      // idx -> number
+  fjWagerIdx: 0,
+  fjInput: '',
+  fjInputErr: '',
+  fjScoreMap: {},    // idx -> 'correct'|'incorrect'
+  fjAnswerShown: false,
+};
+
+
+let prevState = null; // one level of undo
+
+// ═══════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════
+
+function fmt(n){
+  return n < 0 ? `-$${Math.abs(n).toLocaleString()}` : `$${n.toLocaleString()}`;
+}
+
+function esc(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function buildBoard(){
+  const b = QS.map((catQs,ci) =>
+    catQs.map((q,ri) => ({...q, ci, ri, value:VALS[ri], answered:false, isDD:false}))
+  );
+  // Place 2 daily doubles — never on the $200 row
+  const elig = [];
+  for(let ci=0;ci<5;ci++) for(let ri=1;ri<5;ri++) elig.push([ci,ri]);
+  for(let i=elig.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [elig[i],elig[j]]=[elig[j],elig[i]];
+  }
+  b[elig[0][0]][elig[0][1]].isDD = true;
+  b[elig[1][0]][elig[1][1]].isDD = true;
+  return b;
+}
+
+function scoreBarHTML(){
+  if(!S.players.length) return '';
+  return `<div class="sbar">${
+    S.players.map((p,i)=>`
+      <div class="schip${S.active===i?' active':''}">
+        <div class="chip-name">${S.active===i?'★ ':''}${esc(p.name)}</div>
+        <div class="chip-score${p.score<0?' neg':''}">${fmt(p.score)}</div>
+      </div>
+    `).join('')
+  }</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+function saveHistory(){
+  prevState = JSON.parse(JSON.stringify(S));
+}
+
+function goBack(){
+  if(!prevState) return;
+  const p = prevState;
+  prevState = null;
+  Object.assign(S, p);
+  render();
+}
+
+//  RENDER
+// ═══════════════════════════════════════════════════════════════
+
+function backBtn(){
+  return prevState !== null
+    ? '<button class="back-btn" onclick="goBack()">&#8592; Back</button>'
+    : '';
+}
+
+function render(){
+  const map = {
+    setup:       renderSetup,
+    board:       renderBoard,
+    dd_wager:    renderDDWager,
+    question:    renderQuestion,
+    fj_category: renderFJCategory,
+    fj_wager:    renderFJWager,
+    fj_question: renderFJQuestion,
+    gameover:    renderGameover,
+  };
+  document.getElementById('app').innerHTML = (map[S.phase] || (()=>''))();
+
+  // Restore live input values after innerHTML wipe
+  const wi = document.getElementById('wager-input');
+  if(wi) wi.value = S.phase==='dd_wager' ? S.wager : S.fjInput;
+
+  for(let i=0;i<S.numPlayers;i++){
+    const el = document.getElementById(`pname-${i}`);
+    if(el){ el.value = S.names[i]; }
+  }
+}
+
+// ─── Setup ───────────────────────────────────────────────────
+
+function renderSetup(){
+  const nBtns = [1,2,3,4,5,6,7,8].map(n =>
+    `<button class="nbtn${S.numPlayers===n?' active':''}" onclick="setN(${n})">${n}</button>`
+  ).join('');
+
+  const inputs = Array.from({length:S.numPlayers},(_,i) =>
+    `<input class="pinput" id="pname-${i}" type="text"
+      placeholder="Player ${i+1}"
+      oninput="S.names[${i}]=this.value">`
+  ).join('');
+
+  return `
+    <div class="screen fullscreen">
+      <div class="kicker">FRC Robotics</div>
+      <h1 class="game-title">JEOPARDY!</h1>
+      <p class="subtitle">Hand Tools · Power Tools · Fasteners</p>
+      <div class="setup-card">
+        <label class="field-label">Number of Players</label>
+        <div class="nrow">${nBtns}</div>
+        <label class="field-label">Player Names</label>
+        <div class="name-list">${inputs}</div>
+        <button class="btn-gold wide" onclick="startGame()">START GAME →</button>
+      </div>
+    </div>`;
+}
+
+// ─── Board ───────────────────────────────────────────────────
+
+function renderBoard(){
+  const cats = CATS.map(c => `<div class="cat-hdr">${c}</div>`).join('');
+
+  const cells = VALS.flatMap((v,ri) =>
+    CATS.map((_,ci) => {
+      const cell = S.board[ci][ri];
+      return `<div class="cell${cell.answered?' done':''}"
+        ${cell.answered ? '' : `onclick="pickCell(${ci},${ri})"`}>
+        ${cell.answered ? '' : `<span class="cell-val">$${v.toLocaleString()}</span>`}
+      </div>`;
+    })
+  ).join('');
+
+  return `
+    ${scoreBarHTML()}
+    <div class="board-wrap">
+      <p class="board-hint">★ ${esc(S.players[S.active]?.name)}'s turn to choose</p>
+      <div class="board">${cats}${cells}</div>
+    </div>`;
+}
+
+// ─── Daily Double Wager ──────────────────────────────────────
+
+function renderDDWager(){
+  const p   = S.players[S.active];
+  const maxW = Math.max(p.score>0 ? p.score : 0, 1000);
+  const presets = [100,200,500,1000].filter(v=>v<=maxW).map(v=>
+    `<button class="btn-ghost" onclick="setWagerPreset(${v})">$${v.toLocaleString()}</button>`
+  ).join('');
+
+  return `
+    ${scoreBarHTML()}
+    <div class="screen">
+      ${backBtn()}
+      <div class="label-sm">${esc(CATS[S.sel.ci])}</div>
+      <div class="dd-title">DAILY DOUBLE!</div>
+      <p class="muted" style="margin-bottom:2rem">
+        ${esc(p.name)} &nbsp;·&nbsp; Score: ${fmt(p.score)} &nbsp;·&nbsp; Max: $${maxW.toLocaleString()}
+      </p>
+      <div class="wager-row">
+        <input class="winput" id="wager-input" type="number" min="5" max="${maxW}"
+          placeholder="Enter wager…"
+          oninput="S.wager=this.value"
+          onkeydown="if(event.key==='Enter')submitWager()">
+        <button class="btn-gold" onclick="submitWager()">GO! →</button>
+      </div>
+      <p class="werr">${esc(S.wagerErr)}</p>
+      <div class="wager-presets">
+        ${presets}
+        <button class="btn-ghost" onclick="setWagerPreset(${maxW})">Max $${maxW.toLocaleString()}</button>
+      </div>
+    </div>`;
+}
+
+// ─── Question ────────────────────────────────────────────────
+
+function renderQuestion(){
+  const q   = S.board[S.sel.ci][S.sel.ri];
+  const pts = q.isDD ? (parseInt(S.wager,10)||0) : q.value;
+  const lbl = q.isDD
+    ? `${CATS[S.sel.ci]} &nbsp;·&nbsp; Daily Double — Wager $${pts.toLocaleString()}`
+    : `${CATS[S.sel.ci]} &nbsp;·&nbsp; $${q.value.toLocaleString()}`;
+
+  // On DD, only score the active player; otherwise all players
+  const pool = q.isDD
+    ? [{p:S.players[S.active], idx:S.active}]
+    : S.players.map((p,idx) => ({p,idx}));
+
+  const rows = pool.map(({p,idx}) => {
+    const cOn = S.scoreMap[idx]==='correct';
+    const iOn = S.scoreMap[idx]==='incorrect';
+    return `<div class="prow${idx===S.active?' active-p':''}">
+      <span class="prow-info${idx===S.active?' bold':''}">
+        ${idx===S.active?'★ ':''}${esc(p.name)}
+        <span class="prow-sub">${fmt(p.score)}</span>
+      </span>
+      <div class="btn-pair">
+        <button class="btn-ok${cOn?' on':''}" onclick="toggleScore(${idx},'correct')">✓ +$${pts.toLocaleString()}</button>
+        <button class="btn-no${iOn?' on':''}" onclick="toggleScore(${idx},'incorrect')">✗ −$${pts.toLocaleString()}</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const answerBlock = `
+    <div class="score-section">
+      <div class="answer-box">${esc(q.answer)}</div>
+      <p class="score-hint">${q.isDD ? 'Award or deduct wager from active player' : `Award or deduct $${pts.toLocaleString()} per player`}</p>
+      <div class="prows">${rows}</div>
+      <button class="btn-gold" onclick="applyScores()">Continue → Board</button>
+    </div>`;
+
+  return `
+    ${scoreBarHTML()}
+    <div class="screen">
+      ${backBtn()}
+      <div class="q-label">${lbl}</div>
+      <div class="clue-box"><p class="clue-text">${esc(q.clue)}</p></div>
+      ${S.answerShown
+        ? answerBlock
+        : `<button class="btn-outline" onclick="showAnswer()">Show Answer ↓</button>`}
+    </div>`;
+}
+
+// ─── Final Jeopardy: Category Reveal ─────────────────────────
+
+function renderFJCategory(){
+  return `
+    ${scoreBarHTML()}
+    <div class="screen">
+      ${backBtn()}
+      <div class="label-sm">All questions answered</div>
+      <div class="fj-title">FINAL JEOPARDY!</div>
+      <p class="fj-cat-label">Category</p>
+      <div class="fj-cat-box"><span class="fj-cat-name">${esc(FJ.category)}</span></div>
+      <p class="muted" style="margin-bottom:1.75rem">Each player enters a secret wager before the clue is revealed.</p>
+      <button class="btn-gold" onclick="startFJWager()">Enter Wagers →</button>
+    </div>`;
+}
+
+// ─── Final Jeopardy: Wager Entry (sequential) ────────────────
+
+function renderFJWager(){
+  const p        = S.players[S.fjWagerIdx];
+  const canWager = p.score > 0;
+  const maxW     = canWager ? p.score : 0;
+
+  const presets = canWager
+    ? [...new Set([0, Math.floor(maxW*.25), Math.floor(maxW*.5), maxW])].map(v =>
+        `<button class="btn-ghost" onclick="setFJPreset(${v})">$${v.toLocaleString()}</button>`
+      ).join('')
+    : '';
+
+  const content = canWager
+    ? `<div class="wager-row">
+         <input class="winput" id="wager-input" type="number" min="0" max="${maxW}"
+           placeholder="Secret wager…"
+           oninput="S.fjInput=this.value"
+           onkeydown="if(event.key==='Enter')lockFJWager()">
+         <button class="btn-gold" onclick="lockFJWager()">Lock In ✓</button>
+       </div>
+       <p class="werr">${esc(S.fjInputErr)}</p>
+       <div class="wager-presets">${presets}</div>`
+    : `<button class="btn-gold" onclick="lockFJWager()">Continue (Wager $0) →</button>`;
+
+  return `
+    ${scoreBarHTML()}
+    <div class="screen">
+      ${backBtn()}
+      <div class="label-sm">Final Jeopardy · Wager ${S.fjWagerIdx+1} of ${S.players.length}</div>
+      <h3 style="color:#D4AF37;font-family:Impact,'Arial Black',sans-serif;font-size:clamp(1.8rem,5vw,3rem);letter-spacing:.08em;margin-bottom:.3rem">
+        ${esc(p.name)}
+      </h3>
+      <p class="muted" style="margin-bottom:2rem">
+        ${canWager
+          ? `Score: ${fmt(p.score)} &nbsp;·&nbsp; Max wager: $${maxW.toLocaleString()}`
+          : `Score: ${fmt(p.score)} — wager locked at $0`}
+      </p>
+      ${content}
+    </div>`;
+}
+
+// ─── Final Jeopardy: Question + Scoring ──────────────────────
+
+function renderFJQuestion(){
+  const rows = S.players.map((p,idx) => {
+    const w   = S.fjWagers[idx] || 0;
+    const cOn = S.fjScoreMap[idx]==='correct';
+    const iOn = S.fjScoreMap[idx]==='incorrect';
+    return `<div class="prow">
+      <span class="prow-info">
+        ${esc(p.name)}
+        <span class="prow-sub">${fmt(p.score)}</span>
+        <span class="prow-wager">wager: $${w.toLocaleString()}</span>
+      </span>
+      <div class="btn-pair">
+        <button class="btn-ok${cOn?' on':''}" onclick="toggleFJScore(${idx},'correct')">✓ +$${w.toLocaleString()}</button>
+        <button class="btn-no${iOn?' on':''}" onclick="toggleFJScore(${idx},'incorrect')">✗ −$${w.toLocaleString()}</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const answerBlock = `
+    <div class="score-section">
+      <div class="answer-box">${esc(FJ.answer)}</div>
+      <p class="score-hint">Mark each player — wagers apply automatically</p>
+      <div class="prows">${rows}</div>
+      <button class="btn-gold" onclick="applyFJScores()">See Final Results →</button>
+    </div>`;
+
+  return `
+    ${scoreBarHTML()}
+    <div class="screen">
+      ${backBtn()}
+      <div class="q-label">Final Jeopardy &nbsp;·&nbsp; ${esc(FJ.category)}</div>
+      <div class="clue-box"><p class="clue-text">${esc(FJ.clue)}</p></div>
+      ${S.fjAnswerShown
+        ? answerBlock
+        : `<button class="btn-outline" onclick="showFJAnswer()">Reveal Answer ↓</button>`}
+    </div>`;
+}
+
+// ─── Game Over ───────────────────────────────────────────────
+
+function renderGameover(){
+  const sorted = [...S.players].sort((a,b) => b.score - a.score);
+  const medals = ['🥇','🥈','🥉'];
+  const rows = sorted.map((p,i) =>
+    `<div class="final-row${i===0?' gold':''}">
+      <span class="final-name">${medals[i]||`${i+1}.`} ${esc(p.name)}</span>
+      <span class="final-pts${p.score<0?' neg':''}">${fmt(p.score)}</span>
+    </div>`
+  ).join('');
+
+  return `
+    <div class="screen fullscreen">
+      <div style="font-size:3.5rem;margin-bottom:.4rem">🏆</div>
+      <h1 style="color:#D4AF37;font-family:Impact,'Arial Black',sans-serif;
+        font-size:clamp(2rem,6vw,3.5rem);letter-spacing:.1em;margin-bottom:1.5rem;
+        text-shadow:0 0 30px rgba(212,175,55,0.4)">FINAL SCORES</h1>
+      <div class="podium">${rows}</div>
+      <button class="btn-gold" onclick="resetGame()">🔄 Play Again</button>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ACTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function setN(n){ S.numPlayers = n; render(); }
+
+function startGame(){
+  S.players = Array.from({length:S.numPlayers}, (_,i) => ({
+    name: (S.names[i] || `Player ${i+1}`).trim(),
+    score: 0,
+  }));
+  S.active = 0;
+  S.board  = buildBoard();
+  S.phase  = 'board';
+  render();
+}
+
+function pickCell(ci,ri){
+  if(S.board[ci][ri].answered) return;
+  prevState = null; saveHistory();
+  S.sel         = {ci,ri};
+  S.answerShown = false;
+  S.scoreMap    = {};
+  if(S.board[ci][ri].isDD){
+    S.wager    = '';
+    S.wagerErr = '';
+    S.phase    = 'dd_wager';
+  } else {
+    S.phase = 'question';
+  }
+  render();
+}
+
+function setWagerPreset(v){ S.wager = String(v); render(); }
+
+function submitWager(){
+  const w    = parseInt(S.wager,10);
+  const ps   = S.players[S.active].score;
+  const maxW = Math.max(ps>0 ? ps : 0, 1000);
+  if(isNaN(w) || w < 5){ S.wagerErr = 'Minimum wager is $5'; render(); return; }
+  if(w > maxW){ S.wagerErr = `Maximum wager is $${maxW.toLocaleString()}`; render(); return; }
+  S.wagerErr = '';
+  saveHistory();
+  S.phase    = 'question';
+  render();
+}
+
+function showAnswer(){ saveHistory(); S.answerShown = true; render(); }
+
+function toggleScore(idx,type){
+  S.scoreMap[idx] === type ? delete S.scoreMap[idx] : (S.scoreMap[idx] = type);
+  render();
+}
+
+function applyScores(){
+  saveHistory();
+  const q   = S.board[S.sel.ci][S.sel.ri];
+  const pts = q.isDD ? parseInt(S.wager,10) : q.value;
+
+  S.players = S.players.map((p,i) => {
+    const c = S.scoreMap[i];
+    if(!c) return p;
+    return {...p, score: p.score + (c==='correct' ? pts : -pts)};
+  });
+
+  const corrects = Object.entries(S.scoreMap)
+    .filter(([,v]) => v==='correct').map(([k]) => +k);
+  if(corrects.length > 0) S.active = corrects[corrects.length-1];
+
+  S.board[S.sel.ci][S.sel.ri].answered = true;
+  S.scoreMap = {};
+  S.sel      = null;
+
+  const done = S.board.every(cat => cat.every(c => c.answered));
+  if(done){
+    Object.assign(S, {fjWagers:{}, fjWagerIdx:0, fjInput:'', fjInputErr:'', fjScoreMap:{}, fjAnswerShown:false});
+    S.phase = 'fj_category';
+  } else {
+    S.phase = 'board';
+  }
+  render();
+}
+
+function startFJWager(){ saveHistory(); S.fjWagerIdx=0; S.fjInput=''; S.fjInputErr=''; S.phase='fj_wager'; render(); }
+
+function setFJPreset(v){ S.fjInput = String(v); render(); }
+
+function lockFJWager(){
+  saveHistory();
+  const p        = S.players[S.fjWagerIdx];
+  const canWager = p.score > 0;
+  const maxW     = canWager ? p.score : 0;
+
+  if(!canWager){
+    S.fjWagers[S.fjWagerIdx] = 0;
+  } else {
+    const w = parseInt(S.fjInput,10);
+    if(isNaN(w) || w < 0){ S.fjInputErr = 'Minimum wager is $0'; render(); return; }
+    if(w > maxW){ S.fjInputErr = `Maximum is $${maxW.toLocaleString()}`; render(); return; }
+    S.fjWagers[S.fjWagerIdx] = w;
+  }
+
+  S.fjInputErr = '';
+  S.fjInput    = '';
+  const next   = S.fjWagerIdx + 1;
+  if(next >= S.players.length){
+    S.phase = 'fj_question';
+  } else {
+    S.fjWagerIdx = next;
+  }
+  render();
+}
+
+function showFJAnswer(){ saveHistory(); S.fjAnswerShown = true; render(); }
+
+function toggleFJScore(idx,type){
+  S.fjScoreMap[idx] === type ? delete S.fjScoreMap[idx] : (S.fjScoreMap[idx] = type);
+  render();
+}
+
+function applyFJScores(){
+  saveHistory();
+  S.players = S.players.map((p,i) => {
+    const w = S.fjWagers[i] || 0;
+    const c = S.fjScoreMap[i];
+    if(!c) return p;
+    return {...p, score: p.score + (c==='correct' ? w : -w)};
+  });
+  S.phase = 'gameover';
+  render();
+}
+
+function resetGame(){
+  Object.assign(S, {
+    phase:'setup', players:[], active:0, board:null, sel:null,
+    wager:'', wagerErr:'', answerShown:false, scoreMap:{},
+    fjWagers:{}, fjWagerIdx:0, fjInput:'', fjInputErr:'',
+    fjScoreMap:{}, fjAnswerShown:false,
+  });
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+
+render();
+</script>
+</body>
+</html>

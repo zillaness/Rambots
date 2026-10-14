@@ -1,0 +1,77 @@
+{
+ "sha256": "057ec0b597bf982c22006374fd5995b96bb107012c82d5e7ce0e26455f5fb8e5",
+ "pages": [
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "THE ENGINEERING\nDESIGN PROCESS\nDefine. Brainstorm. Build. Test. Repeat.\nDefine\n\u2192\nResearch\n\u2192\nRequirements\n\u2192\nBrainstorm\n\u2192\nPrototype\n\u2192\nTest\n\u2192\nCommunicate\nAn FRC Engineering Lecture  |  Companion to Punk Rock Engineering",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The Full Engineering Design Process\n1. Define the Problem\n\u25bc\n2. Do Background Research\n\u25bc\n3. Specify Requirements\n\u25bc\n4. Brainstorm & Choose Solution\n\u25bc\n5. Develop & Prototype\n\u25bc\n6. Test Solution\n\u25bc\n7. Communicate Results\n\ud83d\udd01  The Iteration Loop\nAt three key stages \u2014 Brainstorm, Prototype, and Test \u2014 the process can loop back. When results and data show your solution isn't working, you don't give up: you re-evaluate, make design changes, prototype again, and test again.\nThis loop is not failure. It is the process.\n\u2190 loop\n\u2190 loop\n\u2190 loop\n2",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Phase 1: Understand the Problem\nStep 1 \u2014 Define the Problem\nWhat exactly are you trying to solve?\n\n\u2022 Write a clear problem statement\n\u2022 What constraints exist? (weight, size, cost, rules)\n\u2022 Who are you designing for?\n\u2022 What does success look like?\n\nFRC example: \"Our robot must pick up 3\" diameter game pieces from the floor and score them in a 2ft high goal within 15 seconds.\"\nStep 2 \u2014 Do Background Research\nWhat already exists? What can you learn?\n\n\u2022 Watch reveal videos from past seasons\n\u2022 Review FRC game manual and rules carefully\n\u2022 Look at Chief Delphi / other team designs\n\u2022 What did your team try last year?\n\nKey principle: \"Don't reinvent the wheel. But understand the wheel so you can improve it.\"\n\u26a0  Skipping these steps is the #1 cause of teams building the wrong thing entirely.\n3",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Step 3: Specify Requirements\nRequirements are the rules your solution MUST follow. Without them, you can't know if your design succeeds.\nMust Have (Non-Negotiable)\nHard limits \u2014 your design FAILS if it doesn't meet these:\n\n\u2022 Fits inside the sizing box at inspection\n\u2022 Doesn't exceed weight limit\n\u2022 Doesn't break game rules\n\u2022 Mechanism is repairable at competition\n\u2022 Operable by drive team in time limit\nNice to Have (Targets)\nDesign goals \u2014 your solution is better if it meets these:\n\n\u2022 Scores in under 3 seconds\n\u2022 Tolerates misaligned game pieces\n\u2022 Can be operated by new drivers\n\u2022 Compatible with future game changes\n\u2022 Requires minimal adjustment between matches\nRequirements are your scorecard \u2014 you'll come back to them during every test phase.\n4",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Step 4: Brainstorm, Evaluate & Choose\nBrainstorm & Choose\nGenerate many ideas, then converge:\n\n\u2022 Sketch multiple concepts (aim for 5+)\n\u2022 No judging during ideation phase\n\u2022 Evaluate each against your requirements\n\u2022 Score or vote to pick the best direction\n\u2022 Consider hybrid approaches\n\nThen choose ONE direction to prototype first.\n\ud83d\udd01  Loop Point #1\nWhen do you loop back from Brainstorm?\n[DATA]\nPrototype data shows your chosen concept is fundamentally flawed\n[RULES]\nRequirements changed (new game rule, different strategy)\n[FIND]\nResearch reveals an approach you hadn't considered\n[PARTS]\nYour chosen solution can't be built with available tools/parts\nGoing back to brainstorm is not defeat \u2014 it means your testing is working.\n5",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Step 5: Develop and Prototype\nDevelop & Prototype\nTurn your chosen idea into something real:\n\n\u2022 Start simple \u2014 cardboard, wood, basic hardware\n\u2022 Prove the concept before adding complexity\n\u2022 Document what you build and why\n\u2022 Identify what you're trying to LEARN from this prototype\n\u2022 Take measurements \u2014 don't just eyeball it\n\nYour prototype is a question, not an answer.\nIt asks: \"Does this concept work?\"\n\ud83d\udd01  Loop Point #2\nWhen do you loop back from Prototype?\nFAIL\nThe prototype reveals the core concept doesn't work (e.g., game piece slips through every time)\nGEOM\nPart interactions or geometry create problems that can't be patched \u2014 a rethink is needed\nLEARN\nBuilding it taught you something that changes what you actually want to build\nZERO\nThe prototype meets zero requirements \u2014 not even partially\n\"I'd rather just build something and see what happens, even knowing I might have to build it twice.\"  \u2014 SuperfastMatt\n6",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Step 6: Test Solution\nTest Against Requirements\nTesting without a standard is just playing around:\n\n\u2022 Run your prototype against the requirements from Step 3\n\u2022 Measure \u2014 success rate, cycle time, failure modes\n\u2022 Record everything: what worked, what didn't, by how much\n\u2022 Test repeatedly, not just once\n\u2022 Test at the edges: what breaks it?\n\nTwo possible results:\n\u2705 Meets Requirements\n\u2192 Communicate Results\n\u274c Fails or Partially\n\u2192 Loop back\n\ud83d\udd01  Loop Point #3 \u2014 The Main One\n\"Based on results and data, make design changes, prototype, test again, and review new data.\"\nWhat to loop to depends on WHY it failed:\n\u2192 Fix & Re-Prototype\nSmall design flaw, wrong dimension, fixable geometry\n\u2192 Back to Brainstorm\nCore concept is broken, requirements can't be met\n\u2192 Revisit Requirements\nRequirements were wrong or unrealistic\nFailing a test is the process working exactly as designed.\n7",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The Three Iteration Gates\nData from later stages always flows back to earlier ones.\nDefine\nProblem\nResearch\nSpecify\nRequirements\nBrainstorm\n& Choose\nDevelop &\nPrototype\nTest\nSolution\nCommunicate\nResults\n\u2b06\nGate 1\n\u2b06\nGate 2\n\u2b06\nGate 3\n\ud83d\udd01 Test \u2192 Back to Brainstorm\nCore concept fails. Requirements can't be met. Start concept over.\n\ud83d\udd01 Test \u2192 Revise & Re-Prototype\nDesign flaw found. Fix the dimensions, geometry, or mechanism. Rebuild and test again.\n\ud83d\udd01 Prototype \u2192 New Concept\nBuilding revealed the approach won't work. Go back and brainstorm a different direction.\nWhy Three Gates?\nEach loop-back point catches failures at different levels of cost:\n\u2022 Brainstorm loop = cheap (just ideas)\n\u2022 Prototype loop = moderate (parts + time)\n\u2022 Test loop = most expensive but most certain\nCatching failures early saves time and materials.\n8",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Loops Are Features, Not Bugs\n\u274c  The Wrong Mindset\n\"\"We failed \u2014 we had to go back to brainstorm.\"\"\n\"\"Going backwards means we wasted time.\"\"\n\"\"A good engineer doesn't need to prototype twice.\"\"\n\"\"Iteration means we didn't plan well enough.\"\"\n\u2705  The Right Mindset\n\"The test worked \u2014 it gave us data to improve the design.\"\n\"We learned something. That iteration bought us certainty.\"\n\"Every real engineer prototypes multiple times.\"\n\"Iteration IS the plan. The plan is to learn and improve.\"\nNASA iterates. SpaceX iterates. Boeing iterates. The only difference is how fast.\n9",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "In FRC: What Each Loop Looks Like\nGate 1\nBrainstorm Loop\nScenario:\nYour team votes to build a catapult shooter. You start sketching the prototype and realize the trajectory required by the field geometry makes a catapult physically impossible to aim reliably.\nAction:\nGo back to brainstorm. Re-evaluate the flywheel vs. catapult vs. pneumatic options with this new constraint explicitly on the table.\n\ud83d\udca1 Brainstorm loops are cheap. This one cost you a day of sketching, not weeks of building.\nGate 2\nPrototype Loop\nScenario:\nYou build a roller intake prototype. Testing shows the rollers spin fine but the game pieces rotate and eject sideways instead of feeding into the conveyor.\nAction:\nRedesign the geometry \u2014 wider roller spacing, angled guide rails. Rebuild and test. Don't abandon rollers entirely until you understand WHY they're failing.\n\ud83d\udca1 Prototype loops require parts and time, but you now know the failure mode precisely.\nGate 3\nTest Loop\nScenario:\nAfter 3 prototype iterations your shooter consistently hits 8/10 shots in isolation. But when you mount it to the full robot and run 5-note autonomous, it hits 3/10.\nAction:\nTest the interaction \u2014 is it vibration, power draw, timing? Add data logging. This is exactly what the test phase is for. Loop back and fix the specific failure.\n\ud83d\udca1 Test loops are expensive but decisive. A robot that fails here at home is better than one that fails at competition.\n10",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Step 7: Communicate Results\nThe final step isn't submission \u2014 it's the start of someone else's next iteration.\n\ud83d\udcdd\nDocument what you built\nCAD files, measurements, materials, assembly notes. Future-you six months from now will thank present-you.\n\ud83d\udcca\nDocument what you learned\nNot just what worked \u2014 what failed, what you tried, and why you made each decision. This is the real value.\n\ud83e\udd1d\nShare with your team\nFormal or informal. A 5-minute debrief beats nothing. Write it on the whiteboard. Add it to the shared drive.\n\ud83c\udf10\nShare with the community\nChief Delphi, FIRST forums, local scrimmages. The FRC community runs on shared knowledge. Give back what you can.\nEngineering knowledge that dies in one team's shop is wasted engineering.\n11",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Summary: Data Drives the Process\n1\nDefine the Problem\nWhat exactly are we solving?\n2\nBackground Research\nWhat already exists? What can we learn?\n3\nSpecify Requirements\nHow will we know if we succeeded?\n4\nBrainstorm & Choose\n\ud83d\udd01 GATE 1 \u2014 May loop back here from prototype or test\n5\nDevelop & Prototype\n\ud83d\udd01 GATE 2 \u2014 May loop back here from test results\n6\nTest Solution\n\ud83d\udd01 GATE 3 \u2014 Loop back until requirements are met\n7\nCommunicate Results\nDocument, share, and feed forward.\nThe loops aren't detours. They ARE the engineering.\n12",
+   "overlays": []
+  }
+ ]
+}

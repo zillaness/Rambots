@@ -1,0 +1,137 @@
+{
+ "sha256": "d11edbedf1c6bc7411ebe449a3e7629a9e6fc55a267adc58754ae94d7b768a20",
+ "pages": [
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Batteries &\nPower Electronics\nA robotics class review\nTool batteries \u00b7 FIRST robotics \u00b7 transformers \u00b7 rectifiers \u00b7 buck converters \u00b7 USB PD",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The 18650 cell\nThe workhorse cylindrical lithium-ion cell \u2014 and where its name comes from\n\u2013\n+\n18650\n65 mm long\n18 mm\n\"18\" = diameter (mm)     \"65\" = length (mm)     \"0\" = cylindrical shape\n2 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Cylindrical cell sizes\nTools and EVs are moving to bigger cells \u2014 more energy per cell, fewer welds per pack\n14500\n18650\n21700\n26650\n4680\nrelative size\nCell\nWhere you'll find it\n14500\nAA-sized lithium \u00b7 vapes, small flashlights\n18650\nOld laptops, flashlights, original Tesla Roadster\n21700\nModern tool packs, Tesla Model 3/Y, Rivian\n26650\nHigh-current flashlights, e-bikes, industrial\n4680\nTesla Model Y (new), Cybertruck, BMW Neue Klasse\n3 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Nominal voltage vs peak charge\nWhy a lithium cell doesn't have just one voltage\n4.2 V peak\njust after charging\n\u2192 5 cells \u00d7 4.2 = 21 V\n3.6 V nominal\naverage during use\n\u2192 5 cells \u00d7 3.6 = 18 V\n3.0 V cutoff\nBMS shuts off discharge\n4 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The 18V / 20V mystery\nSame five cells. Same chemistry. Just different numbers on the label.\nLabeled as NOMINAL\n18V\n5 cells \u00d7 3.6V = 18V\nMilwaukee M18\nBosch 18V\nMakita LXT\n=\nLabeled as PEAK\n20V Max\n5 cells \u00d7 4.2V \u2248 21V (rounded)\nDeWalt\nBlack & Decker\nPorter-Cable\nMarketing, not engineering \u2014 both labels point to the same physical pack at different points on the discharge curve\n5 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Series vs parallel\nThe foundation of every battery pack\nSERIES\n3.6V\n3 Ah\n3.6V\n3 Ah\n3.6V\n3 Ah\n3 \u00d7 3.6V = 10.8 V total\nvoltage adds \u00b7 capacity stays at 3 Ah\nPARALLEL\n3.6V\n3 Ah\n3.6V\n3 Ah\n3.6V\n3 Ah\n3.6 V \u00d7 9 Ah\ncapacity adds \u00b7 voltage stays at 3.6 V\n\"5S2P\" = 5 series + 2 parallel = 10 cells total. Combines both to get the voltage AND capacity you need.\n6 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "High-performance batteries\nWhy brushless tool packs have extra contacts\nSTANDARD PACK\nbattery cells\n+\n\u2013\ntwo contacts \u00b7 power only\nHIGH-PERFORMANCE PACK\nbattery cells + thermistor + comms IC\n+\ndata \u00b7 temp \u00b7 ID\n\u2013\nmultiple contacts \u00b7 pack and tool talk to each other\nTool reads pack temp, state of charge, cell health, and pack ID \u2014 throttles or refuses to fire if anything's wrong\n7 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Lithium cell chemistries\nThe cathode material changes everything \u2014 energy, current, safety, cost\nChemistry\nNominal V\nEnergy (Wh/kg)\nCycles\nBest for\nNMC\n3.6V\n150\u2013220\n1k\u20132k\nModern EVs, quality tool packs \u00b7 balanced everything\nLFP\n3.2V\n90\u2013160\n2k\u20136k+\nSafest \u00b7 solar storage, Tesla SR \u00b7 long life, no cobalt\nLMO / IMR\n3.7V\n100\u2013150\n300\u2013700\nTools, vapes \u00b7 high current bursts\nLCO / ICR\n3.6V\n150\u2013200\n500\u20131k\nPhones, laptops \u00b7 high capacity, low current\nNCA\n3.6V\n200\u2013260\n500\u20131.5k\nTesla Model S/X, aerospace \u00b7 highest energy density\nLTO\n2.4V\n50\u201380\n10k\u201330k\nGrid storage, fast-charge buses \u00b7 ultra-long life\nQuick tag decode: IMR = high current (manganese), used in tools and vapes.   ICR = high capacity (cobalt), used in laptops.\n8 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Pouch cells vs cylindrical\nTrade rigid metal for a flexible foil envelope\nPOUCH\nflat \u00b7 flexible foil\nHigher energy density per volume\nShape-flexible \u2014 fits any device\nLighter \u2014 no steel shell\nEasy to puncture\nSwells with age\nCustom per product\nCYLINDRICAL (18650 / 21700)\nround \u00b7 steel can\nStandardized \u00b7 universally available\nSelf-supporting \u00b7 survives drops\nEasier thermal management\nAir gaps waste pack space\nHeavier per Wh (steel)\nFixed sizes only\n9 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Battery Management System (BMS)\nWatches every cell individually \u00b7 balances during charge \u00b7 cuts off if unsafe\nCell 1\nCell 2\nCell 3\nCell 4\nCell 5\nbalance taps\nBattery Management System\nmonitors V \u00b7 I \u00b7 T   |   shuts off if unsafe   |   balances cells during charge\nNever build a multi-cell lithium pack without a BMS. One cell drifting low or high is a fire risk.\n10 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "FIRST Robotics uses AGM, not lithium\nSealed Lead-Acid (SLA) family \u2014 and why AGM is the right pick\nSLA family tree\nFlooded Lead-Acid\nOriginal. Liquid electrolyte. Spills, vents hydrogen.\nGel Cell\nSilica-thickened. Spill-proof but slow charge only.\nAGM \u2014 Absorbed Glass Mat\nElectrolyte soaked into a fiberglass mat between plates.\nHigh surge current \u00b7 spill-proof \u00b7 any orientation \u00b7 what FRC uses\nKey specs\nNominal voltage\n2.0 V / cell\nFull charge\n2.25\u20132.30 V\nCutoff\n1.75 V / cell\nEnergy density\n30\u201350 Wh/kg\nCycle life\n200\u2013500\nSelf-discharge\n3\u20135% / mo\n11 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Why AGM is right for FIRST\nSpecifically suited to competition robots and student teams\n1\nBrutal surge current\nDrivetrain motors pull 100+ amps in a stall. AGM handles this without complaint.\n2\nSafe for student use\nNo fire risk, no spill risk. Survives charging mistakes that would destroy lithium.\n3\nAny orientation\nRobots flip and roll. AGM is sealed \u2014 mounts upside-down, sideways, anywhere.\n4\nNo BMS required\nSix cells, two terminals, done. Much simpler electrical system than lithium.\n5\nCheap and standardized\nEvery team uses the same model. Easy to source, easy to replace.\n6\nVoltage sag = current limit\nNatural drop under heavy load inherently protects the system \u2014 lithium has no such grace.\n12 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "SLA / AGM vs Lithium-Ion\nHead-to-head across the metrics that matter for robots\nSLA / AGM\nLithium-Ion (LFP)\nEnergy density\n30\u201350 Wh/kg\n90\u2013160 Wh/kg\nCycle life\n200\u2013500\n2,000\u20136,000\nUsable capacity\n50% (DoD limit)\n80\u2013100%\nCost per kWh\n$50\u2013$150 (cheapest)\n$200\u2013$400\nWeight (12V / 100Ah)\n~30 kg\n~12 kg\nNeeds BMS\nNo\nYes\nCold performance\nGood\nPoor (LFP)\nVoltage sag under load\nSignificant\nFlat until cutoff\nSLA wins on cost, safety, and forgiveness \u2014 exactly why FRC uses it. Lithium wins on weight and runtime \u2014 exactly why EVs use it.\n13 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "AC vs DC\nThe basics before we get to transformers\nDC \u2014 Direct Current\n0V\ntime \u2192\nFlat. One direction. One voltage.\nBatteries \u00b7 Solar panels \u00b7 USB\nAC \u2014 Alternating Current\n0V\ntime \u2192\nReverses 60\u00d7 per second (US wall power).\nWall outlets \u00b7 Generators \u00b7 Transformers\n14 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Transformers\nTwo coils on a shared iron core \u2014 voltage ratio = turns ratio \u00b7 only works with AC\niron core\nPrimary\n5 turns\nSecondary\n9 turns\nV in\n(AC)\nV out\n(AC)\n9 / 5 ratio = step-up by 1.8\u00d7.   Step-down = fewer secondary turns.   DC won't work \u2014 needs a CHANGING magnetic field.\n15 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Full-bridge rectifier\nConverts AC to DC using four diodes in a diamond\n~\nAC in\nD1\nD2\nD3\nD4\ncap\nload\n+ DC\n\u2013 DC\nWhichever way AC swings, the output stays + on top, \u2013 on bottom.   Capacitor smooths the result into steady DC.\n16 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Buck converter\nDC-to-DC step-down \u00b7 85\u201395% efficient instead of dissipating heat\n12V\nin\nSW\nMOSFET\nPWM\nL (inductor)\nD\nC\n5V\nout (stable)\nSwitch chops the input \u00b7 inductor smooths the current \u00b7 cap smooths the voltage.   Buck = down \u00b7 Boost = up \u00b7 Buck-boost = either.\n17 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "NPN vs PNP transistors\nTwo complementary flavors of BJT (and same split for N-channel / P-channel MOSFET)\nNPN\n\"Not Pointing iN\"\nBase\nCollector\nEmitter\nON when base > emitter (high signal)\nUsed as a LOW-SIDE switch (between load and ground)\nPNP\n\"Points iN to Pin (base)\"\nBase\nEmitter\nCollector\nON when base < emitter (low signal)\nUsed as a HIGH-SIDE switch (between supply and load)\n18 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Wireless charging\nIt's a transformer with an air gap\nDevice (phone)\nsecondary coil (rectifies to DC)\nair gap\nchanging magnetic field\nprimary coil (driven with AC)\nCharging pad\n19 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "USB Power Delivery (USB PD)\nCharger and device negotiate the right voltage in real time\nCharger\noffers multiple profiles\n5V \u00b7 9V \u00b7 15V \u00b7 20V \u00b7 28V \u00b7 48V\nDevice\nknows what it needs\nphone \u00b7 laptop \u00b7 Switch...\n\"I can do 5/9/15/20V\"\n\"give me 9V/3A please\"\nover CC pins in USB-C cable\nCharger reconfigures its internal buck converter to deliver the requested voltage\nStandard\nVoltage\nMax power\nTypical use\nUSB 2.0 default\n5V\n2.5 W\nBasic accessories\nUSB PD 2.0/3.0\nup to 20V\n100 W\nLaptop charging\nUSB PD 3.1 EPR\nup to 48V\n240 W\nGaming laptops, workstations\n20 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "The big picture\nEvery battery system you'll meet uses the same stages \u2014 in some order\nWall AC\n120V, 60Hz\nTransformer\nstep down\nRectifier\nAC \u2192 DC\nBuck conv.\nregulate V\nBattery\n+ BMS\nPowering the robot:\nBattery\n12V or 18V\nBuck converters\n12V \u2192 5V, 3.3V, etc.\nMotors \u00b7 MCU \u00b7 Sensors\nthe actual robot\nGet electrons into chemistry that stores them, protect them, and convert to whatever voltage the load needs.\n21 / 22\nRobotics Review \u00b7 Batteries & Power",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "That's the whole thing.\nCells store energy. BMS protects them.\nTransformers, rectifiers, and buck converters reshape voltage.\nEverything else is just packaging.\nQuestions? Ask the student who took this lesson.",
+   "overlays": []
+  }
+ ]
+}

@@ -1,0 +1,450 @@
+{
+  "_metadata": {
+    "file": "site.json",
+    "version": "1.1",
+    "author": "Sam Cao",
+    "created": "2026-10-14",
+    "last_updated": "2026-10-14",
+    "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
+    "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
+  },
+  "title": "Presentations & Study Materials",
+  "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
+  "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
+  "version": "1.1",
+  "updated": "2026-10-14",
+  "topics": [
+    "FRC Basics",
+    "Design & CAD",
+    "Electrical & Power",
+    "Materials & Hardware",
+    "Fabrication & 3D Printing",
+    "Shop Practices",
+    "Careers"
+  ],
+  "items": [
+    {
+      "slug": "frc-introductory-guide",
+      "title": "FRC Introductory Guide",
+      "topic": "FRC Basics",
+      "kind": "slides",
+      "source": "files/frc_introductory_guide_v1.1.pptx",
+      "pdf": "files/frc_introductory_guide_v1.1.pdf",
+      "version": "1.1",
+      "gated": true,
+      "description": "FIRST history and core values, every FRC game from 1992 to 2026, legendary teams, suppliers, and the community tools and training resources worth knowing.",
+      "tags": [
+        "first",
+        "history",
+        "teams",
+        "suppliers",
+        "rev",
+        "andymark",
+        "wpilib",
+        "open alliance"
+      ]
+    },
+    {
+      "slug": "drive-bases-and-mechanisms",
+      "title": "FRC Drive Bases & Mechanisms",
+      "topic": "FRC Basics",
+      "kind": "slides",
+      "source": "files/frc_drive_bases_and_mechanisms_v1.0.pptx",
+      "pdf": "files/frc_drive_bases_and_mechanisms_v1.0.pdf",
+      "version": "1.0",
+      "description": "Tank, West Coast, mecanum, swerve, and H-drive compared, plus intakes, elevators, arms, shooters, and climbers.",
+      "tags": [
+        "drivetrain",
+        "swerve",
+        "mecanum",
+        "intake",
+        "elevator",
+        "climber"
+      ],
+      "gated": true
+    },
+    {
+      "slug": "drive-type-showdown",
+      "title": "Drive Type Showdown",
+      "topic": "FRC Basics",
+      "kind": "link",
+      "type": "game",
+      "label": "Game",
+      "url": "https://zillaness.github.io/driveTypeShowdown/",
+      "version": "1.0",
+      "description": "Browser game where you drive every FRC drive type (tank, arcade, swerve, holonomic) head to head, with arcade modes and a story-driven career tutorial.",
+      "tags": [
+        "swerve",
+        "tank",
+        "arcade",
+        "drivetrain"
+      ],
+      "extra_links": [
+        {
+          "label": "Source",
+          "url": "https://github.com/zillaness/DriveTypeShowdown"
+        }
+      ]
+    },
+    {
+      "slug": "engineering-design-process",
+      "title": "The Engineering Design Process",
+      "topic": "Design & CAD",
+      "kind": "slides",
+      "source": "files/engineering_design_process_v1.0.pptx",
+      "pdf": "files/engineering_design_process_v1.0.pdf",
+      "version": "1.0",
+      "description": "The seven-step engineering design process, its three iteration loops, and what each loop looks like on an FRC team. Steps adapted from Science Buddies.",
+      "tags": [
+        "requirements",
+        "brainstorm",
+        "prototype",
+        "iteration",
+        "science buddies"
+      ],
+      "gated": true
+    },
+    {
+      "slug": "punk-rock-engineering",
+      "title": "Punk Rock Engineering",
+      "topic": "Design & CAD",
+      "kind": "slides",
+      "source": "files/punk_rock_engineering_v1.0.pptx",
+      "pdf": "files/punk_rock_engineering_v1.0.pdf",
+      "version": "1.0",
+      "description": "When to build fast and break things, and when to slow down and apply rigor. Inspired by SuperfastMatt.",
+      "tags": [
+        "prototyping",
+        "iteration",
+        "superfastmatt"
+      ],
+      "gated": true
+    },
+    {
+      "slug": "intro-to-cad",
+      "title": "Intro to CAD: FRC Edition",
+      "topic": "Design & CAD",
+      "kind": "html",
+      "label": "Study sheet + quiz",
+      "version": "1.0.2",
+      "description": "Parametric modeling, constraints, features, surfaces, drawings, BOMs, FEA, and the CAD software landscape, with a quiz at the end.",
+      "tags": [
+        "onshape",
+        "solidworks",
+        "parametric",
+        "sketch",
+        "drawing"
+      ]
+    },
+    {
+      "slug": "gusset-project",
+      "title": "The Acute Gusset Project",
+      "topic": "Design & CAD",
+      "kind": "html",
+      "type": "handout",
+      "label": "Project handout",
+      "version": "1.0",
+      "description": "Design one gusset in Onshape, then laser cut it in wood and 3D print it. Includes an Onshape checklist and the deliverables.",
+      "tags": [
+        "onshape",
+        "laser cutter",
+        "3d print",
+        "summer course"
+      ]
+    },
+    {
+      "slug": "batteries-and-power",
+      "title": "Batteries & Power Electronics",
+      "topic": "Electrical & Power",
+      "kind": "slides",
+      "source": "files/batteries_and_power_review_v1.0.pptx",
+      "pdf": "files/batteries_and_power_review_v1.0.pdf",
+      "version": "1.0",
+      "description": "18650 cells, pack voltages, BMS, why FRC uses AGM lead-acid, transformers, rectifiers, buck converters, and USB PD.",
+      "tags": [
+        "battery",
+        "lithium",
+        "agm",
+        "bms",
+        "transformer",
+        "buck converter"
+      ]
+    },
+    {
+      "slug": "batteries-study-sheet",
+      "title": "Batteries & Power Electronics Study Sheet",
+      "topic": "Electrical & Power",
+      "kind": "html",
+      "version": "1.0.1",
+      "description": "Companion to the Batteries & Power Electronics deck, with a diagram for every topic.",
+      "tags": [
+        "battery",
+        "18650",
+        "bms",
+        "rectifier",
+        "usb pd"
+      ]
+    },
+    {
+      "slug": "electrical-systems",
+      "title": "FRC Electrical Systems Reference",
+      "topic": "Electrical & Power",
+      "kind": "html",
+      "version": "1.0.1",
+      "description": "From atoms and Ohm's law to resistors, capacitors, inductors, flyback diodes, and transformers, with practical FRC examples.",
+      "tags": [
+        "voltage",
+        "current",
+        "resistance",
+        "ohm",
+        "capacitor",
+        "inductor"
+      ]
+    },
+    {
+      "slug": "multimeter-challenge",
+      "title": "FRC Multimeter Challenge",
+      "topic": "Electrical & Power",
+      "kind": "html",
+      "type": "game",
+      "label": "Game",
+      "version": "1.0",
+      "description": "Troubleshoot a robot with a virtual multimeter: find opens and shorts, check the battery, and pick the right meter mode before you fry it.",
+      "tags": [
+        "multimeter",
+        "troubleshooting",
+        "short",
+        "continuity"
+      ]
+    },
+    {
+      "slug": "electrical-jeopardy",
+      "title": "FRC Electrical Jeopardy",
+      "topic": "Electrical & Power",
+      "kind": "html",
+      "type": "game",
+      "label": "Game",
+      "version": "1.0",
+      "description": "Jeopardy-style review game on FRC electrical topics, built for a classroom projector.",
+      "tags": [
+        "review",
+        "quiz",
+        "jeopardy"
+      ]
+    },
+    {
+      "slug": "fasteners",
+      "title": "Fasteners Study Sheet",
+      "topic": "Materials & Hardware",
+      "kind": "html",
+      "version": "1.0",
+      "description": "Threads and callouts, tapping and drill charts, head and drive types, grades, torque, loosening, rivets, and which fastener to use when.",
+      "tags": [
+        "bolt",
+        "screw",
+        "thread",
+        "tap",
+        "torque",
+        "loctite"
+      ]
+    },
+    {
+      "slug": "fasteners-jeopardy",
+      "title": "Fasteners & Tools Jeopardy",
+      "topic": "Materials & Hardware",
+      "kind": "html",
+      "type": "game",
+      "label": "Game",
+      "version": "1.0",
+      "description": "Jeopardy-style review game on tools, threads, and thread-locker, built for a classroom projector.",
+      "tags": [
+        "review",
+        "quiz",
+        "jeopardy",
+        "loctite"
+      ],
+      "gated_links": [
+        {
+          "label": "Host answer key",
+          "url": "fasteners-jeopardy/answer-key/"
+        }
+      ]
+    },
+    {
+      "slug": "material-reference",
+      "title": "FRC Material Selection Reference",
+      "topic": "Materials & Hardware",
+      "kind": "html",
+      "label": "Interactive reference",
+      "version": "1.0",
+      "description": "38 materials compared for FRC use, with a material-selection quiz, a fabrication-method guide, and charts.",
+      "tags": [
+        "aluminum",
+        "polycarbonate",
+        "steel",
+        "materials",
+        "quiz"
+      ]
+    },
+    {
+      "slug": "bolt-depot-printable-tools",
+      "title": "Printable Fastener Tools (Bolt Depot)",
+      "topic": "Materials & Hardware",
+      "kind": "link",
+      "label": "External chart",
+      "url": "https://www.boltdepot.com/fastener-information/printable-tools",
+      "version": "1.0",
+      "description": "Bolt Depot's free printable bolt, nut, and thread gauges. Linked rather than rehosted because the charts are Bolt Depot's.",
+      "tags": [
+        "gauge",
+        "thread",
+        "printable"
+      ]
+    },
+    {
+      "slug": "tap-drill-chart",
+      "title": "Tap Drill Sizes (LittleMachineShop)",
+      "topic": "Materials & Hardware",
+      "kind": "link",
+      "label": "External chart",
+      "url": "https://littlemachineshop.com/reference/tapdrill.php",
+      "version": "1.0",
+      "description": "LittleMachineShop's tap drill chart for inch and metric threads. Linked rather than rehosted because the chart is theirs.",
+      "tags": [
+        "tap",
+        "drill",
+        "thread",
+        "chart"
+      ]
+    },
+    {
+      "slug": "digital-fabrication",
+      "title": "Digital Fabrication Review",
+      "topic": "Fabrication & 3D Printing",
+      "kind": "html",
+      "label": "Interactive review",
+      "version": "1.1",
+      "description": "CNC and G-code, 3D printing, infill and layer strength, laser cutters and the EM spectrum, and color as bytes, with interactives and a review quiz.",
+      "tags": [
+        "cnc",
+        "g-code",
+        "laser",
+        "infill",
+        "msla"
+      ]
+    },
+    {
+      "slug": "fdm-review",
+      "title": "FDM / FFF 3D Printing Review",
+      "topic": "Fabrication & 3D Printing",
+      "kind": "html",
+      "version": "1.0",
+      "description": "52-section deep dive on FDM printing: motion systems, extruders, nozzles, cooling, bed adhesion, safety, and a complete materials guide.",
+      "tags": [
+        "fdm",
+        "filament",
+        "nozzle",
+        "petg",
+        "pla",
+        "bambu",
+        "prusa"
+      ]
+    },
+    {
+      "slug": "beyond-fdm",
+      "title": "3D Printing Beyond FDM",
+      "topic": "Fabrication & 3D Printing",
+      "kind": "html",
+      "version": "1.0",
+      "description": "Resin (SLA and MSLA), SLS, HP MJF, Markforged fiber, metal printing, tolerances, print services, and design for additive manufacturing.",
+      "tags": [
+        "sla",
+        "sls",
+        "mjf",
+        "resin",
+        "formlabs",
+        "markforged",
+        "metal"
+      ]
+    },
+    {
+      "slug": "lean-5s",
+      "title": "5S: Lean Manufacturing Principles",
+      "topic": "Shop Practices",
+      "kind": "slides",
+      "source": "files/5s_lean_manufacturing_principles_v1.0.pptx",
+      "pdf": "files/5s_lean_manufacturing_principles_v1.0.pdf",
+      "version": "1.0",
+      "description": "Kaizen, the five S's (plus safety), and PDCA, with shop-floor examples of each step.",
+      "tags": [
+        "kaizen",
+        "pdca",
+        "lean",
+        "sort",
+        "shine"
+      ]
+    },
+    {
+      "slug": "5s-quiz",
+      "title": "5S Quiz",
+      "topic": "Shop Practices",
+      "kind": "document",
+      "type": "game",
+      "label": "Worksheet",
+      "source": "files/5s_quiz_v1.0.docx",
+      "pdf": "files/5s_quiz_v1.0.pdf",
+      "version": "1.0",
+      "description": "Printable worksheet: name each S and explain it in your own words. Pairs with the 5S deck.",
+      "tags": [
+        "lean",
+        "worksheet",
+        "quiz"
+      ]
+    },
+    {
+      "slug": "find-a-job",
+      "title": "So You Wanna Find a Job?",
+      "topic": "Careers",
+      "kind": "slides",
+      "source": "files/so_you_wanna_find_a_job_v1.0.pptx",
+      "pdf": "files/so_you_wanna_find_a_job_v1.0.pdf",
+      "version": "1.0",
+      "description": "Choosing a path, what a real job hunt looks like, resumes, LinkedIn, interviews, and salary negotiation.",
+      "tags": [
+        "resume",
+        "interview",
+        "linkedin",
+        "salary",
+        "ikigai"
+      ]
+    },
+    {
+      "slug": "mock-interview-questions",
+      "title": "Mock Interview Question Bank",
+      "topic": "Careers",
+      "kind": "document",
+      "source": "files/mock_interview_question_bank_v1.0.docx",
+      "pdf": "files/mock_interview_question_bank_v1.0.pdf",
+      "version": "1.0",
+      "description": "Interview questions for engineering roles from intern to quality manager, plus software, embedded, and problem-solving prompts.",
+      "tags": [
+        "interview",
+        "practice",
+        "software",
+        "mechanical"
+      ]
+    }
+  ],
+  "_changelog": [
+    {
+      "version": "1.0",
+      "date": "2026-10-14",
+      "note": "Initial release."
+    },
+    {
+      "version": "1.1",
+      "date": "2026-10-14",
+      "note": "Drive Bases, Engineering Design Process, Punk Rock Engineering, and the FRC Introductory Guide (v1.1: founder names and unverified claims removed) locked behind the Konami code."
+    }
+  ]
+}

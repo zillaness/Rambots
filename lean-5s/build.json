@@ -1,0 +1,98 @@
+{
+ "sha256": "6b3cd7e67eb86c57e786c03e5b7450e2dfc9516dfe046175a02df182a6844aa1",
+ "pages": [
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "5S - Lean Manufacturing Principles\nAaaaand some other background info",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Lean Manufacturing Principles\nKaizen\n5s\nPDCA",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Kaizen",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Kaizen?\nWhat is Kaizen? Besides a word that's fun to say.\nJapanese Word\nContinuous Improvement\nWhat does this mean for you?\nWhat does this mean for us?\nLiterally translated it means Change Good\nDon\u2019t get used to, or be satisfied by the status quo\nPerfection isn\u2019t possible, but we should strive for it everyday.\nBetter today than yesterday",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Penguin Break - Courtesy of Joel",
+   "overlays": [
+    {
+     "media": "ppt/media/image4.gif",
+     "x": 31.770833333333332,
+     "y": 23.79896957324779,
+     "w": 36.458333333333336,
+     "h": 66.66666666666667,
+     "src": "overlays/image4.gif"
+    }
+   ]
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "5S\u2026 Or was it 6?\nSeiri\nSeiton\nSeiso\nSeiketsu\nShitsuke\nSort\nSet in Order\nShine/Sense of Health\nStandardize/Schedule\nSustain\nSAFETY",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Sort-Seiri\nSeparate the needed tools, parts, and instructions\nEliminate unneeded tools, parts, and instructions (from main working environment)\nLeads to>Optimization of work area, Space Freed up, Reduction of Search Times",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Sort",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Set in Order-Seiton\nFurther optimizes and reduces search times\nReduction in waste time and movement (two of the 8 forms of waste)\nHonestly, aesthetically pleasing, looks professional, and gets your manager off your back.\nVisual Management-Kanban",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Shine-Seiso\nSense of Health/Hygiene\nReduction of Defects (FOD)\nAccident Risk Reduction",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Standarize/Schedule-Seiketsu\nEstablish Procedures and Schedules to ensure the repetition of the first three S practices\nDevelop a work structure that will support the new practices and make it part of the daily routine.\nEnsure everyone knows their responsibilities of performing the sorting, organizing and cleaning.\nUse photos and visual controls to help keep everything as it should be.\nMonthly cleaning/tool management",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Sustain-Shitsuke\nAuditing\nEnsure 5S approach is being followed\nPerform regular checks and training\nImplement Improvements wherever possible.  Worker input is the most valuable way to identify improvements - (Our Incentive Plan)",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "PDCA\nPlan\nDo\nCheck\nAct",
+   "overlays": []
+  },
+  {
+   "w": 1920,
+   "h": 1081,
+   "text": "Other Concepts For a Future Date\n8 Forms of Waste\nZero Defects Forward\nKanban\nPDCA",
+   "overlays": []
+  }
+ ]
+}

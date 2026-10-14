@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FRC Electrical Jeopardy!</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #03071e;
+    --panel:     #0a1628;
+    --blue:      #0d2b6b;
+    --lblue:     #3a7bd5;
+    --gold:      #f5c518;
+    --green:     #00c87a;
+    --red:       #e03030;
+    --muted:     #8899aa;
+    --white:     #ffffff;
+    --daily:     #ff6b2b;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: Georgia, serif;
+    min-height: 100vh;
+  }
+
+  /* ── SCREEN VISIBILITY ── */
+  .screen { display: none; }
+  .screen.active { display: flex; }
+
+  /* ══════════════════════════════
+     SETUP SCREEN
+  ══════════════════════════════ */
+  #screen-setup {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .setup-title { text-align: center; }
+  .setup-eyebrow {
+    font-family: monospace;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .setup-h1 {
+    font-size: clamp(36px, 8vw, 56px);
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-shadow: 0 0 40px #f5c51844;
+  }
+  .setup-subtitle {
+    font-family: monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .setup-card {
+    background: var(--panel);
+    border: 1px solid var(--blue);
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .field-label {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .count-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .count-btn {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    border: 2px solid var(--blue);
+    background: transparent;
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .count-btn.sel {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+  }
+
+  .names-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .name-row { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .name-input {
+    background: var(--blue);
+    border: 1px solid #3a7bd544;
+    border-radius: 6px;
+    color: var(--white);
+    padding: 7px 10px;
+    font-size: 14px;
+    font-family: Georgia, serif;
+    width: 100%;
+    outline: none;
+  }
+
+  .btn-gold {
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-gold:hover { opacity: 0.85; }
+
+  /* ══════════════════════════════
+     BOARD SCREEN
+  ══════════════════════════════ */
+  #screen-board {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .board-header {
+    background: var(--panel);
+    text-align: center;
+    padding: 12px 16px 6px;
+  }
+  .board-header h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 4px;
+  }
+  .board-header p {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  /* Score bar */
+  .score-bar {
+    background: var(--panel);
+    border-bottom: 1px solid var(--blue);
+    padding: 8px 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .score-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: Georgia, serif;
+  }
+  .score-chip.active-player { background: #ffffff11; }
+  .score-chip .chip-name {
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .score-chip .chip-score {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .score-chip .chip-score.neg { color: var(--red); }
+
+  /* Grid */
+  .board-wrap {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+  }
+  .board-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .cat-cell {
+    background: var(--blue);
+    border: 1px solid #3a7bd533;
+    border-radius: 7px;
+    padding: 10px 6px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 62px;
+    font-size: clamp(10px, 1.4vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+  }
+  .q-cell {
+    background: var(--blue);
+    border: 1px solid #3a7bd533;
+    border-radius: 7px;
+    padding: 12px 6px;
+    text-align: center;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .q-cell:hover { background: var(--lblue); }
+  .q-cell.used {
+    background: #0d2b6b44;
+    border-color: #0d2b6b44;
+    color: transparent;
+    cursor: default;
+    pointer-events: none;
+  }
+  .q-cell.used::after { content: "✓"; color: #0d2b6b; font-size: 20px; }
+
+  .board-footer {
+    background: var(--panel);
+    border-top: 1px solid var(--blue);
+    padding: 8px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .final-btn-wrap { text-align: center; margin-top: 20px; padding-bottom: 10px; }
+  .btn-final {
+    padding: 15px 40px;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 2px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 #f5c51866; }
+    50%      { box-shadow: 0 0 0 12px #f5c51800; }
+  }
+
+  /* ══════════════════════════════
+     MODAL
+  ══════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: var(--panel);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 700px;
+    padding: 2rem;
+    position: relative;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+  .modal-box.dd-box { border-color: var(--daily); }
+
+  .modal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .modal-cat {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+  }
+  .modal-pts {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .modal-pts.dd { color: var(--daily); }
+  .modal-active {
+    font-family: monospace;
+    font-size: 13px;
+  }
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 0 0 12px;
+  }
+
+  .clue-box {
+    background: var(--blue);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 18px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .clue-text {
+    font-size: clamp(16px, 2.5vw, 20px);
+    text-align: center;
+    line-height: 1.65;
+  }
+
+  .answer-box {
+    background: #f5c51811;
+    border: 1px solid #f5c51866;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .answer-label {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 5px;
+  }
+  .answer-text { font-size: 16px; line-height: 1.6; }
+
+  .btn-reveal {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    color: var(--gold);
+    font-size: 16px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: background 0.15s;
+  }
+  .btn-reveal:hover { background: #f5c51811; }
+
+  .section-label {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .player-btn-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+
+  .btn-correct, .btn-wrong, .btn-skip {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: opacity 0.15s;
+  }
+  .btn-correct:hover, .btn-wrong:hover, .btn-skip:hover { opacity: 0.75; }
+
+  .btn-skip {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid #8899aa44;
+    color: var(--muted);
+    font-size: 15px;
+    font-family: Georgia, serif;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .btn-skip:hover { background: #8899aa11; }
+
+  /* ── DAILY DOUBLE wager ── */
+  .dd-splash {
+    text-align: center;
+    padding: 1rem 0 1.5rem;
+  }
+  .dd-splash h2 {
+    font-size: 36px;
+    color: var(--daily);
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px #ff6b2b44;
+    margin-bottom: 8px;
+  }
+  .dd-hint {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .wager-input {
+    background: var(--blue);
+    border: 1px solid var(--lblue);
+    border-radius: 8px;
+    color: var(--gold);
+    font-size: 28px;
+    font-weight: 700;
+    font-family: Georgia, serif;
+    padding: 10px 16px;
+    text-align: center;
+    width: 100%;
+    outline: none;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .btn-confirm-wager {
+    width: 100%;
+    padding: 14px;
+    background: var(--daily);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    letter-spacing: 2px;
+  }
+  .btn-confirm-wager:hover { opacity: 0.85; }
+
+  /* ══════════════════════════════
+     FINAL JEOPARDY
+  ══════════════════════════════ */
+  #screen-final {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .final-panel {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .final-title { text-align: center; margin-bottom: 2rem; }
+  .final-title h1 {
+    font-size: clamp(32px, 6vw, 52px);
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-shadow: 0 0 40px #f5c51844;
+  }
+  .final-title p {
+    font-family: monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .score-preview {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .score-preview-chip {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    border: 1px solid var(--blue);
+  }
+  .score-preview-chip .p-name { font-family: monospace; font-size: 12px; }
+  .score-preview-chip .p-score { font-size: 22px; font-weight: 700; color: var(--gold); font-family: Georgia, serif; }
+
+  .wager-row {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #0d2b6b88;
+  }
+  .wager-row .wr-name { flex: 1; font-family: monospace; font-size: 13px; }
+  .wager-row input {
+    width: 110px;
+    background: var(--blue);
+    border: 1px solid;
+    border-radius: 6px;
+    color: var(--gold);
+    font-size: 20px;
+    font-weight: 700;
+    font-family: Georgia, serif;
+    padding: 8px 10px;
+    text-align: center;
+    outline: none;
+  }
+
+  .judge-row {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #0d2b6b88;
+  }
+  .judge-row .jr-name { flex: 1; font-family: monospace; font-size: 13px; }
+  .judge-row .jr-wager { font-family: monospace; font-size: 12px; color: var(--muted); }
+  .judge-row .jr-result { font-weight: 700; font-size: 18px; font-family: Georgia, serif; }
+  .judge-row .jr-result.pos { color: var(--green); }
+  .judge-row .jr-result.neg { color: var(--red); }
+
+  .btn-judge-c, .btn-judge-w {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid;
+  }
+  .btn-judge-c { background: #00c87a22; border-color: var(--green); color: var(--green); }
+  .btn-judge-w { background: #e0303022; border-color: var(--red); color: var(--red); }
+  .btn-judge-c:hover { background: #00c87a44; }
+  .btn-judge-w:hover { background: #e0303044; }
+
+  /* Results */
+  .results-list { margin-bottom: 24px; }
+  .result-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 2px solid;
+  }
+  .result-rank { font-size: 26px; width: 36px; }
+  .result-name { flex: 1; font-family: monospace; font-size: 14px; }
+  .result-score { font-size: 26px; font-weight: 700; font-family: Georgia, serif; }
+  .result-score.neg { color: var(--red); }
+
+  .btn-play-again {
+    padding: 14px 32px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    color: var(--gold);
+    font-size: 16px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: block;
+    margin: 0 auto;
+  }
+  .btn-play-again:hover { background: #f5c51811; }
+</style>
+</head>
+<body>
+
+<!-- ══ SETUP SCREEN ══ -->
+<div id="screen-setup" class="screen active">
+  <div class="setup-title">
+    <div class="setup-eyebrow">FIRST ROBOTICS COMPETITION</div>
+    <h1 class="setup-h1">JEOPARDY!</h1>
+    <div class="setup-subtitle">ELECTRICAL SYSTEMS EDITION</div>
+  </div>
+
+  <div class="setup-card">
+    <label class="field-label">NUMBER OF PLAYERS</label>
+    <div class="count-row" id="count-row"></div>
+
+    <label class="field-label">PLAYER NAMES</label>
+    <div class="names-grid" id="names-grid"></div>
+
+    <button class="btn-gold" onclick="startGame()">LET'S PLAY!</button>
+  </div>
+</div>
+
+<!-- ══ BOARD SCREEN ══ -->
+<div id="screen-board" class="screen">
+  <div class="board-header">
+    <h1>JEOPARDY!</h1>
+    <p>FRC ELECTRICAL SYSTEMS EDITION</p>
+  </div>
+  <div class="score-bar" id="score-bar"></div>
+  <div class="board-wrap">
+    <div class="board-grid" id="board-grid"></div>
+    <div class="final-btn-wrap" id="final-btn-wrap" style="display:none">
+      <button class="btn-final" onclick="showFinal()">FINAL JEOPARDY!</button>
+    </div>
+  </div>
+  <div class="board-footer">
+    <span>TAP A PLAYER NAME TO MARK AS ACTIVE BEFORE SELECTING A QUESTION</span>
+    <button id="undo-btn" onclick="undoLast()" style="display:none;margin-left:16px;padding:5px 14px;background:transparent;border:1px solid var(--red);border-radius:6px;color:var(--red);font-family:monospace;font-size:12px;cursor:pointer;letter-spacing:1px;">↩ UNDO LAST ACTION</button>
+  </div>
+</div>
+
+<!-- ══ QUESTION MODAL ══ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-top">
+      <div>
+        <div class="modal-cat" id="m-cat"></div>
+        <div class="modal-pts" id="m-pts"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="modal-active" id="m-active"></span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+
+    <!-- Daily Double wager phase -->
+    <div id="dd-phase">
+      <div class="dd-splash">
+        <h2>DAILY DOUBLE!</h2>
+        <div class="dd-hint" id="dd-hint"></div>
+        <input class="wager-input" type="number" id="wager-input" min="5" />
+        <button class="btn-confirm-wager" onclick="confirmWager()">CONFIRM WAGER</button>
+      </div>
+    </div>
+
+    <!-- Clue phase -->
+    <div id="clue-phase">
+      <div class="clue-box"><p class="clue-text" id="clue-text"></p></div>
+
+      <button class="btn-reveal" id="reveal-btn" onclick="revealAnswer()">Reveal Answer</button>
+
+      <div id="answer-section" style="display:none">
+        <div class="answer-box">
+          <div class="answer-label">CORRECT RESPONSE:</div>
+          <div class="answer-text" id="answer-text"></div>
+        </div>
+      </div>
+
+      <div class="section-label">AWARD POINTS TO:</div>
+      <div class="player-btn-row" id="correct-btns"></div>
+
+      <div class="section-label">DEDUCT POINTS FROM:</div>
+      <div class="player-btn-row" id="wrong-btns"></div>
+
+      <button class="btn-skip" onclick="closeModal()">No Answer / Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINAL JEOPARDY SCREEN ══ -->
+<div id="screen-final" class="screen">
+  <div class="final-panel" id="final-panel"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════ */
+const CATEGORIES = [
+  "ELECTRICITY\nBASICS",
+  "WIRES &\nCONNECTIONS",
+  "FRC POWER\nSYSTEMS",
+  "BATTERY\nCHEMISTRY",
+  "CAN BUS &\nCONTROLS",
+  "DIAGNOSIS\n& SAFETY",
+];
+
+const QUESTIONS = [
+  [
+    { points:200,  clue:"This fundamental relationship between voltage, current, and resistance is the cornerstone of all circuit analysis.", answer:"What is Ohm's Law? (V = I × R)" },
+    { points:400,  clue:"The SI unit of electrical resistance, symbolized by the Greek letter Ω.", answer:"What is the Ohm?" },
+    { points:600,  clue:"A motor draws 5 amperes at 12 volts. This is its power consumption in watts.", answer:"What is 60 watts? (P = V × I)" },
+    { points:800,  clue:"When resistors are added in parallel, total resistance does THIS compared to any individual resistor.", answer:"What is decrease? (Gets smaller / lower than any individual resistor)" },
+    { points:1000, clue:"The formula P = I²R calculates this quantity, expressed in watts, using current and resistance alone.", answer:"What is Power?" },
+  ],
+  [
+    { points:200,  clue:"In the American Wire Gauge (AWG) system, a higher gauge number indicates this type of wire.", answer:"What is thinner / smaller wire?" },
+    { points:400,  clue:"In FRC wiring standards, this insulation color must be used for positive (hot) conductors.", answer:"What is Red?" },
+    { points:600,  clue:"This wire gauge is required for the main power wiring on an FRC robot, connecting battery to PDH.", answer:"What is 6 AWG?" },
+    { points:800,  clue:"This spring-lever connector system requires NO tools to terminate wires and is commonly found on FRC Power Distribution Hubs.", answer:"What is a WAGO (lever / spring connector)?" },
+    { points:1000, clue:"Applied as a tube that shrinks when heated, this material insulates and protects splices, solder joints, and wire terminations.", answer:"What is Heat Shrink Tubing?" },
+  ],
+  [
+    { points:200,  clue:"The nominal operating voltage of an FRC competition robot's battery.", answer:"What is 12 Volts?" },
+    { points:400,  clue:"The current rating of the main breaker that every FRC robot must have as its primary power disconnect.", answer:"What is 120 Amps?" },
+    { points:600,  clue:"PDH, the device on FRC robots that routes and protects power to all subsystems, stands for this.", answer:"What is Power Distribution Hub?" },
+    { points:800,  clue:"This style of connector — rated for high current — is used to connect the battery to the FRC robot's main power circuit and at the charging station.", answer:"What is an Anderson SB50 (Anderson connector)?" },
+    { points:1000, clue:"This National Instruments / REV device serves as the main robot controller, runs robot code, and manages all I/O on an FRC robot.", answer:"What is the RoboRIO?" },
+  ],
+  [
+    { points:200,  clue:"FIRST Robotics Competition rules require all robots to use this specific battery technology — a sealed, spill-proof variant of lead-acid.", answer:"What is AGM (Absorbed Glass Mat / Sealed Lead-Acid)?" },
+    { points:400,  clue:"In AGM battery construction, the electrolyte is absorbed into THIS material between the lead plates.", answer:"What is Fiberglass / Absorbed Glass Mat?" },
+    { points:600,  clue:"When battery cells are wired in series, THIS quantity adds up while amp-hour capacity stays the same.", answer:"What is Voltage?" },
+    { points:800,  clue:"The peak voltage of a fully charged lithium-ion cell, the point at which charging stops to prevent overcharge damage.", answer:"What is 4.2 Volts?" },
+    { points:1000, clue:"The '18' in an '18650' lithium-ion cell refers to this physical dimension of the cylindrical cell.", answer:"What is the diameter? (18 millimeters)" },
+  ],
+  [
+    { points:200,  clue:"CAN Bus, the communication backbone connecting motor controllers and sensors on FRC robots, stands for this.", answer:"What is Controller Area Network?" },
+    { points:400,  clue:"A CAN Bus cable uses exactly this many conductors: one labeled CAN High and one labeled CAN Low.", answer:"What is 2 (two wires)?" },
+    { points:600,  clue:"When measured with a multimeter (power off), a correctly terminated CAN Bus should read approximately this resistance.", answer:"What is ~60 Ohms?" },
+    { points:800,  clue:"Placed at both physical ends of the CAN Bus, these components prevent signal reflections that corrupt data.", answer:"What are Termination Resistors? (120 Ω each)" },
+    { points:1000, clue:"A CAN device intermittently drops off the bus. Besides loose connectors, the wiring diagram shows this topology issue — a cable branch that is too long.", answer:"What is a long stub? (Excessive stub length off the main bus)" },
+  ],
+  [
+    { points:200,  clue:"This condition — where voltage sags so low the RoboRIO cuts all outputs — causes the robot to go 'limp' mid-match even though it stays enabled.", answer:"What is a Brownout?" },
+    { points:400,  clue:"This handheld instrument, essential in every FRC toolbox, measures voltage, current, resistance, and continuity.", answer:"What is a Multimeter?" },
+    { points:600,  clue:"When smoke is observed coming from any robot component, this should be your absolute first action.", answer:"What is Disconnect (remove) the battery?" },
+    { points:800,  clue:"This FRC laptop software provides real-time battery voltage, CAN bus utilization percentage, and a timestamped event log — making it the first tool for electrical diagnosis.", answer:"What is the FRC Driver Station?" },
+    { points:1000, clue:"A PDH branch breaker trips the instant the robot is powered on. Measuring resistance between + and − of that channel's wiring would confirm this root cause.", answer:"What is a Short Circuit?" },
+  ],
+];
+
+const FINAL_JEOPARDY = {
+  category: "FRC ELECTRICAL MASTERY",
+  clue: "On an FRC robot, this type of voltage drop — caused by high current draw from stalled drive motors combined with a high-resistance Anderson connector — can trigger a RoboRIO safety feature that cuts all outputs. Name the phenomenon AND two corrective actions teams should take.",
+  answer: "What is a Brownout? Fixes: fresh/charged battery, clean/replace Anderson SB50 connectors, implement software current limiting, ramp motor setpoints gradually.",
+};
+
+// Daily doubles: [categoryIndex, questionIndex]
+const DAILY_DOUBLES = [[2,3],[4,4],[1,2]];
+
+const PLAYER_COLORS = ["#f5c518","#00c87a","#3a7bd5","#e03030","#a855f7","#f97316","#06b6d4","#ec4899","#84cc16","#14b8a6","#f43f5e","#8b5cf6"];
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let playerCount = 2;
+let playerNames = ["Player 1","Player 2","Player 3","Player 4","Player 5","Player 6","Player 7","Player 8","Player 9","Player 10","Player 11","Player 12"];
+let scores = [];
+let used = [];          // used[cat][q] = bool
+let activePlayer = 0;
+let currentCat = 0;
+let currentQ = 0;
+let isDD = false;
+let ddWager = 0;
+let effectivePts = 0;
+let lastSnapshot = null; // for undo
+
+/* ═══════════════════════════════════════════════════════
+   SETUP SCREEN
+═══════════════════════════════════════════════════════ */
+(function initSetup() {
+  const countRow = document.getElementById('count-row');
+  for (let n = 1; n <= 12; n++) {
+    const btn = document.createElement('button');
+    btn.className = 'count-btn' + (n === 2 ? ' sel' : '');
+    btn.textContent = n;
+    btn.dataset.n = n;
+    btn.onclick = () => selectCount(n);
+    countRow.appendChild(btn);
+  }
+  renderNamesGrid();
+})();
+
+function selectCount(n) {
+  playerCount = n;
+  document.querySelectorAll('.count-btn').forEach(b => {
+    b.classList.toggle('sel', +b.dataset.n === n);
+  });
+  renderNamesGrid();
+}
+
+function renderNamesGrid() {
+  const grid = document.getElementById('names-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < playerCount; i++) {
+    const row = document.createElement('div');
+    row.className = 'name-row';
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.style.background = PLAYER_COLORS[i];
+    const inp = document.createElement('input');
+    inp.className = 'name-input';
+    inp.value = playerNames[i];
+    inp.oninput = e => { playerNames[i] = e.target.value; };
+    row.append(dot, inp);
+    grid.appendChild(row);
+  }
+}
+
+function startGame() {
+  scores = Array(playerCount).fill(0);
+  used = Array(6).fill(null).map(() => Array(5).fill(false));
+  activePlayer = 0;
+  lastSnapshot = null;
+  showScreen('board');
+  renderBoard();
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOARD
+═══════════════════════════════════════════════════════ */
+function renderBoard() {
+  renderScoreBar();
+
+  const grid = document.getElementById('board-grid');
+  grid.innerHTML = '';
+
+  // Category headers
+  CATEGORIES.forEach(cat => {
+    const cell = document.createElement('div');
+    cell.className = 'cat-cell';
+    cell.innerHTML = cat.replace('\n','<br>');
+    grid.appendChild(cell);
+  });
+
+  // Question cells: row by row (point level), col by col (category)
+  for (let qi = 0; qi < 5; qi++) {
+    for (let ci = 0; ci < 6; ci++) {
+      const q = QUESTIONS[ci][qi];
+      const cell = document.createElement('div');
+      cell.className = 'q-cell' + (used[ci][qi] ? ' used' : '');
+      cell.dataset.ci = ci;
+      cell.dataset.qi = qi;
+      if (!used[ci][qi]) {
+        cell.textContent = '$' + q.points;
+        cell.onclick = () => openModal(ci, qi);
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  // Show Final Jeopardy button if all used
+  const allDone = used.every(col => col.every(v => v));
+  document.getElementById('final-btn-wrap').style.display = allDone ? 'block' : 'none';
+  updateUndoBtn();
+}
+
+function renderScoreBar() {
+  const bar = document.getElementById('score-bar');
+  bar.innerHTML = '';
+  for (let i = 0; i < playerCount; i++) {
+    const chip = document.createElement('button');
+    chip.className = 'score-chip' + (i === activePlayer ? ' active-player' : '');
+    chip.style.borderColor = i === activePlayer ? PLAYER_COLORS[i] : 'transparent';
+    chip.innerHTML = `
+      <span class="chip-name" style="color:${PLAYER_COLORS[i]}">${playerNames[i]}</span>
+      <span class="chip-score${scores[i] < 0 ? ' neg' : ''}">${scores[i] < 0 ? '-$'+Math.abs(scores[i]) : '$'+scores[i]}</span>`;
+    chip.onclick = () => { activePlayer = i; renderScoreBar(); updateModalActive(); };
+    bar.appendChild(chip);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════ */
+function openModal(ci, qi) {
+  currentCat = ci;
+  currentQ = qi;
+  isDD = DAILY_DOUBLES.some(([c,q]) => c === ci && q === qi);
+  effectivePts = QUESTIONS[ci][qi].points;
+
+  const box = document.getElementById('modal-box');
+  box.className = 'modal-box' + (isDD ? ' dd-box' : '');
+
+  document.getElementById('m-cat').textContent = CATEGORIES[ci].replace('\n',' ');
+  document.getElementById('m-pts').className = 'modal-pts' + (isDD ? ' dd' : '');
+
+  document.getElementById('clue-text').textContent = QUESTIONS[ci][qi].clue;
+  document.getElementById('answer-text').textContent = QUESTIONS[ci][qi].answer;
+  document.getElementById('answer-section').style.display = 'none';
+  document.getElementById('reveal-btn').style.display = 'block';
+
+  updateModalActive();
+
+  if (isDD) {
+    document.getElementById('dd-phase').style.display = 'block';
+    document.getElementById('clue-phase').style.display = 'none';
+    document.getElementById('m-pts').textContent = 'DAILY DOUBLE';
+    const maxW = Math.max(scores[activePlayer] || 0, effectivePts);
+    document.getElementById('dd-hint').textContent =
+      `Max wager: $${maxW} — ${playerNames[activePlayer]}'s score: $${scores[activePlayer]}`;
+    const wi = document.getElementById('wager-input');
+    wi.max = maxW;
+    wi.min = 5;
+    wi.value = effectivePts;
+    ddWager = effectivePts;
+  } else {
+    document.getElementById('dd-phase').style.display = 'none';
+    document.getElementById('clue-phase').style.display = 'block';
+    document.getElementById('m-pts').textContent = '$' + effectivePts;
+    buildPlayerButtons(effectivePts);
+  }
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function updateModalActive() {
+  const el = document.getElementById('m-active');
+  if (el) {
+    el.textContent = playerNames[activePlayer];
+    el.style.color = PLAYER_COLORS[activePlayer];
+  }
+}
+
+function confirmWager() {
+  const val = parseInt(document.getElementById('wager-input').value, 10);
+  const maxW = Math.max(scores[activePlayer] || 0, effectivePts);
+  ddWager = Math.max(5, Math.min(maxW, isNaN(val) ? effectivePts : val));
+  effectivePts = ddWager;
+
+  document.getElementById('m-pts').textContent = `DAILY DOUBLE — $${ddWager}`;
+  document.getElementById('dd-phase').style.display = 'none';
+  document.getElementById('clue-phase').style.display = 'block';
+  buildPlayerButtons(ddWager);
+}
+
+function revealAnswer() {
+  document.getElementById('answer-section').style.display = 'block';
+  document.getElementById('reveal-btn').style.display = 'none';
+}
+
+function buildPlayerButtons(pts) {
+  const correct = document.getElementById('correct-btns');
+  const wrong   = document.getElementById('wrong-btns');
+  correct.innerHTML = '';
+  wrong.innerHTML   = '';
+
+  for (let i = 0; i < playerCount; i++) {
+    const c = document.createElement('button');
+    c.className = 'btn-correct';
+    c.style.background = PLAYER_COLORS[i] + '22';
+    c.style.borderColor = PLAYER_COLORS[i];
+    c.style.color = PLAYER_COLORS[i];
+    c.textContent = `+$${pts} → ${playerNames[i]}`;
+    c.onclick = () => awardPoints(i, pts);
+    correct.appendChild(c);
+
+    const w = document.createElement('button');
+    w.className = 'btn-wrong';
+    w.style.background = '#e0303011';
+    w.style.borderColor = '#e0303088';
+    w.style.color = '#e03030';
+    w.textContent = `−$${pts} → ${playerNames[i]}`;
+    w.onclick = () => deductPoints(i, pts);
+    wrong.appendChild(w);
+  }
+}
+
+function awardPoints(i, pts) {
+  saveSnapshot();
+  scores[i] += pts;
+  activePlayer = i;
+  markUsed();
+  closeModal();
+}
+
+function deductPoints(i, pts) {
+  saveSnapshot();
+  scores[i] -= pts;
+  markUsed();
+  closeModal();
+}
+
+function markUsed() {
+  used[currentCat][currentQ] = true;
+}
+
+function closeModal() {
+  markUsed();
+  document.getElementById('modal').classList.remove('open');
+  renderBoard();
+}
+
+function saveSnapshot() {
+  lastSnapshot = {
+    scores: [...scores],
+    used: used.map(col => [...col]),
+    activePlayer,
+  };
+}
+
+function undoLast() {
+  if (!lastSnapshot) return;
+  scores = lastSnapshot.scores;
+  used = lastSnapshot.used;
+  activePlayer = lastSnapshot.activePlayer;
+  lastSnapshot = null;
+  document.getElementById('undo-btn').style.display = 'none';
+  renderBoard();
+}
+
+function updateUndoBtn() {
+  const btn = document.getElementById('undo-btn');
+  if (btn) btn.style.display = lastSnapshot ? 'inline-block' : 'none';
+}
+
+/* ═══════════════════════════════════════════════════════
+   FINAL JEOPARDY
+═══════════════════════════════════════════════════════ */
+let fjWagers = [];
+let fjAnswered = [];
+let fjPhase = 'intro';
+
+function showFinal() {
+  fjWagers = Array(playerCount).fill(0);
+  fjAnswered = Array(playerCount).fill(null);
+  fjPhase = 'intro';
+  showScreen('final');
+  renderFinal();
+}
+
+function renderFinal() {
+  const panel = document.getElementById('final-panel');
+  panel.innerHTML = '';
+
+  if (fjPhase === 'intro') {
+    panel.innerHTML = `
+      <div class="final-title">
+        <div style="font-family:monospace;font-size:12px;letter-spacing:4px;color:var(--muted);margin-bottom:10px">AND NOW...</div>
+        <h1>FINAL JEOPARDY!</h1>
+        <p>CATEGORY: ${FINAL_JEOPARDY.category}</p>
+      </div>
+      <div class="score-preview" id="fj-scores"></div>
+      <button class="btn-gold" onclick="fjPhase='wager';renderFinal()">PLACE YOUR WAGERS</button>`;
+    const sp = document.getElementById('fj-scores');
+    for (let i = 0; i < playerCount; i++) {
+      sp.innerHTML += `<div class="score-preview-chip" style="border-color:${PLAYER_COLORS[i]}44">
+        <div class="p-name" style="color:${PLAYER_COLORS[i]}">${playerNames[i]}</div>
+        <div class="p-score">${scores[i]<0?'-$'+Math.abs(scores[i]):'$'+scores[i]}</div>
+      </div>`;
+    }
+  }
+
+  else if (fjPhase === 'wager') {
+    panel.innerHTML = `
+      <div class="final-title"><h1 style="font-size:32px">ENTER WAGERS</h1></div>
+      <div id="wager-rows"></div>
+      <button class="btn-gold" onclick="confirmFJWagers()" style="margin-top:8px">REVEAL CLUE</button>`;
+    const wr = document.getElementById('wager-rows');
+    for (let i = 0; i < playerCount; i++) {
+      const max = Math.max(scores[i], 0);
+      wr.innerHTML += `<div class="wager-row" style="border-color:${PLAYER_COLORS[i]}44">
+        <div class="wr-name" style="color:${PLAYER_COLORS[i]}">${playerNames[i]}<br>
+          <span style="color:var(--muted);font-size:11px">Current: ${scores[i]<0?'-$'+Math.abs(scores[i]):'$'+scores[i]}</span>
+        </div>
+        <input type="number" id="fjw-${i}" min="0" max="${max}" value="${fjWagers[i]}"
+          style="border-color:${PLAYER_COLORS[i]}"
+          oninput="fjWagers[${i}]=Math.max(0,Math.min(${max},+this.value||0))">
+      </div>`;
+    }
+  }
+
+  else if (fjPhase === 'clue') {
+    const answerBlock = `
+      <div class="answer-box" id="fj-answer" style="display:none">
+        <div class="answer-label">CORRECT RESPONSE:</div>
+        <div class="answer-text">${FINAL_JEOPARDY.answer}</div>
+      </div>`;
+    panel.innerHTML = `
+      <div class="final-title" style="margin-bottom:1rem">
+        <div style="font-family:monospace;font-size:11px;letter-spacing:3px;color:var(--muted)">FINAL JEOPARDY — ${FINAL_JEOPARDY.category}</div>
+      </div>
+      <div class="clue-box" style="margin-bottom:20px"><p class="clue-text">${FINAL_JEOPARDY.clue}</p></div>
+      <button class="btn-reveal" onclick="document.getElementById('fj-answer').style.display='block';this.style.display='none'">Reveal Answer</button>
+      ${answerBlock}
+      <div style="margin:20px 0 6px" class="section-label">JUDGE ANSWERS:</div>
+      <div id="judge-rows"></div>
+      <button class="btn-gold" id="fj-results-btn" onclick="fjPhase='results';renderFinal()" style="display:none;margin-top:10px">SEE RESULTS</button>`;
+    renderJudgeRows();
+  }
+
+  else if (fjPhase === 'results') {
+    const finalScores = scores.map((s,i) => {
+      if (fjAnswered[i] === true)  return s + fjWagers[i];
+      if (fjAnswered[i] === false) return s - fjWagers[i];
+      return s;
+    });
+    const order = [...Array(playerCount).keys()].sort((a,b) => finalScores[b]-finalScores[a]);
+    const medals = ['🏆','🥈','🥉'];
+    let rows = '';
+    order.forEach((pi, rank) => {
+      const fs = finalScores[pi];
+      const isBest = rank === 0;
+      rows += `<div class="result-row" style="background:${isBest?'#f5c51822':'var(--panel)'};border-color:${isBest?'var(--gold)':PLAYER_COLORS[pi]+'44'}">
+        <div class="result-rank">${medals[rank]||rank+1+'.'}</div>
+        <div class="result-name" style="color:${PLAYER_COLORS[pi]}">${playerNames[pi]}</div>
+        <div class="result-score${fs<0?' neg':''}">${fs<0?'-$'+Math.abs(fs):'$'+fs}</div>
+      </div>`;
+    });
+    panel.innerHTML = `
+      <div class="final-title">
+        <h1>GAME OVER!</h1>
+        <p>FINAL SCORES</p>
+      </div>
+      <div class="results-list">${rows}</div>
+      <button class="btn-play-again" onclick="resetToSetup()">PLAY AGAIN</button>`;
+  }
+}
+
+function confirmFJWagers() {
+  // Sync wager inputs into fjWagers
+  for (let i = 0; i < playerCount; i++) {
+    const inp = document.getElementById('fjw-'+i);
+    if (inp) {
+      const max = Math.max(scores[i], 0);
+      fjWagers[i] = Math.max(0, Math.min(max, parseInt(inp.value, 10) || 0));
+    }
+  }
+  fjPhase = 'clue';
+  renderFinal();
+}
+
+function renderJudgeRows() {
+  const container = document.getElementById('judge-rows');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < playerCount; i++) {
+    const judged = fjAnswered[i] !== null;
+    const row = document.createElement('div');
+    row.className = 'judge-row';
+    row.style.borderColor = PLAYER_COLORS[i] + '44';
+    row.innerHTML = `
+      <div class="jr-name" style="color:${PLAYER_COLORS[i]}">${playerNames[i]}
+        <span class="jr-wager">wager: $${fjWagers[i]}</span>
+      </div>`;
+    if (!judged) {
+      const btns = document.createElement('div');
+      btns.style.display = 'flex';
+      btns.style.gap = '8px';
+      const bc = document.createElement('button');
+      bc.className = 'btn-judge-c';
+      bc.textContent = '✓ Correct';
+      bc.onclick = () => { fjAnswered[i] = true; checkFJDone(); renderJudgeRows(); };
+      const bw = document.createElement('button');
+      bw.className = 'btn-judge-w';
+      bw.textContent = '✗ Wrong';
+      bw.onclick = () => { fjAnswered[i] = false; checkFJDone(); renderJudgeRows(); };
+      btns.append(bc, bw);
+      row.appendChild(btns);
+    } else {
+      const res = document.createElement('div');
+      res.className = 'jr-result ' + (fjAnswered[i] ? 'pos' : 'neg');
+      res.textContent = fjAnswered[i] ? `+$${fjWagers[i]}` : `−$${fjWagers[i]}`;
+      row.appendChild(res);
+    }
+    container.appendChild(row);
+  }
+}
+
+function checkFJDone() {
+  if (fjAnswered.every(v => v !== null)) {
+    const btn = document.getElementById('fj-results-btn');
+    if (btn) btn.style.display = 'block';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN SWITCHING
+═══════════════════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function resetToSetup() {
+  showScreen('setup');
+}
+</script>
+</body>
+</html>

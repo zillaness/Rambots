@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC Jeopardy — Host Answer Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+:root{
+  --navy:   #04091E;
+  --blue:   #060CE9;
+  --gold:   #D4AF37;
+  --gold-lt:#F0D060;
+  --ink:    #1a1a2e;
+  --cream:  #FAF8F2;
+  --paper:  #F2EFE6;
+  --rule:   rgba(4,9,30,0.12);
+  --shadow: rgba(4,9,30,0.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Source Serif 4', 'Georgia', serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Print button ── */
+.print-bar{
+  background: var(--navy);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.print-bar h2{
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--gold);
+  font-size: 14px;
+  letter-spacing: .08em;
+  font-weight: 600;
+}
+.print-btn{
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Source Serif 4', Georgia, serif;
+  letter-spacing: .04em;
+  transition: opacity .15s;
+}
+.print-btn:hover{opacity:.88}
+
+/* ── Page wrapper ── */
+.page{
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 36px 28px 60px;
+}
+
+/* ── Masthead ── */
+.masthead{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 3px solid var(--navy);
+}
+.masthead-eyebrow{
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.masthead-title{
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--navy);
+  letter-spacing: .04em;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.masthead-sub{
+  font-size: 12px;
+  color: rgba(4,9,30,.45);
+  letter-spacing: .06em;
+  font-style: italic;
+}
+.dd-notice{
+  margin-top: 14px;
+  background: rgba(212,175,55,.1);
+  border: 1.5px solid rgba(212,175,55,.4);
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 12px;
+  color: #7a6010;
+  letter-spacing: .02em;
+}
+.dd-notice strong{color:#5a4a08}
+
+/* ── Category section ── */
+.cat-section{
+  margin-bottom: 32px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px var(--shadow), 0 1px 3px var(--shadow);
+}
+.cat-header{
+  background: var(--navy);
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cat-name{
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: .06em;
+  font-weight: 600;
+}
+.cat-icon{
+  font-size: 16px;
+  opacity: .85;
+}
+
+/* ── Question rows ── */
+.q-row{
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr;
+  border-bottom: 1px solid var(--rule);
+  transition: background .1s;
+}
+.q-row:last-child{border-bottom:none}
+.q-row:nth-child(odd){background: var(--paper)}
+.q-row:nth-child(even){background: var(--cream)}
+.q-row:hover{background: rgba(212,175,55,.08)}
+
+.q-val{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  background: var(--blue);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gold);
+  letter-spacing: .02em;
+  border-right: 2px solid rgba(255,255,255,.1);
+  flex-shrink: 0;
+}
+.q-val.v200{background:#060CE9}
+.q-val.v400{background:#0508C5}
+.q-val.v600{background:#0406A0}
+.q-val.v800{background:#02047C}
+.q-val.v1000{background:#010258}
+
+.q-clue{
+  padding: 12px 16px;
+  font-size: 13px;
+  color: rgba(4,9,30,.75);
+  font-style: italic;
+  line-height: 1.55;
+  border-right: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+}
+.q-answer{
+  padding: 12px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.45;
+  display: flex;
+  align-items: center;
+}
+.answer-tag{
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-right: 6px;
+  font-style: normal;
+}
+
+/* ── Column headers ── */
+.col-headers{
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr;
+  background: rgba(4,9,30,.06);
+  border-bottom: 1.5px solid var(--rule);
+}
+.col-hdr{
+  padding: 6px 16px;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: rgba(4,9,30,.4);
+  font-weight: 600;
+  font-style: normal;
+}
+.col-hdr:first-child{text-align:center;padding:6px 8px}
+
+/* ── Final Jeopardy ── */
+.fj-section{
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px var(--shadow), 0 1px 3px var(--shadow);
+}
+.fj-header{
+  background: linear-gradient(135deg, var(--navy) 0%, #1a1060 100%);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fj-title-text{
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: .08em;
+  font-weight: 700;
+}
+.fj-cat-badge{
+  background: rgba(212,175,55,.2);
+  border: 1px solid rgba(212,175,55,.4);
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: var(--gold-lt);
+  letter-spacing: .08em;
+}
+.fj-body{
+  background: var(--paper);
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.fj-block-label{
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(4,9,30,.35);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.fj-clue-text{
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(4,9,30,.7);
+  line-height: 1.65;
+}
+.fj-answer-text{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.5;
+  padding: 12px 16px;
+  background: rgba(212,175,55,.08);
+  border: 1.5px solid rgba(212,175,55,.3);
+  border-radius: 7px;
+}
+
+/* ── Footer ── */
+.footer{
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-size: 11px;
+  color: rgba(4,9,30,.3);
+  letter-spacing: .06em;
+}
+
+/* ── Print ── */
+@media print{
+  .print-bar{display:none}
+  body{background:#fff;font-size:12px}
+  .page{padding:16px 20px 32px;max-width:100%}
+  .masthead{margin-bottom:20px;padding-bottom:16px}
+  .cat-section,.fj-section{box-shadow:none;border:1.5px solid #ccc}
+  .q-val.v200{background:#1a20d0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .q-val.v400{background:#1518b0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .q-val.v600{background:#0f1290!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .q-val.v800{background:#0a0c70!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .q-val.v1000{background:#060850!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cat-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .fj-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cat-section{break-inside:avoid;page-break-inside:avoid}
+  .fj-section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- Sticky print bar -->
+<div class="print-bar">
+  <h2>🎯 FRC Jeopardy — Host Answer Guide</h2>
+  <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <div class="masthead-eyebrow">Host Reference Sheet</div>
+    <h1 class="masthead-title">FRC Jeopardy!<br>Answer Guide</h1>
+    <p class="masthead-sub">Hand Tools · Power Tools · Thread Anatomy · Fastener Hardware · Torque & Loctite</p>
+    <div class="dd-notice">
+      ⚠️ <strong>Daily Doubles</strong> are randomly assigned at game start — they will not be marked here. Two are hidden somewhere among the $400–$1000 rows.
+    </div>
+  </div>
+
+  <!-- ── HAND TOOLS ─────────────────────────────────────── -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-icon">🔧</span>
+      <span class="cat-name">Hand Tools</span>
+    </div>
+    <div class="col-headers">
+      <div class="col-hdr">Value</div>
+      <div class="col-hdr">Clue (shown to players)</div>
+      <div class="col-hdr">Correct Response</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v200">$200</div>
+      <div class="q-clue">This hand tool delivers the cleanest, squarest cut on PVC pipe in seconds — no saw marks, no fuss.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a pipe cutter?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v400">$400</div>
+      <div class="q-clue">When hand-cutting aluminum with a hacksaw, always secure the workpiece in this device before applying cutting fluid.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a vise?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v600">$600</div>
+      <div class="q-clue">Score-and-snap works for straight cuts in polycarbonate (Lexan), but pre-drill holes slowly to prevent this defect at the entry point.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is cracking?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v800">$800</div>
+      <div class="q-clue">Before hand-sawing Baltic birch plywood, tape the cut line with this common material to minimize splintering on the exit face.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is masking tape?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v1000">$1000</div>
+      <div class="q-clue">Always wear this when hand-sawing MDF — the dust contains formaldehyde binders and is a documented health hazard.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a dust mask (respirator)?</div>
+    </div>
+  </div>
+
+  <!-- ── POWER TOOLS ────────────────────────────────────── -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-icon">⚡</span>
+      <span class="cat-name">Power Tools</span>
+    </div>
+    <div class="col-headers">
+      <div class="col-hdr">Value</div>
+      <div class="col-hdr">Clue (shown to players)</div>
+      <div class="col-hdr">Correct Response</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v200">$200</div>
+      <div class="q-clue">This power tool uses a continuous-loop blade and is the primary machine for cutting metal bar stock and tube in an FRC shop.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a band saw?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v400">$400</div>
+      <div class="q-clue">When cutting aluminum on a band saw, this common shop penetrant doubles as an effective cutting fluid.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is WD-40?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v600">$600</div>
+      <div class="q-clue">For metals and plastics on the band saw, always use a bimetal blade in this tooth-per-inch range.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is 14–18 TPI?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v800">$800</div>
+      <div class="q-clue">Use this V-shaped holding accessory when band-sawing round tube to prevent vibration chatter.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a V-block?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v1000">$1000</div>
+      <div class="q-clue">Cutting carbon fiber requires this grade of respirator — NOT an N95 — because the dust is a serious carcinogenic hazard.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is an N100 respirator?</div>
+    </div>
+  </div>
+
+  <!-- ── THREAD ANATOMY ─────────────────────────────────── -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-icon">🔩</span>
+      <span class="cat-name">Thread Anatomy</span>
+    </div>
+    <div class="col-headers">
+      <div class="col-hdr">Value</div>
+      <div class="col-hdr">Clue (shown to players)</div>
+      <div class="col-hdr">Correct Response</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v200">$200</div>
+      <div class="q-clue">In the thread callout '¼-20 UNC', this number represents the threads per inch.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is 20 (TPI)?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v400">$400</div>
+      <div class="q-clue">The smallest thread diameter — measured at the roots of an external thread — also called the root or core diameter.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is the minor diameter?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v600">$600</div>
+      <div class="q-clue">The simple metric tap drill formula: drill diameter (mm) = major diameter minus this.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is the pitch?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v800">$800</div>
+      <div class="q-clue">The included angle of the thread cross-section for both UN and ISO metric standard threads.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is 60 degrees?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v1000">$1000</div>
+      <div class="q-clue">This American engineer standardized the 60° thread form in 1864, creating the basis for today's UNC/UNF thread system.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> Who is William Sellers?</div>
+    </div>
+  </div>
+
+  <!-- ── FASTENER HARDWARE ──────────────────────────────── -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-icon">🔨</span>
+      <span class="cat-name">Fastener Hardware</span>
+    </div>
+    <div class="col-headers">
+      <div class="col-hdr">Value</div>
+      <div class="col-hdr">Clue (shown to players)</div>
+      <div class="col-hdr">Correct Response</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v200">$200</div>
+      <div class="q-clue">This nut uses a nylon insert to resist vibration-induced loosening — replace it immediately when it spins on with zero resistance.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a nylock (nylon insert) nut?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v400">$400</div>
+      <div class="q-clue">The FRC default structural fastener: cylindrical head, hex socket drive, high torque capacity, zero cam-out risk.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a Socket Head Cap Screw (SHCS)?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v600">$600</div>
+      <div class="q-clue">An SAE Grade 8 bolt is identified by exactly this many radial lines stamped into its head.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is 6 radial lines?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v800">$800</div>
+      <div class="q-clue">This threaded insert is installed from ONE side into thin sheet metal — a mandrel is pulled, expanding a flange behind the sheet.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is a riv-nut (rivet nut)?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v1000">$1000</div>
+      <div class="q-clue">The standard drill number for the tap drill of #10-32 — the most common FRC machine thread.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is #21 (0.159")?</div>
+    </div>
+  </div>
+
+  <!-- ── TORQUE & LOCTITE ───────────────────────────────── -->
+  <div class="cat-section">
+    <div class="cat-header">
+      <span class="cat-icon">🧪</span>
+      <span class="cat-name">Torque &amp; Loctite</span>
+    </div>
+    <div class="col-headers">
+      <div class="col-hdr">Value</div>
+      <div class="col-hdr">Clue (shown to players)</div>
+      <div class="col-hdr">Correct Response</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v200">$200</div>
+      <div class="q-clue">The FRC default Loctite threadlocker — medium strength, product #243, fully removable with hand tools.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is Loctite Blue (243)?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v400">$400</div>
+      <div class="q-clue">Loctite threadlocker will NOT cure on this metal type without special primer — and also fails on oily or dirty threads.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is stainless steel?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v600">$600</div>
+      <div class="q-clue">The chip-breaking tapping rhythm 'two forward, half back' means rotating the tap this many degrees forward, then this many degrees back.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is 360–720° forward, 180° back?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v800">$800</div>
+      <div class="q-clue">This Loctite grade has ultra-low viscosity and wicks into already-assembled joints by capillary action — ideal for field repairs.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is Loctite Green (290)?</div>
+    </div>
+    <div class="q-row">
+      <div class="q-val v1000">$1000</div>
+      <div class="q-clue">Permanent fastener retention requiring a heat gun at 250°F+ to remove — used only for set screws on critical hubs and press-fit motor pinions.</div>
+      <div class="q-answer"><span class="answer-tag">A.</span> What is Loctite Red (271)?</div>
+    </div>
+  </div>
+
+  <!-- ── FINAL JEOPARDY ─────────────────────────────────── -->
+  <div class="fj-section">
+    <div class="fj-header">
+      <span class="fj-title-text">⭐ Final Jeopardy</span>
+      <span class="fj-cat-badge">Fastener History</span>
+    </div>
+    <div class="fj-body">
+      <div>
+        <div class="fj-block-label">Clue (shown to players)</div>
+        <p class="fj-clue-text">Working in 1841, this British engineer proposed the first-ever standardized national thread system — using a 55° thread angle — directly motivating William Sellers to create the competing 60° American standard 23 years later.</p>
+      </div>
+      <div>
+        <div class="fj-block-label">Correct Response</div>
+        <div class="fj-answer-text">Who is Joseph Whitworth?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    FRC Robotics · Jeopardy Host Reference · All 25 questions + Final Jeopardy · Daily Doubles randomly assigned at runtime
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

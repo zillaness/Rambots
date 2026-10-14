@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRC Multimeter Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080b13;--bg2:#0f1420;--bg3:#141928;--panel:#1a2035;--border:#263050;
+  --orange:#ff5722;--amber:#ff9800;--cyan:#00e5ff;--green:#00e676;--red:#ff1744;
+  --text:#cdd6f4;--dim:#5a6a90;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text)}
+#wrap{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column}
+#hdr{background:#0c1022;border-bottom:2px solid var(--orange);padding:10px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+#hdr-title{font-family:'Orbitron',monospace;font-weight:900;font-size:.95rem;color:var(--orange);letter-spacing:2px}
+#hdr-lv{font-family:'Orbitron',monospace;font-size:.68rem;background:var(--orange);color:#fff;padding:3px 12px;border-radius:20px;letter-spacing:1px}
+#hdr-sc{margin-left:auto;font-family:'Orbitron',monospace;font-size:.78rem;color:var(--amber)}
+.ldot{width:9px;height:9px;border-radius:50%;background:var(--border);border:1px solid #333;display:inline-block;margin:0 2px;cursor:pointer;transition:.2s}
+.ldot.done{background:var(--green)}.ldot.cur{background:var(--orange);box-shadow:0 0 8px var(--orange)}
+#main{display:grid;grid-template-columns:1fr 302px;flex:1;overflow:hidden;min-height:0}
+#cpanel{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+#scen-box{padding:11px 18px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+#scen-badge{font-family:'Orbitron',monospace;font-size:.62rem;color:var(--amber);letter-spacing:1px;margin-bottom:3px}
+#scen-text{font-size:.8rem;line-height:1.5}
+#obj-bar{padding:5px 18px;background:rgba(0,229,255,.06);border-bottom:1px solid rgba(0,229,255,.1);font-size:.73rem;color:var(--cyan);flex-shrink:0}
+#carea{flex:1;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden;cursor:crosshair}
+#carea svg{max-width:100%;max-height:100%}
+#mpanel{background:var(--bg3);display:flex;flex-direction:column;padding:11px 9px;gap:9px;overflow-y:auto}
+#dmm{background:#252525;border-radius:10px;padding:13px 10px;border:3px solid #f5c519}
+#dmm-brand{font-family:'Orbitron',monospace;font-size:.55rem;color:#f5c519;letter-spacing:3px;text-align:center;margin-bottom:7px}
+#disp{background:#001800;border:2px solid #004400;border-radius:6px;padding:8px 10px;margin-bottom:9px;position:relative;min-height:62px}
+#disp-beep{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#00ff41;position:absolute;top:5px;left:7px;display:none}
+#disp-beep.on{display:block;animation:blink .4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+#disp-val{font-family:'Share Tech Mono',monospace;font-size:2rem;color:#00ff41;text-align:right;line-height:1}
+#disp-unit{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#00bb30;text-align:right;margin-top:2px}
+#disp-msg{font-size:.62rem;color:#00bb30;text-align:right;margin-top:3px;font-family:'Share Tech Mono',monospace;min-height:13px}
+#dial-svg{display:block;width:100%;cursor:pointer}
+#probe-row{display:flex;gap:6px;margin-top:4px}
+.pbtn{flex:1;padding:7px 3px;border:2px solid transparent;border-radius:6px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:.7rem;font-weight:600;text-align:center;transition:.2s;background:none}
+#pbtn-r{border-color:#ff4444;color:#ff8888}
+#pbtn-r:hover,#pbtn-r.active{background:rgba(255,68,68,.22);color:#ff4444}
+#pbtn-b{border-color:#888;color:#aaa}
+#pbtn-b:hover,#pbtn-b.active{background:rgba(140,140,140,.22);color:#ccc}
+.ploc{font-size:.58rem;color:var(--dim);margin-top:2px;font-family:'Share Tech Mono',monospace}
+#pbtn-clr{width:100%;margin-top:4px;padding:5px;background:rgba(255,87,34,.1);border:1px solid var(--orange);border-radius:5px;color:var(--orange);font-size:.65rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:.2s}
+#pbtn-clr:hover{background:rgba(255,87,34,.25)}
+#tip{font-size:.66rem;color:var(--dim);background:rgba(0,0,0,.3);border-radius:6px;padding:8px 10px;border-left:2px solid var(--orange);line-height:1.5}
+#tip strong{color:var(--amber)}
+#fbar{background:var(--panel);border-top:1px solid var(--border);padding:10px 18px;height:68px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+#fbar-ico{font-size:1.3rem;width:30px;text-align:center;flex-shrink:0}
+#fbar-txt{flex:1;font-size:.8rem;line-height:1.4}
+#next-btn{padding:7px 20px;background:var(--green);color:#000;border:none;border-radius:6px;font-family:'Orbitron',monospace;font-size:.68rem;font-weight:700;cursor:pointer;display:none;letter-spacing:1px;transition:.2s;white-space:nowrap}
+#next-btn:hover{background:#00ff9d}
+#reset-btn{padding:7px 14px;background:rgba(255,87,34,.13);color:var(--orange);border:1px solid var(--orange);border-radius:6px;font-family:'Orbitron',monospace;font-size:.65rem;cursor:pointer;display:none;letter-spacing:1px;transition:.2s;white-space:nowrap}
+#reset-btn:hover{background:rgba(255,87,34,.3)}
+.moverlay{display:none;position:absolute;inset:0;z-index:200;background:rgba(0,0,0,.85);align-items:center;justify-content:center}
+.moverlay.show{display:flex}
+#exp-wrap.show{background:rgba(100,0,0,.82);animation:flashR .15s}
+@keyframes flashR{0%{background:rgba(255,0,0,.9)}100%{background:rgba(100,0,0,.82)}}
+#exp-card{background:#180000;border:3px solid var(--red);border-radius:12px;padding:26px 30px;max-width:460px;width:92%;text-align:center}
+#exp-wrap.show #exp-card{animation:shakeCard .5s}
+@keyframes shakeCard{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+#exp-emo{font-size:2.4rem;margin-bottom:7px;font-family:'Orbitron',monospace;color:var(--red)}
+#exp-title{font-family:'Orbitron',monospace;color:var(--red);font-size:1.05rem;font-weight:900;margin-bottom:9px}
+#exp-msg{color:#ffcdd2;font-size:.86rem;line-height:1.6;margin-bottom:5px}
+#exp-det{color:#666;font-size:.72rem;line-height:1.5;margin-bottom:16px}
+#exp-ok{padding:8px 28px;background:var(--red);color:#fff;border:none;border-radius:6px;font-family:'Orbitron',monospace;font-size:.72rem;font-weight:700;cursor:pointer}
+#exp-ok:hover{background:#ff4569}
+#lc-card{background:var(--panel);border:2px solid var(--green);border-radius:13px;padding:30px 38px;max-width:400px;width:92%;text-align:center}
+#lc-wrap.show #lc-card{animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+#lc-emo{font-size:2rem;margin-bottom:8px;font-family:'Orbitron',monospace;color:var(--green)}
+#lc-title{font-family:'Orbitron',monospace;color:var(--green);font-size:.98rem;font-weight:700;margin-bottom:7px}
+#lc-text{color:var(--text);font-size:.83rem;line-height:1.6;margin-bottom:17px}
+#lc-btn{padding:10px 34px;background:var(--green);color:#000;border:none;border-radius:7px;font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;cursor:pointer}
+#lc-btn:hover{background:#00ff9d}
+#win-card{text-align:center;padding:20px}
+#win-t{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:900;color:var(--green);margin-bottom:9px}
+#win-s{font-size:.95rem;color:var(--amber);margin-bottom:14px}
+#win-pts{font-family:'Orbitron',monospace;font-size:2.4rem;color:var(--orange);margin-bottom:18px}
+#win-rb{padding:11px 38px;background:var(--orange);color:#fff;border:none;border-radius:7px;font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;cursor:pointer}
+#win-rb:hover{background:#ff7043}
+#sfx{display:none;position:absolute;inset:0;z-index:150;background:rgba(0,230,118,.11);pointer-events:none;animation:sfade .7s forwards}
+@keyframes sfade{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+.wire{stroke:#00e5ff;stroke-width:2.5;fill:none;stroke-linecap:round}
+.wire-neg{stroke:#666;stroke-width:2;fill:none;stroke-linecap:round}
+.wire-break{stroke:#ff1744;stroke-width:2.5;fill:none;stroke-dasharray:6 4;animation:dashMove .5s linear infinite}
+.wire-short{stroke:#ff9800;stroke-width:3;fill:none}
+@keyframes dashMove{to{stroke-dashoffset:-10}}
+.tripped{animation:tPulse 1s infinite}
+@keyframes tPulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sparking{animation:spark .3s infinite alternate}
+@keyframes spark{from{opacity:1}to{opacity:.25}}
+.fault-line{stroke:#ff9800;stroke-width:3;fill:none;stroke-dasharray:8 4;animation:fDash .4s linear infinite}
+@keyframes fDash{to{stroke-dashoffset:-12}}
+.tpt{cursor:pointer}
+.tpt circle{fill:#ffea00;stroke:#ff8800;stroke-width:2.5;transition:r .15s}
+.tpt:hover circle{r:11}
+.tpt.red circle{fill:#ff4444;stroke:#ff8888}
+.tpt.blk circle{fill:#aaa;stroke:#ccc}
+.tpt text{fill:#ffea00;font-family:'Share Tech Mono',monospace;font-size:10px;pointer-events:none}
+.tpt.red text{fill:#ff8888}
+.tpt.blk text{fill:#ddd}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hdr">
+    <div id="hdr-title">FRC MULTIMETER CHALLENGE</div>
+    <div id="hdr-lv">LEVEL 1</div>
+    <span id="dots"></span>
+    <div id="hdr-sc">SCORE: 0</div>
+  </div>
+  <div id="main">
+    <div id="cpanel">
+      <div id="scen-box">
+        <div id="scen-badge">SCENARIO</div>
+        <div id="scen-text"></div>
+      </div>
+      <div id="obj-bar"></div>
+      <div id="carea">
+        <svg id="csvg" viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+    <div id="mpanel">
+      <div id="dmm">
+        <div id="dmm-brand">FRC-87 DIGITAL MULTIMETER</div>
+        <div id="disp">
+          <div id="disp-beep">-- CONT BEEP --</div>
+          <div id="disp-val">----</div>
+          <div id="disp-unit"></div>
+          <div id="disp-msg"></div>
+        </div>
+        <svg id="dial-svg" viewBox="0 0 220 195"></svg>
+        <div id="probe-row">
+          <div>
+            <button class="pbtn" id="pbtn-r">+ RED PROBE</button>
+            <div class="ploc" id="red-loc">not placed</div>
+          </div>
+          <div>
+            <button class="pbtn" id="pbtn-b">- BLK PROBE</button>
+            <div class="ploc" id="blk-loc">not placed</div>
+          </div>
+        </div>
+        <button id="pbtn-clr">X  CLEAR PROBES</button>
+      </div>
+      <div id="tip"></div>
+    </div>
+  </div>
+  <div id="fbar">
+    <div id="fbar-ico">?</div>
+    <div id="fbar-txt">Select a meter setting on the dial, then place your probes on the yellow test points.</div>
+    <button id="reset-btn">RESET BREAKER</button>
+    <button id="next-btn">NEXT LEVEL</button>
+  </div>
+  <div id="exp-wrap" class="moverlay">
+    <div id="exp-card">
+      <div id="exp-emo">!!</div>
+      <div id="exp-title">ERROR</div>
+      <div id="exp-msg"></div>
+      <div id="exp-det"></div>
+      <button id="exp-ok">I UNDERSTAND - TRY AGAIN</button>
+    </div>
+  </div>
+  <div id="lc-wrap" class="moverlay">
+    <div id="lc-card">
+      <div id="lc-emo">PASS</div>
+      <div id="lc-title">LEVEL COMPLETE!</div>
+      <div id="lc-text"></div>
+      <button id="lc-btn">NEXT LEVEL</button>
+    </div>
+  </div>
+  <div id="win-wrap" class="moverlay">
+    <div id="win-card">
+      <div id="win-t">ELECTRICAL CERTIFIED!</div>
+      <div id="win-s">All 5 levels complete - ready for inspection!</div>
+      <div id="win-pts"></div>
+      <button id="win-rb">PLAY AGAIN</button>
+    </div>
+  </div>
+  <div id="sfx"></div>
+</div>
+<script>
+var _ac = null;
+function getAC() {
+  if (!_ac) { try { _ac = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
+  return _ac;
+}
+function beep(f, d, v) {
+  try {
+    var c = getAC(); if (!c) return;
+    var o = c.createOscillator(), g = c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.frequency.value = f || 800; o.type = 'square';
+    g.gain.setValueAtTime(v || 0.1, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + (d || 0.2));
+    o.start(c.currentTime); o.stop(c.currentTime + (d || 0.2));
+  } catch(e) {}
+}
+function boom() {
+  try {
+    var c = getAC(); if (!c) return;
+    var sr = c.sampleRate, len = Math.floor(sr * 0.5);
+    var buf = c.createBuffer(1, len, sr), data = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sr * 0.08));
+    var src = c.createBufferSource(), g = c.createGain();
+    g.gain.value = 0.35; src.buffer = buf;
+    src.connect(g); g.connect(c.destination); src.start();
+  } catch(e) {}
+}
+function contBeep() { beep(900, 0.14, 0.1); setTimeout(function(){ beep(900, 0.14, 0.1); }, 210); }
+
+var S = {
+  level:0, dial:'OFF', red:null, black:null, held:null,
+  score:0, done:{}, reset:false, exploded:0, finished:false
+};
+
+var DIALS = [
+  { id:'OFF',  label:'OFF',  angle:270, col:'#666' },
+  { id:'ACV',  label:'V~',   angle:330, col:'#aaa' },
+  { id:'DCV',  label:'VDC',  angle:30,  col:'#00e5ff' },
+  { id:'OHM',  label:'OHM',  angle:90,  col:'#ff9800' },
+  { id:'CONT', label:'CONT', angle:150, col:'#00e676' },
+  { id:'AMP',  label:'AMPS', angle:210, col:'#ff4444' }
+];
+
+var LV = [
+  {
+    title:'Pre-Match Battery Check',
+    scene:'It is 30 minutes before your match. The electrical lead asks you to verify the robot battery. A healthy FRC battery should read 12.6V or higher at rest.',
+    goal:'Measure the battery terminal voltage using the correct meter setting.',
+    tip:'Use <strong>VDC (DC Voltage)</strong> for battery checks. NEVER use OHM or AMPS on a live source - that is extremely dangerous and will destroy your meter!',
+    pts:{ POS:'Battery (+)', NEG:'Battery (-)' },
+    eval:function(dial, r, b, rst) {
+      if ((dial === 'OHM' || dial === 'CONT') && (r || b)) {
+        return { boom:true, emo:'BOOM', title:'METER DAMAGED!',
+          msg:'NEVER use OHM/CONT mode on a live battery! The meters internal current source fights 12V - you blow the internal fuse and risk meter damage.',
+          det:'An ohmmeter injects its own test current. An external voltage overwhelms it. Rule: if the circuit is LIVE, do NOT use OHM mode.' };
+      }
+      if (dial === 'AMP' && r && b) {
+        return { boom:true, emo:'FIRE', title:'CATASTROPHIC SHORT CIRCUIT!',
+          msg:'Ammeters have near-zero internal resistance! Across a battery = direct short. Hundreds of amps, melted wires, destroyed meter, fire risk!',
+          det:'V=IR: 12.6V / 0.001 ohm = 12600A potential. Ammeters go IN SERIES with a load, NEVER directly across a voltage source.' };
+      }
+      if (!r || !b) return { val:'----', unit:'', msg:'Place both probes on the circuit test points' };
+      if (dial === 'OFF') return { val:'OFF', unit:'', msg:'Turn the dial to a measurement setting' };
+      if (dial === 'ACV') return { val:'0.00', unit:'VAC', msg:'Battery is DC power! Switch to VDC mode.' };
+      if (dial === 'OHM') return { val:'OL', unit:'Ohm', msg:'De-energize the circuit before using OHM mode!' };
+      if (dial === 'DCV') {
+        if (r === 'POS' && b === 'NEG') return { ok:true, val:'12.64', unit:'VDC', msg:'Healthy battery - ready to compete!' };
+        if (r === 'NEG' && b === 'POS') return { val:'-12.64', unit:'VDC', msg:'Reversed probes! Red goes on (+). Reading valid but inverted.' };
+        return { val:'OL', unit:'VDC', msg:'Probe both terminals: Red=(+), Black=(-)' };
+      }
+      return { val:'----', unit:'', msg:'' };
+    },
+    win:function(res) { return res && res.ok; },
+    end:'Battery reads 12.64V DC - fully charged! Always: Red probe to (+), Black to (-), VDC mode for voltage measurements.'
+  },
+  {
+    title:'Find the Open Circuit',
+    scene:'Your arm motor stopped responding after last nights practice. The motor controller shows power but the motor is dead. Suspect a wire connection failed inside an Anderson connector.',
+    goal:'Use CONTINUITY mode to trace the wire and find where the open circuit is.',
+    tip:'CONT mode sends a tiny test current and BEEPS if connected. Silence = open circuit. Start at one end and probe toward the suspected break until you find it.',
+    pts:{ A:'Node A', B:'Node B', C:'Node C', D:'Node D' },
+    eval:function(dial, r, b, rst) {
+      if ((dial === 'OHM' || dial === 'AMP') && (r || b)) {
+        return { boom:true, emo:'ZAP', title:'WRONG MODE - CIRCUIT IS LIVE!',
+          msg:'This wire run is energized at 12V. Using OHM or AMPS on a live circuit will damage your meter.',
+          det:'Rule: Confirm power is OFF before using OHM mode. Unplug the battery first, then test resistance.' };
+      }
+      if (!r || !b) return { val:'----', unit:'', msg:'Place both probes on test points' };
+      if (dial === 'OFF') return { val:'OFF', unit:'', msg:'Turn the dial on' };
+      if (dial === 'ACV') return { val:'0.00', unit:'VAC', msg:'This is a DC circuit. ACV mode shows nothing useful.' };
+      var live = { A:1, B:1 }, dead = { C:1, D:1 };
+      if (dial === 'DCV') {
+        if (live[r] && dead[b]) return { val:'12.0', unit:'VDC', msg:'12V here, 0V there - break is between these points! Use CONT to narrow it down.' };
+        if (dead[r] && live[b]) return { val:'-12.0', unit:'VDC', msg:'Reversed probes, but confirms: voltage gap across the break.' };
+        if (live[r] && live[b]) return { val:'0.0', unit:'VDC', msg:'Same voltage on both - try probing across the connector.' };
+        if (dead[r] && dead[b]) return { val:'0.0', unit:'VDC', msg:'Both 0V - no power on this side. Break is upstream.' };
+        return { val:'----', unit:'', msg:'' };
+      }
+      if (dial === 'CONT') {
+        var pre = { A:1, B:1 }, post = { C:1, D:1 };
+        var spanBreak = (pre[r] && post[b]) || (post[r] && pre[b]);
+        var sameSide = (pre[r] && pre[b]) || (post[r] && post[b]);
+        if (sameSide) {
+          contBeep();
+          return { val:'BEEP', unit:'<2 Ohm', msg:'Connected! No break here. Try probing across the Anderson connector.', beep:1 };
+        }
+        if (spanBreak) {
+          if ((r === 'B' && b === 'C') || (r === 'C' && b === 'B')) {
+            return { ok:1, val:'OPEN', unit:'INF', msg:'BREAK FOUND! No continuity across the Anderson connector!' };
+          }
+          return { val:'OPEN', unit:'INF', msg:'Open circuit in this region - narrow it down! Probe adjacent to the connector.' };
+        }
+      }
+      return { val:'----', unit:'', msg:'' };
+    },
+    win:function(res) { return res && res.ok; },
+    end:'Open circuit confirmed between B and C - inside the Anderson connector. The crimp was incomplete. Re-terminate the connector pins to fix.'
+  },
+  {
+    title:'Tripped Channel Breaker',
+    scene:'Your robot drives fine but channel 5 on the PDH runs the intake roller - and it is completely dead. No fault light, no error code. Time to trace power with the meter.',
+    goal:'Use DC Voltage to trace power through the circuit, find where it drops to 0V, then reset the breaker.',
+    tip:'Probe from PDH bus through each component to the motor. Voltage should be present everywhere. Where it drops to 0V is the fault. Use GND as your black probe reference.',
+    pts:{ A:'PDH Bus', B:'Brkr In', C:'Brkr Out', D:'Mtr Ctrl', GND:'GND' },
+    eval:function(dial, r, b, rst) {
+      if ((dial === 'OHM' || dial === 'CONT') && (r || b)) {
+        return { boom:true, emo:'ZAP', title:'WRONG MODE - PDH BUS IS LIVE!',
+          msg:'The PDH bus is energized with 12V. OHM or CONT mode on a live circuit will damage your meter.',
+          det:'Always confirm power is OFF before using resistance or continuity mode on any circuit!' };
+      }
+      if (dial === 'AMP' && r && b) {
+        return { boom:true, emo:'BOOM', title:'SHORT CIRCUIT!',
+          msg:'Ammeter across a live bus = short circuit! Use VDC to trace voltage, not current mode.',
+          det:'Ammeters have near-zero resistance and must only go IN SERIES with a load, never in parallel.' };
+      }
+      if (!r || !b) return { val:'----', unit:'', msg:'Place both probes - use GND as your black probe reference' };
+      if (dial === 'OFF') return { val:'OFF', unit:'', msg:'Turn the dial on' };
+      if (dial === 'ACV') return { val:'0.00', unit:'VAC', msg:'FRC robots run on 12V DC. Use VDC mode.' };
+      if (dial === 'DCV') {
+        if (b !== 'GND') return { val:'----', unit:'VDC', msg:'Use GND as your black probe reference.' };
+        if (r === 'A') return { val:'12.1', unit:'VDC', msg:'PDH bus live - 12.1V present.' };
+        if (r === 'B') return { val:'12.1', unit:'VDC', msg:'12.1V at breaker input - PDH side OK.' };
+        if (r === 'C') {
+          if (rst) return { val:'12.0', unit:'VDC', msg:'Breaker output now live after reset - 12.0V!' };
+          return { val:'0.0', unit:'VDC', msg:'0V here! Breaker is tripped. Hit RESET BREAKER button!', needReset:1 };
+        }
+        if (r === 'D') {
+          if (rst) return { ok:1, val:'12.0', unit:'VDC', msg:'Motor controller receiving 12V - circuit restored!' };
+          return { val:'0.0', unit:'VDC', msg:'Motor controller at 0V - no power due to tripped breaker.', needReset:1 };
+        }
+      }
+      return { val:'----', unit:'', msg:'' };
+    },
+    win:function(res, rst) { return res && res.ok && rst; },
+    end:'Channel 5 breaker was thermally tripped from motor stall. Traced: PDH Bus 12V > Breaker input 12V > Breaker output 0V. Reset restored 12V to motor controller.'
+  },
+  {
+    title:'Find the Short to Chassis',
+    scene:'Your drivetrain keeps tripping the 120A main breaker. The lead inspector suspects a wire chafed against the chassis frame. You need to find exactly which section is shorted.',
+    goal:'Use CONTINUITY from chassis ground to probe along the positive wire. A BEEP means that point is shorted to chassis.',
+    tip:'With CONT mode: keep one probe on CHASSIS, trace with the other along the wire. BEEP = shorted. No beep = fine. Work from PDH toward the motor.',
+    pts:{ CHG:'Chassis GND', W1:'Wire 1', W2:'Wire 2', W3:'Wire 3', W4:'Wire 4' },
+    eval:function(dial, r, b, rst) {
+      if (dial === 'OHM' && (r || b)) {
+        return { boom:true, emo:'ZAP', title:'WRONG MODE - WIRE IS LIVE!',
+          msg:'This positive wire is live at 12V. OHM mode on a live wire will damage your meter.',
+          det:'Use CONT mode instead - lower test voltage and the audible beep makes wire tracing easy.' };
+      }
+      if (dial === 'AMP' && r && b) {
+        return { boom:true, emo:'BOOM', title:'DANGEROUS SHORT!',
+          msg:'Current mode across a live wire creates a short circuit through your meter.', det:'' };
+      }
+      if (!r || !b) return { val:'----', unit:'', msg:'Place both probes - keep Chassis GND on one' };
+      if (dial === 'OFF') return { val:'OFF', unit:'', msg:'Turn the dial on' };
+      if (dial === 'ACV') return { val:'0.00', unit:'', msg:'Wrong mode. Use CONT for short detection.' };
+      if (dial === 'DCV') return { val:'12.0', unit:'VDC', msg:'All wire points read 12V (live). Switch to CONT mode to find the short.' };
+      if (dial === 'CONT') {
+        var hasCHG = (r === 'CHG' || b === 'CHG');
+        var other = (r === 'CHG') ? b : r;
+        if (!hasCHG) return { val:'----', unit:'', msg:'Keep Chassis GND on one probe, trace with the other.' };
+        if (other === 'CHG') return { val:'BEEP', unit:'', msg:'Probing chassis to itself - move one probe to the wire!', beep:1 };
+        if (other === 'W1') { contBeep(); return { val:'BEEP', unit:'~0 Ohm', msg:'BEEP at W1 - short exists somewhere. Keep tracing toward the motor.', beep:1 }; }
+        if (other === 'W2') { contBeep(); return { val:'BEEP', unit:'~0 Ohm', msg:'BEEP at W2 - still shorted. The short is between here and W3.', beep:1 }; }
+        if (other === 'W3') { contBeep(); return { ok:1, val:'BEEP', unit:'~0 Ohm', msg:'SHORT FOUND! W3 is connected to chassis - the chafed section is here!', beep:1 }; }
+        if (other === 'W4') return { val:'OPEN', unit:'INF', msg:'No continuity at W4 - past the short. Move back to W3.' };
+      }
+      return { val:'----', unit:'', msg:'' };
+    },
+    win:function(res) { return res && res.ok; },
+    end:'Short found at W3! The wire chafed through its insulation against a frame crossmember. Fix: re-route with cable clamps and spiral wrap. Frame must stay isolated from the positive rail.'
+  },
+  {
+    title:'Robot Inspector: Electrified Frame?',
+    scene:'You are a robot inspector at a regional. This team failed the walk-around - someone touched the frame and felt a tingle. Verify whether the frame is electrified and find the fault location.',
+    goal:'Use DC Voltage between BATTERY NEGATIVE and each frame point. 0V = isolated (pass). Any voltage = fault (fail).',
+    tip:'Measure VDC from battery negative to each part of the frame. A properly isolated FRC robot reads 0V everywhere. Any voltage means a chafed wire is contacting the frame - FAIL inspection.',
+    pts:{ BNEG:'Bat(-)', F1:'Frame L', F2:'Frame Mid', F3:'Frame R' },
+    eval:function(dial, r, b, rst) {
+      if ((dial === 'OHM' || dial === 'CONT') && (r || b)) {
+        return { boom:true, emo:'ZAP', title:'WRONG MODE - ROBOT IS POWERED!',
+          msg:'Battery is connected for inspection. OHM or CONT on a powered robot frame could damage your meter.',
+          det:'For inspection voltage checks, always use VDC (DC Voltage) mode.' };
+      }
+      if (dial === 'AMP' && r && b) {
+        return { boom:true, emo:'BOOM', title:'SHORT CIRCUIT RISK!',
+          msg:'Ammeter mode between frame and battery reference could create a dangerous current path.', det:'' };
+      }
+      if (!r || !b) return { val:'----', unit:'', msg:'Place both probes - use Bat(-) as your reference' };
+      if (dial === 'OFF') return { val:'OFF', unit:'', msg:'Turn the dial on' };
+      if (dial === 'ACV') return { val:'0.00', unit:'VAC', msg:'Robot uses DC power. Use VDC mode.' };
+      if (dial === 'DCV') {
+        var hasNeg = (r === 'BNEG' || b === 'BNEG');
+        if (!hasNeg) return { val:'----', unit:'VDC', msg:'Use Bat(-) as one of your probe reference points.' };
+        var frame = (b === 'BNEG') ? r : b;
+        var inv = (b !== 'BNEG');
+        if (frame === 'BNEG') return { val:'0.0', unit:'VDC', msg:'Probing Bat(-) to itself. Move to a frame test point.' };
+        if (frame === 'F1') return { val:(inv ? '-0.0' : '0.0'), unit:'VDC', msg:'PASS: Left frame = 0.0V - isolated, no fault here.' };
+        if (frame === 'F2') return { ok:1, val:(inv ? '-11.8' : '11.8'), unit:'VDC', msg:'FAIL INSPECTION! Mid-frame reads 11.8V - frame is ELECTRIFIED!' };
+        if (frame === 'F3') return { val:(inv ? '-0.0' : '0.0'), unit:'VDC', msg:'PASS: Right frame = 0.0V - isolated, no fault here.' };
+      }
+      return { val:'----', unit:'', msg:'' };
+    },
+    win:function(res) { return res && res.ok; },
+    end:'FRAME FAULT FOUND! Mid-frame reads 11.8V - a positive wire chafed against the chassis. Robot FAILS inspection. Fix: trace all power wires, add grommets at metal edges, use spiral wrap.'
+  }
+];
+
+function mkT(id, x, y, label, r, b) {
+  var isR = (r === id), isB = (b === id);
+  var cls = 'tpt' + (isR ? ' red' : '') + (isB ? ' blk' : '');
+  return '<g class="' + cls + '" data-tp="' + id + '">' +
+    '<circle cx="' + x + '" cy="' + y + '" r="9"/>' +
+    '<text x="' + x + '" y="' + (y + 20) + '" text-anchor="middle">' + label + '</text>' +
+    (isR ? '<text x="' + x + '" y="' + (y - 15) + '" text-anchor="middle" font-size="9" fill="#ff6666" font-family="Share Tech Mono,monospace">RED</text>' : '') +
+    (isB ? '<text x="' + x + '" y="' + (y - 15) + '" text-anchor="middle" font-size="9" fill="#bbb" font-family="Share Tech Mono,monospace">BLK</text>' : '') +
+    '</g>';
+}
+function mkC(x, y, w, h, t1, t2) {
+  return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="#141928" stroke="#00e5ff" stroke-width="1.5"/>' +
+    '<text x="' + (x + w/2) + '" y="' + (y + h/2 - 5) + '" fill="#fff" font-family="Exo 2,sans-serif" font-size="10" font-weight="600" text-anchor="middle">' + t1 + '</text>' +
+    '<text x="' + (x + w/2) + '" y="' + (y + h/2 + 8) + '" fill="#00e5ff" font-family="Share Tech Mono,monospace" font-size="9" text-anchor="middle">' + t2 + '</text>';
+}
+function mkG(x, y) {
+  return '<line x1="'+x+'" y1="'+y+'" x2="'+x+'" y2="'+(y+16)+'" stroke="#666" stroke-width="2" fill="none"/>' +
+    '<line x1="'+(x-11)+'" y1="'+(y+16)+'" x2="'+(x+11)+'" y2="'+(y+16)+'" stroke="#666" stroke-width="2" fill="none"/>' +
+    '<line x1="'+(x-6)+'" y1="'+(y+22)+'" x2="'+(x+6)+'" y2="'+(y+22)+'" stroke="#666" stroke-width="2" fill="none"/>' +
+    '<line x1="'+(x-2)+'" y1="'+(y+28)+'" x2="'+(x+2)+'" y2="'+(y+28)+'" stroke="#666" stroke-width="2" fill="none"/>';
+}
+
+function circ1(r, b) {
+  var o = '';
+  o += '<rect x="140" y="92" width="240" height="155" rx="10" fill="#141928" stroke="#555" stroke-width="2"/>';
+  o += '<rect x="154" y="105" width="212" height="128" rx="5" fill="#080b13"/>';
+  o += '<text x="260" y="149" text-anchor="middle" fill="#fff" font-family="Exo 2,sans-serif" font-size="13" font-weight="600">MK 18-12</text>';
+  o += '<text x="260" y="165" text-anchor="middle" fill="#00e5ff" font-family="Share Tech Mono,monospace" font-size="10">12V  18Ah  SLA</text>';
+  o += '<text x="260" y="179" text-anchor="middle" fill="#00e5ff" font-family="Share Tech Mono,monospace" font-size="10">FRC Competition Battery</text>';
+  o += '<rect x="160" y="83" width="24" height="13" rx="3" fill="#cc0000" stroke="#ff4444" stroke-width="1.5"/>';
+  o += '<text x="172" y="94" text-anchor="middle" fill="#ff8888" font-family="Share Tech Mono,monospace" font-size="10">+</text>';
+  o += '<line x1="172" y1="92" x2="172" y2="73" stroke="#ff4444" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += '<rect x="336" y="83" width="24" height="13" rx="3" fill="#222" stroke="#888" stroke-width="1.5"/>';
+  o += '<text x="348" y="94" text-anchor="middle" fill="#888" font-family="Share Tech Mono,monospace" font-size="10">-</text>';
+  o += '<line x1="348" y1="92" x2="348" y2="73" stroke="#777" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += '<text x="172" y="60" text-anchor="middle" fill="#ff9800" font-family="Share Tech Mono,monospace" font-size="8">SB50 RED</text>';
+  o += '<text x="348" y="60" text-anchor="middle" fill="#888" font-family="Share Tech Mono,monospace" font-size="8">SB50 BLK</text>';
+  o += '<rect x="60" y="268" width="400" height="28" rx="4" fill="rgba(255,23,68,0.09)" stroke="#ff1744" stroke-width="1"/>';
+  o += '<text x="260" y="285" text-anchor="middle" fill="#ff4444" font-family="Share Tech Mono,monospace" font-size="9">!! LIVE 12V SOURCE  -  OHM and AMPS modes are DANGEROUS here</text>';
+  o += mkT('POS', 172, 73, '(+)', r, b);
+  o += mkT('NEG', 348, 73, '(-)', r, b);
+  return o;
+}
+
+function circ2(r, b) {
+  var o = '';
+  o += mkC(8, 148, 80, 52, 'PDH', 'Ch. 3');
+  o += '<line x1="88" y1="174" x2="165" y2="174" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += '<line x1="190" y1="174" x2="225" y2="174" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += '<rect x="225" y="152" width="62" height="44" rx="5" fill="rgba(255,23,68,0.1)" stroke="#ff1744" stroke-width="1.5"/>';
+  o += '<text x="256" y="169" text-anchor="middle" fill="#ff4444" font-family="Share Tech Mono,monospace" font-size="8">ANDERSON</text>';
+  o += '<text x="256" y="181" text-anchor="middle" fill="#ff4444" font-family="Share Tech Mono,monospace" font-size="8">CONNECTOR</text>';
+  o += '<text x="256" y="190" text-anchor="middle" fill="#ff8800" font-family="Share Tech Mono,monospace" font-size="7">LOOSE CRIMP</text>';
+  o += '<line x1="225" y1="174" x2="193" y2="174" class="wire-break"/>';
+  o += '<line x1="287" y1="174" x2="312" y2="174" class="wire-break"/>';
+  o += '<line x1="312" y1="174" x2="406" y2="174" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += mkC(406, 148, 90, 52, 'MOTOR', 'CTRL');
+  o += '<line x1="48" y1="255" x2="455" y2="255" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += '<line x1="48" y1="200" x2="48" y2="255" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += mkG(48, 255);
+  o += '<text x="256" y="135" text-anchor="middle" fill="#ff4444" font-family="Share Tech Mono,monospace" font-size="9">[ open circuit here ]</text>';
+  o += '<text x="120" y="194" text-anchor="middle" fill="#00e5ff" font-family="Share Tech Mono,monospace" font-size="9">+12V live</text>';
+  o += '<text x="358" y="194" text-anchor="middle" fill="#00e5ff" font-family="Share Tech Mono,monospace" font-size="9">+12V live</text>';
+  o += mkT('A', 55, 174, 'A', r, b);
+  o += mkT('B', 176, 174, 'B', r, b);
+  o += mkT('C', 300, 174, 'C', r, b);
+  o += mkT('D', 418, 174, 'D', r, b);
+  return o;
+}
+
+function circ3(r, b, rst) {
+  var bclr = rst ? '#00e676' : '#ff1744';
+  var blbl = rst ? 'NORMAL' : 'TRIPPED';
+  var o = '';
+  o += mkC(8, 148, 90, 52, 'PDH', 'Bus +12V');
+  o += '<line x1="98" y1="174" x2="182" y2="174" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += '<rect x="182" y="130" width="126" height="58" rx="6" fill="#141928" stroke="' + bclr + '" stroke-width="2"/>';
+  o += '<text x="245" y="149" text-anchor="middle" fill="' + bclr + '" font-family="Share Tech Mono,monospace" font-size="8">CHANNEL 5</text>';
+  o += '<text x="245" y="162" text-anchor="middle" fill="' + bclr + '" font-family="Exo 2,sans-serif" font-size="10" font-weight="700">BREAKER 40A</text>';
+  o += '<text x="245" y="175" text-anchor="middle" fill="' + bclr + '" font-family="Share Tech Mono,monospace" font-size="9"' + (rst ? '' : ' class="tripped"') + '>' + blbl + '</text>';
+  o += '<line x1="308" y1="174" x2="386" y2="174" stroke="' + (rst ? '#00e5ff' : '#333') + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += mkC(386, 148, 96, 52, 'MOTOR', 'CTRL');
+  o += '<line x1="482" y1="174" x2="512" y2="174" stroke="#555" stroke-width="2" fill="none"/>';
+  o += '<line x1="48" y1="258" x2="455" y2="258" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += '<line x1="48" y1="200" x2="48" y2="258" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += '<line x1="434" y1="200" x2="434" y2="258" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += mkG(256, 258);
+  o += '<text x="136" y="138" text-anchor="middle" fill="#ff9800" font-family="Share Tech Mono,monospace" font-size="9">12.1V</text>';
+  o += '<text x="364" y="138" text-anchor="middle" fill="' + (rst ? '#ff9800' : '#ff1744') + '" font-family="Share Tech Mono,monospace" font-size="9">' + (rst ? '12.0V' : '0.0V') + '</text>';
+  if (!rst) {
+    o += '<rect x="155" y="220" width="202" height="22" rx="4" fill="rgba(255,23,68,0.09)" stroke="#ff1744" stroke-width="1"/>';
+    o += '<text x="256" y="235" text-anchor="middle" fill="#ff4444" font-family="Share Tech Mono,monospace" font-size="8">!! BREAKER TRIPPED - press RESET BREAKER button</text>';
+  }
+  o += mkT('A', 72, 174, 'PDH Bus', r, b);
+  o += mkT('B', 208, 145, 'Brkr In', r, b);
+  o += mkT('C', 308, 145, 'Brkr Out', r, b);
+  o += mkT('D', 426, 174, 'Mtr Ctrl', r, b);
+  o += mkT('GND', 256, 258, 'GND', r, b);
+  return o;
+}
+
+function circ4(r, b) {
+  var o = '';
+  o += mkC(8, 132, 82, 50, 'PDH', '+ Bus');
+  o += '<line x1="90" y1="157" x2="168" y2="157" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += '<line x1="168" y1="157" x2="252" y2="157" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += '<line x1="252" y1="157" x2="332" y2="157" class="wire-short"/>';
+  o += '<circle cx="290" cy="157" r="8" fill="none" stroke="#ff9800" stroke-width="2" class="sparking"/>';
+  o += '<text x="290" y="144" text-anchor="middle" fill="#ff9800" font-family="Share Tech Mono,monospace" font-size="8">CHAFE</text>';
+  o += '<line x1="290" y1="165" x2="290" y2="224" stroke="#ff9800" stroke-width="2.5" stroke-dasharray="5 3" fill="none"/>';
+  o += '<text x="308" y="202" fill="#ff9800" font-family="Share Tech Mono,monospace" font-size="8">short!</text>';
+  o += '<line x1="332" y1="157" x2="372" y2="157" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  o += mkC(372, 132, 96, 50, 'MOTOR', 'CTRL');
+  o += '<rect x="28" y="224" width="440" height="18" rx="4" fill="#111118" stroke="#555" stroke-width="1.5"/>';
+  o += '<text x="258" y="237" text-anchor="middle" fill="#777" font-family="Share Tech Mono,monospace" font-size="9">ROBOT CHASSIS / FRAME</text>';
+  o += mkG(476, 242);
+  o += '<line x1="48" y1="182" x2="48" y2="224" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += '<text x="258" y="278" text-anchor="middle" fill="#444" font-family="Share Tech Mono,monospace" font-size="8">Probe chassis to each wire point to find the short</text>';
+  o += mkT('W1', 87, 157, 'W1', r, b);
+  o += mkT('W2', 179, 157, 'W2', r, b);
+  o += mkT('W3', 332, 157, 'W3', r, b);
+  o += mkT('W4', 420, 157, 'W4', r, b);
+  o += mkT('CHG', 258, 233, 'Chassis', r, b);
+  return o;
+}
+
+function circ5(r, b) {
+  var o = '';
+  o += '<rect x="55" y="72" width="410" height="212" rx="14" fill="none" stroke="#555" stroke-width="3"/>';
+  o += '<text x="260" y="106" text-anchor="middle" fill="#666" font-family="Exo 2,sans-serif" font-size="11" font-weight="600">ROBOT FRAME / CHASSIS</text>';
+  o += '<line x1="55" y1="188" x2="465" y2="188" stroke="#333" stroke-width="1" stroke-dasharray="4 4" fill="none"/>';
+  o += '<line x1="260" y1="72" x2="260" y2="48" class="fault-line"/>';
+  o += '<text x="260" y="42" text-anchor="middle" fill="#ff9800" font-family="Share Tech Mono,monospace" font-size="8">CHAFED +12V WIRE (fault source)</text>';
+  o += mkC(6, 232, 120, 50, 'BATTERY', '12V SLA');
+  o += '<text x="40" y="296" text-anchor="middle" fill="#ff4444" font-family="Share Tech Mono,monospace" font-size="8">(+)</text>';
+  o += '<text x="112" y="296" text-anchor="middle" fill="#888" font-family="Share Tech Mono,monospace" font-size="8">(-)</text>';
+  o += '<line x1="112" y1="232" x2="112" y2="282" stroke="#777" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  o += '<rect x="28" y="302" width="464" height="22" rx="4" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.14)" stroke-width="1"/>';
+  o += '<text x="260" y="317" text-anchor="middle" fill="#00e5ff" font-family="Share Tech Mono,monospace" font-size="9">INSPECTION: Frame to Bat(-) must read 0.0V for pass</text>';
+  o += mkT('F1', 116, 152, 'Frame L', r, b);
+  o += mkT('F2', 260, 92, 'Frame Mid', r, b);
+  o += mkT('F3', 404, 152, 'Frame R', r, b);
+  o += mkT('BNEG', 112, 232, 'Bat(-)', r, b);
+  return o;
+}
+
+var CIRCS = [circ1, circ2, circ3, circ4, circ5];
+
+function renderHdr() {
+  document.getElementById('hdr-lv').textContent = 'LEVEL ' + (S.level + 1);
+  document.getElementById('hdr-sc').textContent = 'SCORE: ' + S.score;
+  var h = '';
+  for (var i = 0; i < 5; i++) {
+    var c = S.done[i] ? 'done' : (i === S.level ? 'cur' : '');
+    h += '<span class="ldot ' + c + '" data-lv="' + i + '" title="Level ' + (i+1) + '"></span>';
+  }
+  document.getElementById('dots').innerHTML = h;
+}
+
+function renderScene() {
+  var lv = LV[S.level];
+  document.getElementById('scen-badge').textContent = 'SCENARIO  -  LEVEL ' + (S.level + 1) + ' OF 5';
+  document.getElementById('scen-text').textContent = lv.scene;
+  document.getElementById('obj-bar').textContent = 'OBJECTIVE: ' + lv.goal;
+  document.getElementById('tip').innerHTML = lv.tip;
+}
+
+function renderCircuit() {
+  document.getElementById('csvg').innerHTML = CIRCS[S.level](S.red, S.black, S.reset);
+}
+
+function renderDial() {
+  var cx = 110, cy = 105, R = 78, LR = 92;
+  var h = '';
+  h += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="#1e1e1e" stroke="#444" stroke-width="2.5"/>';
+  var a1 = 180 * Math.PI / 180, a2 = 240 * Math.PI / 180;
+  h += '<path d="M' + (cx + R * Math.cos(a1)).toFixed(1) + ',' + (cy + R * Math.sin(a1)).toFixed(1) +
+    ' A' + R + ',' + R + ' 0 0,1 ' + (cx + R * Math.cos(a2)).toFixed(1) + ',' + (cy + R * Math.sin(a2)).toFixed(1) +
+    '" fill="none" stroke="rgba(255,23,68,0.4)" stroke-width="7"/>';
+  for (var i = 0; i < DIALS.length; i++) {
+    var d = DIALS[i];
+    var rad = d.angle * Math.PI / 180;
+    var lx = (cx + LR * Math.cos(rad)).toFixed(1);
+    var ly = (cy + LR * Math.sin(rad)).toFixed(1);
+    var act = (S.dial === d.id);
+    h += '<g data-dial="' + d.id + '" style="cursor:pointer">';
+    h += '<circle cx="' + lx + '" cy="' + ly + '" r="18" fill="' + (act ? d.col : 'rgba(255,255,255,0.04)') + '" stroke="' + (act ? d.col : '#2a2a2a') + '" stroke-width="' + (act ? 2 : 1) + '"/>';
+    var fs = (d.label.length > 3 ? 8 : 10);
+    h += '<text x="' + lx + '" y="' + ly + '" text-anchor="middle" dominant-baseline="middle" fill="' + (act ? '#000' : '#777') + '" font-family="Share Tech Mono,monospace" font-size="' + fs + '" font-weight="' + (act ? '700' : '400') + '">' + d.label + '</text>';
+    h += '</g>';
+  }
+  var adial = DIALS[0];
+  for (var j = 0; j < DIALS.length; j++) { if (DIALS[j].id === S.dial) { adial = DIALS[j]; break; } }
+  var nr = adial.angle * Math.PI / 180;
+  var nx = (cx + (R - 20) * Math.cos(nr)).toFixed(1);
+  var ny = (cy + (R - 20) * Math.sin(nr)).toFixed(1);
+  h += '<line x1="' + cx + '" y1="' + cy + '" x2="' + nx + '" y2="' + ny + '" stroke="#f5c519" stroke-width="2.5" stroke-linecap="round" fill="none"/>';
+  h += '<circle cx="' + cx + '" cy="' + cy + '" r="22" fill="#1a1a1a" stroke="#555" stroke-width="2"/>';
+  h += '<circle cx="' + cx + '" cy="' + cy + '" r="10" fill="#2a2a2a" stroke="#444" stroke-width="1.5"/>';
+  h += '<text x="18" y="180" fill="rgba(255,68,68,0.55)" font-family="Share Tech Mono,monospace" font-size="7">!! DANGER</text>';
+  document.getElementById('dial-svg').innerHTML = h;
+}
+
+function renderProbes() {
+  var lv = LV[S.level];
+  document.getElementById('pbtn-r').className = 'pbtn' + (S.held === 'red' ? ' active' : '');
+  document.getElementById('pbtn-b').className = 'pbtn' + (S.held === 'black' ? ' active' : '');
+  document.getElementById('red-loc').textContent = (S.red && lv.pts[S.red]) ? lv.pts[S.red] : 'not placed';
+  document.getElementById('blk-loc').textContent = (S.black && lv.pts[S.black]) ? lv.pts[S.black] : 'not placed';
+}
+
+function getRes() { return LV[S.level].eval(S.dial, S.red, S.black, S.reset); }
+
+function renderDisp(res) {
+  document.getElementById('disp-val').textContent = (res && res.val) ? res.val : '----';
+  document.getElementById('disp-unit').textContent = (res && res.unit) ? res.unit : '';
+  document.getElementById('disp-msg').textContent = (res && res.msg) ? res.msg : '';
+  document.getElementById('disp-beep').className = (res && res.beep) ? 'on' : '';
+}
+
+function renderFbar(res) {
+  var fi = document.getElementById('fbar-ico');
+  var ft = document.getElementById('fbar-txt');
+  var nb = document.getElementById('next-btn');
+  var rb = document.getElementById('reset-btn');
+  nb.style.display = 'none'; rb.style.display = 'none';
+  if (!res || !res.val) {
+    fi.textContent = '?';
+    ft.textContent = 'Select a meter setting on the dial, then place your probes on the yellow test points.';
+    return;
+  }
+  if (res.ok && !S.finished) {
+    fi.textContent = 'V'; ft.textContent = res.msg || 'Correct!'; nb.style.display = 'block'; return;
+  }
+  if (res.needReset) {
+    fi.textContent = '!'; ft.textContent = res.msg || ''; rb.style.display = 'block'; return;
+  }
+  fi.textContent = '>'; ft.textContent = res.msg || '';
+}
+
+function doRender() {
+  renderHdr(); renderScene(); renderCircuit(); renderDial(); renderProbes();
+  var res = getRes();
+  if (res && res.boom && !S.finished) { showBoom(res); return; }
+  renderDisp(res); renderFbar(res); checkWin(res);
+}
+
+function checkWin(res) {
+  if (S.finished) return;
+  var lv = LV[S.level];
+  if (lv.win(res, S.reset)) {
+    S.finished = true; S.done[S.level] = 1;
+    S.score += Math.max(10, 100 - S.exploded * 15);
+    var sf = document.getElementById('sfx');
+    sf.style.display = 'block';
+    setTimeout(function() { sf.style.display = 'none'; }, 700);
+    beep(600, 0.14, 0.1);
+    setTimeout(function() { beep(800, 0.14, 0.1); }, 160);
+    setTimeout(function() { beep(1000, 0.28, 0.1); }, 320);
+    setTimeout(function() { showLvDone(lv); }, 700);
+  }
+}
+
+function setDial(id) { beep(440, 0.08, 0.06); S.dial = id; doRender(); }
+function pickProbe(color) {
+  S.held = (S.held === color) ? null : color; renderProbes();
+  document.getElementById('carea').style.cursor = S.held ? 'crosshair' : 'default';
+}
+function placeProbe(id) {
+  if (!S.held) return;
+  beep(600, 0.05, 0.08);
+  if (S.held === 'red') { S.red = id; if (S.black === id) S.black = null; }
+  else { S.black = id; if (S.red === id) S.red = null; }
+  S.held = null; doRender();
+}
+function clearProbes() { beep(300, 0.1, 0.06); S.red = null; S.black = null; S.held = null; doRender(); }
+function doResetBreaker() {
+  beep(500, 0.2, 0.14); S.reset = true;
+  document.getElementById('reset-btn').style.display = 'none'; doRender();
+}
+
+function showBoom(data) {
+  S.exploded++;
+  boom();
+  document.getElementById('exp-emo').textContent = data.emo || '!!';
+  document.getElementById('exp-title').textContent = data.title || 'ERROR!';
+  document.getElementById('exp-msg').textContent = data.msg || '';
+  document.getElementById('exp-det').textContent = data.det || '';
+  document.getElementById('exp-wrap').className = 'moverlay show';
+}
+function closeBoom() {
+  document.getElementById('exp-wrap').className = 'moverlay';
+  if (S.dial === 'OHM' || S.dial === 'CONT' || S.dial === 'AMP') S.dial = 'OFF';
+  S.red = null; S.black = null; S.held = null; doRender();
+}
+
+function showLvDone(lv) {
+  var last = (S.level >= 4);
+  document.getElementById('lc-emo').textContent = last ? 'WIN' : 'PASS';
+  document.getElementById('lc-title').textContent = last ? 'ALL 5 LEVELS DONE!' : 'LEVEL COMPLETE!';
+  document.getElementById('lc-text').textContent = lv.end;
+  document.getElementById('lc-btn').textContent = last ? 'SEE RESULTS' : 'NEXT LEVEL';
+  document.getElementById('lc-wrap').className = 'moverlay show';
+}
+function closeLvDone() {
+  document.getElementById('lc-wrap').className = 'moverlay';
+  if (S.level >= 4) showWin(); else nextLv();
+}
+function nextLv() {
+  if (S.level < 4) {
+    S.level++; S.red = null; S.black = null; S.held = null;
+    S.dial = 'OFF'; S.exploded = 0; S.finished = false; S.reset = false;
+    document.getElementById('next-btn').style.display = 'none'; doRender();
+  } else { showWin(); }
+}
+function showWin() {
+  document.getElementById('win-pts').textContent = S.score + ' pts';
+  document.getElementById('win-wrap').className = 'moverlay show';
+}
+function restartGame() {
+  document.getElementById('win-wrap').className = 'moverlay';
+  S.level = 0; S.score = 0; S.done = {}; S.red = null; S.black = null;
+  S.held = null; S.dial = 'OFF'; S.exploded = 0; S.finished = false; S.reset = false;
+  doRender();
+}
+function jumpLv(i) {
+  if (i === S.level) return;
+  S.level = i; S.red = null; S.black = null; S.held = null;
+  S.dial = 'OFF'; S.exploded = 0; S.finished = false; S.reset = false; doRender();
+}
+
+document.getElementById('dial-svg').addEventListener('click', function(e) {
+  var el = e.target.closest('[data-dial]');
+  if (el) setDial(el.getAttribute('data-dial'));
+});
+document.getElementById('carea').addEventListener('click', function(e) {
+  if (!S.held) return;
+  var el = e.target.closest('[data-tp]');
+  if (el) placeProbe(el.getAttribute('data-tp'));
+});
+document.getElementById('dots').addEventListener('click', function(e) {
+  var el = e.target.closest('[data-lv]');
+  if (el) jumpLv(parseInt(el.getAttribute('data-lv'), 10));
+});
+document.getElementById('pbtn-r').addEventListener('click', function() { pickProbe('red'); });
+document.getElementById('pbtn-b').addEventListener('click', function() { pickProbe('black'); });
+document.getElementById('pbtn-clr').addEventListener('click', clearProbes);
+document.getElementById('next-btn').addEventListener('click', nextLv);
+document.getElementById('reset-btn').addEventListener('click', doResetBreaker);
+document.getElementById('exp-ok').addEventListener('click', closeBoom);
+document.getElementById('lc-btn').addEventListener('click', closeLvDone);
+document.getElementById('win-rb').addEventListener('click', restartGame);
+
+doRender();
+</script>
+</body>
+</html>
