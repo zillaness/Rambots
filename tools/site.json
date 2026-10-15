@@ -1,18 +1,18 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.1",
+    "version": "1.1.1",
     "author": "Sam Cao",
     "created": "2026-10-14",
-    "last_updated": "2026-10-14",
+    "last_updated": "2026-10-15",
     "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
     "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
   },
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.1",
-  "updated": "2026-10-14",
+  "version": "1.1.1",
+  "updated": "2026-10-15",
   "topics": [
     "FRC Basics",
     "Design & CAD",
@@ -70,8 +70,8 @@
       "kind": "link",
       "type": "game",
       "label": "Game",
-      "url": "https://zillaness.github.io/driveTypeShowdown/",
-      "version": "1.0",
+      "url": "https://zillaness.github.io/DriveTypeShowdown/",
+      "version": "1.0.1",
       "description": "Browser game where you drive every FRC drive type (tank, arcade, swerve, holonomic) head to head, with arcade modes and a story-driven career tutorial.",
       "tags": [
         "swerve",
@@ -445,6 +445,11 @@
       "version": "1.1",
       "date": "2026-10-14",
       "note": "Drive Bases, Engineering Design Process, Punk Rock Engineering, and the FRC Introductory Guide (v1.1: founder names and unverified claims removed) locked behind the Konami code."
+    },
+    {
+      "version": "1.1.1",
+      "date": "2026-10-15",
+      "note": "Fixed the Drive Type Showdown link (repo path is case-sensitive: DriveTypeShowdown)."
     }
   ]
 }
