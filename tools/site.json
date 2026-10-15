@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.1.1",
+    "version": "1.2",
     "author": "Sam Cao",
     "created": "2026-10-14",
     "last_updated": "2026-10-15",
@@ -11,7 +11,7 @@
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.1.1",
+  "version": "1.2",
   "updated": "2026-10-15",
   "topics": [
     "FRC Basics",
@@ -20,7 +20,9 @@
     "Materials & Hardware",
     "Fabrication & 3D Printing",
     "Shop Practices",
-    "Careers"
+    "Team Leadership",
+    "Careers",
+    "Life Skills"
   ],
   "items": [
     {
@@ -433,6 +435,58 @@
         "software",
         "mechanical"
       ]
+    },
+    {
+      "slug": "framework-guide",
+      "title": "Rambots Framework Guide",
+      "topic": "Team Leadership",
+      "kind": "html",
+      "label": "Facilitator guide",
+      "version": "2.2.1",
+      "description": "A facilitator reference for 71 team frameworks: decisions, planning, root cause, retros, and brainstorming. Each tool has steps, history with sources, FRC examples, a tool finder, and a practice quiz.",
+      "tags": [
+        "frameworks",
+        "facilitation",
+        "decision matrix",
+        "retro",
+        "planning",
+        "leadership"
+      ]
+    },
+    {
+      "slug": "framework-toolkit",
+      "title": "Rambots Framework Toolkit",
+      "topic": "Team Leadership",
+      "kind": "html",
+      "label": "Interactive toolkit",
+      "version": "2.3.1",
+      "description": "Interactive worksheets for 71 decision, planning, brainstorming, and review frameworks, with a built-in study guide. Fill them in live in meetings, then save, export, or copy each one.",
+      "tags": [
+        "frameworks",
+        "worksheets",
+        "meetings",
+        "kanban",
+        "pugh",
+        "leadership"
+      ]
+    },
+    {
+      "slug": "new-driver",
+      "title": "New Driver Reference",
+      "topic": "Life Skills",
+      "kind": "html",
+      "label": "Study sheet + interactives",
+      "version": "1.2",
+      "gated": true,
+      "description": "A 66-section reference for new drivers: licensing, how cars work, tires, brakes, maintenance, bad weather, emergencies, buying a car, and insurance, with 11 interactives.",
+      "tags": [
+        "driving",
+        "license",
+        "cars",
+        "tires",
+        "brakes",
+        "insurance"
+      ]
     }
   ],
   "_changelog": [
@@ -450,6 +504,11 @@
       "version": "1.1.1",
       "date": "2026-10-15",
       "note": "Fixed the Drive Type Showdown link (repo path is case-sensitive: DriveTypeShowdown)."
+    },
+    {
+      "version": "1.2",
+      "date": "2026-10-15",
+      "note": "Added Rambots Framework Guide and Framework Toolkit (new Team Leadership topic) and New Driver Reference (new Life Skills topic, locked behind the Konami code)."
     }
   ]
 }
