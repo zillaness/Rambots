@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.2",
+    "version": "1.2.1",
     "author": "Sam Cao",
     "created": "2026-10-14",
     "last_updated": "2026-10-15",
@@ -11,7 +11,7 @@
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.2",
+  "version": "1.2.1",
   "updated": "2026-10-15",
   "topics": [
     "FRC Basics",
@@ -476,7 +476,7 @@
       "topic": "Life Skills",
       "kind": "html",
       "label": "Study sheet + interactives",
-      "version": "1.2",
+      "version": "1.2.1",
       "gated": true,
       "description": "A 66-section reference for new drivers: licensing, how cars work, tires, brakes, maintenance, bad weather, emergencies, buying a car, and insurance, with 11 interactives.",
       "tags": [
@@ -509,6 +509,11 @@
       "version": "1.2",
       "date": "2026-10-15",
       "note": "Added Rambots Framework Guide and Framework Toolkit (new Team Leadership topic) and New Driver Reference (new Life Skills topic, locked behind the Konami code)."
+    },
+    {
+      "version": "1.2.1",
+      "date": "2026-10-15",
+      "note": "New Driver v1.2.1: corrected loaded-vehicle braking physics and replaced unverified Tire Rack wet-braking figures with sourced, braking-only test findings."
     }
   ]
 }

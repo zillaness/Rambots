@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
-  file: newer_driver_v1.2.html
-  version: 1.2
+  file: newer_driver_v1.2.1.html
+  version: 1.2.1
   author: Sam Cao
   created: 2026-06-02
   last_updated: 2026-10-15
@@ -941,7 +941,7 @@ html[data-mode="present"] .doc-meta{display:none;}
 <div class="doc-meta" id="docMeta">
   <div class="doc-meta-header" onclick="this.closest('.doc-meta').classList.toggle('open')">
     <span class="doc-meta-logo">DRIVER // GUIDE</span>
-    <span class="doc-meta-ver" id="dmVer">v1.2</span>
+    <span class="doc-meta-ver" id="dmVer">v1.2.1</span>
     <span class="doc-meta-status" id="dmStatus">66 / 66 sections &nbsp;&#183;&nbsp; 11 / 11 interactives</span>
     <span class="doc-meta-caret">&#9660;</span>
   </div>
@@ -949,11 +949,12 @@ html[data-mode="present"] .doc-meta{display:none;}
     <div class="doc-meta-row"><span class="dm-key">Author</span><span class="dm-val">Sam Cao</span></div>
     <div class="doc-meta-row"><span class="dm-key">Created</span><span class="dm-val">2026-06-02</span></div>
     <div class="doc-meta-row"><span class="dm-key">Last Updated</span><span class="dm-val" id="dmUpdated">2026-10-15</span></div>
-    <div class="doc-meta-row"><span class="dm-key">Version</span><span class="dm-val" id="dmVersion">1.2</span></div>
+    <div class="doc-meta-row"><span class="dm-key">Version</span><span class="dm-val" id="dmVersion">1.2.1</span></div>
     <div class="doc-meta-row"><span class="dm-key">Sections</span><span class="dm-val dm-complete" id="dmSections">66 / 66 complete</span></div>
     <div class="doc-meta-row"><span class="dm-key">Interactives</span><span class="dm-val dm-complete" id="dmInteractives">11 / 11 complete</span></div>
     <div class="doc-meta-cl">
       <div class="doc-meta-cl-title">// Changelog</div>
+      <div class="cl-entry"><span class="cl-ver">v1.2.1</span><span class="cl-date">2026-10-15</span><span class="cl-note">Physics and data corrections: loaded-vehicle stopping now explains brake heat and fade, tire load sensitivity, and trailers, adds the CDL empty-truck note, and drops the unsourced 25&ndash;40% figure (s17); wet braking vs. tread depth replaces unverified exact Tire Rack distances with sourced, braking-only test findings (s14, s17).</span></div>
       <div class="cl-entry"><span class="cl-ver">v1.2</span><span class="cl-date">2026-10-15</span><span class="cl-note">Factual corrections: stopping distances (s17) and car vs. truck stopping (s42); BAC limits, under-21 zero tolerance (s1); AEB status (s34); recall loaners (s53); off-tracking vs. tail swing, CDL right-turn technique, and box truck simulator labels and steering (s60); liability exception for NH (s52); cost box total (s54); wireless CarPlay and 37% study attribution (s9); 3&ndash;4 second following rule throughout (s17, s28, s41); state-variation notes (s59, s61). Mobile: sidebar hidden and full-width content under 760px.</span></div>
       <div class="cl-entry"><span class="cl-ver">v1.1.1</span><span class="cl-date">2026-06-03</span><span class="cl-note">Fix: sidebar nav uses JS scrollIntoView to prevent iframe treating anchors as external links.</span></div>
       <div class="cl-entry"><span class="cl-ver">v1.1</span><span class="cl-date">2026-06-02</span><span class="cl-note">Phase 4 finalization: all 66 sections, 11 interactives complete. Bumped to v1.1.</span></div>
@@ -1356,7 +1357,7 @@ html[data-mode="present"] .doc-meta{display:none;}
 <p>Wear patterns diagnose specific problems. <strong>Center wear</strong> means over-inflation. <strong>Both shoulders wearing faster</strong> means under-inflation. <strong>One-sided edge wear</strong> means camber misalignment (the suspension is tilting the tire). <strong>Cupping or scalloping</strong> (wavy high-low spots around the circumference) means worn shock absorbers. <strong>Feathering</strong> (tread ribs worn on one side, sharp on the other) means toe misalignment. Each pattern points to a specific mechanical problem, not just a worn tire.</p>
 <div class="callout callout-danger">
   <div class="callout-icon">Wet Stopping Distance vs. Tread Depth</div>
-  Independent Tire Rack testing: at 70 mph on wet pavement, a tire at 2/32&rdquo; required 498 feet to stop. The same tire model at 10/32&rdquo; (new) required 195 feet. The difference is 303 feet, roughly the length of a football field, attributable entirely to worn tread channels that cannot evacuate water. Worn tires in the rain are genuinely dangerous.
+  In AAA's 2018 tests, tires worn to 4/32&rdquo; needed on average about 43% more distance than new tires to stop from 60&nbsp;mph on a wet test track. Tire Rack's wet-track testing of a sedan showed braking distance nearly doubling as tread wore from new to 2/32&rdquo;, because shallow grooves cannot channel water out from under the tire. These are braking-only distances on controlled test surfaces; real wet roads are often slicker, and reaction distance comes on top. Worn tires in the rain are genuinely dangerous.
 </div>
 <p>Rotate tires every 5,000&ndash;7,500 miles (at every oil change on a 7,500-mile schedule). Front tires wear faster on FWD cars because they handle both steering and driving forces. Rotation moves each tire through different positions to equalize wear, extending the set's life by 10,000&ndash;20,000 miles. Include a full-size spare in the rotation. Never include a donut spare in a rotation. Check tire age (DOT date code) at every rotation; even low-mileage tires over 6&ndash;10 years old should be inspected or replaced.</p>
 </section>
@@ -1407,7 +1408,7 @@ html[data-mode="present"] .doc-meta{display:none;}
   <div class="section-sub">REACTION TIME &middot; BRAKING DISTANCE &middot; TREAD DATA &middot; LOADED VEHICLE &middot; INTERACTIVE</div></div>
 </div>
 <p>Total stopping distance has two components. <strong>Reaction distance</strong> is the distance traveled from the moment a hazard is perceived to the moment the brake pedal reaches full pressure. Average alert reaction time is 1.5 seconds. Fatigued, distracted, or impaired drivers run 2.5&ndash;3 seconds. At 60&nbsp;mph (88&nbsp;ft/sec), 1.5 seconds of reaction distance alone covers 132 feet before the brakes begin to work. <strong>Braking distance</strong> depends on vehicle weight, tire traction, and road surface. Combined: roughly 270&ndash;300 feet at 60&nbsp;mph on dry pavement (about 132 feet of reaction plus 140&ndash;170 feet of braking at 0.7&ndash;0.85g; the simulator below uses 132 + 142 = 274 feet). On wet pavement (about 0.45&ndash;0.55g of grip): roughly 350&ndash;400 feet. On packed snow (about 0.2&ndash;0.3g): roughly 530&ndash;730 feet.</p>
-<p>A fully loaded vehicle extends stopping distance because kinetic energy (1/2 mv&sup2;) scales with mass while braking force (friction) does not. A truck at maximum payload stops 25&ndash;40% further than the same truck empty at the same speed. Tire Rack independent testing: at 70&nbsp;mph on wet pavement, a tire at 2/32&rdquo; tread required 498 feet to stop versus 195 feet for the same model new. The difference of 303 feet is attributable entirely to tread depth.</p>
+<p>A heavier vehicle carries more kinetic energy (1/2 mv&sup2;), but its weight also presses the tires harder into the road, so tire grip grows roughly with the load. In an ideal tire-limited stop, the extra mass nearly cancels out. Heavy loads still tend to lengthen real stops: the brakes must turn more energy into heat, brake force and heat capacity are limited (so brakes fade sooner, especially on long downhill grades), tires lose a little grip per pound as the load on them rises, and a trailer adds mass that the tow vehicle's brakes may not fully cover. <strong>Note:</strong> the CDL manual warns that an empty big truck can take longer to stop than a loaded one, because it has less traction, its brakes and suspension are designed for a full load, and its wheels lock up more easily. Tread matters too: in Tire Rack&rsquo;s wet-track sedan tests, tires worn to 2/32&rdquo; needed nearly twice the braking distance of new tires.</p>
 <div class="interactive-wrap" id="int-following-distance">
   <div class="interactive-title">// FOLLOWING DISTANCE SIMULATOR</div>
   <div class="interactive-sub">Select a gap scenario, then Run. Watch whether the following car stops in time at 60 mph.</div>
@@ -5571,6 +5572,7 @@ _btt && _btt.addEventListener('click', e => { e.preventDefault(); window.scrollT
 </script>
 
 <!-- CHANGELOG
+  v1.2.1 (2026-10-15): Physics and data corrections: loaded-vehicle stopping rewritten (brake heat and fade, tire load sensitivity, trailer brakes, CDL empty-truck note; unsourced 25-40% figure removed) (s17); wet braking vs. tread depth now uses sourced, braking-only test findings (AAA 4/32" result, Tire Rack near-doubling at 2/32") instead of unverified 498/195 ft figures and football-field comparison (s14, s17).
   v1.2 (2026-10-15): Factual corrections: stopping distances (s17) and car vs. truck stopping (s42); BAC limits and under-21 zero tolerance (s1); AEB status (s34); recall loaners (s53); off-tracking vs. tail swing, CDL right-turn technique, box truck simulator labels and steering inputs (s60); New Hampshire liability exception (s52); cost box total (s54); wireless CarPlay and 37% study attribution (s9); 3-4 second following rule (s17, s28, s41); state-variation notes (s59, s61). Mobile: sidebar hidden, full-width main with 16px gutter under 760px.
   v1.1.1 (2026-06-03): Fix sidebar nav anchor interception in iframe.
   v1.1 (2026-06-02): Phase 4 finalization -- 66 sections, 11 interactives complete.
