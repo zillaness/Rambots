@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.3
+version: 1.4
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -34,6 +34,7 @@ The page is unlisted (not on the Rambots site's landing page) and asks search en
 - **Source copy:** branch `claude/focused-dirac-gom1ys`, folder `tools/ramathon_sales_tracker/`. Edit there, test, then copy `index.html` and `sw.js` to the live folder.
 - **Clicker photos:** upload straight into the live folder `ramathon-sales-tracker/clicker_photos/` (file names in its README).
 - **Prize photos:** `ramathon-sales-tracker/prize_photos/` (any names; send the prize list and card prices to wire them up).
+- **Copter photos:** `ramathon-sales-tracker/copter_photos/` (file names in its README).
 
 The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) lets you pick booths in **Settings**.
 
@@ -48,9 +49,9 @@ The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) 
 
 | Do this | What happens |
 |---|---|
-| Tap **Clickers** or **Copters** | Opens that booth's buttons |
+| Tap **Clickers** or **Copters** | Opens that booth's photo buttons |
 | Tap an item (clickers: tap the design's photo) | Adds 1 to the current customer |
-| **# Type qty** (Copters) or the number in the right panel | Keypad to punch in an exact quantity |
+| The number in the right panel | Keypad to punch in an exact quantity |
 | **−** / **+** in the right panel | Adjust one line |
 | **Kid / Teen / Adult**, **Male / Female** | Optional. Tag who the items are *for*. Tap again to clear |
 | **Done · Next customer** (or Enter) | Saves the sale, resets the panel |
@@ -69,6 +70,20 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 5. **Cancel match** if a bot fails before the match counts: hand tickets back, players go back to the front of the queue.
 
 Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default (always 9 cards, can't be gamed by two kids cooperating); switch to **both players, per balloon** if you prefer. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
+
+## Clock, goal and pace
+
+- The top bar shows a small chip with the time and how far ahead or behind the goal this laptop is (target = a steady pace from the event start to the end). Tap it for the per-booth table and the tickets per minute still needed.
+- **Settings > Clock and goal:** event date and hours (default Sat 10/17, 10:30 AM to 1:00 PM), goals per booth (default Clickers 500, Copters 500, Battle 200) and a switch to hide the chip. Each laptop paces only the booths it runs. Plinko (goal 100) is counted from its bucket and typed into Combine.
+
+## Upsell prompts
+
+- **Clickers:** the right panel breaks the price into deals (e.g. `3 for 10 + 2 for 7 · 3.40 each`) and, when it saves money, says "Ask: 1 more is only +3 tix".
+- **Copters:** with a Full kit in the cart, a red **Ask** box offers **Upgrade 1 kit (+1)** to a toroidal kit (with a one-line explanation of what toroidal means) and **+ Extra propeller**. The wording lives in `TOROIDAL_PITCH` at the top of the script.
+
+## Backorders
+
+Something sold out? **Backorder** (next to Log walk-off) logs the item, quantity, a parent's name and a phone or email (required). No tickets are taken. Backorders never count as sales and only appear in History, the stats and the **Backorders CSV**. That file contains contact info: keep it off the public repo.
 
 ## Prize Table
 
@@ -103,14 +118,28 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 | Extra weapon | 1 |
 | Prize Table (cards, not tix) | Small 3, Medium 6, Grand 9 (editable) |
 
+## Exports and combining the laptops
+
+Totals (and Settings) has three downloads:
+
+| Button | File name | What's in it |
+|---|---|---|
+| Sales CSV | `ramathon_sales_<booth>_<station>_<laptop id>_<date>_<time>.csv` | One row per item / player / trade / walk-off |
+| Stats CSV | `ramathon_stats_...csv` | Averages, combo counts, add-on rates, busiest 30 minutes, goal vs actual |
+| Backorders CSV | `ramathon_backorders_...csv` | Backorder list with contact info (private) |
+
+Every sales row carries `record_id`, `laptop_id` and `exported_at`. Each export is a full snapshot, so hourly backups repeat earlier rows.
+
+**Combine laptops' CSVs** (Totals or Settings): pick the sales CSVs from all laptops, early backups included. Each record is counted once, from its newest export (a sale voided after a backup stays voided). Type the Plinko bucket count, then read the event total against the 1,300 goal or **Download combined CSV**.
+
 ## End of the event
 
 1. **Totals:** compare "Tickets that should be in the boxes" (and each box) with the counted boxes.
-2. **Totals > Download CSV** on every laptop. Export every hour or so during the event as a backup.
-3. Paste all CSVs into one sheet; each row carries its station name. Player names are never exported.
+2. **Totals > Sales CSV** on every laptop (export every hour or so during the event as a backup), plus **Stats CSV** and, if any, **Backorders CSV**.
+3. Copy the sales CSVs onto one laptop and use **Combine laptops' CSVs** for the event total. Player names are never exported.
 4. Inventory check per item: before − after − walk-offs = sold.
 
-CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason, cards_redeemed`.
+Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason, cards_redeemed, record_id, laptop_id, exported_at`.
 
 ## Known limits
 
@@ -126,3 +155,4 @@ CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = walk-o
 - v1.2 (2026-10-16): Photo button per clicker design, priced together; live on GitHub Pages (presentations branch); Xiao long bao renamed Dumpling.
 - v1.2.1 (2026-10-16): Booths renamed Clickers and Copters; all 13 clicker photos live.
 - v1.3 (2026-10-16): Prize Table replaces Plinko (cards in, prizes out, live stock, most-popular prizes); each booth link has its own storage; fixed two-tab undo.
+- v1.4 (2026-10-16): Clock and pace chip with per-booth goals, clicker combo breakdown and nudge, copter upgrade prompts, copter photos, backorders, stats CSV, new export names with record ids, Combine screen.
