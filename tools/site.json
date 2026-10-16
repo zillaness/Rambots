@@ -1,18 +1,18 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.2.1",
+    "version": "1.3",
     "author": "Sam Cao",
     "created": "2026-10-14",
-    "last_updated": "2026-10-15",
+    "last_updated": "2026-10-16",
     "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
     "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
   },
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.2.1",
-  "updated": "2026-10-15",
+  "version": "1.3",
+  "updated": "2026-10-16",
   "topics": [
     "FRC Basics",
     "Design & CAD",
@@ -471,6 +471,24 @@
       ]
     },
     {
+      "slug": "harada-chart",
+      "title": "Rambots Harada Chart",
+      "topic": "Team Leadership",
+      "kind": "html",
+      "label": "Interactive worksheet",
+      "version": "2.1",
+      "description": "Write one SMART goal for the 2027 season, then break it into 8 pillars and up to 64 small actions on a 9x9 Harada chart. Save it as a Markdown file to turn in, or export a PNG or PDF.",
+      "tags": [
+        "harada",
+        "open window 64",
+        "smart goal",
+        "goal setting",
+        "ohtani",
+        "season planning",
+        "leadership"
+      ]
+    },
+    {
       "slug": "new-driver",
       "title": "New Driver Reference",
       "topic": "Life Skills",
@@ -514,6 +532,11 @@
       "version": "1.2.1",
       "date": "2026-10-15",
       "note": "New Driver v1.2.1: corrected loaded-vehicle braking physics and replaced unverified Tire Rack wet-braking figures with sourced, braking-only test findings."
+    },
+    {
+      "version": "1.3",
+      "date": "2026-10-16",
+      "note": "Added the Rambots Harada Chart v2.1 (SMART goal plus 9x9 Harada chart) under Team Leadership."
     }
   ]
 }
