@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.0
+version: 1.1
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,39 +10,59 @@ ai_update: Update last_updated and version. Keep the filename README.md. Append 
 
 # Ramathon Sales Tracker
 
-One HTML file with huge buttons for logging booth sales on a laptop. It needs no internet once the file is on the laptop. Every tap is saved on that laptop immediately.
+One web page with huge buttons for the Ram-a-thon booths: fidget clickers and pull copters (shared sales laptop) and Balloon Battle (its own laptop). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
 
-## Setup (5 minutes, do it before the event)
+## Event-day links (one per laptop)
 
-1. Download `index.html` from this folder onto the laptop (GitHub: open the file, then **Download raw file**).
-2. Put it somewhere it will stay (Desktop is fine) and double-click it. It opens in the browser.
-3. Use a **normal** browser window, never private/incognito. Private windows throw the data away when they close.
-4. Open **Settings**:
-   - **Station name:** e.g. `Laptop 1` or `Copter table`. It goes on every exported row.
-   - **This laptop sells:** pick Fidget Clickers, Pull Copters, or both. Plinko is off by default.
-   - **Demographic buttons:** shown or hidden.
-5. Ring up a fake sale, then **Settings > Delete all data** so the counts start at zero.
+| Laptop | Link ends in | What it shows |
+|---|---|---|
+| Sales table | `?booth=sales` | Fidget Clickers and Pull Copters |
+| Balloon Battle | `?booth=battle` | Battle queue and matches |
 
-Always open the same copy of the file on that laptop, in one tab only. A second tab shows a red warning.
+The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) lets you pick booths in **Settings**.
 
-## Ringing up a sale
+## Setup (5 minutes per laptop, the day before)
+
+1. Open that laptop's link in Chrome while on wifi, then bookmark it.
+2. Use a **normal** window, never private/incognito (private windows throw the data away).
+3. Ring up a fake sale or match, then **Settings > Delete all data** so counts start at zero.
+4. One tab only. A second tab shows a red warning.
+
+## Sales table
 
 | Do this | What happens |
 |---|---|
-| Tap **Fidget Clickers** or **Pull Copters** | Opens that half's buttons |
+| Tap **Fidget Clickers** or **Pull Copters** | Opens that booth's buttons |
 | Tap an item | Adds 1 to the current customer |
-| Tap **# Type qty** (or the number in the right panel) | Keypad to punch in an exact quantity |
+| **# Type qty** (or the number in the right panel) | Keypad to punch in an exact quantity |
 | **−** / **+** in the right panel | Adjust one line |
 | **Kid / Teen / Adult**, **Male / Female** | Optional. Tag who the items are *for*. Tap again to clear |
 | **Done · Next customer** (or Enter) | Saves the sale, resets the panel |
-| **Undo** (or Ctrl+Z / Cmd+Z) | Reverses the last change and says exactly what it undid |
-| **← Back** (or Esc) | Back to the two big halves |
+| **Log walk-off** | Stock that left without tickets (demo unit, giveaway, broken) |
 
-The panel shows **Collect N tix** for the customer. Clicker tiers are applied automatically: 1 = 4, 2 = 7, 3 = 10, then they stack (4 = 14, 5 = 17, 6 = 20).
+The panel shows **Collect N tix**. When one customer buys from both booths it also shows how many tickets go in each booth's box. Clicker tiers apply automatically: 1 = 4, 2 = 7, 3 = 10, then they stack (4 = 14, 5 = 17, 6 = 20).
 
-**History** lists every sale. **Void** takes a sale out of the totals; **Restore** or Undo puts it back.
+## Balloon Battle
 
-## Prices (edit `CATEGORIES` at the top of the script)
+1. **Queue:** type a first name, tap the number of extra weapons (so the crew can have them ready), **Add to queue** (or Enter). Wait times start at 3 minutes per match and adjust to the real pace.
+2. **Start vs House** (next person) or **Start vs Player** (next two). Tickets are collected now: 5 per player + 1 per extra weapon. The toast says exactly how many from whom.
+3. **Match over** when someone loses all 3 balloons, then tap the result:
+   - vs House: how many House balloons the player popped (0 to 3).
+   - vs Player: who won, then how many the loser popped.
+4. The result card says how many 3-card bundles to hand over. **Instant rematch** runs the same players again at the rematch price (shows how many people are waiting).
+5. **Cancel match** if a bot fails before the match counts: hand tickets back, players go back to the front of the queue.
+
+Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default (always 9 cards, can't be gamed by two kids cooperating); switch to **both players, per balloon** if you prefer. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
+
+## Everywhere
+
+- **Undo** (or Ctrl+Z / Cmd+Z) reverses the last change and says exactly what it undid.
+- **History** lists every sale, match, and walk-off. **Void** takes one out of the totals; **Restore** or Undo puts it back.
+- **Totals** shows tickets expected in each box, dollars after CCA's 10%, item counts with walk-offs, battle cards paid and cards per ticket (target about 1), and the age/gender breakdown.
+
+## Prices
+
+Sale prices live in `CATEGORIES` at the top of the script; Balloon Battle prices live in Settings.
 
 | Item | Tix |
 |---|---|
@@ -53,23 +73,27 @@ The panel shows **Collect N tix** for the customer. Clicker tiers are applied au
 | Extra propeller | 1 |
 | Toroidal propeller | 2 |
 | Extra ripcord | 1 |
-| Plinko game (off by default) | 1 |
+| Balloon Battle match (per player) | 5 |
+| Instant rematch (per player) | 6 |
+| Extra weapon | 1 |
+| Plinko play (off by default) | 1 |
 
 ## End of the event
 
-1. **Totals** shows "Tickets that should be in the box." Count the box and compare.
-2. **Totals > Download CSV** (also in Settings). Export every hour or so during the event as a backup.
-3. With two laptops, paste both CSVs into one sheet. Each row carries its station name, so nothing collides.
+1. **Totals:** compare "Tickets that should be in the boxes" (and each box) with the counted boxes.
+2. **Totals > Download CSV** on every laptop. Export every hour or so during the event as a backup.
+3. Paste all CSVs into one sheet; each row carries its station name. Player names are never exported.
+4. Inventory check per item: before − after − walk-offs = sold.
 
-CSV columns: `station, customer_no, status (sold/voided/open), opened_at, closed_at, category, item, qty, item_tickets, customer_total_tickets, age, gender`. One row per item line.
-
-Colors and variants are not tracked. Count inventory before and after for the color split, and count giveaways and broken units separately so they don't show up as sales.
+CSV columns: `station, record (S = sale, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason`.
 
 ## Known limits
 
-- Data lives in that laptop's browser. Clearing browser data deletes it, so export before anyone touches browser settings.
-- Undo history resets when the page reloads (the sales themselves don't).
+- Data lives in each laptop's browser. Clearing browser data deletes it, so export before anyone touches browser settings.
+- Undo history resets when the page reloads (the saved data doesn't).
+- Opened as a local file (double-click), it saves fine but won't reopen offline from a bookmark; use the hosted link.
 
 ## CHANGELOG
 
-- v1.0 (2026-10-16): Initial release for Ramathon 2026.
+- v1.0 (2026-10-16): Initial release for Ram-a-thon 2026.
+- v1.1 (2026-10-16): Balloon Battle queue and matches, per-box ticket split, walk-off log, net $, booth links, offline reopen, clicker photo folder.

@@ -1,11 +1,11 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.0
+  version: 1.1
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
-  description: Huge-button, offline sales tracker for the Rambots Ramathon booth (fidget clickers, pull copters, optional plinko).
+  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: fidget clicker and pull copter sales, Balloon Battle queue and matches, walk-offs, optional plinko.
   ai_update: Update last_updated and version. Keep the filename index.html so volunteers' links never break. Append a changelog entry at the bottom.
 -->
 <html lang="en">
@@ -122,7 +122,7 @@
   }
   .main { padding: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; min-height: 0; }
 
-  /* ---- Home: one huge half per category -------------------------------- */
+  /* ---- Home: one huge tile per booth ----------------------------------- */
   .home { flex: 1; display: grid; gap: 16px; grid-auto-flow: column; grid-auto-columns: 1fr; min-height: 0; }
   .cat {
     border: 0;
@@ -137,13 +137,14 @@
     position: relative;
     text-align: center;
   }
-  .cat .c-name { font-size: clamp(34px, 5vw, 84px); font-weight: 700; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.02em; }
-  .cat .c-hint { font-size: clamp(16px, 1.8vw, 26px); font-weight: 500; }
-  .cat .c-go { font-size: clamp(15px, 1.4vw, 20px); opacity: 0.85; }
+  .cat .c-name { font-size: clamp(30px, 4.6vw, 84px); font-weight: 700; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.02em; }
+  .cat .c-hint { font-size: clamp(15px, 1.7vw, 26px); font-weight: 500; }
+  .cat .c-go { font-size: clamp(14px, 1.4vw, 20px); opacity: 0.85; }
   .theme-red { background: var(--rb-red); color: #fff; }
   .theme-yellow { background: var(--rb-yellow); color: var(--rb-ink); }
   .theme-ink { background: var(--rb-ink); color: #fff; }
-  .cat:active, .item:active { transform: scale(0.985); }
+  .theme-paper { background: #fff; color: var(--rb-red); box-shadow: inset 0 0 0 5px var(--rb-red), var(--rb-shadow-md); }
+  .cat:active, .item:active, .start:active, .pop:active { transform: scale(0.985); }
   .badge {
     position: absolute;
     top: 14px;
@@ -170,6 +171,16 @@
   }
   .cat-title { font-size: 32px; font-weight: 700; }
   .cat-tip { font-size: 15px; color: var(--rb-gray-600); text-align: right; }
+  .walkoff-btn {
+    height: 66px;
+    padding: 0 18px;
+    border-radius: 14px;
+    border: 3px dashed var(--rb-gray-500);
+    background: transparent;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--rb-gray-700);
+  }
   .items { flex: 1; display: grid; gap: 14px; min-height: 0; grid-auto-rows: 1fr; }
   .items.cols-3 { grid-template-columns: repeat(3, 1fr); }
   .items.cols-1 { grid-template-columns: 1fr; }
@@ -213,7 +224,7 @@
     font-weight: 700;
   }
 
-  /* ---- Current customer panel ------------------------------------------ */
+  /* ---- Right panel (current customer, or Battle queue) ----------------- */
   .panel {
     background: #fff;
     border-left: 1px solid var(--rb-gray-200);
@@ -226,7 +237,7 @@
   }
   .p-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .p-title { font-size: 24px; font-weight: 700; }
-  .p-sub { color: var(--rb-gray-600); font-size: 15px; }
+  .p-sub { color: var(--rb-gray-600); font-size: 15px; text-align: right; }
   .lines { flex: 1; overflow: auto; min-height: 70px; display: flex; flex-direction: column; gap: 8px; }
   .empty { color: var(--rb-gray-500); font-size: 20px; text-align: center; margin: auto; padding: 16px; }
   .line {
@@ -241,7 +252,7 @@
   .line.pulse { animation: pulse 600ms ease-out; }
   @keyframes pulse { from { background: var(--rb-yellow-100); border-color: var(--rb-yellow); } to { background: #fff; } }
   .l-info { min-width: 0; }
-  .l-name { font-size: 18px; font-weight: 700; line-height: 1.15; }
+  .l-name { font-size: 18px; font-weight: 700; line-height: 1.15; overflow-wrap: anywhere; }
   .l-sub { font-size: 15px; color: var(--rb-gray-600); margin-top: 2px; }
   .l-sub b { color: var(--rb-red); font-size: 17px; }
   .l-ctl { display: flex; align-items: center; gap: 6px; }
@@ -255,6 +266,7 @@
     font-weight: 700;
     line-height: 1;
   }
+  .step.sm { width: 46px; height: 46px; font-size: 24px; }
   .qty {
     min-width: 64px;
     height: 50px;
@@ -267,11 +279,16 @@
   .total { display: flex; justify-content: space-between; align-items: baseline; border-top: 3px solid var(--rb-ink); padding-top: 10px; }
   .t-label { font-size: 22px; font-weight: 700; }
   .t-val { font-size: 46px; font-weight: 700; color: var(--rb-red); }
+  .box-split { margin-top: -6px; display: flex; flex-direction: column; gap: 2px; font-size: 17px; color: var(--rb-gray-700); }
+  .box-split div { display: flex; justify-content: space-between; }
+  .box-split b { color: var(--rb-ink); }
   .demo { display: flex; flex-direction: column; gap: 8px; }
   .d-label { font-size: 14px; font-weight: 700; color: var(--rb-gray-600); text-transform: uppercase; letter-spacing: 0.04em; }
   .chips { display: grid; gap: 8px; }
-  .chips.c3 { grid-template-columns: repeat(3, 1fr); }
   .chips.c2 { grid-template-columns: repeat(2, 1fr); }
+  .chips.c3 { grid-template-columns: repeat(3, 1fr); }
+  .chips.c4 { grid-template-columns: repeat(4, 1fr); }
+  .chips.c5 { grid-template-columns: repeat(5, 1fr); }
   .chip {
     min-height: 50px;
     border-radius: 12px;
@@ -285,6 +302,7 @@
   .chip small { display: block; font-size: 12px; font-weight: 500; color: var(--rb-gray-600); }
   .chip.on { background: var(--rb-ink); color: #fff; border-color: var(--rb-ink); }
   .chip.on small { color: #fff; }
+  .chip.sm { min-height: 44px; font-size: 15px; }
   .done {
     min-height: 92px;
     border-radius: 16px;
@@ -296,6 +314,108 @@
     line-height: 1.15;
   }
   .done small { display: block; font-size: 14px; font-weight: 500; opacity: 0.9; }
+
+  /* ---- Balloon Battle -------------------------------------------------- */
+  .arena { flex: 1; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+  .now { background: #fff; border-radius: 20px; box-shadow: var(--rb-shadow-md); padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .now.fill { flex: 1; min-height: 0; }
+  .now-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .now-title { font-size: 28px; font-weight: 700; }
+  .timer { font-size: 46px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--rb-red); }
+  .players { flex: 1; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); min-height: 0; }
+  .pcard { border: 3px solid var(--rb-ink); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .pname { font-size: clamp(28px, 3.2vw, 50px); font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+  .ptix { font-size: 20px; color: var(--rb-gray-700); }
+  .ptix b { color: var(--rb-red); }
+  .wrow { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; }
+  .wrow .wcount { font-size: 30px; min-width: 36px; text-align: center; }
+  .huge {
+    min-height: 96px;
+    border-radius: 18px;
+    border: 0;
+    font-size: clamp(24px, 2.6vw, 36px);
+    font-weight: 700;
+    line-height: 1.15;
+    padding: 10px 16px;
+  }
+  .huge small { display: block; font-size: 16px; font-weight: 500; opacity: 0.92; }
+  .huge.go { background: var(--rb-success); color: #fff; }
+  .huge.red { background: var(--rb-red); color: #fff; }
+  .huge.yellow { background: var(--rb-yellow); color: var(--rb-ink); }
+  .linkbtn { background: none; border: 0; color: var(--rb-gray-600); font-size: 16px; text-decoration: underline; align-self: center; padding: 8px 12px; }
+  .prompt { font-size: clamp(24px, 2.6vw, 38px); font-weight: 700; text-align: center; }
+  .pops { flex: 1; display: grid; gap: 14px; min-height: 0; }
+  .pops.c2 { grid-template-columns: repeat(2, 1fr); }
+  .pops.c3 { grid-template-columns: repeat(3, 1fr); }
+  .pops.c4 { grid-template-columns: repeat(4, 1fr); }
+  .pop {
+    border-radius: 18px;
+    border: 0;
+    background: var(--rb-yellow);
+    color: var(--rb-ink);
+    font-size: clamp(48px, 7vw, 110px);
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 150px;
+    line-height: 1;
+    box-shadow: var(--rb-shadow-md);
+  }
+  .pop small { font-size: clamp(16px, 1.6vw, 24px); font-weight: 600; }
+  .pop.win { background: var(--rb-red); color: #fff; font-size: clamp(32px, 4vw, 64px); }
+  .result { background: var(--rb-yellow-100); border: 3px solid var(--rb-yellow); border-radius: 18px; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .r-title { font-size: 18px; font-weight: 700; color: var(--rb-gray-700); }
+  .r-line { font-size: clamp(22px, 2.2vw, 32px); font-weight: 700; }
+  .r-line .give { color: var(--rb-red); }
+  .r-line .none { color: var(--rb-gray-600); font-weight: 500; }
+  .starts { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; min-height: 0; }
+  .start {
+    border-radius: 22px;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: var(--rb-shadow-md);
+    min-height: 140px;
+  }
+  .start .s-big { font-size: clamp(28px, 3.4vw, 56px); font-weight: 700; line-height: 1.05; }
+  .start .s-sub { font-size: clamp(17px, 1.8vw, 26px); overflow-wrap: anywhere; }
+  .qform { display: flex; flex-direction: column; gap: 8px; }
+  .qform input {
+    font: inherit;
+    font-size: 24px;
+    padding: 10px 14px;
+    border: 3px solid var(--rb-ink);
+    border-radius: 12px;
+    width: 100%;
+  }
+  .qadd {
+    min-height: 64px;
+    border-radius: 14px;
+    border: 0;
+    background: var(--rb-ink);
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .qrow {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    align-items: center;
+    border: 2px solid var(--rb-gray-200);
+    border-radius: 14px;
+    padding: 8px 10px;
+  }
+  .qrow.first { border-color: var(--rb-yellow); background: var(--rb-yellow-100); }
+  .q-pos { font-size: 24px; font-weight: 700; min-width: 28px; text-align: center; }
 
   /* ---- Toast ------------------------------------------------------------ */
   .toast {
@@ -351,13 +471,13 @@
   .dialog {
     background: #fff;
     border-radius: 20px;
-    width: min(820px, 100%);
+    width: min(860px, 100%);
     max-height: calc(100dvh - 32px);
     overflow: auto;
     padding: 24px;
     box-shadow: var(--rb-shadow-lg);
   }
-  .dialog.narrow { width: min(520px, 100%); }
+  .dialog.narrow { width: min(560px, 100%); }
   .d-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
   .d-title { font-size: 28px; font-weight: 700; margin: 0; }
   .close {
@@ -390,7 +510,7 @@
     font-weight: 700;
   }
   .key.small { font-size: 22px; }
-  .row { display: flex; gap: 12px; margin-top: 14px; }
+  .row { display: flex; gap: 12px; margin-top: 14px; align-items: center; }
   .btn {
     flex: 1;
     min-height: 68px;
@@ -404,15 +524,14 @@
   .btn.go { background: var(--rb-success); border-color: var(--rb-success); color: #fff; }
   .btn.danger { background: var(--rb-red); border-color: var(--rb-red); color: #fff; }
   .btn.slim { flex: 0 0 auto; min-height: 50px; font-size: 18px; }
-
-  .big-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 18px; }
+  .big-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 14px; }
   .stat { background: var(--rb-gray-050); border: 2px solid var(--rb-gray-200); border-radius: 14px; padding: 12px 16px; }
-  .stat .s-val { font-size: 40px; font-weight: 700; color: var(--rb-red); }
+  .stat .s-val { font-size: 38px; font-weight: 700; color: var(--rb-red); }
   .stat .s-label { font-size: 15px; color: var(--rb-gray-600); font-weight: 700; }
-  h3 { font-size: 20px; margin: 18px 0 8px; }
+  h3 { font-size: 20px; margin: 20px 0 8px; }
   table { width: 100%; border-collapse: collapse; font-size: 17px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rb-gray-200); }
-  th { font-size: 14px; color: var(--rb-gray-600); text-transform: uppercase; letter-spacing: 0.03em; }
+  th { font-size: 13px; color: var(--rb-gray-600); text-transform: uppercase; letter-spacing: 0.03em; }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   tr.sub td { font-weight: 700; border-bottom: 2px solid var(--rb-ink); }
   .note { font-size: 15px; color: var(--rb-gray-600); margin: 8px 0; }
@@ -425,8 +544,8 @@
   .h-top { font-weight: 700; font-size: 18px; }
   .h-items { font-size: 15px; color: var(--rb-gray-700); }
   .h-tix { font-size: 22px; font-weight: 700; white-space: nowrap; }
-  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
-  .field label, .field .f-label { font-weight: 700; font-size: 17px; }
+  .field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .field > label, .field .f-label { font-weight: 700; font-size: 17px; }
   .field input {
     font: inherit;
     font-size: 22px;
@@ -434,6 +553,9 @@
     border: 2px solid var(--rb-ink);
     border-radius: 12px;
   }
+  .nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .nums label { display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 700; color: var(--rb-gray-700); }
+  .nums input { width: 100%; }
   .toggles { display: flex; flex-wrap: wrap; gap: 10px; }
   .toggle {
     min-height: 56px;
@@ -455,10 +577,13 @@
     .panel { border-left: 0; border-top: 1px solid var(--rb-gray-200); overflow: visible; }
     .items.cols-3 { grid-template-columns: repeat(2, 1fr); }
     .home { grid-auto-flow: row; grid-auto-rows: 1fr; grid-auto-columns: auto; }
+    .starts { grid-template-columns: 1fr; }
+    .pops.c4 { grid-template-columns: repeat(2, 1fr); }
     .station, .brand span, .cat-tip { display: none; }
     .tbtn { padding: 0 10px; font-size: 15px; height: 46px; }
     .undo { width: auto; min-width: 96px; height: 52px; }
     .undo .u-sub { display: none; }
+    .cat-head { flex-wrap: wrap; }
   }
   @media (max-width: 560px) {
     .top { gap: 6px; padding: 0 8px; }
@@ -466,7 +591,7 @@
     .tbtn { flex: 1; padding: 0 4px; font-size: 14px; }
     .undo { min-width: 84px; padding: 4px 8px; }
     .undo .u-main { font-size: 18px; }
-    .back { height: 56px; padding: 0 14px; font-size: 20px; }
+    .back, .walkoff-btn { height: 56px; padding: 0 14px; font-size: 18px; }
     .cat-title { font-size: 24px; }
   }
 </style>
@@ -479,12 +604,14 @@
 'use strict';
 
 /* ==========================================================================
-   Items and prices. Edit this block to change prices or reuse the tracker
-   at another event. "tiers" items price by quantity within one customer.
+   Booths, items and prices. Edit this block to change sale prices or reuse
+   the tracker at another event. "tiers" items price by quantity within one
+   customer. Balloon Battle prices live in Settings so they can change on
+   the day.
    ========================================================================== */
 const CATEGORIES = [
   {
-    id: 'clickers', name: 'Fidget Clickers', theme: 'yellow',
+    id: 'clickers', kind: 'sale', name: 'Fidget Clickers', theme: 'yellow', walkoffs: true,
     hint: '1 = 4 tix · 2 = 7 · 3 = 10',
     items: [
       {
@@ -497,7 +624,7 @@ const CATEGORIES = [
     ],
   },
   {
-    id: 'copters', name: 'Pull Copters', theme: 'red',
+    id: 'copters', kind: 'sale', name: 'Pull Copters', theme: 'red', walkoffs: true,
     hint: 'Full kit = 5 tix · add-ons 1 to 3',
     items: [
       { id: 'kit', name: 'Full kit', price: 5, style: 'primary', note: 'Launcher + propeller + ripcord' },
@@ -508,14 +635,27 @@ const CATEGORIES = [
       { id: 'ripcord', name: 'Extra ripcord', price: 1, style: 'accent' },
     ],
   },
+  { id: 'battle', kind: 'battle', name: 'Balloon Battle', theme: 'ink', defaultOn: false },
   {
-    id: 'plinko', name: 'Plinko', theme: 'ink', defaultOn: false,
-    hint: '1 tix per game',
+    id: 'plinko', kind: 'sale', name: 'Plinko', theme: 'paper', defaultOn: false,
+    hint: '1 tix per play',
     items: [
-      { id: 'plinko', name: 'Plinko game', price: 1, style: 'ink' },
+      { id: 'plinko', name: 'Plinko play', price: 1, style: 'outline' },
     ],
   },
 ];
+
+const BATTLE_DEFAULTS = {
+  match: 5,          // tix per player per match
+  rematch: 6,        // tix per player for an instant rematch (5 + 1 skip-the-line fee)
+  weapon: 1,         // tix per extra weapon
+  cardsPerPop: 3,    // Pokemon cards per balloon popped (cards come bundled in 3s)
+  pvpRule: 'winner', // 'winner' = only the winner is paid; 'both' = both players paid per pop
+};
+const BALLOONS = 3;
+const NET_PER_TICKET = 0.90;           // CCA keeps 10%
+const PRIZE_DOLLARS_PER_CARD = 5 / 9;  // a 9-card prize costs about $5
+const DEFAULT_CYCLE_MIN = 3;           // ~2 min match + ~1 min balloon reset
 
 const AGES = [
   { id: 'kid', label: 'Kid', sub: '12 and under' },
@@ -526,14 +666,22 @@ const GENDERS = [
   { id: 'm', label: 'Male' },
   { id: 'f', label: 'Female' },
 ];
+const WALKOFF_REASONS = [
+  { id: 'demo', label: 'Demo unit' },
+  { id: 'giveaway', label: 'Giveaway' },
+  { id: 'broken', label: 'Broken' },
+  { id: 'other', label: 'Other' },
+];
 
 const STORAGE_KEY = 'rambots_ramathon_sales_v1';
+const DATA_KEYS = ['customers', 'currentId', 'nextNo', 'walkoffs', 'nextWalkoffNo',
+  'queue', 'matches', 'matchId', 'lastMatchId', 'nextMatchNo'];
 
 /* ==========================================================================
    Lookups and pricing
    ========================================================================== */
 const ITEMS = {};
-CATEGORIES.forEach(cat => cat.items.forEach(it => { ITEMS[it.id] = Object.assign({ cat: cat.id }, it); }));
+CATEGORIES.filter(c => c.kind === 'sale').forEach(cat => cat.items.forEach(it => { ITEMS[it.id] = Object.assign({ cat: cat.id }, it); }));
 const catById = id => CATEGORIES.find(c => c.id === id);
 
 function linePrice(itemId, qty) {
@@ -549,6 +697,7 @@ const customerTotal = c => c.lines.reduce((sum, l) => sum + linePrice(l.item, l.
 const unitsOf = c => c.lines.reduce((sum, l) => sum + l.qty, 0);
 const qtyOf = (c, itemId) => { const l = c && c.lines.find(x => x.item === itemId); return l ? l.qty : 0; };
 const catUnits = (c, catId) => c ? c.lines.filter(l => ITEMS[l.item].cat === catId).reduce((s, l) => s + l.qty, 0) : 0;
+const catTix = (c, catId) => c ? c.lines.filter(l => ITEMS[l.item].cat === catId).reduce((s, l) => s + linePrice(l.item, l.qty), 0) : 0;
 
 /* ==========================================================================
    State, persistence, undo
@@ -560,24 +709,29 @@ function defaultState() {
   const cats = {};
   CATEGORIES.forEach(c => { cats[c.id] = c.defaultOn !== false; });
   return {
-    settings: { station: 'Laptop 1', cats, demographics: true },
-    customers: [],
-    currentId: null,
-    nextNo: 1,
+    settings: { station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS) },
+    customers: [], currentId: null, nextNo: 1,
+    walkoffs: [], nextWalkoffNo: 1,
+    queue: [], matches: [], matchId: null, lastMatchId: null, nextMatchNo: 1,
     lastExport: null,
   };
 }
 
+function hydrate(raw) {
+  const base = defaultState();
+  if (!raw) return base;
+  const saved = JSON.parse(raw);
+  const ss = saved.settings || {};
+  saved.settings = Object.assign({}, base.settings, ss, {
+    cats: Object.assign({}, base.settings.cats, ss.cats || {}),
+    battle: Object.assign({}, base.settings.battle, ss.battle || {}),
+  });
+  return Object.assign(base, saved);
+}
+
 function load() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultState();
-    const saved = JSON.parse(raw);
-    const base = defaultState();
-    const savedSettings = saved.settings || {};
-    const cats = Object.assign({}, base.settings.cats, savedSettings.cats || {});
-    saved.settings = Object.assign({}, base.settings, savedSettings, { cats });
-    return Object.assign(base, saved);
+    return hydrate(localStorage.getItem(STORAGE_KEY));
   } catch (e) {
     storageOK = false;
     return defaultState();
@@ -593,15 +747,34 @@ function save() {
   }
 }
 
+// A booth link (index.html?booth=sales or ?booth=battle) locks this laptop to
+// its booth so nobody has to touch Settings on the day.
+const BOOTH_PRESETS = {
+  sales: { cats: ['clickers', 'copters'], station: 'Sales table' },
+  battle: { cats: ['battle'], station: 'Balloon Battle' },
+};
+const boothParam = new URLSearchParams(location.search).get('booth');
+const preset = BOOTH_PRESETS[boothParam] || null;
+
+function applyPreset() {
+  if (!preset) return;
+  Object.keys(state.settings.cats).forEach(id => { state.settings.cats[id] = preset.cats.includes(id); });
+  if (state.settings.station === 'Laptop 1') state.settings.station = preset.station;
+}
+
 let state = load();
+applyPreset();
 save();
 
-const view = { screen: 'home', modal: null, pulse: null };
+const blankDraft = () => ({ name: '', weapons: 0, age: null, gender: null });
+const view = { screen: 'home', modal: null, pulse: null, pvpWinner: null, qDraft: blankDraft(), focusName: false };
 const undoStack = [];
 const UNDO_LIMIT = 200;
 
 function snapshot() {
-  return JSON.stringify({ customers: state.customers, currentId: state.currentId, nextNo: state.nextNo });
+  const snap = {};
+  DATA_KEYS.forEach(k => { snap[k] = state[k]; });
+  return JSON.stringify(snap);
 }
 
 // Every data change goes through commit() so it can be undone. fn returns the
@@ -621,6 +794,7 @@ function undo() {
   if (!u) { toast('Nothing to undo', 'info'); return; }
   Object.assign(state, JSON.parse(u.snap));
   view.pulse = null;
+  view.pvpWinner = null;
   save();
   render();
   toast('Undid: ' + u.label, 'undo');
@@ -629,6 +803,7 @@ function undo() {
 const now = () => new Date().toISOString();
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const current = () => state.customers.find(c => c.id === state.currentId) || null;
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 function ensureCurrent() {
   let c = current();
@@ -644,7 +819,7 @@ function ensureCurrent() {
 }
 
 /* ==========================================================================
-   Actions
+   Sale actions
    ========================================================================== */
 function addItem(itemId, n) {
   const it = ITEMS[itemId];
@@ -730,21 +905,312 @@ function setVoided(id, voided) {
   toast(label + (voided ? ' · Undo brings it back' : ''), voided ? 'warn' : 'ok');
 }
 
-function clearAll() {
-  commit(() => {
-    state.customers = [];
-    state.currentId = null;
-    state.nextNo = 1;
-    return 'Deleted all sales data';
+/* ---- Walk-offs: stock that left without tickets ----------------------- */
+function openWalkoff(catId) {
+  const cat = catById(catId);
+  view.modal = { type: 'walkoff', cat: catId, item: cat.items[0].id, qty: 1, reason: 'demo' };
+  render();
+}
+
+function saveWalkoff() {
+  const m = view.modal;
+  if (!m || m.type !== 'walkoff') return;
+  const it = ITEMS[m.item];
+  const reason = WALKOFF_REASONS.find(r => r.id === m.reason).label;
+  const label = commit(() => {
+    state.walkoffs.push({
+      id: uid(), no: state.nextWalkoffNo++, at: now(), station: state.settings.station,
+      item: m.item, qty: m.qty, reason: m.reason, voided: false,
+    });
+    return `Walk-off: ${m.qty} ${it.name} (${reason})`;
   });
   view.modal = null;
-  view.screen = 'home';
   render();
-  toast('All sales deleted · Undo brings them back until you reload', 'warn');
+  toast('Logged ' + label.toLowerCase(), 'ok');
+}
+
+function setWalkoffVoided(id, voided) {
+  const w = state.walkoffs.find(x => x.id === id);
+  if (!w) return;
+  const label = commit(() => {
+    w.voided = voided;
+    return `${voided ? 'Voided' : 'Restored'} walk-off #${w.no}`;
+  });
+  render();
+  toast(label, voided ? 'warn' : 'ok');
 }
 
 /* ==========================================================================
-   CSV export (one row per item line; merge laptops by stacking files)
+   Balloon Battle
+   ========================================================================== */
+const bs = () => state.settings.battle;
+const playingMatch = () => state.matches.find(m => m.id === state.matchId) || null;
+const lastMatch = () => state.matches.find(m => m.id === state.lastMatchId) || null;
+const matchTix = m => m.players.reduce((s, p) => s + p.tix, 0);
+const matchCards = m => m.players.reduce((s, p) => s + (p.cards || 0), 0);
+const matchTitle = m => m.mode === 'pvp' ? `${m.players[0].name} vs ${m.players[1].name}` : `${m.players[0].name} vs House`;
+const weaponsText = n => n ? plural(n, 'extra weapon') : 'no extra weapons';
+
+function cardsText(cards) {
+  if (!cards) return '0 cards';
+  const per = bs().cardsPerPop;
+  if (per === 3 && cards % 3 === 0) return `${plural(cards / 3, 'bundle')} (${cards} cards)`;
+  return plural(cards, 'card');
+}
+
+function queueAdd() {
+  const d = view.qDraft;
+  const name = d.name.trim() || `Walk-up ${state.queue.length + 1}`;
+  commit(() => {
+    state.queue.push({ id: uid(), name, weapons: d.weapons, age: d.age, gender: d.gender, addedAt: now() });
+    return `Queued ${name} (${weaponsText(d.weapons)})`;
+  });
+  view.qDraft = blankDraft();
+  view.focusName = true;
+  render();
+}
+
+function queueRemove(id) {
+  const q = state.queue.find(x => x.id === id);
+  if (!q) return;
+  commit(() => {
+    state.queue = state.queue.filter(x => x !== q);
+    return `Removed ${q.name} from the queue`;
+  });
+  render();
+}
+
+function queueWeapons(id, delta) {
+  const q = state.queue.find(x => x.id === id);
+  if (!q) return;
+  const next = Math.max(0, Math.min(9, q.weapons + delta));
+  if (next === q.weapons) return;
+  commit(() => {
+    const old = q.weapons;
+    q.weapons = next;
+    return `${q.name}: ${old} → ${next} extra weapons`;
+  });
+  render();
+}
+
+function makePlayer(entry, base) {
+  return {
+    name: entry.name, weapons: entry.weapons || 0, age: entry.age || null, gender: entry.gender || null,
+    base, tix: base + (entry.weapons || 0) * bs().weapon,
+    pops: null, won: null, cards: 0, qid: entry.id || null, queuedAt: entry.addedAt || null,
+  };
+}
+
+function collectToast(m) {
+  const parts = m.players.map(p => `${p.name} ${p.tix}`).join(' · ');
+  toast(`Collect ${matchTix(m)} tix: ${parts}`, 'ok');
+}
+
+function startMatch(mode) {
+  if (playingMatch()) { toast('Finish the current match first', 'warn'); return; }
+  const need = mode === 'pvp' ? 2 : 1;
+  let entries = state.queue.slice(0, need);
+  if (mode === 'house' && !entries.length) entries = [{ name: 'Walk-up', weapons: 0 }];
+  if (entries.length < need) { toast('vs Player needs 2 people in the queue', 'warn'); return; }
+  let m = null;
+  commit(() => {
+    const ids = entries.map(e => e.id).filter(Boolean);
+    state.queue = state.queue.filter(q => !ids.includes(q.id));
+    m = {
+      id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode, rematch: false,
+      startedAt: now(), endedAt: null, status: 'playing', voided: false,
+      players: entries.map(e => makePlayer(e, bs().match)),
+    };
+    state.matches.push(m);
+    state.matchId = m.id;
+    return `Started match #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
+  });
+  view.pvpWinner = null;
+  render();
+  collectToast(m);
+}
+
+function rematch() {
+  const lm = lastMatch();
+  if (!lm || lm.status !== 'done' || lm.voided || playingMatch()) return;
+  let m = null;
+  commit(() => {
+    m = {
+      id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode: lm.mode, rematch: true,
+      startedAt: now(), endedAt: null, status: 'playing', voided: false,
+      players: lm.players.map(p => makePlayer({ name: p.name, weapons: p.weapons, age: p.age, gender: p.gender }, bs().rematch)),
+    };
+    state.matches.push(m);
+    state.matchId = m.id;
+    return `Rematch #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
+  });
+  view.pvpWinner = null;
+  render();
+  collectToast(m);
+}
+
+function matchWeapons(pi, delta) {
+  const m = playingMatch();
+  if (!m || m.status !== 'playing') return;
+  const p = m.players[pi];
+  const next = Math.max(0, Math.min(9, p.weapons + delta));
+  if (next === p.weapons) return;
+  commit(() => {
+    const old = p.weapons;
+    p.weapons = next;
+    p.tix = p.base + next * bs().weapon;
+    return `${p.name}: ${old} → ${next} extra weapons (${delta > 0 ? '+' : '−'}${bs().weapon} tix)`;
+  });
+  render();
+}
+
+function endMatch() {
+  const m = playingMatch();
+  if (!m || m.status !== 'playing') return;
+  commit(() => {
+    m.status = 'scoring';
+    m.endedAt = now();
+    return `Ended match #${m.no}`;
+  });
+  view.pvpWinner = null;
+  render();
+}
+
+function cancelMatch() {
+  const m = playingMatch();
+  if (!m) return;
+  commit(() => {
+    state.matches = state.matches.filter(x => x !== m);
+    state.matchId = null;
+    // Put the players back at the front of the queue, in their original order.
+    const back = m.players.map(p => ({
+      id: p.qid || uid(), name: p.name, weapons: p.weapons, age: p.age, gender: p.gender, addedAt: p.queuedAt || m.startedAt,
+    }));
+    state.queue = back.concat(state.queue);
+    if (state.nextMatchNo === m.no + 1) state.nextMatchNo = m.no; // reuse the number
+    return `Cancelled match #${m.no} (no tix, players back in queue)`;
+  });
+  view.pvpWinner = null;
+  render();
+  toast(`Match #${m.no} cancelled · hand back ${matchTix(m)} tix`, 'warn');
+}
+
+function finishScoring(m, label) {
+  m.status = 'done';
+  if (!m.endedAt) m.endedAt = now();
+  state.matchId = null;
+  state.lastMatchId = m.id;
+  return label;
+}
+
+function scoreHouse(pops) {
+  const m = playingMatch();
+  if (!m || m.status !== 'scoring' || m.mode !== 'house') return;
+  const p = m.players[0];
+  commit(() => {
+    p.pops = pops;
+    p.won = pops === BALLOONS;
+    p.cards = pops * bs().cardsPerPop;
+    return finishScoring(m, `Match #${m.no}: ${p.name} popped ${pops} (${p.cards} cards)`);
+  });
+  render();
+}
+
+function scorePvpLoser(pops) {
+  const m = playingMatch();
+  const w = view.pvpWinner;
+  if (!m || m.status !== 'scoring' || m.mode !== 'pvp' || w == null) return;
+  const winner = m.players[w];
+  const loser = m.players[1 - w];
+  commit(() => {
+    winner.pops = BALLOONS;
+    winner.won = true;
+    winner.cards = BALLOONS * bs().cardsPerPop;
+    loser.pops = pops;
+    loser.won = false;
+    loser.cards = bs().pvpRule === 'both' ? pops * bs().cardsPerPop : 0;
+    return finishScoring(m, `Match #${m.no}: ${winner.name} beat ${loser.name} (${matchCards(m)} cards)`);
+  });
+  view.pvpWinner = null;
+  render();
+}
+
+function setMatchVoided(id, voided) {
+  const m = state.matches.find(x => x.id === id);
+  if (!m || m.status !== 'done') return;
+  const label = commit(() => {
+    m.voided = voided;
+    return `${voided ? 'Voided' : 'Restored'} match #${m.no}`;
+  });
+  render();
+  toast(label, voided ? 'warn' : 'ok');
+}
+
+function avg(list) { return list.reduce((s, x) => s + x, 0) / list.length; }
+
+function cycleMinutes() {
+  const starts = state.matches.filter(m => !m.voided).map(m => Date.parse(m.startedAt)).sort((a, b) => a - b);
+  const gaps = [];
+  for (let i = 1; i < starts.length; i++) {
+    const g = (starts[i] - starts[i - 1]) / 60000;
+    if (g > 0.3 && g < 15) gaps.push(g);
+  }
+  const recent = gaps.slice(-6);
+  return recent.length ? avg(recent) : DEFAULT_CYCLE_MIN;
+}
+
+function playersPerMatch() {
+  const recent = state.matches.filter(m => !m.voided).slice(-6);
+  return recent.length ? avg(recent.map(m => m.players.length)) : 1;
+}
+
+function waitText(index) {
+  const ahead = Math.ceil((index + 1) / playersPerMatch()) - (playingMatch() ? 0 : 1);
+  if (ahead <= 0) return 'next up';
+  return `~${Math.max(1, Math.round(ahead * cycleMinutes()))} min`;
+}
+
+/* ==========================================================================
+   Totals
+   ========================================================================== */
+function computeTotals() {
+  const sold = state.customers.filter(c => c.closedAt && !c.voided && c.lines.length);
+  const byItem = {};
+  const byBox = {};
+  sold.forEach(c => {
+    c.lines.forEach(l => {
+      const b = byItem[l.item] || (byItem[l.item] = { units: 0, tix: 0, walkoffs: 0 });
+      const t = linePrice(l.item, l.qty);
+      b.units += l.qty;
+      b.tix += t;
+      byBox[ITEMS[l.item].cat] = (byBox[ITEMS[l.item].cat] || 0) + t;
+    });
+  });
+  state.walkoffs.filter(w => !w.voided).forEach(w => {
+    const b = byItem[w.item] || (byItem[w.item] = { units: 0, tix: 0, walkoffs: 0 });
+    b.walkoffs += w.qty;
+  });
+  const matches = state.matches.filter(m => !m.voided);
+  const battle = {
+    matches: matches.length,
+    house: matches.filter(m => m.mode === 'house').length,
+    pvp: matches.filter(m => m.mode === 'pvp').length,
+    rematches: matches.filter(m => m.rematch).length,
+    players: matches.reduce((s, m) => s + m.players.length, 0),
+    weapons: matches.reduce((s, m) => s + m.players.reduce((t, p) => t + p.weapons, 0), 0),
+    tix: matches.reduce((s, m) => s + matchTix(m), 0),
+    cards: matches.reduce((s, m) => s + matchCards(m), 0),
+    avgMin: null,
+  };
+  const timed = matches.filter(m => m.status === 'done' && m.endedAt);
+  if (timed.length) battle.avgMin = avg(timed.map(m => (Date.parse(m.endedAt) - Date.parse(m.startedAt)) / 60000));
+  if (battle.tix) byBox.battle = battle.tix;
+  const tix = Object.values(byBox).reduce((s, x) => s + x, 0);
+  return { sold, byItem, byBox, battle, matches, tix };
+}
+
+/* ==========================================================================
+   CSV export (one row per item line / player; stack files from each laptop)
    ========================================================================== */
 function pad(n) { return String(n).padStart(2, '0'); }
 function localStamp(iso) {
@@ -759,18 +1225,39 @@ function csvCell(v) {
 function labelOf(list, id) { const x = list.find(v => v.id === id); return x ? x.label : ''; }
 
 function buildCSV() {
-  const header = ['station', 'customer_no', 'status', 'opened_at', 'closed_at', 'category', 'item',
-    'qty', 'item_tickets', 'customer_total_tickets', 'age', 'gender'];
+  const header = ['station', 'record', 'status', 'opened_at', 'closed_at', 'category', 'item', 'qty',
+    'item_tickets', 'record_total_tickets', 'age', 'gender',
+    'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason'];
   const rows = [header];
+  const blankBattle = ['', '', '', '', ''];
   state.customers.forEach(c => {
     if (!c.lines.length) return;
     const status = c.voided ? 'voided' : (c.closedAt ? 'sold' : 'open');
     const total = customerTotal(c);
     c.lines.forEach(l => {
       const it = ITEMS[l.item];
-      rows.push([c.station, c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
+      rows.push([c.station, 'S' + c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
         catById(it.cat).name, it.name, l.qty, linePrice(l.item, l.qty), total,
-        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)]);
+        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['']));
+    });
+  });
+  state.walkoffs.forEach(w => {
+    const it = ITEMS[w.item];
+    rows.push([w.station, 'W' + w.no, w.voided ? 'voided' : 'walk-off', localStamp(w.at), localStamp(w.at),
+      catById(it.cat).name, it.name, w.qty, 0, 0, '', ''].concat(blankBattle, [labelOf(WALKOFF_REASONS, w.reason)]));
+  });
+  state.matches.forEach(m => {
+    const status = m.voided ? 'voided' : (m.status === 'done' ? 'played' : 'in progress');
+    const total = matchTix(m);
+    m.players.forEach((p, i) => {
+      const common = [m.station, 'B' + m.no, status, localStamp(m.startedAt), localStamp(m.endedAt), 'Balloon Battle'];
+      const demo = [labelOf(AGES, p.age), labelOf(GENDERS, p.gender)];
+      const mode = m.mode === 'pvp' ? 'vs player' : 'vs house';
+      rows.push(common.concat([m.rematch ? 'Rematch' : 'Match', 1, p.base, total], demo,
+        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '']));
+      if (p.weapons) {
+        rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '']));
+      }
     });
   });
   return rows.map(r => r.map(csvCell).join(',')).join('\r\n');
@@ -781,7 +1268,8 @@ function exportCSV() {
   const slug = (state.settings.station || 'station').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
   const d = new Date();
   const name = `ramathon_sales_${slug}_${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.csv`;
-  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+  const bom = String.fromCharCode(0xfeff); // lets Excel read the file as UTF-8
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;
@@ -794,6 +1282,18 @@ function exportCSV() {
   toast('Downloaded ' + name, 'ok');
 }
 
+function clearAll() {
+  commit(() => {
+    const fresh = defaultState();
+    DATA_KEYS.forEach(k => { state[k] = fresh[k]; });
+    return 'Deleted all data';
+  });
+  view.modal = null;
+  view.screen = 'home';
+  render();
+  toast('All data deleted · Undo brings it back until you reload', 'warn');
+}
+
 /* ==========================================================================
    Rendering
    ========================================================================== */
@@ -801,18 +1301,45 @@ const app = document.getElementById('app');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 const enabledCats = () => CATEGORIES.filter(c => state.settings.cats[c.id]);
 const fmtTime = iso => iso ? new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+const money = n => '$' + n.toFixed(2);
+function fmtDur(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  return `${Math.floor(s / 60)}:${pad(s % 60)}`;
+}
 
 function render() {
   const cats = enabledCats();
   if (cats.length === 1) view.screen = cats[0].id;
   else if (view.screen !== 'home' && !cats.some(c => c.id === view.screen)) view.screen = 'home';
+
+  // Keep the cursor in a text field across re-renders.
+  const ae = document.activeElement;
+  const keep = ae && ae.tagName === 'INPUT' && ae.id ? { id: ae.id, s: ae.selectionStart, e: ae.selectionEnd } : null;
+
   const c = current();
-  const main = view.screen === 'home' ? homeView(cats, c) : catView(catById(view.screen), c, cats.length > 1);
+  const multi = cats.length > 1;
+  let main;
+  let panel;
+  if (view.screen === 'home') { main = homeView(cats, c); panel = panelView(c); }
+  else if (view.screen === 'battle') { main = battleView(multi); panel = queuePanel(); }
+  else { main = catView(catById(view.screen), c, multi); panel = panelView(c); }
+
   app.innerHTML = topBar()
-    + `<div class="layout"><main class="main">${main}</main>${panelView(c)}</div>`
+    + `<div class="layout"><main class="main">${main}</main>${panel}</div>`
     + modalView()
     + bannerView();
   view.pulse = null;
+
+  const focusId = view.focusName ? 'q-name' : (keep && keep.id);
+  view.focusName = false;
+  if (focusId) {
+    const el = document.getElementById(focusId);
+    if (el) {
+      el.focus();
+      if (keep && keep.id === focusId) { try { el.setSelectionRange(keep.s, keep.e); } catch (err) { /* number inputs */ } }
+    }
+  }
+  tick();
 }
 
 function topBar() {
@@ -833,11 +1360,20 @@ function topBar() {
 
 function homeView(cats, c) {
   return `<div class="home">${cats.map(cat => {
-    const n = catUnits(c, cat.id);
+    let badge = '';
+    let hint = cat.hint;
+    if (cat.kind === 'battle') {
+      hint = `${bs().match} tix per player · rematch ${bs().rematch}`;
+      if (playingMatch()) badge = 'Match in progress';
+      else if (state.queue.length) badge = `${state.queue.length} in queue`;
+    } else {
+      const n = catUnits(c, cat.id);
+      if (n) badge = `${n} in this sale`;
+    }
     return `<button class="cat theme-${cat.theme}" data-act="cat" data-cat="${cat.id}">
-      ${n ? `<span class="badge">${n} in this sale</span>` : ''}
+      ${badge ? `<span class="badge">${esc(badge)}</span>` : ''}
       <span class="c-name">${esc(cat.name)}</span>
-      <span class="c-hint">${esc(cat.hint)}</span>
+      <span class="c-hint">${esc(hint)}</span>
       <span class="c-go">Tap to open</span>
     </button>`;
   }).join('')}</div>`;
@@ -850,6 +1386,7 @@ function catView(cat, c, canBack) {
       <div class="cat-title">${esc(cat.name)}</div>
       <div class="spacer"></div>
       <div class="cat-tip">Tap = +1<br>"Type qty" = punch in a number</div>
+      ${cat.walkoffs ? `<button class="walkoff-btn" data-act="walkoff" data-cat="${cat.id}">Log walk-off</button>` : ''}
     </div>
     <div class="items ${cols}">${cat.items.map(it => {
       const q = qtyOf(c, it.id);
@@ -871,13 +1408,18 @@ function panelView(c) {
   const has = lines.length > 0;
   const total = c ? customerTotal(c) : 0;
   const units = c ? unitsOf(c) : 0;
+  const boxes = has ? CATEGORIES.filter(cat => cat.kind === 'sale' && catTix(c, cat.id) > 0) : [];
+  const split = boxes.length > 1
+    ? `<div class="box-split">${boxes.map(cat => `<div><span>${esc(cat.name)} box</span><b>${catTix(c, cat.id)} tix</b></div>`).join('')}</div>`
+    : '';
   return `<aside class="panel" aria-label="Current customer">
     <div class="p-head">
       <div class="p-title">${c ? `Customer #${c.no}` : 'Next customer'}</div>
-      <div class="p-sub">${has ? `${units} item${units === 1 ? '' : 's'} · tap a number to type` : ''}</div>
+      <div class="p-sub">${has ? `${plural(units, 'item')} · tap a number to type` : ''}</div>
     </div>
     <div class="lines">${has ? lines.map(lineView).join('') : '<div class="empty">Tap an item to start a sale</div>'}</div>
     <div class="total"><span class="t-label">Collect</span><span class="t-val">${total} tix</span></div>
+    ${split}
     ${state.settings.demographics ? demoView(c, has) : ''}
     <button class="done" data-act="finish" ${has ? '' : 'disabled'}>Done · Next customer<small>or press Enter</small></button>
   </aside>`;
@@ -908,6 +1450,142 @@ function demoView(c, enabled) {
   </div>`;
 }
 
+/* ---- Balloon Battle screen -------------------------------------------- */
+function battleView(canBack) {
+  const head = `<div class="cat-head">
+      ${canBack ? '<button class="back" data-act="home">← Back</button>' : ''}
+      <div class="cat-title">Balloon Battle</div>
+      <div class="spacer"></div>
+      <div class="cat-tip">Tickets are collected when a match starts<br>${bs().match} per player · +${bs().weapon} per extra weapon · rematch ${bs().rematch}</div>
+    </div>`;
+  const m = playingMatch();
+  let body;
+  if (m && m.status === 'playing') body = playingView(m);
+  else if (m && m.status === 'scoring') body = m.mode === 'house' ? scoreHouseView(m) : scorePvpView(m);
+  else body = idleView();
+  return head + `<div class="arena">${body}</div>`;
+}
+
+function playingView(m) {
+  return `<div class="now fill">
+    <div class="now-head">
+      <span class="now-title">Match #${m.no} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · rematch' : ''}</span>
+      <span class="timer" id="match-timer">0:00</span>
+    </div>
+    <div class="players">${m.players.map((p, i) => `<div class="pcard">
+      <div class="pname">${esc(p.name)}</div>
+      <div class="ptix">Collected <b>${p.tix} tix</b> (${p.base} + ${p.weapons} weapon${p.weapons === 1 ? '' : 's'})</div>
+      <div class="wrow">Extra weapons
+        <button class="step" data-act="mweapon" data-p="${i}" data-d="-1" aria-label="One fewer weapon">−</button>
+        <span class="wcount">${p.weapons}</span>
+        <button class="step" data-act="mweapon" data-p="${i}" data-d="1" aria-label="One more weapon">+</button>
+      </div>
+    </div>`).join('')}${m.mode === 'house' ? `<div class="pcard" style="border-style:dashed;color:var(--rb-gray-600)"><div class="pname">House bot</div><div class="ptix">Driven by the crew</div></div>` : ''}</div>
+    <button class="huge go" data-act="endmatch">Match over · enter result<small>someone lost all ${BALLOONS} balloons</small></button>
+    <button class="linkbtn" data-act="cancelmatch">Cancel match (hand tickets back, players return to the front of the queue)</button>
+  </div>`;
+}
+
+function scoreHouseView(m) {
+  const p = m.players[0];
+  const per = bs().cardsPerPop;
+  const opts = [];
+  for (let n = 0; n <= BALLOONS; n++) opts.push(n);
+  return `<div class="now fill">
+    <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
+    <div class="prompt">How many House balloons did ${esc(p.name)} pop?</div>
+    <div class="pops c4">${opts.map(n => `<button class="pop" data-act="scorehouse" data-n="${n}">${n}<small>${n ? cardsText(n * per) : 'no cards'}</small></button>`).join('')}</div>
+  </div>`;
+}
+
+function scorePvpView(m) {
+  const w = view.pvpWinner;
+  if (w == null) {
+    return `<div class="now fill">
+      <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
+      <div class="prompt">Who won?</div>
+      <div class="pops c2">${m.players.map((p, i) => `<button class="pop win" data-act="pvpwinner" data-p="${i}">${esc(p.name)}<small>won</small></button>`).join('')}</div>
+    </div>`;
+  }
+  const winner = m.players[w];
+  const loser = m.players[1 - w];
+  const per = bs().cardsPerPop;
+  const both = bs().pvpRule === 'both';
+  const opts = [];
+  for (let n = 0; n < BALLOONS; n++) opts.push(n);
+  return `<div class="now fill">
+    <div class="now-head"><span class="now-title">Match #${m.no} result · ${esc(winner.name)} won</span></div>
+    <div class="prompt">How many of ${esc(winner.name)}'s balloons did ${esc(loser.name)} pop?</div>
+    <div class="pops c3">${opts.map(n => `<button class="pop" data-act="pvploser" data-n="${n}">${n}<small>${esc(loser.name)}: ${both && n ? cardsText(n * per) : '0 cards'}</small></button>`).join('')}</div>
+    <p class="note" style="text-align:center">${both ? 'Payout rule: both players paid per balloon.' : 'Payout rule: winner only. The count is still logged.'}</p>
+    <button class="linkbtn" data-act="pvpwinner" data-p="">Wrong winner? Pick again</button>
+  </div>`;
+}
+
+function idleView() {
+  const lm = lastMatch();
+  let result = '';
+  if (lm && lm.status === 'done' && !lm.voided) {
+    const lines = lm.players.map(p => {
+      const what = lm.mode === 'pvp' ? (p.won ? 'won' : `popped ${p.pops}`) : `popped ${p.pops}`;
+      const give = p.cards ? `<span class="give">give ${cardsText(p.cards)}</span>` : '<span class="none">0 cards</span>';
+      return `<div class="r-line">${esc(p.name)} ${what} → ${give}</div>`;
+    }).join('');
+    const waiting = state.queue.length;
+    const rmTix = lm.players.map(p => bs().rematch + p.weapons * bs().weapon);
+    result = `<div class="result">
+      <div class="r-title">Match #${lm.no} result · ${esc(matchTitle(lm))}</div>
+      ${lines}
+      <button class="huge yellow" data-act="rematch">Instant rematch · ${rmTix.join(' + ')} tix<small>${waiting ? `${plural(waiting, 'person')} waiting in the queue` : 'nobody waiting'}</small></button>
+    </div>`;
+  }
+  const q = state.queue;
+  const houseSub = q.length ? `${esc(q[0].name)} · ${weaponsText(q[0].weapons)}` : 'Walk-up (queue is empty)';
+  const pvpSub = q.length >= 2 ? `${esc(q[0].name)} vs ${esc(q[1].name)}` : 'Needs 2 people in the queue';
+  return `${result}
+    <div class="starts">
+      <button class="start theme-red" data-act="startmatch" data-mode="house">
+        <span class="s-big">Start vs House</span><span class="s-sub">${houseSub}</span>
+      </button>
+      <button class="start theme-ink" data-act="startmatch" data-mode="pvp" ${q.length >= 2 ? '' : 'disabled'}>
+        <span class="s-big">Start vs Player</span><span class="s-sub">${pvpSub}</span>
+      </button>
+    </div>`;
+}
+
+function queuePanel() {
+  const d = view.qDraft;
+  const chip = (field, val, label, extra) => `<button class="chip sm${d[field] === val ? ' on' : ''}" data-act="qdraft" data-field="${field}" data-val="${val}">${label}${extra || ''}</button>`;
+  const demo = state.settings.demographics ? `<div class="d-label">Optional · who is it</div>
+    <div class="chips c5">${AGES.map(a => chip('age', a.id, a.label)).join('')}${GENDERS.map(g => chip('gender', g.id, g.label)).join('')}</div>` : '';
+  const rows = state.queue.map((q, i) => `<div class="qrow${i === 0 ? ' first' : ''}">
+      <div class="q-pos">${i + 1}</div>
+      <div class="l-info">
+        <div class="l-name">${esc(q.name)}</div>
+        <div class="l-sub"><b>${q.weapons}</b> extra weapon${q.weapons === 1 ? '' : 's'} · ${waitText(i)}</div>
+      </div>
+      <div class="l-ctl">
+        <button class="step sm" data-act="qweapon" data-id="${q.id}" data-d="-1" aria-label="One fewer weapon for ${esc(q.name)}">−</button>
+        <button class="step sm" data-act="qweapon" data-id="${q.id}" data-d="1" aria-label="One more weapon for ${esc(q.name)}">+</button>
+        <button class="step sm" data-act="qremove" data-id="${q.id}" aria-label="Remove ${esc(q.name)}">✕</button>
+      </div>
+    </div>`).join('');
+  return `<aside class="panel" aria-label="Battle queue">
+    <div class="p-head">
+      <div class="p-title">Queue</div>
+      <div class="p-sub">${state.queue.length} waiting<br>−/+ = extra weapons</div>
+    </div>
+    <div class="qform">
+      <input id="q-name" placeholder="First name" value="${esc(d.name)}" maxlength="24" autocomplete="off">
+      <div class="d-label">Extra weapons (+${bs().weapon} tix each)</div>
+      <div class="chips c4">${[0, 1, 2, 3].map(n => chip('weapons', n, String(n))).join('')}</div>
+      ${demo}
+      <button class="qadd" data-act="qadd">Add to queue</button>
+    </div>
+    <div class="lines">${rows || '<div class="empty">Nobody in line</div>'}</div>
+  </aside>`;
+}
+
 function bannerView() {
   if (!storageOK) return '<div class="banner">NOT SAVING: this browser is blocking storage. Close this window and open the tracker in a normal (not private) window.</div>';
   if (otherTab) return '<div class="banner">The tracker is open in another tab or window. Close the extra one so sales are not lost.</div>';
@@ -924,6 +1602,7 @@ function modalView() {
   else if (m.type === 'history') inner = historyView();
   else if (m.type === 'settings') inner = settingsView();
   else if (m.type === 'confirmClear') inner = confirmClearView();
+  else if (m.type === 'walkoff') inner = walkoffView(m);
   return `<div class="overlay" data-act="overlay">${inner}</div>`;
 }
 
@@ -952,90 +1631,171 @@ function keypadView(m) {
   </div>`;
 }
 
-function computeTotals() {
-  const sold = state.customers.filter(c => c.closedAt && !c.voided && c.lines.length);
-  const byItem = {};
-  let tix = 0;
-  sold.forEach(c => {
-    c.lines.forEach(l => {
-      const b = byItem[l.item] || (byItem[l.item] = { units: 0, tix: 0 });
-      b.units += l.qty;
-      b.tix += linePrice(l.item, l.qty);
-    });
-    tix += customerTotal(c);
-  });
-  return { sold, byItem, tix };
+function walkoffView(m) {
+  const cat = catById(m.cat);
+  return `<div class="dialog narrow" role="dialog" aria-label="Log walk-off">
+    ${dialogHead('Log a walk-off')}
+    <p class="note">Stock that left without tickets. Logged at 0 tix so that before − after − walk-offs = sold.</p>
+    <div class="field">
+      <div class="f-label">What</div>
+      <div class="toggles">${cat.items.map(it => `<button class="toggle" data-act="woitem" data-item="${it.id}" aria-pressed="${m.item === it.id}">${esc(it.name)}</button>`).join('')}</div>
+    </div>
+    <div class="field">
+      <div class="f-label">How many</div>
+      <div class="wrow">
+        <button class="step" data-act="woqty" data-d="-1" aria-label="One fewer">−</button>
+        <span class="wcount">${m.qty}</span>
+        <button class="step" data-act="woqty" data-d="1" aria-label="One more">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="f-label">Why</div>
+      <div class="toggles">${WALKOFF_REASONS.map(r => `<button class="toggle" data-act="woreason" data-val="${r.id}" aria-pressed="${m.reason === r.id}">${r.label}</button>`).join('')}</div>
+    </div>
+    <div class="row">
+      <button class="btn" data-act="close">Cancel</button>
+      <button class="btn go" data-act="wosave">Log ${m.qty} walk-off${m.qty === 1 ? '' : 's'}</button>
+    </div>
+  </div>`;
 }
 
 function totalsView() {
-  const { sold, byItem, tix } = computeTotals();
+  const t = computeTotals();
   const open = current();
-  const catRows = CATEGORIES.map(cat => {
-    const rows = cat.items.filter(it => byItem[it.id]);
+  const playing = playingMatch();
+  const boxRows = CATEGORIES.filter(cat => t.byBox[cat.id]).map(cat =>
+    `<tr><td>${esc(cat.name)} box</td><td class="num">${t.byBox[cat.id]}</td><td class="num">${money(t.byBox[cat.id] * NET_PER_TICKET)}</td></tr>`).join('');
+
+  const itemRows = CATEGORIES.filter(cat => cat.kind === 'sale').map(cat => {
+    const rows = cat.items.filter(it => t.byItem[it.id]);
     if (!rows.length) return '';
-    let u = 0, t = 0;
+    let u = 0, tx = 0, w = 0;
     const body = rows.map(it => {
-      const b = byItem[it.id]; u += b.units; t += b.tix;
-      return `<tr><td>${esc(it.name)}</td><td class="num">${b.units}</td><td class="num">${b.tix}</td></tr>`;
+      const b = t.byItem[it.id]; u += b.units; tx += b.tix; w += b.walkoffs;
+      return `<tr><td>${esc(it.name)}</td><td class="num">${b.units}</td><td class="num">${b.walkoffs || ''}</td><td class="num">${b.tix}</td></tr>`;
     }).join('');
-    return body + `<tr class="sub"><td>${esc(cat.name)} total</td><td class="num">${u}</td><td class="num">${t}</td></tr>`;
+    return body + `<tr class="sub"><td>${esc(cat.name)} total</td><td class="num">${u}</td><td class="num">${w || ''}</td><td class="num">${tx}</td></tr>`;
   }).join('');
 
-  const usedCats = CATEGORIES.filter(cat => cat.items.some(it => byItem[it.id]));
+  const b = t.battle;
+  const battleBlock = b.matches ? `<h3>Balloon Battle</h3>
+    <div class="big-stats">
+      <div class="stat"><div class="s-val">${b.matches}</div><div class="s-label">Matches (${b.house} vs House · ${b.pvp} vs Player · ${b.rematches} rematches)</div></div>
+      <div class="stat"><div class="s-val">${b.cards}</div><div class="s-label">Cards paid out (≈ ${money(b.cards * PRIZE_DOLLARS_PER_CARD)} in prizes)</div></div>
+      <div class="stat"><div class="s-val">${b.tix ? (b.cards / b.tix).toFixed(2) : '0'}</div><div class="s-label">Cards per ticket (target about 1)</div></div>
+      <div class="stat"><div class="s-val">${b.avgMin == null ? '-' : b.avgMin.toFixed(1)}</div><div class="s-label">Average match, minutes</div></div>
+    </div>
+    <p class="note">${plural(b.players, 'player')} · ${plural(b.weapons, 'extra weapon')} sold · ${b.tix} tix (≈ ${money(b.tix * NET_PER_TICKET)} after CCA's 10%) vs ≈ ${money(b.cards * PRIZE_DOLLARS_PER_CARD)} in prizes.</p>` : '';
+
+  // Demographics: sale units and battle players per age / gender group.
+  const usedSale = CATEGORIES.filter(cat => cat.kind === 'sale' && cat.items.some(it => t.byItem[it.id] && t.byItem[it.id].units));
+  const battlePlayers = t.matches.flatMap(m => m.players);
   const demoTable = (title, list, field) => {
     const groups = list.map(o => ({ id: o.id, label: o.label })).concat([{ id: null, label: 'Not tagged' }]);
     const body = groups.map(g => {
-      const cs = sold.filter(c => (c[field] || null) === g.id);
-      if (!cs.length) return '';
-      const cells = usedCats.map(cat => `<td class="num">${cs.reduce((s, c) => s + catUnits(c, cat.id), 0)}</td>`).join('');
-      return `<tr><td>${esc(g.label)}</td><td class="num">${cs.length}</td>${cells}<td class="num">${cs.reduce((s, c) => s + customerTotal(c), 0)}</td></tr>`;
+      const cs = t.sold.filter(c => (c[field] || null) === g.id);
+      const ps = battlePlayers.filter(p => (p[field] || null) === g.id);
+      if (!cs.length && !ps.length) return '';
+      const cells = usedSale.map(cat => `<td class="num">${cs.reduce((s, c) => s + catUnits(c, cat.id), 0)}</td>`).join('');
+      const battleCell = b.matches ? `<td class="num">${ps.length}</td>` : '';
+      const tix = cs.reduce((s, c) => s + customerTotal(c), 0) + ps.reduce((s, p) => s + p.tix, 0);
+      return `<tr><td>${esc(g.label)}</td>${cells}${battleCell}<td class="num">${tix}</td></tr>`;
     }).join('');
-    return `<h3>${title}</h3><table><thead><tr><th>${title}</th><th class="num">Customers</th>${usedCats.map(cat => `<th class="num">${esc(cat.name)}</th>`).join('')}<th class="num">Tix</th></tr></thead><tbody>${body}</tbody></table>`;
+    if (!body) return '';
+    return `<h3>${title}</h3><table><thead><tr><th>${title}</th>${usedSale.map(cat => `<th class="num">${esc(cat.name)} units</th>`).join('')}${b.matches ? '<th class="num">Battle players</th>' : ''}<th class="num">Tix</th></tr></thead><tbody>${body}</tbody></table>`;
   };
+
+  const pending = [];
+  if (open && open.lines.length) pending.push(`customer #${open.no} still open (${customerTotal(open)} tix, not counted yet)`);
+  if (playing) pending.push(`match #${playing.no} in progress (its ${matchTix(playing)} tix are counted)`);
 
   return `<div class="dialog" role="dialog" aria-label="Totals">
     ${dialogHead('Totals · ' + esc(state.settings.station))}
     <div class="big-stats">
-      <div class="stat"><div class="s-val">${tix}</div><div class="s-label">Tickets that should be in the box</div></div>
-      <div class="stat"><div class="s-val">${sold.length}</div><div class="s-label">Customers</div></div>
+      <div class="stat"><div class="s-val">${t.tix}</div><div class="s-label">Tickets that should be in the boxes</div></div>
+      <div class="stat"><div class="s-val">${money(t.tix * NET_PER_TICKET)}</div><div class="s-label">To Rambots after CCA's 10%</div></div>
+      <div class="stat"><div class="s-val">${t.sold.length + b.players}</div><div class="s-label">Customers + battle players</div></div>
     </div>
-    ${open && open.lines.length ? `<p class="note">Not counted yet: customer #${open.no} in progress (${customerTotal(open)} tix).</p>` : ''}
-    ${sold.length ? `<table><thead><tr><th>Item</th><th class="num">Units</th><th class="num">Tix</th></tr></thead><tbody>${catRows}</tbody></table>
-      ${demoTable('Age', AGES, 'age')}
-      ${demoTable('Gender', GENDERS, 'gender')}` : '<p class="note">No finished sales yet.</p>'}
+    ${pending.length ? `<p class="note">Note: ${pending.join('; ')}.</p>` : ''}
+    ${boxRows ? `<h3>Per ticket box</h3><table><thead><tr><th>Box</th><th class="num">Tix</th><th class="num">After 10%</th></tr></thead><tbody>${boxRows}</tbody></table>` : '<p class="note">Nothing sold yet.</p>'}
+    ${itemRows ? `<h3>Items</h3><table><thead><tr><th>Item</th><th class="num">Sold</th><th class="num">Walk-offs</th><th class="num">Tix</th></tr></thead><tbody>${itemRows}</tbody></table>
+      <p class="note">Inventory check: before − after − walk-offs should equal sold.</p>` : ''}
+    ${battleBlock}
+    ${demoTable('Age', AGES, 'age')}
+    ${demoTable('Gender', GENDERS, 'gender')}
     <p class="note">Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}. Export every hour or so as a backup.</p>
     <div class="row"><button class="btn go" data-act="export">Download CSV</button></div>
   </div>`;
 }
 
 function historyView() {
-  const list = state.customers.filter(c => c.lines.length).slice().reverse();
-  const rows = list.map(c => {
-    const items = c.lines.map(l => `${ITEMS[l.item].name} ×${l.qty}`).join(', ');
-    const tags = [labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].filter(Boolean).join(' · ');
-    const isOpen = !c.closedAt;
-    const btn = isOpen ? '<span class="note">in progress</span>'
-      : (c.voided ? `<button class="btn slim" data-act="restore" data-id="${c.id}">Restore</button>`
-        : `<button class="btn slim" data-act="void" data-id="${c.id}">Void</button>`);
-    return `<div class="h-row${c.voided ? ' voided' : ''}${isOpen ? ' open' : ''}">
+  const entries = [];
+  state.customers.filter(c => c.lines.length).forEach(c => entries.push({ t: c.closedAt || c.openedAt, kind: 'sale', c }));
+  state.matches.forEach(m => entries.push({ t: m.startedAt, kind: 'match', m }));
+  state.walkoffs.forEach(w => entries.push({ t: w.at, kind: 'walkoff', w }));
+  entries.sort((a, b) => Date.parse(b.t) - Date.parse(a.t));
+
+  const rows = entries.map(e => {
+    if (e.kind === 'sale') {
+      const c = e.c;
+      const items = c.lines.map(l => `${ITEMS[l.item].name} ×${l.qty}`).join(', ');
+      const tags = [labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].filter(Boolean).join(' · ');
+      const isOpen = !c.closedAt;
+      const btn = isOpen ? '<span class="note">in progress</span>'
+        : (c.voided ? `<button class="btn slim" data-act="restore" data-id="${c.id}">Restore</button>`
+          : `<button class="btn slim" data-act="void" data-id="${c.id}">Void</button>`);
+      return `<div class="h-row${c.voided ? ' voided' : ''}${isOpen ? ' open' : ''}">
+        <div class="h-main">
+          <div class="h-top">Sale #${c.no} · ${fmtTime(c.closedAt || c.openedAt)}${tags ? ' · ' + esc(tags) : ''}${c.voided ? ' · VOIDED' : ''}</div>
+          <div class="h-items">${esc(items)}</div>
+        </div>
+        <div class="h-tix">${customerTotal(c)} tix</div>
+        ${btn}
+      </div>`;
+    }
+    if (e.kind === 'match') {
+      const m = e.m;
+      const who = m.players.map(p => {
+        const res = p.pops == null ? '' : (m.mode === 'pvp' && p.won ? ' won' : ` popped ${p.pops}`);
+        return `${p.name} (${weaponsText(p.weapons)})${res}${p.cards ? `, ${p.cards} cards` : ''}`;
+      }).join(' · ');
+      const isOpen = m.status !== 'done';
+      const btn = isOpen ? '<span class="note">in progress</span>'
+        : (m.voided ? `<button class="btn slim" data-act="mrestore" data-id="${m.id}">Restore</button>`
+          : `<button class="btn slim" data-act="mvoid" data-id="${m.id}">Void</button>`);
+      return `<div class="h-row${m.voided ? ' voided' : ''}${isOpen ? ' open' : ''}">
+        <div class="h-main">
+          <div class="h-top">Battle #${m.no} · ${fmtTime(m.startedAt)} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · rematch' : ''}${m.voided ? ' · VOIDED' : ''}</div>
+          <div class="h-items">${esc(who)}</div>
+        </div>
+        <div class="h-tix">${matchTix(m)} tix</div>
+        ${btn}
+      </div>`;
+    }
+    const w = e.w;
+    const btn = w.voided ? `<button class="btn slim" data-act="worestore" data-id="${w.id}">Restore</button>`
+      : `<button class="btn slim" data-act="wovoid" data-id="${w.id}">Void</button>`;
+    return `<div class="h-row${w.voided ? ' voided' : ''}">
       <div class="h-main">
-        <div class="h-top">#${c.no} · ${fmtTime(c.closedAt || c.openedAt)}${tags ? ' · ' + esc(tags) : ''}${c.voided ? ' · VOIDED' : ''}</div>
-        <div class="h-items">${esc(items)}</div>
+        <div class="h-top">Walk-off #${w.no} · ${fmtTime(w.at)} · ${esc(labelOf(WALKOFF_REASONS, w.reason))}${w.voided ? ' · VOIDED' : ''}</div>
+        <div class="h-items">${esc(ITEMS[w.item].name)} ×${w.qty}</div>
       </div>
-      <div class="h-tix">${customerTotal(c)} tix</div>
+      <div class="h-tix">0 tix</div>
       ${btn}
     </div>`;
   }).join('');
   return `<div class="dialog" role="dialog" aria-label="History">
     ${dialogHead('History')}
-    <p class="note">Newest first. Void removes a sale from the totals (Undo or Restore brings it back).</p>
-    <div class="hist">${rows || '<p class="note">No sales yet.</p>'}</div>
+    <p class="note">Newest first. Void removes a record from the totals (Undo or Restore brings it back).</p>
+    <div class="hist">${rows || '<p class="note">Nothing yet.</p>'}</div>
   </div>`;
 }
 
 function settingsView() {
   const s = state.settings;
-  const n = state.customers.filter(c => c.lines.length).length;
+  const b = s.battle;
+  const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length;
+  const num = (id, label, val) => `<label>${label}<input type="number" id="${id}" min="0" max="99" step="1" value="${val}"></label>`;
   return `<div class="dialog" role="dialog" aria-label="Settings">
     ${dialogHead('Settings')}
     <div class="field">
@@ -1043,16 +1803,34 @@ function settingsView() {
       <input id="station-input" value="${esc(s.station)}" maxlength="40" autocomplete="off">
     </div>
     <div class="field">
-      <div class="f-label">This laptop sells</div>
-      <div class="toggles">${CATEGORIES.map(cat => `<button class="toggle" data-act="togglecat" data-cat="${cat.id}" aria-pressed="${!!s.cats[cat.id]}">${esc(cat.name)}</button>`).join('')}</div>
+      <div class="f-label">This laptop runs</div>
+      <div class="toggles">${CATEGORIES.map(cat => `<button class="toggle" data-act="togglecat" data-cat="${cat.id}" aria-pressed="${!!s.cats[cat.id]}" ${preset ? 'disabled' : ''}>${esc(cat.name)}</button>`).join('')}</div>
+      ${preset ? `<p class="note">Set by this laptop's link (?booth=${esc(boothParam)}). Open the link without "?booth=..." to choose booths by hand.</p>` : ''}
     </div>
     <div class="field">
       <div class="f-label">Demographic buttons (optional)</div>
       <div class="toggles"><button class="toggle" data-act="toggledemo" aria-pressed="${!!s.demographics}">${s.demographics ? 'Shown' : 'Hidden'}</button></div>
     </div>
     <div class="field">
+      <div class="f-label">Balloon Battle prices (tickets per player; applies to new matches)</div>
+      <div class="nums">
+        ${num('set-match', 'Match', b.match)}
+        ${num('set-rematch', 'Instant rematch', b.rematch)}
+        ${num('set-weapon', 'Extra weapon', b.weapon)}
+        ${num('set-cpp', 'Cards per balloon', b.cardsPerPop)}
+      </div>
+    </div>
+    <div class="field">
+      <div class="f-label">vs Player payout</div>
+      <div class="toggles">
+        <button class="toggle" data-act="pvprule" data-val="winner" aria-pressed="${b.pvpRule === 'winner'}">Winner only (${BALLOONS * b.cardsPerPop} cards)</button>
+        <button class="toggle" data-act="pvprule" data-val="both" aria-pressed="${b.pvpRule === 'both'}">Both players, per balloon</button>
+      </div>
+      <p class="note">Winner only can't be gamed by two kids cooperating and costs the same every match. Both-per-balloon pays up to ${(BALLOONS * 2 - 1) * b.cardsPerPop} cards on ${b.match * 2} tix.</p>
+    </div>
+    <div class="field">
       <div class="f-label">Data on this laptop</div>
-      <p class="note">${n} customer${n === 1 ? '' : 's'} saved. Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}.</p>
+      <p class="note">${plural(n, 'record')} saved. Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}.</p>
       <div class="row">
         <button class="btn go" data-act="export">Download CSV</button>
         <button class="btn danger" data-act="clearask" ${n ? '' : 'disabled'}>Delete all data</button>
@@ -1062,10 +1840,10 @@ function settingsView() {
 }
 
 function confirmClearView() {
-  const n = state.customers.filter(c => c.lines.length).length;
+  const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length;
   return `<div class="dialog narrow" role="dialog" aria-label="Confirm delete">
     ${dialogHead('Delete all data?')}
-    <p class="note" style="font-size:19px">This removes all ${n} customers from this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
+    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, battles, walk-offs, queue) from this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
     <div class="row">
       <button class="btn" data-act="open" data-modal="settings">Cancel</button>
       <button class="btn danger" data-act="clear">Delete all ${n}</button>
@@ -1074,7 +1852,7 @@ function confirmClearView() {
 }
 
 /* ==========================================================================
-   Toast
+   Toast and match timer
    ========================================================================== */
 const toastEl = document.getElementById('toast');
 let toastTimer = null;
@@ -1082,8 +1860,15 @@ function toast(msg, kind) {
   toastEl.textContent = msg;
   toastEl.className = 'toast show ' + (kind || 'info');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { toastEl.className = 'toast ' + (kind || 'info'); }, kind === 'undo' ? 4500 : 3000);
+  toastTimer = setTimeout(() => { toastEl.className = 'toast ' + (kind || 'info'); }, kind === 'undo' ? 4500 : 3200);
 }
+
+function tick() {
+  const el = document.getElementById('match-timer');
+  const m = playingMatch();
+  if (el && m) el.textContent = fmtDur(Date.now() - Date.parse(m.startedAt));
+}
+setInterval(tick, 1000);
 
 /* ==========================================================================
    Input handling
@@ -1121,17 +1906,46 @@ const actions = {
   overlay: () => { view.modal = null; render(); },
   void: d => setVoided(d.id, true),
   restore: d => setVoided(d.id, false),
+  mvoid: d => setMatchVoided(d.id, true),
+  mrestore: d => setMatchVoided(d.id, false),
+  wovoid: d => setWalkoffVoided(d.id, true),
+  worestore: d => setWalkoffVoided(d.id, false),
   export: exportCSV,
   clearask: () => { view.modal = { type: 'confirmClear' }; render(); },
   clear: clearAll,
   togglecat: d => {
     const cats = state.settings.cats;
-    if (cats[d.cat] && enabledCats().length === 1) { toast('Keep at least one thing on sale', 'warn'); return; }
+    if (cats[d.cat] && enabledCats().length === 1) { toast('Keep at least one booth on', 'warn'); return; }
     cats[d.cat] = !cats[d.cat];
     save();
     render();
   },
   toggledemo: () => { state.settings.demographics = !state.settings.demographics; save(); render(); },
+  pvprule: d => { state.settings.battle.pvpRule = d.val; save(); render(); },
+  // Walk-offs
+  walkoff: d => openWalkoff(d.cat),
+  woitem: d => { view.modal.item = d.item; render(); },
+  woqty: d => { view.modal.qty = Math.max(1, Math.min(99, view.modal.qty + Number(d.d))); render(); },
+  woreason: d => { view.modal.reason = d.val; render(); },
+  wosave: saveWalkoff,
+  // Balloon Battle
+  qdraft: d => {
+    const val = d.field === 'weapons' ? Number(d.val) : d.val;
+    const draft = view.qDraft;
+    draft[d.field] = d.field !== 'weapons' && draft[d.field] === val ? null : val;
+    render();
+  },
+  qadd: queueAdd,
+  qremove: d => queueRemove(d.id),
+  qweapon: d => queueWeapons(d.id, Number(d.d)),
+  startmatch: d => startMatch(d.mode),
+  mweapon: d => matchWeapons(Number(d.p), Number(d.d)),
+  endmatch: endMatch,
+  cancelmatch: cancelMatch,
+  scorehouse: d => scoreHouse(Number(d.n)),
+  pvpwinner: d => { view.pvpWinner = d.p === '' ? null : Number(d.p); render(); },
+  pvploser: d => scorePvpLoser(Number(d.n)),
+  rematch,
 };
 
 document.addEventListener('click', e => {
@@ -1141,10 +1955,14 @@ document.addEventListener('click', e => {
   const fn = actions[el.dataset.act];
   if (fn) fn(el.dataset);
   // Drop focus so a stray Enter/Space never re-fires the last button.
-  if (document.activeElement && document.activeElement !== document.body
-      && document.activeElement.tagName === 'BUTTON') document.activeElement.blur();
+  if (document.activeElement && document.activeElement.tagName === 'BUTTON') document.activeElement.blur();
 });
 
+document.addEventListener('input', e => {
+  if (e.target.id === 'q-name') view.qDraft.name = e.target.value;
+});
+
+const BATTLE_FIELDS = { 'set-match': 'match', 'set-rematch': 'rematch', 'set-weapon': 'weapon', 'set-cpp': 'cardsPerPop' };
 document.addEventListener('change', e => {
   if (e.target.id === 'station-input') {
     state.settings.station = e.target.value.trim() || 'Station';
@@ -1153,6 +1971,13 @@ document.addEventListener('change', e => {
     save();
     render();
     toast('Station name saved', 'ok');
+  } else if (BATTLE_FIELDS[e.target.id]) {
+    const v = parseInt(e.target.value, 10);
+    if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    state.settings.battle[BATTLE_FIELDS[e.target.id]] = v;
+    save();
+    render();
+    toast('Saved · applies to new matches', 'ok');
   }
 });
 
@@ -1168,7 +1993,11 @@ document.addEventListener('keydown', e => {
     return;
   }
   if (inField) {
-    if (e.key === 'Enter') e.target.blur();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (e.target.id === 'q-name') queueAdd();
+      else e.target.blur();
+    }
     return;
   }
   if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') {
@@ -1183,22 +2012,30 @@ document.addEventListener('keydown', e => {
     return;
   }
   if (e.key === 'Enter' || e.key === ' ') {
-    // Enter finishes the sale; Space does nothing (stops accidental re-clicks).
+    // Enter finishes a sale; Space does nothing (stops accidental re-clicks).
     e.preventDefault();
-    if (e.key === 'Enter' && !m) finish();
+    if (e.key === 'Enter' && !m && view.screen !== 'battle') finish();
   }
 });
 
-// Two tabs on one laptop would overwrite each other's sales. Follow the other
-// tab's saves and warn loudly.
+// Two tabs on one laptop would overwrite each other. Follow the other tab's
+// saves and warn loudly.
 window.addEventListener('storage', e => {
   if (e.key !== STORAGE_KEY || !e.newValue) return;
   try {
-    state = Object.assign(defaultState(), JSON.parse(e.newValue));
+    state = hydrate(e.newValue);
+    applyPreset();
     otherTab = true;
     render();
   } catch (err) { /* ignore malformed */ }
 });
+
+// Hosted (GitHub Pages): cache the page so a refresh with no wifi still opens
+// it, and ask the browser not to evict saved sales under storage pressure.
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  navigator.serviceWorker.register('sw.js').catch(() => { /* still works online */ });
+}
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 render();
 </script>
@@ -1207,6 +2044,13 @@ render();
   current-customer panel with live ticket total and stacked clicker tiers, optional age/gender tags,
   undo (button + Ctrl+Z) that names what it undid, history with void/restore, totals, CSV export,
   per-laptop station setting, offline localStorage persistence.
+  v1.1 (2026-10-16): Added Balloon Battle (name + weapons queue with wait estimate, vs House / vs Player,
+  per-player tickets at match start, balloons-popped result, card payout in 3-card bundles, winner-only or
+  per-balloon PvP payout rule, instant rematch fee, cancel match, editable battle prices). Added per-box
+  ticket split in the customer panel and Totals, walk-off log, net $ after CCA's 10%, cards-per-ticket and
+  prize cost in Totals, battle and walk-off rows in the CSV. Added ?booth=sales / ?booth=battle links that
+  lock a laptop to its booth, an offline cache (sw.js) so the hosted page reopens without wifi, and a
+  persistent-storage request.
 -->
 </body>
 </html>
