@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.5
+  version: 1.5.1
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -799,7 +799,7 @@ const CATEGORIES = [
       { id: 'kit_toroidal', name: 'Kit w/ toroidal', price: 6, note: 'Launcher + toroidal + ripcord', photo: 'toroidal_kit' },
       { id: 'launcher', name: 'Launcher only', price: 3, note: 'Rare: spares, group buys', photo: 'launcher_only' },
       { id: 'propeller', name: 'Extra propeller', price: 1, photo: 'propeller' },
-      { id: 'toroidal', name: 'Toroidal propeller', price: 2, photo: 'toroidal_prop' },
+      { id: 'toroidal', name: 'Extra toroidal propeller', price: 2, photo: 'toroidal_prop' },
       { id: 'ripcord', name: 'Extra ripcord', price: 1, photo: 'ripcord', letter: 'R' },
     ].map(it => Object.assign({ photoDir: COPTER_PHOTO_DIR }, it)),
   },
@@ -818,7 +818,7 @@ const BATTLE_DEFAULTS = {
   weapon: 1,         // tix per extra weapon
   cardsPerPop: 3,    // Pokemon cards per balloon popped (cards come bundled in 3s)
   pvpRule: 'winner', // 'winner' = only the winner is paid (per balloon they popped); 'both' = both paid per pop
-  pvpTie: 'none',    // vs Player tie: 'none' = no cards (can't be gamed); 'both' = each paid per own pop
+  pvpTie: 'both',    // vs Player tie: 'both' = each paid per own pop; 'none' = no cards (can't be gamed)
   matchSeconds: 120, // match time limit (countdown); editable in Settings
 };
 const BALLOONS = 3;
@@ -942,6 +942,8 @@ function hydrate(raw) {
     event: Object.assign({}, base.settings.event, ss.event || {}),
   });
   const merged = Object.assign(base, saved);
+  // Until someone picks a tie rule on this laptop, follow the current default.
+  if (!merged.settings.battle.pvpTieSet) merged.settings.battle.pvpTie = BATTLE_DEFAULTS.pvpTie;
   // An item removed or renamed in the config would otherwise break saved data
   // on this laptop: an old clicker design counts as "Other design"; anything
   // else that no longer exists (e.g. Plinko) is dropped.
@@ -2154,16 +2156,18 @@ function copterAsk(c) {
   const has = key => { const left = keyLeft(key); return left == null || left > 0; };
   const canUpgrade = kits && has('part_toroidal');
   const canProp = has('part_propeller');
-  if (!canUpgrade && !canProp) return '';
+  const canTorProp = has('part_toroidal');
+  if (!canUpgrade && !canProp && !canTorProp) return '';
   const upgrade = canUpgrade ? `<div class="ask-title">Ask: upgrade to a toroidal propeller? +${ITEMS.kit_toroidal.price - ITEMS.kit.price} tix</div>
       <div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : '';
   return `<div class="ask">
     ${upgrade}
-    ${canProp ? `<div class="ask-title">Ask: want extra propellers? ${ITEMS.propeller.price} tix each</div>` : ''}
+    ${canUpgrade ? '<div class="ask-row"><button class="askbtn" data-act="upgrade">Upgrade 1 kit to toroidal (+1)</button></div>' : ''}
+    ${canProp || canTorProp ? `<div class="ask-title">Ask: want extra propellers? Regular ${ITEMS.propeller.price} tix · toroidal ${ITEMS.toroidal.price} tix</div>
     <div class="ask-row">
-      ${canUpgrade ? '<button class="askbtn" data-act="upgrade">Upgrade 1 kit (+1)</button>' : ''}
-      ${canProp ? '<button class="askbtn" data-act="add" data-item="propeller">+ Extra propeller</button>' : ''}
-    </div>
+      ${canProp ? `<button class="askbtn" data-act="add" data-item="propeller">+ Extra propeller (${ITEMS.propeller.price})</button>` : ''}
+      ${canTorProp ? `<button class="askbtn" data-act="add" data-item="toroidal">+ Extra toroidal (${ITEMS.toroidal.price})</button>` : ''}
+    </div>` : ''}
   </div>`;
 }
 
@@ -2770,8 +2774,8 @@ function settingsView() {
       </div>
       <div class="f-label" style="margin-top:6px">Tie when time runs out (winner-only rule)</div>
       <div class="toggles">
-        <button class="toggle" data-act="pvptie" data-val="none" aria-pressed="${b.pvpTie === 'none'}">No cards</button>
         <button class="toggle" data-act="pvptie" data-val="both" aria-pressed="${b.pvpTie === 'both'}">Each paid for own balloons</button>
+        <button class="toggle" data-act="pvptie" data-val="none" aria-pressed="${b.pvpTie === 'none'}">No cards</button>
       </div>
       <p class="note">Winner only: the winner gets ${b.cardsPerPop} cards per balloon they popped (up to ${BALLOONS * b.cardsPerPop}); the other player gets none, so two kids gain nothing by letting each other pop. "Each paid" on a tie reopens that: a cooperative 2–2 tie pays ${4 * b.cardsPerPop} cards on ${b.match * 2} tix.</p>
     </div>
@@ -2945,7 +2949,7 @@ const actions = {
   scorehouse: d => scoreHouse(Number(d.n)),
   pvppop: d => { view.pvpPops[Number(d.p)] = Number(d.n); render(); },
   pvpsave: scorePvp,
-  pvptie: d => { state.settings.battle.pvpTie = d.val; save(); render(); },
+  pvptie: d => { state.settings.battle.pvpTie = d.val; state.settings.battle.pvpTieSet = true; save(); render(); },
   rematch,
 };
 
@@ -3134,6 +3138,10 @@ render();
   balloon they popped (not always 9); tie rule in Settings. Pace chip names the booths behind its goal.
   Stock for every sale item: per clicker design and per copter part (kits use launcher + propeller +
   ripcord), "N left" on buttons, Left column and copter parts table in Totals, stock in the stats CSV.
+  v1.5.1 (2026-10-16): vs Player ties now pay each player for their own balloons by default (Settings can
+  switch to no cards); laptops that never chose a tie rule pick up the new default. Copter Ask box offers
+  both extra propeller (1) and extra toroidal propeller (2); "Toroidal propeller" renamed "Extra toroidal
+  propeller".
 -->
 </body>
 </html>
