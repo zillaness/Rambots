@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.2
+version: 1.2.1
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,13 +10,13 @@ ai_update: Update last_updated and version. Keep the filename README.md. Append 
 
 # Ramathon Sales Tracker
 
-One web page with huge buttons for the Ram-a-thon booths: fidget clickers and pull copters (shared sales laptop) and Balloon Battle (its own laptop). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
+One web page with huge buttons for the Ram-a-thon booths: Clickers and Copters (shared sales laptop) and Balloon Battle (its own laptop). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
 
 ## Event-day links (one per laptop)
 
 | Laptop | Link | What it shows |
 |---|---|---|
-| Sales table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales | Fidget Clickers and Pull Copters |
+| Sales table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales | Clickers and Copters |
 | Balloon Battle | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=battle | Battle queue and matches |
 
 The page is unlisted (not on the Rambots site's landing page) and asks search engines not to index it.
@@ -40,9 +40,9 @@ The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) 
 
 | Do this | What happens |
 |---|---|
-| Tap **Fidget Clickers** or **Pull Copters** | Opens that booth's buttons |
+| Tap **Clickers** or **Copters** | Opens that booth's buttons |
 | Tap an item (clickers: tap the design's photo) | Adds 1 to the current customer |
-| **# Type qty** (pull copters) or the number in the right panel | Keypad to punch in an exact quantity |
+| **# Type qty** (Copters) or the number in the right panel | Keypad to punch in an exact quantity |
 | **−** / **+** in the right panel | Adjust one line |
 | **Kid / Teen / Adult**, **Male / Female** | Optional. Tag who the items are *for*. Tap again to clear |
 | **Done · Next customer** (or Enter) | Saves the sale, resets the panel |
@@ -107,3 +107,4 @@ CSV columns: `station, record (S = sale, B = battle, W = walk-off), status, open
 - v1.0 (2026-10-16): Initial release for Ram-a-thon 2026.
 - v1.1 (2026-10-16): Balloon Battle queue and matches, per-box ticket split, walk-off log, net $, booth links, offline reopen, clicker photo folder.
 - v1.2 (2026-10-16): Photo button per clicker design, priced together; live on GitHub Pages (presentations branch); Xiao long bao renamed Dumpling.
+- v1.2.1 (2026-10-16): Booths renamed Clickers and Copters; all 13 clicker photos live.
