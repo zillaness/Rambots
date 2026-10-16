@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.5
+version: 1.5.1
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -69,7 +69,7 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 4. The result card says how many 3-card bundles to hand over. **Instant rematch** runs the same players again at the rematch price (shows how many people are waiting).
 5. **Cancel match** if a bot fails before the match counts: hand tickets back, players go back to the front of the queue.
 
-Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default: the winner gets 3 cards per balloon they popped (a 2–1 win when time runs out pays 6), the other player gets none. **Ties** pay nothing by default (so two kids can't cooperate to a 2–2 tie for 12 cards); switch to "each paid for own balloons" if you prefer. Or switch the whole rule to **both players, per balloon**. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
+Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default: the winner gets 3 cards per balloon they popped (a 2–1 win when time runs out pays 6), the other player gets none. **Ties** pay each player for their own balloons by default (a 1–1 tie pays 3 cards each); switch to "No cards" in Settings if kids start playing for ties. Or switch the whole rule to **both players, per balloon**. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
 
 ## Clock, goal and pace
 
@@ -79,7 +79,7 @@ Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by de
 ## Upsell prompts
 
 - **Clickers:** the right panel breaks the price into deals (e.g. `3 for 10 + 2 for 7 · 3.40 each`) and, when it saves money, says "Ask: 1 more is only +3 tix".
-- **Copters:** with a Full kit in the cart, a red **Ask** box offers **Upgrade 1 kit (+1)** to a toroidal kit (with a one-line explanation of what toroidal means) and **+ Extra propeller**. The wording lives in `TOROIDAL_PITCH` at the top of the script.
+- **Copters:** with a Full kit in the cart, a red **Ask** box offers **Upgrade 1 kit to toroidal (+1)** (with a one-line explanation of what toroidal means), then **+ Extra propeller (1)** and **+ Extra toroidal (2)**. The wording lives in `TOROIDAL_PITCH` at the top of the script.
 
 ## Backorders
 
@@ -115,7 +115,7 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 | Kit with toroidal propeller | 6 |
 | Launcher only | 3 |
 | Extra propeller | 1 |
-| Toroidal propeller | 2 |
+| Extra toroidal propeller | 2 |
 | Extra ripcord | 1 |
 | Balloon Battle match (per player) | 5 |
 | Instant rematch (per player) | 6 |
@@ -162,3 +162,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.4 (2026-10-16): Clock and pace chip with per-booth goals, clicker combo breakdown and nudge, copter upgrade prompts, copter photos, backorders, stats CSV, new export names with record ids, Combine screen.
 - v1.4.1 (2026-10-16): All six copter buttons have photos; home-screen tiles show the blue switch (Clickers) and the kid with a pull copter (Copters).
 - v1.5 (2026-10-16): Battle countdown with custom length; vs Player scored by balloons popped (winner paid per balloon, tie rule); stock left for clicker designs and copter parts.
+- v1.5.1 (2026-10-16): Ties pay each player for their own balloons by default.

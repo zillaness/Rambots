@@ -16,7 +16,7 @@ ai_update: Update last_updated and version. Keep the filename README.md. Append 
 | Kit w/ toroidal | `toroidal_kit.jpg` |
 | Launcher only | `launcher_only.jpg` |
 | Extra propeller | `propeller.jpg` |
-| Toroidal propeller | `toroidal_prop.jpg` |
+| Extra toroidal propeller | `toroidal_prop.jpg` |
 | Extra ripcord | `ripcord.jpg` |
 
 `regular_prop.jpg` (kid with a pull copter) is the picture on the **Copters** tile of the home screen.
