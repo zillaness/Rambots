@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.6
+version: 1.7
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -61,13 +61,26 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 
 ## Balloon Battle
 
-1. **Queue:** type a first name, tap the number of extra weapons (so the crew can have them ready), **Add to queue** (or Enter). Wait times start at 3 minutes per match and adjust to the real pace.
-2. **Start vs House** (next person) or **Start vs Player** (next two). Tickets are collected now: 5 per player + 1 per extra weapon. The toast says exactly how many from whom.
-3. The clock shows **Ready** until the robots are set up. Tap **GO** to start the countdown (default 2:00; **Settings > Match length** for any length, e.g. 1.5 or 3). At zero it flashes red **Time!** and counts overtime. Tap **Match over** when time runs out or someone loses all 3 balloons, then tap the result:
+**Sign up (right side), tickets collected now:**
+1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
+2. Type the first name(s). Enter on player 1 jumps to player 2.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2; hand over that weapon's sticker). Two taps = **already has the sticker** (free). Three taps = none. Weapons unlock once: a kid with the sticker never pays for that weapon again.
+4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, which stickers to give, and the place in line with the wait.
+
+The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
+
+**Queue (left, under the match):** each sign-up shows its estimated wait next to the names (time left in the current match, plus 2 minutes turnaround, plus one match cycle per match ahead; it follows the real pace once a few matches have run). Per row: **Start** (any match), **Weapons** (add or change; says what to collect or hand back), **↓** (not ready yet, move down one), **✕** (remove and refund; the toast says how many tix to hand back). Two solos waiting: the earlier one shows **Pair with ...** (ages shown when tagged) to make one vs Player match in the earlier spot.
+
+**The match (pinned on top while sign-ups continue):**
+1. **Start next** (or Start on any row) calls the match up. The clock shows **Ready**.
+2. **GO** starts the countdown (default 2:00; **Settings > Match length**). **Pause / Resume**, **Edit clock** (±10 s, ±1 min, back to full), **Restart** (back to Ready, free, counted in the stats), **Change weapons**, **Not ready: back to queue** (front of the line, tickets kept). At zero it flashes red **Time!** and counts overtime.
+3. **Match over** and tap the result:
    - vs House: how many House balloons the player popped, on the **Survived** row or the **Knocked out** row.
-   - vs Player: how many balloons each player popped (0 to 3 each), then **Save result**. The tracker works out who was knocked out (the other player popped all 3) and the cards.
-4. The result card says how many 3-card bundles to hand over. **Instant rematch** runs the same players again at the rematch price (shows how many people are waiting).
-5. **Cancel match** if a bot fails before the match counts: hand tickets back, players go back to the front of the queue.
+   - vs Player: how many balloons each player popped (0 to 3 each), then **Save result**.
+4. The result card says how many 3-card bundles to give, then offers (for both players, or only one of them vs House):
+   - **Instant rematch** (5 tix): plays right now, once in a row, only while 2 or fewer matches are waiting.
+   - **Rematch · back in line** (5 tix): back of the queue.
+   Weapons stay unlocked either way. The rematch price and both rules are in **Settings**.
 
 Payout rules (**Settings > Balloon Battle scoring**, one tap per preset, each showing its worst single match in cards per ticket):
 
@@ -128,9 +141,10 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 | Extra propeller | 1 |
 | Extra toroidal propeller | 2 |
 | Extra ripcord | 1 |
-| Balloon Battle match (per player) | 5 |
-| Instant rematch (per player) | 6 |
-| Extra weapon | 1 |
+| Balloon Battle match (per player, also Rematch back in line) | 5 |
+| Instant rematch (per player) | 5 |
+| Unlock wheel spikes (once) | 1 |
+| Unlock buzz saw (once) | 2 |
 | Prize Table (cards, not tix) | Small 3, Medium 6, Grand 9 (editable) |
 
 ## Exports and combining the laptops
@@ -143,7 +157,7 @@ Totals (and Settings) has three downloads:
 | Stats CSV | `ramathon_stats_...csv` | Averages, combo counts, add-on rates, busiest 30 minutes, goal vs actual |
 | Backorders CSV | `ramathon_backorders_...csv` | Backorder list with contact info (private) |
 
-Every sales row carries `record_id`, `laptop_id` and `exported_at`. Each export is a full snapshot, so hourly backups repeat earlier rows.
+Every sales row carries `record_id`, `laptop_id` and `exported_at`. Battle sign-ups export as `queued` until played; refunded and paired sign-ups export with those statuses and Combine skips them. Each weapon is its own row (e.g. `Buzz saw`, 2 tix; `Buzz saw (sticker)`, 0 tix). Each export is a full snapshot, so hourly backups repeat earlier rows.
 
 **Combine laptops' CSVs** (Totals or Settings): pick the sales CSVs from all laptops, early backups included. Each record is counted once, from its newest export (a sale voided after a backup stays voided). Type the Plinko bucket count, then read the event total against the 1,300 goal or **Download combined CSV**.
 
@@ -175,3 +189,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.5 (2026-10-16): Battle countdown with custom length; vs Player scored by balloons popped (winner paid per balloon, tie rule); stock left for clicker designs and copter parts.
 - v1.5.1 (2026-10-16): Ties pay each player for their own balloons by default.
 - v1.6 (2026-10-16): Every Balloon Battle scoring option as Settings presets with worst-case cards per ticket; new default "3 per balloon, must survive to the end"; live cards-per-ticket bar; Rules / script card; match clock waits for GO; battle_outcome CSV column.
+- v1.7 (2026-10-16): Balloon Battle sign-up flow (vs House / vs Player / Solo, named weapons that unlock once, tickets at sign-up, weapon Ask line and pop-up), queue of paid matches with waits next to names, start any match, push down, refund, pair solos; pinned match with GO, Pause, Edit clock, Restart, Change weapons, Back to queue; Instant rematch (5, once, short line) and Rematch back in line.
