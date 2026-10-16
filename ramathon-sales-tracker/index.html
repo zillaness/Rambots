@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.7
+  version: 1.7.1
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -875,7 +875,7 @@ const BATTLE_DEFAULTS = {
   rematch: 5,        // tix per player for an instant rematch (plays right away)
   rematchOnce: true, // an instant rematch can't be followed by another one
   rematchMaxWaiting: 2, // instant rematch only while this many matches (or fewer) are waiting
-  weaponPrices: { spikes: 1, saw: 2 }, // one-time unlock; after that the weapon is free (sticker)
+  weaponPrices: { spikes: 1, saw: 2 }, // one-time unlock; after that the weapon is free
   turnaroundMin: 2,  // minutes between matches (balloons, weapons), for wait estimates
   cardsPerPop: 3,    // Pokemon cards per balloon popped (cards come bundled in 3s)
   pvpRule: 'winner', // 'winner' = only the winner is paid (per balloon they popped); 'both' = both paid per pop
@@ -903,7 +903,8 @@ const OUTCOMES = [
   ['knockedOut', 'Knocked out', 'lost all 3 balloons'],
 ];
 const BALLOONS = 3;
-// Battle weapons: pay once to unlock (the kid gets a sticker), free after that.
+// Battle weapons: pay once to unlock, free after that. How the crew checks an
+// earlier unlock (sticker, stamp, nothing) is still undecided.
 const WEAPONS = [
   { id: 'spikes', name: 'Wheel spikes' },
   { id: 'saw', name: 'Buzz saw' },
@@ -1391,7 +1392,7 @@ const isOpen = m => !!m.solo && m.mode === 'house' && m.status === 'queued';
 const ageTag = p => (p.age ? ` (${labelOf(AGES, p.age)})` : '');
 
 // Weapons a player has this match: bought now ({ id: tix paid }) or unlocked
-// earlier (sticker, free). Saves from before v1.7 only have a count.
+// earlier (free). Saves from before v1.7 only have a count.
 function weaponsOf(p) {
   if (!p.buy) return p.weapons ? [{ id: 'extra', name: 'Extra weapon', qty: p.weapons, tix: p.tix - p.base, have: false }] : [];
   return Object.keys(p.buy).map(id => ({ id, name: weaponName(id), qty: 1, tix: p.buy[id], have: false }))
@@ -1401,7 +1402,7 @@ const weaponIds = p => weaponsOf(p).filter(w => w.id !== 'extra').map(w => w.id)
 function weaponsText(p) {
   const list = weaponsOf(p);
   if (!list.length) return 'no weapons';
-  return list.map(w => (w.id === 'extra' ? plural(w.qty, 'extra weapon') : `${w.name}${w.have ? ' (sticker)' : ''}`)).join(', ');
+  return list.map(w => (w.id === 'extra' ? plural(w.qty, 'extra weapon') : `${w.name}${w.have ? ' (unlocked earlier)' : ''}`)).join(', ');
 }
 function weaponAsk() {
   return `Want to unlock ${WEAPONS.map(w => `${w.name.toLowerCase()} for ${plural(weaponPrice(w.id), 'ticket')}`).join(' or ')}? You keep it all day.`;
@@ -1414,7 +1415,7 @@ function cardsText(cards) {
   return plural(cards, 'card');
 }
 
-// Sign-up draft: weapon chips cycle none -> unlock (pay) -> has sticker (free) -> none.
+// Sign-up draft: weapon chips cycle none -> unlock (pay) -> already unlocked (free) -> none.
 function cycleWeapon(w, id) {
   if (!w[id]) w[id] = 'buy';
   else if (w[id] === 'buy') w[id] = 'have';
@@ -1451,8 +1452,8 @@ const signupTitle = m => (isOpen(m) ? `${m.players[0].name} (solo, wants an oppo
 
 function collectToast(m, extra) {
   const parts = m.players.map(p => `${p.name} ${p.tix}`).join(' · ');
-  const stickers = m.players.flatMap(p => Object.keys(p.buy || {}).map(weaponName));
-  toast(`Collect ${matchTix(m)} tix: ${parts}${stickers.length ? ` · give sticker: ${stickers.join(', ')}` : ''}${extra || ''}`, 'ok');
+  const unlocks = m.players.flatMap(p => Object.keys(p.buy || {}).map(weaponName));
+  toast(`Collect ${matchTix(m)} tix: ${parts}${unlocks.length ? ` · new unlock: ${unlocks.join(', ')}` : ''}${extra || ''}`, 'ok');
 }
 
 // Add the sign-up to the queue and collect its tickets. Asks about weapons
@@ -1999,7 +2000,7 @@ function buildCSV() {
       rows.push(common.concat([m.rematch ? 'Rematch' : 'Match', 1, p.base, total], demo,
         [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', ''], tail(m.id, p.outcome ? outcomeLabel(p.outcome) : [m.tie ? 'Tie' : '', p.knockedOut ? 'Knocked out' : (p.knockedOut === false ? 'Survived' : '')].filter(Boolean).join(' / '))));
       weaponsOf(p).forEach(w => {
-        rows.push(common.concat([w.have ? `${w.name} (sticker)` : w.name, w.qty, w.tix, total], demo, [mode, 'P' + (i + 1), '', '', '', '', ''], tail(m.id)));
+        rows.push(common.concat([w.have ? `${w.name} (unlocked earlier)` : w.name, w.qty, w.tix, total], demo, [mode, 'P' + (i + 1), '', '', '', '', ''], tail(m.id)));
       });
     });
   });
@@ -2109,7 +2110,7 @@ function computeStats() {
       const bought = paidPlayers.flatMap(p => weaponsOf(p)).filter(x => x.id === w.id && !x.have);
       add('Battle', `${w.name} unlocks`, `${bought.length} (${bought.reduce((s, x) => s + x.tix, 0)} tix)`);
     });
-    add('Battle', 'Weapons used with a sticker (free)', paidPlayers.flatMap(p => weaponsOf(p)).filter(x => x.have).length);
+    add('Battle', 'Weapons used, unlocked earlier (free)', paidPlayers.flatMap(p => weaponsOf(p)).filter(x => x.have).length);
     add('Battle', 'Instant rematch rate', pct(b.rematches, b.matches));
     add('Battle', 'Rematches back in line', b.again);
     add('Battle', 'Solo sign-ups paired up', t.paid.filter(m => m.pairedFrom).length);
@@ -2716,7 +2717,7 @@ function rulesLines() {
   const b = bs();
   const mins = b.matchSeconds % 60 ? `${Math.floor(b.matchSeconds / 60)} min ${b.matchSeconds % 60} s` : plural(b.matchSeconds / 60, 'minute');
   const lines = [
-    `${b.match} tickets each to play. Unlock a weapon: ${WEAPONS.map(w => `${w.name.toLowerCase()} +${weaponPrice(w.id)}`).join(', ')}. Pay once, keep your sticker, it's yours all day.`,
+    `${b.match} tickets each to play. Unlock a weapon: ${WEAPONS.map(w => `${w.name.toLowerCase()} +${weaponPrice(w.id)}`).join(', ')}. Pay once and it stays unlocked for your next matches.`,
     `Each robot has ${BALLOONS} balloons. Pop the other robot's balloons!`,
     `The match lasts ${mins}, or until a robot loses all ${BALLOONS} balloons.`,
   ];
@@ -2887,7 +2888,7 @@ function queueView() {
 }
 
 function weaponChip(st, id, act, attrs) {
-  const sub = st === 'buy' ? `unlock · +${weaponPrice(id)} tix` : (st === 'have' ? 'has sticker · free' : `+${weaponPrice(id)} tix`);
+  const sub = st === 'buy' ? `unlock · +${weaponPrice(id)} tix` : (st === 'have' ? 'already unlocked · free' : `+${weaponPrice(id)} tix`);
   return `<button class="chip wchip${st ? ' on ' + st : ''}" data-act="${act}" ${attrs} data-w="${id}">${esc(weaponName(id))}<small>${sub}</small></button>`;
 }
 
@@ -2913,7 +2914,7 @@ function signupPanel() {
       <div class="chips c3">${modes.map(([id, label, sub]) => `<button class="chip${d.mode === id ? ' on' : ''}" data-act="qmode" data-val="${id}">${label}<small>${sub}</small></button>`).join('')}</div>
       <div class="ask-line">Ask: “${esc(weaponAsk())}”</div>
       ${forms}
-      <p class="note">Weapon tap: unlock (pay, give a sticker) → already has the sticker (free) → none.</p>
+      <p class="note">Weapon tap: unlock (pay) → already unlocked (free) → none.</p>
       <button class="qadd" data-act="qadd">Add to queue · collect ${draftTix(d)} tix</button>
       <div class="script"><div class="f-label">Scoring (say it)</div><p>${esc(scoringShort())}</p></div>
     </div>
@@ -3837,7 +3838,7 @@ render();
   collected. battle_outcome CSV column.
   v1.7 (2026-10-16): Balloon Battle sign-up flow. Pick vs House, vs Player (a pair) or Solo (wants an
   opponent), names, weapons per player, then Add to queue collects the tickets. Weapons are named (wheel
-  spikes +1, buzz saw +2) and unlock once: a kid with the sticker gets them free. Red Ask line plus a
+  spikes +1, buzz saw +2) and unlock once: a kid who unlocked one earlier gets it free. Red Ask line plus a
   pop-up when a player has no weapon. The queue holds paid matches with a wait estimate next to the names;
   start any match, push one down, remove and refund, pair two solos into a vs Player match. The current
   match stays pinned on top with GO, Pause / Resume, Restart (back to Ready, free), Edit clock, Change
@@ -3845,6 +3846,8 @@ render();
   matches wait; all editable in Settings) or Rematch back in line. Short scoring script on the sign-up
   panel; controls script slot in the Rules card. CSV: one row per weapon, queued / refunded / paired
   statuses (Combine counts queued, skips refunded and paired). Old name-only queue entries are dropped.
+  v1.7.1 (2026-10-16): Removed sticker wording (the unlock token is undecided): "already unlocked" chip,
+  "new unlock" in the collect toast, "(unlocked earlier)" in History, stats and CSV.
 -->
 </body>
 </html>
