@@ -1,6 +1,6 @@
 ---
-file: ramathon_status_v1.0.md
-version: 1.0
+file: ramathon_status_v1.1.md
+version: 1.1
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: status and handoff
 
-Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.7.1** is live.
+Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8** is live.
 
 ## Where things are
 
@@ -20,7 +20,7 @@ Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.7.1**
 | Sales laptop link | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales |
 | Battle laptop link | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=battle |
 | Prize Table laptop link | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=prizes |
-| Source (edit here, then copy `index.html`, `sw.js`, `README.md` to the live folder) | branch `claude/focused-dirac-gom1ys`, folder `tools/ramathon_sales_tracker/` |
+| Source (edit here, then copy `index.html`, `sw.js`, `README.md` to the live folder) | branch `ramathon-carnival`, folder `tools/ramathon_sales_tracker/` (the old branch `claude/focused-dirac-gom1ys` is frozen at v1.7.1 and kept until after the event) |
 | How to use the tracker | `README.md` in either folder |
 | Test suites (Playwright) | `tools/ramathon_sales_tracker/tests/` (see its README) |
 | Open-items page with notes and a copy button (private Claude artifact) | https://claude.ai/artifact/JWCsGNL8Jr1nZGgKg1YbEQ |
@@ -63,6 +63,16 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 - Instant rematch: Sam said 5 tickets, **once**, and only if the queue isn't too long. Sam later said a 7-ticket premium to cut the line is possible and will ask the business team.
 - Scoring script on screen in two places: short on the sign-up panel, full behind the Rules button. The controls script will be written later with Sam.
 
+**Sales add-ons (decided 2026-10-16)**
+- Policy: don't discount. If people are unhappy, give extra or a freebie instead.
+- Cash: no cash discount (tabled). A small cash-emoji button marks a sale as a cash sale at full price; cash sales count toward the goal. Sales first; Battle only if cash shows up there.
+- Free Pokémon card for every 10 tix spent, with a reminder on screen. It costs little and sends kids to Plinko or Balloon Battle.
+- 30 tix earns a free prize: 3 free cards, which is a Small prize at the Prize Table. Nothing extra on top. (Claude proposed this reading; Sam approved it.)
+- Freebie button: deprioritized for this event. If built later: track only, no cap; at Battle, both a free match and bonus cards.
+- Walk-off logging: Sam considers it unnecessary. The button stays and is optional.
+- Partner club referrals: an optional tag like the demographics, built only once a partner club agrees. Sam will ask the students which other clubs they are in.
+- Source branch renamed `ramathon-carnival`; keep the old branch until after the event.
+
 **Plinko**
 - 9 slots. Sam is considering limiting where kids may drop.
 - Sam likes a drop multiplier: 3x from the center, 2x next to the center, 1x from the sides.
@@ -71,6 +81,10 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 ## Suggested or assumed by Claude (not confirmed by Sam)
 
 Check these with the team. Everything except the Plinko board is a Settings change or a one-line edit.
+
+- **Cash sales (v1.8):** cash is $1 per ticket. The whole sale is cash or tickets (no split payments). Totals keeps cash out of "Tickets that should be in the boxes" and shows it on its own line; the CSV marks each sale row `paid_with` tickets or cash.
+- **Free card rule (v1.8):** counted on one customer's Clickers + Copters total (cash sales included), 1 card per full 10 tix, no cap. The panel asks for more when the next card is 1 to 3 tix away. Script line: "Win more at Plinko or Balloon Battle." Rate is in Settings (0 = off).
+- **Free card cost:** about $0.56 a card (9-card prize ≈ $5), so about 6% of the ticket money on a sale that earns one.
 
 - **Weapon unlock token.** Claude suggested a sticker or hand stamp so the crew can tell a kid already unlocked a weapon. Not decided. The tracker wording is neutral ("already unlocked"). With no token, the tracker still carries weapons into rematches automatically.
 - **Instant rematch defaults:**
@@ -100,6 +114,7 @@ Check these with the team. Everything except the Plinko board is a Settings chan
 7. Cards or vouchers wording.
 8. Controls script for the battle robots.
 9. Any new clicker designs (name and photo).
+10. A stack of Pokémon cards at the Sales table for the free card with purchase.
 
 ## Open questions for the business team
 
@@ -117,7 +132,8 @@ These are tracked with notes on the open-items page.
   - Refunds.
 - **Plinko:** drop rule and multiplier, slot payouts, tickets per drop.
 - **Prize Table:** cards per prize.
-- **Sales:** confirm prices, goals, and who follows up on backorders.
+- **Sales:** confirm prices, goals, and who follows up on backorders. Free card rate (1 per 10 tix) and the 30-tix free prize.
+- **Partner club:** which club, and what each side gives referred kids (a freebie, not a discount).
 - **Running the day:** who runs each laptop, and who exports hourly and combines at the end.
 
 ## Numbers already worked out
@@ -133,7 +149,7 @@ These are tracked with notes on the open-items page.
 ## How to resume in a new chat
 
 1. Read this file and `README.md`.
-2. Changes go on branch `claude/focused-dirac-gom1ys` in `tools/ramathon_sales_tracker/`.
+2. Changes go on branch `ramathon-carnival` in `tools/ramathon_sales_tracker/`.
 3. Run the tests before deploying (`tests/README.md`).
 4. Deploy by copying to `ramathon-sales-tracker/` on `presentations` and checking md5.
 5. Keep backorder contact info and any GitHub token out of the public repo. Player names are never exported.
@@ -141,3 +157,4 @@ These are tracked with notes on the open-items page.
 ## CHANGELOG
 
 - v1.0 (2026-10-16): Initial status and handoff after tracker v1.7.1.
+- v1.1 (2026-10-16): Tracker v1.8 (cash sale button, free Pokémon card per 10 tix). Sam's sales add-on decisions. Source branch renamed `ramathon-carnival`.
