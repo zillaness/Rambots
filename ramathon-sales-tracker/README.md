@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.2.1
+version: 1.3
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Keep the filename README.md. Append 
 
 # Ramathon Sales Tracker
 
-One web page with huge buttons for the Ram-a-thon booths: Clickers and Copters (shared sales laptop) and Balloon Battle (its own laptop). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
+One web page with huge buttons for the Ram-a-thon booths: Clickers and Copters (shared sales laptop), Balloon Battle (its own laptop) and the Prize Table (its own laptop, Pokemon cards in, prizes out). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
 
 ## Event-day links (one per laptop)
 
@@ -18,6 +18,13 @@ One web page with huge buttons for the Ram-a-thon booths: Clickers and Copters (
 |---|---|---|
 | Sales table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales | Clickers and Copters |
 | Balloon Battle | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=battle | Battle queue and matches |
+| Prize Table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=prizes | Card-for-prize trades |
+
+Each booth link keeps its **own saved data**, so two different booth links can even share one laptop (two tabs) without touching each other. Opening the **same** booth link in two tabs shows a red warning; close one.
+
+**All booths on one laptop instead?** Open the plain link (no `?booth=`), go to **Settings > This laptop runs**, and turn on the booths you need. You get one big tile per booth, one data set and one CSV.
+
+Plinko is not tracked; count its ticket bucket afterward.
 
 The page is unlisted (not on the Rambots site's landing page) and asks search engines not to index it.
 
@@ -26,6 +33,7 @@ The page is unlisted (not on the Rambots site's landing page) and asks search en
 - **Live copy:** branch `presentations`, folder `ramathon-sales-tracker/` (served by GitHub Pages).
 - **Source copy:** branch `claude/focused-dirac-gom1ys`, folder `tools/ramathon_sales_tracker/`. Edit there, test, then copy `index.html` and `sw.js` to the live folder.
 - **Clicker photos:** upload straight into the live folder `ramathon-sales-tracker/clicker_photos/` (file names in its README).
+- **Prize photos:** `ramathon-sales-tracker/prize_photos/` (any names; send the prize list and card prices to wire them up).
 
 The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) lets you pick booths in **Settings**.
 
@@ -62,10 +70,19 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 
 Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default (always 9 cards, can't be gamed by two kids cooperating); switch to **both players, per balloon** if you prefer. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
 
+## Prize Table
+
+1. **Settings > Prize Table:** check the cards per prize and, if you want live stock, type each prize's starting count (blank = not tracked).
+2. Tap the prize(s) the kid picks. The panel shows **Collect N cards**; take the cards, tap **Done · Next trade** (or Enter).
+3. With stock entered, each button shows **N left**, turns red when low, and says **None left** at zero (it still lets you log it and warns you to check the bin).
+4. **Totals** lists prizes most-popular first, cards redeemed, average cards per trade, and an estimated prize cost.
+
+Card price changes in Settings apply to new trades only. The buttons are placeholders (Small 3, Medium 6, Grand 9) until the real prize list and photos arrive.
+
 ## Everywhere
 
 - **Undo** (or Ctrl+Z / Cmd+Z) reverses the last change and says exactly what it undid.
-- **History** lists every sale, match, and walk-off. **Void** takes one out of the totals; **Restore** or Undo puts it back.
+- **History** lists every sale, trade, match, and walk-off. **Void** takes one out of the totals; **Restore** or Undo puts it back.
 - **Totals** shows tickets expected in each box, dollars after CCA's 10%, item counts with walk-offs, battle cards paid and cards per ticket (target about 1), and the age/gender breakdown.
 
 ## Prices
@@ -84,7 +101,7 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 | Balloon Battle match (per player) | 5 |
 | Instant rematch (per player) | 6 |
 | Extra weapon | 1 |
-| Plinko play (off by default) | 1 |
+| Prize Table (cards, not tix) | Small 3, Medium 6, Grand 9 (editable) |
 
 ## End of the event
 
@@ -93,14 +110,14 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 3. Paste all CSVs into one sheet; each row carries its station name. Player names are never exported.
 4. Inventory check per item: before − after − walk-offs = sold.
 
-CSV columns: `station, record (S = sale, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason`.
+CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason, cards_redeemed`.
 
 ## Known limits
 
 - Data lives in each laptop's browser. Clearing browser data deletes it, so export before anyone touches browser settings.
 - Undo history resets when the page reloads (the saved data doesn't).
-- Opened as a local file (double-click), it saves fine but won't reopen offline and won't show photos; use the hosted link.
-- Each laptop keeps its own data. The hosted link and a local copy are different storage, so stick to the link.
+- A local copy works too if you download the whole `ramathon-sales-tracker` folder (photos included) and always open it from the same place; it just won't pick up updates. The hosted link is simpler.
+- Each laptop, and each booth link, keeps its own data. The hosted link and a local copy are different storage, so pick one and stick to it.
 
 ## CHANGELOG
 
@@ -108,3 +125,4 @@ CSV columns: `station, record (S = sale, B = battle, W = walk-off), status, open
 - v1.1 (2026-10-16): Balloon Battle queue and matches, per-box ticket split, walk-off log, net $, booth links, offline reopen, clicker photo folder.
 - v1.2 (2026-10-16): Photo button per clicker design, priced together; live on GitHub Pages (presentations branch); Xiao long bao renamed Dumpling.
 - v1.2.1 (2026-10-16): Booths renamed Clickers and Copters; all 13 clicker photos live.
+- v1.3 (2026-10-16): Prize Table replaces Plinko (cards in, prizes out, live stock, most-popular prizes); each booth link has its own storage; fixed two-tab undo.

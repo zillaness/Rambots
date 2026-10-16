@@ -1,11 +1,11 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.2.1
+  version: 1.3
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
-  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: fidget clicker (per-design photo buttons) and pull copter sales, Balloon Battle queue and matches, walk-offs, optional plinko.
+  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: Clickers (per-design photo buttons) and Copters sales, Balloon Battle queue and matches, Prize Table card redemptions, walk-offs.
   ai_update: Update last_updated and version. Keep the filename index.html so volunteers' links never break. Append a changelog entry at the bottom.
 -->
 <html lang="en">
@@ -228,6 +228,23 @@
   .ph-none { font-size: clamp(36px, 4.5vw, 72px); font-weight: 700; color: var(--rb-gray-300); }
   .photo-item .i-name { font-size: clamp(16px, 1.6vw, 26px); line-height: 1.1; }
   .photo-item .badge { top: 10px; left: 10px; z-index: 1; }
+  .photo-item .i-cards { font-size: clamp(16px, 1.6vw, 26px); font-weight: 700; color: var(--rb-red); }
+  .prize-item { background: #fff; box-shadow: inset 0 0 0 4px var(--rb-red), var(--rb-shadow-md); }
+  .stock {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 16px;
+    font-weight: 700;
+    background: #fff;
+    color: var(--rb-ink);
+    border: 2px solid var(--rb-ink);
+  }
+  .stock.low { background: var(--rb-red); color: #fff; border-color: var(--rb-red); }
+  .stock.out { background: var(--rb-ink); color: #fff; }
   .group-row {
     display: flex;
     justify-content: space-between;
@@ -585,6 +602,7 @@
   .nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
   .nums label { display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 700; color: var(--rb-gray-700); }
   .nums input { width: 100%; }
+  .field input.mini { width: 120px; font-size: 20px; padding: 8px 10px; text-align: right; }
   .toggles { display: flex; flex-wrap: wrap; gap: 10px; }
   .toggle {
     min-height: 56px;
@@ -663,6 +681,15 @@ const CLICKER_DESIGNS = [
   ['burger', 'Burger'],
 ];
 const PHOTO_DIR = 'clicker_photos/';
+
+// Prize Table: [id, button label, cards]. Photos go in prize_photos/<id>.jpg.
+// Placeholders until the real prize list and photos arrive. Card prices and
+// starting stock can be changed per laptop in Settings.
+const PRIZES = [
+  ['small', 'Small prize', 3],
+  ['medium', 'Medium prize', 6],
+  ['grand', 'Grand prize', 9],
+];
 const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
 
 const CATEGORIES = [
@@ -688,11 +715,10 @@ const CATEGORIES = [
   },
   { id: 'battle', kind: 'battle', name: 'Balloon Battle', theme: 'ink', defaultOn: false },
   {
-    id: 'plinko', kind: 'sale', name: 'Plinko', theme: 'paper', defaultOn: false,
-    hint: '1 tix per play',
-    items: [
-      { id: 'plinko', name: 'Plinko play', price: 1, style: 'outline' },
-    ],
+    id: 'prizes', kind: 'prizes', name: 'Prize Table', theme: 'paper', defaultOn: false, layout: 'photos',
+    hint: 'Trade Pokemon cards for prizes',
+    tip: 'Tap a prize = +1<br>Collect the cards shown on the right',
+    items: PRIZES.map(([id, name, cards]) => ({ id: 'prize_' + id, name, cards, photo: id, photoDir: 'prize_photos/' })),
   },
 ];
 
@@ -724,15 +750,15 @@ const WALKOFF_REASONS = [
   { id: 'other', label: 'Other' },
 ];
 
-const STORAGE_KEY = 'rambots_ramathon_sales_v1';
-const DATA_KEYS = ['customers', 'currentId', 'nextNo', 'walkoffs', 'nextWalkoffNo',
+const STORAGE_BASE = 'rambots_ramathon_sales_v1';
+const DATA_KEYS = ['customers', 'currentId', 'nextNo', 'tradeId', 'nextTradeNo', 'walkoffs', 'nextWalkoffNo',
   'queue', 'matches', 'matchId', 'lastMatchId', 'nextMatchNo'];
 
 /* ==========================================================================
    Lookups and pricing
    ========================================================================== */
 const ITEMS = {};
-CATEGORIES.filter(c => c.kind === 'sale').forEach(cat => cat.items.forEach(it => { ITEMS[it.id] = Object.assign({ cat: cat.id }, it); }));
+CATEGORIES.filter(c => c.items).forEach(cat => cat.items.forEach(it => { ITEMS[it.id] = Object.assign({ cat: cat.id }, it); }));
 const catById = id => CATEGORIES.find(c => c.id === id);
 
 function groupPrice(groupId, n) {
@@ -741,10 +767,22 @@ function groupPrice(groupId, n) {
   return Math.floor(n / g.bundle.size) * g.bundle.price + g.tiers[n % g.bundle.size];
 }
 
-// Price of qty of one item bought on its own (group items use the tier price).
+// Prize card price: the Settings override if set, else the PRIZES default.
+function cardsFor(itemId) {
+  const o = state.settings.prizes[itemId];
+  return o && Number.isFinite(o.cards) ? o.cards : ITEMS[itemId].cards;
+}
+const isPrize = itemId => ITEMS[itemId].cards != null;
+const kindOf = itemId => (isPrize(itemId) ? 'trade' : 'sale');
+// A prize line remembers its card price, so editing it later never rewrites past trades.
+const newLine = (itemId, qty) => (isPrize(itemId) ? { item: itemId, qty, unit: cardsFor(itemId) } : { item: itemId, qty });
+
+// Price of qty of one item bought on its own (group items use the tier price;
+// prizes are priced in cards).
 function linePrice(itemId, qty) {
   const it = ITEMS[itemId];
   if (!it || qty <= 0) return 0;
+  if (it.cards != null) return cardsFor(itemId) * qty;
   return it.group ? groupPrice(it.group, qty) : it.price * qty;
 }
 
@@ -755,6 +793,7 @@ function lineTixList(c) {
   const sofar = {};
   return c.lines.map(l => {
     const it = ITEMS[l.item];
+    if (l.unit != null) return l.unit * l.qty;
     if (!it.group) return it.price * l.qty;
     const before = sofar[it.group] || 0;
     sofar[it.group] = before + l.qty;
@@ -782,8 +821,8 @@ function defaultState() {
   const cats = {};
   CATEGORIES.forEach(c => { cats[c.id] = c.defaultOn !== false; });
   return {
-    settings: { station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS) },
-    customers: [], currentId: null, nextNo: 1,
+    settings: { station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS), prizes: {} },
+    customers: [], currentId: null, nextNo: 1, tradeId: null, nextTradeNo: 1,
     walkoffs: [], nextWalkoffNo: 1,
     queue: [], matches: [], matchId: null, lastMatchId: null, nextMatchNo: 1,
     lastExport: null,
@@ -798,13 +837,19 @@ function hydrate(raw) {
   saved.settings = Object.assign({}, base.settings, ss, {
     cats: Object.assign({}, base.settings.cats, ss.cats || {}),
     battle: Object.assign({}, base.settings.battle, ss.battle || {}),
+    prizes: Object.assign({}, ss.prizes || {}),
   });
   const merged = Object.assign(base, saved);
-  // A design removed or renamed in CLICKER_DESIGNS would otherwise break saved
-  // sales on this laptop; count those as "Other design" instead.
-  const fix = id => (ITEMS[id] || !String(id).startsWith('clicker') ? id : 'clicker');
-  merged.customers.forEach(c => { c.lines.forEach(l => { l.item = fix(l.item); }); });
+  // An item removed or renamed in the config would otherwise break saved data
+  // on this laptop: an old clicker design counts as "Other design"; anything
+  // else that no longer exists (e.g. Plinko) is dropped.
+  const fix = id => (ITEMS[id] ? id : (String(id).startsWith('clicker') ? 'clicker' : null));
+  merged.customers.forEach(c => {
+    c.lines.forEach(l => { l.item = fix(l.item); });
+    c.lines = c.lines.filter(l => l.item);
+  });
   merged.walkoffs.forEach(w => { w.item = fix(w.item); });
+  merged.walkoffs = merged.walkoffs.filter(w => w.item);
   return merged;
 }
 
@@ -826,14 +871,17 @@ function save() {
   }
 }
 
-// A booth link (index.html?booth=sales or ?booth=battle) locks this laptop to
-// its booth so nobody has to touch Settings on the day.
+// A booth link (index.html?booth=sales, ?booth=battle or ?booth=prizes) locks
+// this laptop to its booth so nobody has to touch Settings on the day. Each
+// booth link keeps its own saved data, so two booth tabs never collide.
 const BOOTH_PRESETS = {
   sales: { cats: ['clickers', 'copters'], station: 'Sales table' },
   battle: { cats: ['battle'], station: 'Balloon Battle' },
+  prizes: { cats: ['prizes'], station: 'Prize Table' },
 };
 const boothParam = new URLSearchParams(location.search).get('booth');
 const preset = BOOTH_PRESETS[boothParam] || null;
+const STORAGE_KEY = preset ? `${STORAGE_BASE}_${boothParam}` : STORAGE_BASE;
 
 function applyPreset() {
   if (!preset) return;
@@ -881,40 +929,70 @@ function undo() {
 
 const now = () => new Date().toISOString();
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-const current = () => state.customers.find(c => c.id === state.currentId) || null;
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
-function ensureCurrent() {
-  let c = current();
+// Two kinds of "customer": a sale (paid in tickets) and a prize trade (paid in
+// cards). Each kind has its own open record and numbering.
+const curKey = kind => (kind === 'trade' ? 'tradeId' : 'currentId');
+const kindOfCustomer = c => c.kind || 'sale';
+const currentOf = kind => state.customers.find(c => c.id === state[curKey(kind)]) || null;
+const current = () => currentOf('sale');
+const activeKind = () => (view.screen === 'prizes' ? 'trade' : 'sale');
+const unitWord = kind => (kind === 'trade' ? 'cards' : 'tix');
+const recordWord = kind => (kind === 'trade' ? 'Trade' : 'Customer');
+
+function ensureCurrent(kind) {
+  let c = currentOf(kind);
   if (!c) {
     c = {
-      id: uid(), no: state.nextNo++, station: state.settings.station,
+      id: uid(), kind, no: kind === 'trade' ? state.nextTradeNo++ : state.nextNo++, station: state.settings.station,
       openedAt: now(), closedAt: null, lines: [], age: null, gender: null, voided: false,
     };
     state.customers.push(c);
-    state.currentId = c.id;
+    state[curKey(kind)] = c.id;
   }
   return c;
+}
+
+// Prize stock: starting count from Settings minus every trade line (open
+// trades included). null = not tracked.
+function stockStart(itemId) {
+  const o = state.settings.prizes[itemId];
+  return o && Number.isFinite(o.stock) ? o.stock : null;
+}
+function stockLeft(itemId) {
+  const start = stockStart(itemId);
+  if (start == null) return null;
+  return start - state.customers.filter(c => kindOfCustomer(c) === 'trade' && !c.voided).reduce((s, c) => s + qtyOf(c, itemId), 0);
 }
 
 /* ==========================================================================
    Sale actions
    ========================================================================== */
+function stockWarning(itemId) {
+  if (!isPrize(itemId)) return;
+  const left = stockLeft(itemId);
+  if (left != null && left < 0) toast(`Count says no ${ITEMS[itemId].name} left. Check the bin.`, 'warn');
+}
+
 function addItem(itemId, n) {
   const it = ITEMS[itemId];
-  const before = current() ? customerTotal(current()) : 0;
+  const kind = kindOf(itemId);
+  const before = currentOf(kind) ? customerTotal(currentOf(kind)) : 0;
   commit(() => {
-    const c = ensureCurrent();
+    const c = ensureCurrent(kind);
     const line = c.lines.find(l => l.item === itemId);
-    if (line) line.qty += n; else c.lines.push({ item: itemId, qty: n });
-    return `+${n} ${it.name} (+${customerTotal(c) - before} tix)`;
+    if (line) line.qty += n; else c.lines.push(newLine(itemId, n));
+    return `+${n} ${it.name} (+${customerTotal(c) - before} ${unitWord(kind)})`;
   });
   view.pulse = itemId;
   render();
+  stockWarning(itemId);
 }
 
 function removeOne(itemId) {
-  const c = current();
+  const kind = kindOf(itemId);
+  const c = currentOf(kind);
   if (!c) return;
   const it = ITEMS[itemId];
   const before = customerTotal(c);
@@ -923,7 +1001,7 @@ function removeOne(itemId) {
     if (!line) return null;
     line.qty -= 1;
     if (line.qty <= 0) c.lines = c.lines.filter(l => l !== line);
-    return `−1 ${it.name} (−${before - customerTotal(c)} tix)`;
+    return `−1 ${it.name} (−${before - customerTotal(c)} ${unitWord(kind)})`;
   });
   view.pulse = itemId;
   render();
@@ -931,22 +1009,24 @@ function removeOne(itemId) {
 
 function setQty(itemId, q) {
   const it = ITEMS[itemId];
-  const old = qtyOf(current(), itemId);
+  const kind = kindOf(itemId);
+  const old = qtyOf(currentOf(kind), itemId);
   if (q === old) { render(); return; }
   commit(() => {
-    const c = ensureCurrent();
+    const c = ensureCurrent(kind);
     const line = c.lines.find(l => l.item === itemId);
     if (q <= 0) c.lines = c.lines.filter(l => l.item !== itemId);
     else if (line) line.qty = q;
-    else c.lines.push({ item: itemId, qty: q });
+    else c.lines.push(newLine(itemId, q));
     return `${it.name}: ${old} → ${q}`;
   });
   view.pulse = itemId;
   render();
+  stockWarning(itemId);
 }
 
 function setDemo(field, val) {
-  const c = current();
+  const c = currentOf(activeKind());
   if (!c || !c.lines.length) return;
   const list = field === 'age' ? AGES : GENDERS;
   const name = field === 'age' ? 'Age' : 'Gender';
@@ -958,19 +1038,21 @@ function setDemo(field, val) {
   render();
 }
 
-function finish() {
-  const c = current();
+function finish(kind) {
+  kind = kind || activeKind();
+  const c = currentOf(kind);
   if (!c || !c.lines.length) return;
   const total = customerTotal(c);
+  const word = recordWord(kind);
   commit(() => {
     c.closedAt = now();
-    state.currentId = null;
-    return `Finished customer #${c.no} (${total} tix)`;
+    state[curKey(kind)] = null;
+    return `Finished ${word.toLowerCase()} #${c.no} (${total} ${unitWord(kind)})`;
   });
   view.screen = 'home';
   view.pulse = null;
   render();
-  toast(`Customer #${c.no} saved · ${total} tix`, 'ok');
+  toast(`${word} #${c.no} saved · ${total} ${unitWord(kind)}`, 'ok');
 }
 
 function setVoided(id, voided) {
@@ -978,7 +1060,7 @@ function setVoided(id, voided) {
   if (!c) return;
   const label = commit(() => {
     c.voided = voided;
-    return `${voided ? 'Voided' : 'Restored'} customer #${c.no}`;
+    return `${voided ? 'Voided' : 'Restored'} ${recordWord(kindOfCustomer(c)).toLowerCase()} #${c.no}`;
   });
   render();
   toast(label + (voided ? ' · Undo brings it back' : ''), voided ? 'warn' : 'ok');
@@ -1253,7 +1335,23 @@ function waitText(index) {
    Totals
    ========================================================================== */
 function computeTotals() {
-  const sold = state.customers.filter(c => c.closedAt && !c.voided && c.lines.length);
+  const done = kind => state.customers.filter(c => kindOfCustomer(c) === kind && c.closedAt && !c.voided && c.lines.length);
+  const sold = done('sale');
+  const trades = done('trade');
+  const byPrize = {};
+  trades.forEach(c => {
+    const cards = lineTixList(c);
+    c.lines.forEach((l, i) => {
+      const b = byPrize[l.item] || (byPrize[l.item] = { given: 0, cards: 0 });
+      b.given += l.qty;
+      b.cards += cards[i];
+    });
+  });
+  const prizes = {
+    trades: trades.length,
+    given: Object.values(byPrize).reduce((s, b) => s + b.given, 0),
+    cards: Object.values(byPrize).reduce((s, b) => s + b.cards, 0),
+  };
   const byItem = {};
   const byBox = {};
   sold.forEach(c => {
@@ -1286,7 +1384,7 @@ function computeTotals() {
   if (timed.length) battle.avgMin = avg(timed.map(m => (Date.parse(m.endedAt) - Date.parse(m.startedAt)) / 60000));
   if (battle.tix) byBox.battle = battle.tix;
   const tix = Object.values(byBox).reduce((s, x) => s + x, 0);
-  return { sold, byItem, byBox, battle, matches, tix };
+  return { sold, byItem, byBox, battle, matches, tix, trades, byPrize, prizes };
 }
 
 /* ==========================================================================
@@ -1307,25 +1405,26 @@ function labelOf(list, id) { const x = list.find(v => v.id === id); return x ? x
 function buildCSV() {
   const header = ['station', 'record', 'status', 'opened_at', 'closed_at', 'category', 'item', 'qty',
     'item_tickets', 'record_total_tickets', 'age', 'gender',
-    'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason'];
+    'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason', 'cards_redeemed'];
   const rows = [header];
   const blankBattle = ['', '', '', '', ''];
   state.customers.forEach(c => {
     if (!c.lines.length) return;
-    const status = c.voided ? 'voided' : (c.closedAt ? 'sold' : 'open');
+    const trade = kindOfCustomer(c) === 'trade';
+    const status = c.voided ? 'voided' : (c.closedAt ? (trade ? 'traded' : 'sold') : 'open');
     const total = customerTotal(c);
-    const tix = lineTixList(c);
+    const amounts = lineTixList(c);
     c.lines.forEach((l, i) => {
       const it = ITEMS[l.item];
-      rows.push([c.station, 'S' + c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
-        catById(it.cat).name, it.name, l.qty, tix[i], total,
-        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['']));
+      rows.push([c.station, (trade ? 'T' : 'S') + c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
+        catById(it.cat).name, it.name, l.qty, trade ? 0 : amounts[i], trade ? 0 : total,
+        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['', trade ? amounts[i] : '']));
     });
   });
   state.walkoffs.forEach(w => {
     const it = ITEMS[w.item];
     rows.push([w.station, 'W' + w.no, w.voided ? 'voided' : 'walk-off', localStamp(w.at), localStamp(w.at),
-      catById(it.cat).name, it.name, w.qty, 0, 0, '', ''].concat(blankBattle, [labelOf(WALKOFF_REASONS, w.reason)]));
+      catById(it.cat).name, it.name, w.qty, 0, 0, '', ''].concat(blankBattle, [labelOf(WALKOFF_REASONS, w.reason), '']));
   });
   state.matches.forEach(m => {
     const status = m.voided ? 'voided' : (m.status === 'done' ? 'played' : 'in progress');
@@ -1335,9 +1434,9 @@ function buildCSV() {
       const demo = [labelOf(AGES, p.age), labelOf(GENDERS, p.gender)];
       const mode = m.mode === 'pvp' ? 'vs player' : 'vs house';
       rows.push(common.concat([m.rematch ? 'Rematch' : 'Match', 1, p.base, total], demo,
-        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '']));
+        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', '']));
       if (p.weapons) {
-        rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '']));
+        rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '', '']));
       }
     });
   });
@@ -1403,7 +1502,13 @@ function render() {
   let panel;
   if (view.screen === 'home') { main = homeView(cats, c); panel = panelView(c); }
   else if (view.screen === 'battle') { main = battleView(multi); panel = queuePanel(); }
-  else { main = catView(catById(view.screen), c, multi); panel = panelView(c); }
+  else {
+    const cat = catById(view.screen);
+    const kind = cat.kind === 'prizes' ? 'trade' : 'sale';
+    const cc = currentOf(kind);
+    main = catView(cat, cc, multi);
+    panel = panelView(cc, kind);
+  }
 
   app.innerHTML = topBar()
     + `<div class="layout"><main class="main">${main}</main>${panel}</div>`
@@ -1447,6 +1552,9 @@ function homeView(cats, c) {
       hint = `${bs().match} tix per player · rematch ${bs().rematch}`;
       if (playingMatch()) badge = 'Match in progress';
       else if (state.queue.length) badge = `${state.queue.length} in queue`;
+    } else if (cat.kind === 'prizes') {
+      const tr = currentOf('trade');
+      if (tr && tr.lines.length) badge = `${customerTotal(tr)} cards in this trade`;
     } else {
       const n = catUnits(c, cat.id);
       if (n) badge = `${n} in this sale`;
@@ -1470,13 +1578,17 @@ function catView(cat, c, canBack) {
     </div>`;
   if (cat.layout === 'photos') {
     // One photo button per design; tap the number in the right panel to type a quantity.
-    return head + `<div class="items photos">${cat.items.map(it => {
+    const cols = Math.min(5, Math.max(3, cat.items.length));
+    return head + `<div class="items photos" style="grid-template-columns:repeat(${cols},1fr)">${cat.items.map(it => {
       const q = qtyOf(c, it.id);
+      const prize = it.cards != null;
       return `<div class="tile">
-        <button class="item photo-item" data-act="add" data-item="${it.id}">
+        <button class="item photo-item${prize ? ' prize-item' : ''}" data-act="add" data-item="${it.id}">
           ${q ? `<span class="badge">×${q}</span>` : ''}
+          ${prize ? stockPill(it.id) : ''}
           <span class="ph">${photoHtml(it)}</span>
           <span class="i-name">${esc(it.name)}</span>
+          ${prize ? `<span class="i-cards">${cardsFor(it.id)} cards</span>` : ''}
         </button>
       </div>`;
     }).join('')}</div>`;
@@ -1498,7 +1610,18 @@ function catView(cat, c, canBack) {
     }).join('')}</div>`;
 }
 
-function panelView(c) {
+function stockPill(itemId) {
+  const left = stockLeft(itemId);
+  if (left == null) return '';
+  const start = stockStart(itemId);
+  const cls = left <= 0 ? ' out' : (left <= Math.max(2, Math.ceil(start * 0.2)) ? ' low' : '');
+  return `<span class="stock${cls}">${left <= 0 ? 'None left' : `${left} left`}</span>`;
+}
+
+function panelView(c, kind) {
+  kind = kind || 'sale';
+  const unit = unitWord(kind);
+  const word = recordWord(kind);
   const lines = c ? c.lines : [];
   const has = lines.length > 0;
   const total = c ? customerTotal(c) : 0;
@@ -1514,42 +1637,44 @@ function panelView(c) {
     const g = PRICE_GROUPS[gid];
     return `<div class="group-row"><span>${esc(g.name)} ×${n} together</span><b>${groupPrice(gid, n)} tix</b></div>`;
   }).join('') : '';
-  return `<aside class="panel" aria-label="Current customer">
+  return `<aside class="panel" aria-label="Current ${word.toLowerCase()}">
     <div class="p-head">
-      <div class="p-title">${c ? `Customer #${c.no}` : 'Next customer'}</div>
-      <div class="p-sub">${has ? `${plural(units, 'item')} · tap a number to type` : ''}</div>
+      <div class="p-title">${c ? `${word} #${c.no}` : `Next ${word.toLowerCase()}`}</div>
+      <div class="p-sub">${has ? `${plural(units, kind === 'trade' ? 'prize' : 'item')} · tap a number to type` : ''}</div>
     </div>
-    <div class="lines">${has ? lines.map(lineView).join('') : '<div class="empty">Tap an item to start a sale</div>'}</div>
+    <div class="lines">${has ? lines.map(lineView).join('') : `<div class="empty">${kind === 'trade' ? 'Tap a prize to start a trade' : 'Tap an item to start a sale'}</div>`}</div>
     ${groupRows}
-    <div class="total"><span class="t-label">Collect</span><span class="t-val">${total} tix</span></div>
+    <div class="total"><span class="t-label">Collect</span><span class="t-val">${total} ${unit}</span></div>
     ${split}
     ${state.settings.demographics ? demoView(c, has) : ''}
-    <button class="done" data-act="finish" ${has ? '' : 'disabled'}>Done · Next customer<small>or press Enter</small></button>
+    <button class="done" data-act="finish" ${has ? '' : 'disabled'}>Done · Next ${word.toLowerCase()}<small>or press Enter</small></button>
   </aside>`;
 }
 
 // Design photos: try each extension in turn, remember which one worked, and
 // fall back to a big letter when there is no photo yet.
 const photoState = {};
-const photoUrl = (slug, i) => `${PHOTO_DIR}${slug}.${PHOTO_EXTS[i]}`;
+const photoBase = it => (it.photoDir || PHOTO_DIR) + it.photo;
+const photoUrl = (base, i) => `${base}.${PHOTO_EXTS[i]}`;
 const photoPlaceholder = it => `<span class="ph-none" aria-hidden="true">${esc(it.photo ? it.name.charAt(0) : '?')}</span>`;
 
 function photoHtml(it) {
   if (!it.photo) return photoPlaceholder(it);
-  const s = photoState[it.photo] || (photoState[it.photo] = { i: 0, none: false });
+  const base = photoBase(it);
+  const s = photoState[base] || (photoState[base] = { i: 0, none: false });
   if (s.none) return photoPlaceholder(it);
-  return `<img alt="" draggable="false" src="${photoUrl(it.photo, s.i)}" data-photo="${it.photo}">`;
+  return `<img alt="" draggable="false" src="${photoUrl(base, s.i)}" data-photo="${base}">`;
 }
 
 document.addEventListener('error', e => {
   const img = e.target;
   if (!(img instanceof HTMLImageElement) || !img.dataset.photo) return;
-  const slug = img.dataset.photo;
-  const s = photoState[slug];
-  if (img.getAttribute('src') === photoUrl(slug, s.i)) s.i += 1;
-  if (s.i < PHOTO_EXTS.length) { img.src = photoUrl(slug, s.i); return; }
+  const base = img.dataset.photo;
+  const s = photoState[base];
+  if (img.getAttribute('src') === photoUrl(base, s.i)) s.i += 1;
+  if (s.i < PHOTO_EXTS.length) { img.src = photoUrl(base, s.i); return; }
   s.none = true;
-  const it = Object.values(ITEMS).find(x => x.photo === slug);
+  const it = Object.values(ITEMS).find(x => x.photo && photoBase(x) === base);
   img.outerHTML = photoPlaceholder(it);
 }, true);
 
@@ -1558,7 +1683,8 @@ function lineView(l) {
   return `<div class="line${view.pulse === l.item ? ' pulse' : ''}">
     <div class="l-info">
       <div class="l-name">${esc(it.name)}</div>
-      <div class="l-sub">${it.group ? PRICE_GROUPS[it.group].unit : `<b>${linePrice(l.item, l.qty)} tix</b> · ${it.price} each`}</div>
+      <div class="l-sub">${it.group ? PRICE_GROUPS[it.group].unit
+        : (l.unit != null ? `<b>${l.unit * l.qty} cards</b> · ${l.unit} each` : `<b>${linePrice(l.item, l.qty)} tix</b> · ${it.price} each`)}</div>
     </div>
     <div class="l-ctl">
       <button class="step" data-act="minus" data-item="${l.item}" aria-label="Remove one ${esc(it.name)}">−</button>
@@ -1716,7 +1842,7 @@ function queuePanel() {
 
 function bannerView() {
   if (!storageOK) return '<div class="banner">NOT SAVING: this browser is blocking storage. Close this window and open the tracker in a normal (not private) window.</div>';
-  if (otherTab) return '<div class="banner">The tracker is open in another tab or window. Close the extra one so sales are not lost.</div>';
+  if (otherTab) return '<div class="banner">This booth is open in another tab or window. Close the extra one. Undo history was cleared to protect its sales.</div>';
   return '';
 }
 
@@ -1740,12 +1866,17 @@ function dialogHead(title) {
 
 function keypadView(m) {
   const it = ITEMS[m.item];
-  const cur = qtyOf(current(), m.item);
+  const kind = kindOf(m.item);
+  const where = kind === 'trade' ? 'trade' : 'sale';
+  const cur = qtyOf(currentOf(kind), m.item);
   const q = m.value === '' ? null : parseInt(m.value, 10);
   let price;
-  if (q == null) price = `Currently ${cur} in this sale`;
-  else if (q === 0) price = 'Removes it from this sale';
-  else if (it.group) {
+  if (q == null) price = `Currently ${cur} in this ${where}`;
+  else if (q === 0) price = `Removes it from this ${where}`;
+  else if (it.cards != null) {
+    const line = currentOf(kind) && currentOf(kind).lines.find(l => l.item === m.item);
+    price = `= ${(line ? line.unit : cardsFor(m.item)) * q} cards`;
+  } else if (it.group) {
     const n = groupUnits(current(), it.group) - cur + q;
     price = `${n} ${PRICE_GROUPS[it.group].unit}${n === 1 ? '' : 's'} together = ${groupPrice(it.group, n)} tix`;
   } else price = `= ${linePrice(m.item, q)} tix`;
@@ -1811,6 +1942,21 @@ function totalsView() {
     return body + `<tr class="sub"><td>${esc(cat.name)} total</td><td class="num">${u}</td><td class="num">${w || ''}</td><td class="num">${tx}</td></tr>`;
   }).join('');
 
+  const pz = t.prizes;
+  const prizeRows = Object.keys(t.byPrize).sort((a, b2) => t.byPrize[b2].given - t.byPrize[a].given).map(id => {
+    const r = t.byPrize[id];
+    const left = stockLeft(id);
+    return `<tr><td>${esc(ITEMS[id].name)}</td><td class="num">${r.given}</td><td class="num">${r.cards}</td><td class="num">${left == null ? '' : left}</td></tr>`;
+  }).join('');
+  const prizeBlock = pz.trades ? `<h3>Prize Table</h3>
+    <div class="big-stats">
+      <div class="stat"><div class="s-val">${pz.given}</div><div class="s-label">Prizes given (${plural(pz.trades, 'trade')})</div></div>
+      <div class="stat"><div class="s-val">${pz.cards}</div><div class="s-label">Cards redeemed (≈ ${money(pz.cards * PRIZE_DOLLARS_PER_CARD)} in prizes)</div></div>
+      <div class="stat"><div class="s-val">${(pz.cards / pz.trades).toFixed(1)}</div><div class="s-label">Average cards per trade</div></div>
+    </div>
+    <table><thead><tr><th>Prize (most popular first)</th><th class="num">Given</th><th class="num">Cards</th><th class="num">Left</th></tr></thead><tbody>${prizeRows}</tbody></table>
+    ${t.battle.cards ? `<p class="note">On this laptop: Balloon Battle paid out ${t.battle.cards} cards; ${pz.cards} redeemed.</p>` : ''}` : '';
+
   const b = t.battle;
   const battleBlock = b.matches ? `<h3>Balloon Battle</h3>
     <div class="big-stats">
@@ -1821,6 +1967,9 @@ function totalsView() {
     </div>
     <p class="note">${plural(b.players, 'player')} · ${plural(b.weapons, 'extra weapon')} sold · ${b.tix} tix (≈ ${money(b.tix * NET_PER_TICKET)} after CCA's 10%) vs ≈ ${money(b.cards * PRIZE_DOLLARS_PER_CARD)} in prizes.</p>` : '';
 
+  // Prize-only laptops have no tickets; leave the ticket figures out there.
+  const hasTix = t.tix > 0 || t.sold.length > 0 || b.players > 0 || enabledCats().some(cat => cat.kind !== 'prizes');
+
   // Demographics: sale units and battle players per age / gender group.
   const usedSale = CATEGORIES.filter(cat => cat.kind === 'sale' && cat.items.some(it => t.byItem[it.id] && t.byItem[it.id].units));
   const battlePlayers = t.matches.flatMap(m => m.players);
@@ -1829,32 +1978,37 @@ function totalsView() {
     const body = groups.map(g => {
       const cs = t.sold.filter(c => (c[field] || null) === g.id);
       const ps = battlePlayers.filter(p => (p[field] || null) === g.id);
-      if (!cs.length && !ps.length) return '';
+      const ts = t.trades.filter(c => (c[field] || null) === g.id);
+      if (!cs.length && !ps.length && !ts.length) return '';
       const cells = usedSale.map(cat => `<td class="num">${cs.reduce((s, c) => s + catUnits(c, cat.id), 0)}</td>`).join('');
       const battleCell = b.matches ? `<td class="num">${ps.length}</td>` : '';
+      const prizeCell = pz.trades ? `<td class="num">${ts.reduce((s, c) => s + unitsOf(c), 0)}</td>` : '';
       const tix = cs.reduce((s, c) => s + customerTotal(c), 0) + ps.reduce((s, p) => s + p.tix, 0);
-      return `<tr><td>${esc(g.label)}</td>${cells}${battleCell}<td class="num">${tix}</td></tr>`;
+      return `<tr><td>${esc(g.label)}</td>${cells}${battleCell}${prizeCell}${hasTix ? `<td class="num">${tix}</td>` : ''}</tr>`;
     }).join('');
     if (!body) return '';
-    return `<h3>${title}</h3><table><thead><tr><th>${title}</th>${usedSale.map(cat => `<th class="num">${esc(cat.name)} units</th>`).join('')}${b.matches ? '<th class="num">Battle players</th>' : ''}<th class="num">Tix</th></tr></thead><tbody>${body}</tbody></table>`;
+    return `<h3>${title}</h3><table><thead><tr><th>${title}</th>${usedSale.map(cat => `<th class="num">${esc(cat.name)} units</th>`).join('')}${b.matches ? '<th class="num">Battle players</th>' : ''}${pz.trades ? '<th class="num">Prizes</th>' : ''}${hasTix ? '<th class="num">Tix</th>' : ''}</tr></thead><tbody>${body}</tbody></table>`;
   };
 
   const pending = [];
   if (open && open.lines.length) pending.push(`customer #${open.no} still open (${customerTotal(open)} tix, not counted yet)`);
   if (playing) pending.push(`match #${playing.no} in progress (its ${matchTix(playing)} tix are counted)`);
+  const openTrade = currentOf('trade');
+  if (openTrade && openTrade.lines.length) pending.push(`trade #${openTrade.no} still open (${customerTotal(openTrade)} cards, not counted yet)`);
 
   return `<div class="dialog" role="dialog" aria-label="Totals">
     ${dialogHead('Totals · ' + esc(state.settings.station))}
-    <div class="big-stats">
+    ${hasTix ? `<div class="big-stats">
       <div class="stat"><div class="s-val">${t.tix}</div><div class="s-label">Tickets that should be in the boxes</div></div>
       <div class="stat"><div class="s-val">${money(t.tix * NET_PER_TICKET)}</div><div class="s-label">To Rambots after CCA's 10%</div></div>
       <div class="stat"><div class="s-val">${t.sold.length + b.players}</div><div class="s-label">Customers + battle players</div></div>
-    </div>
+    </div>` : ''}
     ${pending.length ? `<p class="note">Note: ${pending.join('; ')}.</p>` : ''}
-    ${boxRows ? `<h3>Per ticket box</h3><table><thead><tr><th>Box</th><th class="num">Tix</th><th class="num">After 10%</th></tr></thead><tbody>${boxRows}</tbody></table>` : '<p class="note">Nothing sold yet.</p>'}
+    ${boxRows ? `<h3>Per ticket box</h3><table><thead><tr><th>Box</th><th class="num">Tix</th><th class="num">After 10%</th></tr></thead><tbody>${boxRows}</tbody></table>` : (pz.trades ? '' : '<p class="note">Nothing sold yet.</p>')}
     ${itemRows ? `<h3>Items</h3><table><thead><tr><th>Item</th><th class="num">Sold</th><th class="num">Walk-offs</th><th class="num">Tix</th></tr></thead><tbody>${itemRows}</tbody></table>
       <p class="note">Inventory check: before − after − walk-offs should equal sold.</p>` : ''}
     ${battleBlock}
+    ${prizeBlock}
     ${demoTable('Age', AGES, 'age')}
     ${demoTable('Gender', GENDERS, 'gender')}
     <p class="note">Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}. Export every hour or so as a backup.</p>
@@ -1880,10 +2034,10 @@ function historyView() {
           : `<button class="btn slim" data-act="void" data-id="${c.id}">Void</button>`);
       return `<div class="h-row${c.voided ? ' voided' : ''}${isOpen ? ' open' : ''}">
         <div class="h-main">
-          <div class="h-top">Sale #${c.no} · ${fmtTime(c.closedAt || c.openedAt)}${tags ? ' · ' + esc(tags) : ''}${c.voided ? ' · VOIDED' : ''}</div>
+          <div class="h-top">${kindOfCustomer(c) === 'trade' ? 'Trade' : 'Sale'} #${c.no} · ${fmtTime(c.closedAt || c.openedAt)}${tags ? ' · ' + esc(tags) : ''}${c.voided ? ' · VOIDED' : ''}</div>
           <div class="h-items">${esc(items)}</div>
         </div>
-        <div class="h-tix">${customerTotal(c)} tix</div>
+        <div class="h-tix">${customerTotal(c)} ${unitWord(kindOfCustomer(c))}</div>
         ${btn}
       </div>`;
     }
@@ -1963,6 +2117,20 @@ function settingsView() {
       <p class="note">Winner only can't be gamed by two kids cooperating and costs the same every match. Both-per-balloon pays up to ${(BALLOONS * 2 - 1) * b.cardsPerPop} cards on ${b.match * 2} tix.</p>
     </div>
     <div class="field">
+      <div class="f-label">Prize Table: cards per prize and starting stock (blank = don't track stock)</div>
+      <table><thead><tr><th>Prize</th><th class="num">Cards</th><th class="num">Starting stock</th><th class="num">Left now</th></tr></thead><tbody>
+      ${CATEGORIES.find(cat => cat.id === 'prizes').items.map(it => {
+        const st = stockStart(it.id);
+        const left = stockLeft(it.id);
+        return `<tr><td>${esc(it.name)}</td>
+          <td class="num"><input class="mini" type="number" id="pz-cards-${it.id}" min="0" max="999" value="${cardsFor(it.id)}"></td>
+          <td class="num"><input class="mini" type="number" id="pz-stock-${it.id}" min="0" max="9999" value="${st == null ? '' : st}" placeholder="not tracked"></td>
+          <td class="num">${left == null ? '' : left}</td></tr>`;
+      }).join('')}
+      </tbody></table>
+      <p class="note">Card price changes apply to new trades only.</p>
+    </div>
+    <div class="field">
       <div class="f-label">Data on this laptop</div>
       <p class="note">${plural(n, 'record')} saved. Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}.</p>
       <div class="row">
@@ -1977,7 +2145,7 @@ function confirmClearView() {
   const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length;
   return `<div class="dialog narrow" role="dialog" aria-label="Confirm delete">
     ${dialogHead('Delete all data?')}
-    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, battles, walk-offs, queue) from this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
+    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, trades, battles, walk-offs, queue) from this booth on this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
     <div class="row">
       <button class="btn" data-act="open" data-modal="settings">Cancel</button>
       <button class="btn danger" data-act="clear">Delete all ${n}</button>
@@ -2033,7 +2201,7 @@ const actions = {
   keypad: d => { view.modal = { type: 'keypad', item: d.item, value: '' }; render(); },
   key: d => keypadPress(d.key),
   kpset: keypadSet,
-  finish,
+  finish: () => finish(),
   demo: d => setDemo(d.field, d.val),
   open: d => { view.modal = { type: d.modal }; render(); },
   close: () => { view.modal = null; render(); },
@@ -2105,6 +2273,17 @@ document.addEventListener('change', e => {
     save();
     render();
     toast('Station name saved', 'ok');
+  } else if (/^pz-(cards|stock)-/.test(e.target.id)) {
+    const [, what, itemId] = e.target.id.match(/^pz-(cards|stock)-(.+)$/);
+    const raw = e.target.value.trim();
+    const v = parseInt(raw, 10);
+    const o = state.settings.prizes[itemId] || (state.settings.prizes[itemId] = {});
+    if (what === 'stock' && raw === '') o.stock = null;
+    else if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    else o[what] = v;
+    save();
+    render();
+    toast(what === 'cards' ? 'Saved · applies to new trades' : 'Starting stock saved', 'ok');
   } else if (BATTLE_FIELDS[e.target.id]) {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
@@ -2152,13 +2331,16 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Two tabs on one laptop would overwrite each other. Follow the other tab's
-// saves and warn loudly.
+// Two tabs of the same booth link would overwrite each other. Follow the other
+// tab's saves and warn loudly. (Different booth links use separate storage.)
 window.addEventListener('storage', e => {
   if (e.key !== STORAGE_KEY || !e.newValue) return;
   try {
     state = hydrate(e.newValue);
     applyPreset();
+    // This tab's undo snapshots predate the other tab's changes; undoing one
+    // would erase them, so drop the history.
+    undoStack.length = 0;
     otherTab = true;
     render();
   } catch (err) { /* ignore malformed */ }
@@ -2190,6 +2372,10 @@ render();
   (webp/jpg/jpeg/png, letter tile until uploaded). Xiao long bao renamed Dumpling. Added noindex.
   v1.2.1 (2026-10-16): Booths renamed Clickers and Copters. LEGO and Spam musubi photos use the uploaded
   file names (lego.jpg, musubi.jpg). Saved sales of a removed design now load as "Other design".
+  v1.3 (2026-10-16): Prize Table replaces Plinko: photo button per prize (placeholders until the prize list
+  arrives), trades collected in cards, optional starting stock with live "N left" / low / none-left pills,
+  most-popular prizes and cards redeemed in Totals, T rows + cards_redeemed column in the CSV. ?booth=prizes
+  link. Each booth link keeps its own storage. Fixed: undo in one tab could erase another tab's changes.
 -->
 </body>
 </html>
