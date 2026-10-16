@@ -1,10 +1,10 @@
 ---
 file: README.md
-version: 1.1
+version: 1.2
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
-description: How to set up, run, and export the Ramathon sales tracker (tools/ramathon_sales_tracker/index.html).
+description: How to set up, run, and export the Ramathon sales tracker (live at zillaness.github.io/Rambots/ramathon-sales-tracker/).
 ai_update: Update last_updated and version. Keep the filename README.md. Append changelog at bottom.
 ---
 
@@ -14,10 +14,18 @@ One web page with huge buttons for the Ram-a-thon booths: fidget clickers and pu
 
 ## Event-day links (one per laptop)
 
-| Laptop | Link ends in | What it shows |
+| Laptop | Link | What it shows |
 |---|---|---|
-| Sales table | `?booth=sales` | Fidget Clickers and Pull Copters |
-| Balloon Battle | `?booth=battle` | Battle queue and matches |
+| Sales table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales | Fidget Clickers and Pull Copters |
+| Balloon Battle | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=battle | Battle queue and matches |
+
+The page is unlisted (not on the Rambots site's landing page) and asks search engines not to index it.
+
+## Where the files live
+
+- **Live copy:** branch `presentations`, folder `ramathon-sales-tracker/` (served by GitHub Pages).
+- **Source copy:** branch `claude/focused-dirac-gom1ys`, folder `tools/ramathon_sales_tracker/`. Edit there, test, then copy `index.html` and `sw.js` to the live folder.
+- **Clicker photos:** upload straight into the live folder `ramathon-sales-tracker/clicker_photos/` (file names in its README).
 
 The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) lets you pick booths in **Settings**.
 
@@ -33,14 +41,14 @@ The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) 
 | Do this | What happens |
 |---|---|
 | Tap **Fidget Clickers** or **Pull Copters** | Opens that booth's buttons |
-| Tap an item | Adds 1 to the current customer |
-| **# Type qty** (or the number in the right panel) | Keypad to punch in an exact quantity |
+| Tap an item (clickers: tap the design's photo) | Adds 1 to the current customer |
+| **# Type qty** (pull copters) or the number in the right panel | Keypad to punch in an exact quantity |
 | **−** / **+** in the right panel | Adjust one line |
 | **Kid / Teen / Adult**, **Male / Female** | Optional. Tag who the items are *for*. Tap again to clear |
 | **Done · Next customer** (or Enter) | Saves the sale, resets the panel |
 | **Log walk-off** | Stock that left without tickets (demo unit, giveaway, broken) |
 
-The panel shows **Collect N tix**. When one customer buys from both booths it also shows how many tickets go in each booth's box. Clicker tiers apply automatically: 1 = 4, 2 = 7, 3 = 10, then they stack (4 = 14, 5 = 17, 6 = 20).
+The panel shows **Collect N tix**. When one customer buys from both booths it also shows how many tickets go in each booth's box. Clickers are priced together across designs (any mix): 1 = 4, 2 = 7, 3 = 10, then they stack (4 = 14, 5 = 17, 6 = 20). A design without a photo shows its first letter; **Other design** catches anything not on the list.
 
 ## Balloon Battle
 
@@ -62,11 +70,11 @@ Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by de
 
 ## Prices
 
-Sale prices live in `CATEGORIES` at the top of the script; Balloon Battle prices live in Settings.
+Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (clicker designs in `CLICKER_DESIGNS`); Balloon Battle prices live in Settings.
 
 | Item | Tix |
 |---|---|
-| Fidget clicker | 1 = 4, 2 = 7, 3 = 10, stacked after 3 |
+| Fidget clicker (any design) | 1 = 4, 2 = 7, 3 = 10, stacked after 3 |
 | Pull copter full kit (launcher + propeller + ripcord) | 5 |
 | Kit with toroidal propeller | 6 |
 | Launcher only | 3 |
@@ -91,9 +99,11 @@ CSV columns: `station, record (S = sale, B = battle, W = walk-off), status, open
 
 - Data lives in each laptop's browser. Clearing browser data deletes it, so export before anyone touches browser settings.
 - Undo history resets when the page reloads (the saved data doesn't).
-- Opened as a local file (double-click), it saves fine but won't reopen offline from a bookmark; use the hosted link.
+- Opened as a local file (double-click), it saves fine but won't reopen offline and won't show photos; use the hosted link.
+- Each laptop keeps its own data. The hosted link and a local copy are different storage, so stick to the link.
 
 ## CHANGELOG
 
 - v1.0 (2026-10-16): Initial release for Ram-a-thon 2026.
 - v1.1 (2026-10-16): Balloon Battle queue and matches, per-box ticket split, walk-off log, net $, booth links, offline reopen, clicker photo folder.
+- v1.2 (2026-10-16): Photo button per clicker design, priced together; live on GitHub Pages (presentations branch); Xiao long bao renamed Dumpling.

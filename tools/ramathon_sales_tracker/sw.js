@@ -1,6 +1,6 @@
 /**
  * @file sw.js (Ramathon sales tracker offline cache)
- * @version 1.0
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -46,7 +46,9 @@ async function networkFirst(req) {
     if (res && res.ok) cache.put(req, res.clone());
     return res;
   } catch (err) {
-    const hit = (await cache.match(req, { ignoreSearch: true })) || (await cache.match('./index.html'));
+    let hit = await cache.match(req, { ignoreSearch: true });
+    // Only page loads fall back to the tracker; a missing photo must stay missing.
+    if (!hit && req.mode === 'navigate') hit = await cache.match('./index.html');
     if (hit) return hit;
     throw err;
   }
@@ -54,4 +56,5 @@ async function networkFirst(req) {
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial release. Network-first with 4 s timeout, cached fallback for the tracker page.
+ * v1.1 (2026-10-16): Fall back to the tracker page only for page loads, so missing photos stay missing.
  */

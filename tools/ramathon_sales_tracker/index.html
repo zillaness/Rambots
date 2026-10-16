@@ -1,17 +1,18 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.1
+  version: 1.2
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
-  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: fidget clicker and pull copter sales, Balloon Battle queue and matches, walk-offs, optional plinko.
+  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: fidget clicker (per-design photo buttons) and pull copter sales, Balloon Battle queue and matches, walk-offs, optional plinko.
   ai_update: Update last_updated and version. Keep the filename index.html so volunteers' links never break. Append a changelog entry at the bottom.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <title>Ramathon Sales</title>
 <style>
   :root {
@@ -210,6 +211,34 @@
   .style-outline { background: #fff; color: var(--rb-red); box-shadow: inset 0 0 0 5px var(--rb-red), var(--rb-shadow-md); }
   .style-accent { background: var(--rb-yellow); color: var(--rb-ink); }
   .style-ink { background: var(--rb-ink); color: #fff; }
+  .items.photos { grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .photo-item { padding: 8px 8px 10px; gap: 6px; justify-content: flex-start; background: var(--rb-yellow); color: var(--rb-ink); }
+  .photo-item .ph {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .photo-item .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph-none { font-size: clamp(36px, 4.5vw, 72px); font-weight: 700; color: var(--rb-gray-300); }
+  .photo-item .i-name { font-size: clamp(16px, 1.6vw, 26px); line-height: 1.1; }
+  .photo-item .badge { top: 10px; left: 10px; z-index: 1; }
+  .group-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    background: var(--rb-yellow-100);
+    border: 2px solid var(--rb-yellow);
+    border-radius: 12px;
+    padding: 8px 12px;
+  }
   .typeqty {
     position: absolute;
     right: 12px;
@@ -576,6 +605,7 @@
     .main { min-height: 62vh; }
     .panel { border-left: 0; border-top: 1px solid var(--rb-gray-200); overflow: visible; }
     .items.cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .items.photos { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 160px; }
     .home { grid-auto-flow: row; grid-auto-rows: 1fr; grid-auto-columns: auto; }
     .starts { grid-template-columns: 1fr; }
     .pops.c4 { grid-template-columns: repeat(2, 1fr); }
@@ -605,23 +635,43 @@
 
 /* ==========================================================================
    Booths, items and prices. Edit this block to change sale prices or reuse
-   the tracker at another event. "tiers" items price by quantity within one
-   customer. Balloon Battle prices live in Settings so they can change on
-   the day.
+   the tracker at another event. Items in a price group (the clickers) are
+   priced together by total quantity within one customer, so any mix of
+   designs gets the tier price. Balloon Battle prices live in Settings so
+   they can change on the day.
    ========================================================================== */
+const PRICE_GROUPS = {
+  // price(n) = floor(n / 3) * 10 + [0, 4, 7][n % 3]  ->  4, 7, 10, 14, 17, 20 ...
+  clicker: { name: 'Fidget clickers', unit: 'clicker', tiers: [0, 4, 7], bundle: { size: 3, price: 10 } },
+};
+
+// Clicker designs: [photo file name in clicker_photos/, button label].
+const CLICKER_DESIGNS = [
+  ['egg_tart', 'Egg tart'],
+  ['hot_dog_bun', 'Hot dog bun'],
+  ['smores', "S'mores"],
+  ['chocolate_bar', 'Chocolate bar'],
+  ['avocado', 'Avocado'],
+  ['dumpling', 'Dumpling'],
+  ['creeper', 'Creeper'],
+  ['oreo', 'Oreo'],
+  ['spam_musubi', 'Spam musubi'],
+  ['salmon_nigiri', 'Salmon nigiri'],
+  ['lego_brick', 'LEGO brick'],
+  ['wd40', 'WD-40'],
+  ['burger', 'Burger'],
+];
+const PHOTO_DIR = 'clicker_photos/';
+const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
+
 const CATEGORIES = [
   {
-    id: 'clickers', kind: 'sale', name: 'Fidget Clickers', theme: 'yellow', walkoffs: true,
+    id: 'clickers', kind: 'sale', name: 'Fidget Clickers', theme: 'yellow', walkoffs: true, layout: 'photos',
     hint: '1 = 4 tix · 2 = 7 · 3 = 10',
-    items: [
-      {
-        id: 'clicker', name: 'Fidget clicker', style: 'accent',
-        // price(n) = floor(n / 3) * 10 + [0, 4, 7][n % 3]  ->  4, 7, 10, 14, 17, 20 ...
-        tiers: [0, 4, 7], bundle: { size: 3, price: 10 },
-        priceText: 'Tap = +1 clicker',
-        note: '1 = 4 tix · 2 = 7 · 3 = 10 · stacks: 4 = 14 · 5 = 17 · 6 = 20',
-      },
-    ],
+    tip: 'Tap a design = +1 · mix any designs<br>1 = 4 · 2 = 7 · 3 = 10 · 4 = 14 · 5 = 17 · 6 = 20',
+    items: CLICKER_DESIGNS.map(([photo, name]) => ({ id: 'clicker_' + photo, name, photo, group: 'clicker' }))
+      // "clicker" keeps its v1.0 id so older saved sales still load.
+      .concat([{ id: 'clicker', name: 'Other design', group: 'clicker' }]),
   },
   {
     id: 'copters', kind: 'sale', name: 'Pull Copters', theme: 'red', walkoffs: true,
@@ -684,20 +734,42 @@ const ITEMS = {};
 CATEGORIES.filter(c => c.kind === 'sale').forEach(cat => cat.items.forEach(it => { ITEMS[it.id] = Object.assign({ cat: cat.id }, it); }));
 const catById = id => CATEGORIES.find(c => c.id === id);
 
+function groupPrice(groupId, n) {
+  const g = PRICE_GROUPS[groupId];
+  if (n <= 0) return 0;
+  return Math.floor(n / g.bundle.size) * g.bundle.price + g.tiers[n % g.bundle.size];
+}
+
+// Price of qty of one item bought on its own (group items use the tier price).
 function linePrice(itemId, qty) {
   const it = ITEMS[itemId];
   if (!it || qty <= 0) return 0;
-  if (it.tiers) {
-    const size = it.bundle.size;
-    return Math.floor(qty / size) * it.bundle.price + it.tiers[qty % size];
-  }
-  return it.price * qty;
+  return it.group ? groupPrice(it.group, qty) : it.price * qty;
 }
-const customerTotal = c => c.lines.reduce((sum, l) => sum + linePrice(l.item, l.qty), 0);
+
+// Tickets per line for one customer. Group items share the tier price: each
+// line gets the extra tickets it adds on top of the lines before it, so the
+// lines always add up to the customer's total.
+function lineTixList(c) {
+  const sofar = {};
+  return c.lines.map(l => {
+    const it = ITEMS[l.item];
+    if (!it.group) return it.price * l.qty;
+    const before = sofar[it.group] || 0;
+    sofar[it.group] = before + l.qty;
+    return groupPrice(it.group, before + l.qty) - groupPrice(it.group, before);
+  });
+}
+const customerTotal = c => lineTixList(c).reduce((sum, t) => sum + t, 0);
 const unitsOf = c => c.lines.reduce((sum, l) => sum + l.qty, 0);
 const qtyOf = (c, itemId) => { const l = c && c.lines.find(x => x.item === itemId); return l ? l.qty : 0; };
+const groupUnits = (c, groupId) => c ? c.lines.filter(l => ITEMS[l.item].group === groupId).reduce((s, l) => s + l.qty, 0) : 0;
 const catUnits = (c, catId) => c ? c.lines.filter(l => ITEMS[l.item].cat === catId).reduce((s, l) => s + l.qty, 0) : 0;
-const catTix = (c, catId) => c ? c.lines.filter(l => ITEMS[l.item].cat === catId).reduce((s, l) => s + linePrice(l.item, l.qty), 0) : 0;
+function catTix(c, catId) {
+  if (!c) return 0;
+  const tix = lineTixList(c);
+  return c.lines.reduce((s, l, i) => s + (ITEMS[l.item].cat === catId ? tix[i] : 0), 0);
+}
 
 /* ==========================================================================
    State, persistence, undo
@@ -1178,9 +1250,10 @@ function computeTotals() {
   const byItem = {};
   const byBox = {};
   sold.forEach(c => {
-    c.lines.forEach(l => {
+    const tix = lineTixList(c);
+    c.lines.forEach((l, i) => {
       const b = byItem[l.item] || (byItem[l.item] = { units: 0, tix: 0, walkoffs: 0 });
-      const t = linePrice(l.item, l.qty);
+      const t = tix[i];
       b.units += l.qty;
       b.tix += t;
       byBox[ITEMS[l.item].cat] = (byBox[ITEMS[l.item].cat] || 0) + t;
@@ -1234,10 +1307,11 @@ function buildCSV() {
     if (!c.lines.length) return;
     const status = c.voided ? 'voided' : (c.closedAt ? 'sold' : 'open');
     const total = customerTotal(c);
-    c.lines.forEach(l => {
+    const tix = lineTixList(c);
+    c.lines.forEach((l, i) => {
       const it = ITEMS[l.item];
       rows.push([c.station, 'S' + c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
-        catById(it.cat).name, it.name, l.qty, linePrice(l.item, l.qty), total,
+        catById(it.cat).name, it.name, l.qty, tix[i], total,
         labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['']));
     });
   });
@@ -1380,14 +1454,28 @@ function homeView(cats, c) {
 }
 
 function catView(cat, c, canBack) {
-  const cols = cat.items.length >= 3 ? 'cols-3' : 'cols-1';
-  return `<div class="cat-head">
+  const head = `<div class="cat-head">
       ${canBack ? '<button class="back" data-act="home">← Back</button>' : ''}
       <div class="cat-title">${esc(cat.name)}</div>
       <div class="spacer"></div>
-      <div class="cat-tip">Tap = +1<br>"Type qty" = punch in a number</div>
+      <div class="cat-tip">${cat.tip || 'Tap = +1<br>"Type qty" = punch in a number'}</div>
       ${cat.walkoffs ? `<button class="walkoff-btn" data-act="walkoff" data-cat="${cat.id}">Log walk-off</button>` : ''}
-    </div>
+    </div>`;
+  if (cat.layout === 'photos') {
+    // One photo button per design; tap the number in the right panel to type a quantity.
+    return head + `<div class="items photos">${cat.items.map(it => {
+      const q = qtyOf(c, it.id);
+      return `<div class="tile">
+        <button class="item photo-item" data-act="add" data-item="${it.id}">
+          ${q ? `<span class="badge">×${q}</span>` : ''}
+          <span class="ph">${photoHtml(it)}</span>
+          <span class="i-name">${esc(it.name)}</span>
+        </button>
+      </div>`;
+    }).join('')}</div>`;
+  }
+  const cols = cat.items.length >= 3 ? 'cols-3' : 'cols-1';
+  return head + `
     <div class="items ${cols}">${cat.items.map(it => {
       const q = qtyOf(c, it.id);
       const priceText = it.priceText || `${it.price} tix`;
@@ -1412,12 +1500,20 @@ function panelView(c) {
   const split = boxes.length > 1
     ? `<div class="box-split">${boxes.map(cat => `<div><span>${esc(cat.name)} box</span><b>${catTix(c, cat.id)} tix</b></div>`).join('')}</div>`
     : '';
+  // Group items (clickers) are priced together; show that as one summary line.
+  const groupRows = has ? Object.keys(PRICE_GROUPS).map(gid => {
+    const n = groupUnits(c, gid);
+    if (!n) return '';
+    const g = PRICE_GROUPS[gid];
+    return `<div class="group-row"><span>${esc(g.name)} ×${n} together</span><b>${groupPrice(gid, n)} tix</b></div>`;
+  }).join('') : '';
   return `<aside class="panel" aria-label="Current customer">
     <div class="p-head">
       <div class="p-title">${c ? `Customer #${c.no}` : 'Next customer'}</div>
       <div class="p-sub">${has ? `${plural(units, 'item')} · tap a number to type` : ''}</div>
     </div>
     <div class="lines">${has ? lines.map(lineView).join('') : '<div class="empty">Tap an item to start a sale</div>'}</div>
+    ${groupRows}
     <div class="total"><span class="t-label">Collect</span><span class="t-val">${total} tix</span></div>
     ${split}
     ${state.settings.demographics ? demoView(c, has) : ''}
@@ -1425,12 +1521,37 @@ function panelView(c) {
   </aside>`;
 }
 
+// Design photos: try each extension in turn, remember which one worked, and
+// fall back to a big letter when there is no photo yet.
+const photoState = {};
+const photoUrl = (slug, i) => `${PHOTO_DIR}${slug}.${PHOTO_EXTS[i]}`;
+const photoPlaceholder = it => `<span class="ph-none" aria-hidden="true">${esc(it.photo ? it.name.charAt(0) : '?')}</span>`;
+
+function photoHtml(it) {
+  if (!it.photo) return photoPlaceholder(it);
+  const s = photoState[it.photo] || (photoState[it.photo] = { i: 0, none: false });
+  if (s.none) return photoPlaceholder(it);
+  return `<img alt="" draggable="false" src="${photoUrl(it.photo, s.i)}" data-photo="${it.photo}">`;
+}
+
+document.addEventListener('error', e => {
+  const img = e.target;
+  if (!(img instanceof HTMLImageElement) || !img.dataset.photo) return;
+  const slug = img.dataset.photo;
+  const s = photoState[slug];
+  if (img.getAttribute('src') === photoUrl(slug, s.i)) s.i += 1;
+  if (s.i < PHOTO_EXTS.length) { img.src = photoUrl(slug, s.i); return; }
+  s.none = true;
+  const it = Object.values(ITEMS).find(x => x.photo === slug);
+  img.outerHTML = photoPlaceholder(it);
+}, true);
+
 function lineView(l) {
   const it = ITEMS[l.item];
   return `<div class="line${view.pulse === l.item ? ' pulse' : ''}">
     <div class="l-info">
       <div class="l-name">${esc(it.name)}</div>
-      <div class="l-sub"><b>${linePrice(l.item, l.qty)} tix</b> · ${it.tiers ? 'tier price' : `${it.price} each`}</div>
+      <div class="l-sub">${it.group ? PRICE_GROUPS[it.group].unit : `<b>${linePrice(l.item, l.qty)} tix</b> · ${it.price} each`}</div>
     </div>
     <div class="l-ctl">
       <button class="step" data-act="minus" data-item="${l.item}" aria-label="Remove one ${esc(it.name)}">−</button>
@@ -1614,7 +1735,13 @@ function keypadView(m) {
   const it = ITEMS[m.item];
   const cur = qtyOf(current(), m.item);
   const q = m.value === '' ? null : parseInt(m.value, 10);
-  const price = q == null ? `Currently ${cur} in this sale` : (q === 0 ? 'Removes it from this sale' : `= ${linePrice(m.item, q)} tix`);
+  let price;
+  if (q == null) price = `Currently ${cur} in this sale`;
+  else if (q === 0) price = 'Removes it from this sale';
+  else if (it.group) {
+    const n = groupUnits(current(), it.group) - cur + q;
+    price = `${n} ${PRICE_GROUPS[it.group].unit}${n === 1 ? '' : 's'} together = ${groupPrice(it.group, n)} tix`;
+  } else price = `= ${linePrice(m.item, q)} tix`;
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'back'];
   return `<div class="dialog narrow" role="dialog" aria-label="Type quantity">
     ${dialogHead('How many ' + esc(it.name) + '?')}
@@ -2051,6 +2178,9 @@ render();
   prize cost in Totals, battle and walk-off rows in the CSV. Added ?booth=sales / ?booth=battle links that
   lock a laptop to its booth, an offline cache (sw.js) so the hosted page reopens without wifi, and a
   persistent-storage request.
+  v1.2 (2026-10-16): Fidget clickers are now one photo button per design (13 designs + "Other design"),
+  priced together by total count so any mix gets the 4/7/10 tiers. Photos load from clicker_photos/
+  (webp/jpg/jpeg/png, letter tile until uploaded). Xiao long bao renamed Dumpling. Added noindex.
 -->
 </body>
 </html>
