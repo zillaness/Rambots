@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.1
+version: 1.2
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -33,9 +33,9 @@ Until a design has a photo, its button shows the design's first letter.
 | Dumpling | `dumpling.jpg` |
 | Minecraft creeper | `creeper.jpg` |
 | Oreo | `oreo.jpg` |
-| Spam musubi | `spam_musubi.jpg` |
+| Spam musubi | `musubi.jpg` |
 | Salmon nigiri | `salmon_nigiri.jpg` |
-| LEGO brick | `lego_brick.jpg` |
+| LEGO brick | `lego.jpg` |
 | WD-40 | `wd40.jpg` |
 | Burger (maybe) | `burger.jpg` |
 
@@ -45,3 +45,4 @@ Got a design that isn't listed? Use lowercase words joined by underscores (e.g. 
 
 - v1.0 (2026-10-16): Created folder and file-name list from the Ram-a-thon 2026 revenue model.
 - v1.1 (2026-10-16): Xiao long bao renamed Dumpling; upload to the live folder on the presentations branch.
+- v1.2 (2026-10-16): All 13 photos uploaded; file names for LEGO and Spam musubi now lego.jpg and musubi.jpg; photos re-encoded as 800 px JPEGs (originals in git history).

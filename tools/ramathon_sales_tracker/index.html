@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.2
+  version: 1.2.1
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -642,10 +642,11 @@
    ========================================================================== */
 const PRICE_GROUPS = {
   // price(n) = floor(n / 3) * 10 + [0, 4, 7][n % 3]  ->  4, 7, 10, 14, 17, 20 ...
-  clicker: { name: 'Fidget clickers', unit: 'clicker', tiers: [0, 4, 7], bundle: { size: 3, price: 10 } },
+  clicker: { name: 'Clickers', unit: 'clicker', tiers: [0, 4, 7], bundle: { size: 3, price: 10 } },
 };
 
-// Clicker designs: [photo file name in clicker_photos/, button label].
+// Clicker designs: [id, button label, photo file name in clicker_photos/ if not the id].
+// Keep ids stable once sales exist; change the label or photo name instead.
 const CLICKER_DESIGNS = [
   ['egg_tart', 'Egg tart'],
   ['hot_dog_bun', 'Hot dog bun'],
@@ -655,9 +656,9 @@ const CLICKER_DESIGNS = [
   ['dumpling', 'Dumpling'],
   ['creeper', 'Creeper'],
   ['oreo', 'Oreo'],
-  ['spam_musubi', 'Spam musubi'],
+  ['spam_musubi', 'Spam musubi', 'musubi'],
   ['salmon_nigiri', 'Salmon nigiri'],
-  ['lego_brick', 'LEGO brick'],
+  ['lego_brick', 'LEGO brick', 'lego'],
   ['wd40', 'WD-40'],
   ['burger', 'Burger'],
 ];
@@ -666,15 +667,15 @@ const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
 
 const CATEGORIES = [
   {
-    id: 'clickers', kind: 'sale', name: 'Fidget Clickers', theme: 'yellow', walkoffs: true, layout: 'photos',
+    id: 'clickers', kind: 'sale', name: 'Clickers', theme: 'yellow', walkoffs: true, layout: 'photos',
     hint: '1 = 4 tix · 2 = 7 · 3 = 10',
     tip: 'Tap a design = +1 · mix any designs<br>1 = 4 · 2 = 7 · 3 = 10 · 4 = 14 · 5 = 17 · 6 = 20',
-    items: CLICKER_DESIGNS.map(([photo, name]) => ({ id: 'clicker_' + photo, name, photo, group: 'clicker' }))
+    items: CLICKER_DESIGNS.map(([id, name, photo]) => ({ id: 'clicker_' + id, name, photo: photo || id, group: 'clicker' }))
       // "clicker" keeps its v1.0 id so older saved sales still load.
       .concat([{ id: 'clicker', name: 'Other design', group: 'clicker' }]),
   },
   {
-    id: 'copters', kind: 'sale', name: 'Pull Copters', theme: 'red', walkoffs: true,
+    id: 'copters', kind: 'sale', name: 'Copters', theme: 'red', walkoffs: true,
     hint: 'Full kit = 5 tix · add-ons 1 to 3',
     items: [
       { id: 'kit', name: 'Full kit', price: 5, style: 'primary', note: 'Launcher + propeller + ripcord' },
@@ -798,7 +799,13 @@ function hydrate(raw) {
     cats: Object.assign({}, base.settings.cats, ss.cats || {}),
     battle: Object.assign({}, base.settings.battle, ss.battle || {}),
   });
-  return Object.assign(base, saved);
+  const merged = Object.assign(base, saved);
+  // A design removed or renamed in CLICKER_DESIGNS would otherwise break saved
+  // sales on this laptop; count those as "Other design" instead.
+  const fix = id => (ITEMS[id] || !String(id).startsWith('clicker') ? id : 'clicker');
+  merged.customers.forEach(c => { c.lines.forEach(l => { l.item = fix(l.item); }); });
+  merged.walkoffs.forEach(w => { w.item = fix(w.item); });
+  return merged;
 }
 
 function load() {
@@ -2181,6 +2188,8 @@ render();
   v1.2 (2026-10-16): Fidget clickers are now one photo button per design (13 designs + "Other design"),
   priced together by total count so any mix gets the 4/7/10 tiers. Photos load from clicker_photos/
   (webp/jpg/jpeg/png, letter tile until uploaded). Xiao long bao renamed Dumpling. Added noindex.
+  v1.2.1 (2026-10-16): Booths renamed Clickers and Copters. LEGO and Spam musubi photos use the uploaded
+  file names (lego.jpg, musubi.jpg). Saved sales of a removed design now load as "Other design".
 -->
 </body>
 </html>
