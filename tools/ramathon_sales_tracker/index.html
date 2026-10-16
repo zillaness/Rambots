@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.6
+  version: 1.7
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -405,7 +405,7 @@
   .done small { display: block; font-size: 14px; font-weight: 500; opacity: 0.9; }
 
   /* ---- Balloon Battle -------------------------------------------------- */
-  .arena { flex: 1; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+  .arena { flex: 1; display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; padding-bottom: 4px; }
   .now { background: #fff; border-radius: 20px; box-shadow: var(--rb-shadow-md); padding: 18px; display: flex; flex-direction: column; gap: 14px; }
   .now.fill { flex: 1; min-height: 0; }
   .now-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
@@ -533,6 +533,38 @@
     padding: 8px 10px;
   }
   .qrow.first { border-color: var(--rb-yellow); background: var(--rb-yellow-100); }
+  .huge.ink { background: var(--rb-ink); color: #fff; }
+  .huge:disabled { opacity: 0.45; }
+  .now.current { flex: 0 0 auto; gap: 10px; padding: 14px 18px; position: sticky; top: 0; z-index: 4; }
+  .cur-players { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cp { border: 3px solid var(--rb-ink); border-radius: 14px; padding: 8px 14px; display: flex; flex-direction: column; min-width: 0; }
+  .cp.house { border-style: dashed; color: var(--rb-gray-600); }
+  .cp-name { font-size: clamp(24px, 2.6vw, 38px); font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+  .cp-sub { font-size: 16px; color: var(--rb-gray-700); }
+  .ctl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mini-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mini-row .btn { min-height: 44px; font-size: 16px; }
+  .timer.paused { color: var(--rb-gray-700); }
+  .queue-card { flex: 1 0 auto; min-height: 160px; display: flex; flex-direction: column; gap: 10px; background: #fff; border-radius: 20px; box-shadow: var(--rb-shadow-md); padding: 14px 16px; }
+  .qc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .qc-title { font-size: 22px; font-weight: 700; }
+  .qc-sub { font-size: 14px; color: var(--rb-gray-600); }
+  .qlist { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+  .queue-card .huge { min-height: 72px; }
+  .q-wait { display: inline-block; margin-left: 6px; padding: 1px 10px; border-radius: 999px; background: var(--rb-ink); color: #fff; font-size: 15px; white-space: nowrap; }
+  .solo { font-size: 14px; font-weight: 600; color: var(--rb-red); }
+  .btn.pair { margin-top: 6px; min-height: 40px; font-size: 15px; border-color: var(--rb-red); color: var(--rb-red); }
+  .l-ctl .btn.slim { min-height: 46px; font-size: 16px; padding: 0 12px; }
+  .r-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .r-btns .huge { min-height: 84px; }
+  .ask-line { font-size: 16px; font-weight: 700; color: var(--rb-red-700); background: var(--rb-red-100); border-radius: 10px; padding: 8px 12px; }
+  .ask-big { font-size: clamp(22px, 2.4vw, 32px); font-weight: 700; color: var(--rb-red-700); margin: 0 0 8px; }
+  .pform { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--rb-gray-200); padding-top: 8px; }
+  .chip.wchip.on.buy { background: var(--rb-red); border-color: var(--rb-red); color: #fff; }
+  .chip.wchip.on.have { background: var(--rb-success); border-color: var(--rb-success); color: #fff; }
+  .chip.wchip:not(.on) { border-color: var(--rb-red); }
+  .dialog.upsell { width: min(820px, 100%); display: flex; flex-direction: column; gap: 12px; }
+  .clock-big { font-size: 72px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
   .q-pos { font-size: 24px; font-weight: 700; min-width: 28px; text-align: center; }
 
   /* ---- Toast ------------------------------------------------------------ */
@@ -701,7 +733,11 @@
     .items.cols-3 { grid-template-columns: repeat(2, 1fr); }
     .items.photos { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 170px; }
     .home { grid-auto-flow: row; grid-auto-rows: 1fr; grid-auto-columns: auto; }
-    .starts { grid-template-columns: 1fr; }
+    .starts, .ctl-row, .r-btns { grid-template-columns: 1fr; }
+    .arena { overflow: visible; }
+    .now.current { top: var(--top-h); }
+    .qrow { grid-template-columns: auto 1fr; }
+    .qrow .l-ctl { grid-column: 1 / -1; flex-wrap: wrap; }
     .pops.c4 { grid-template-columns: repeat(2, 1fr); }
     .station, .brand span, .cat-tip, .pace .pc-sub { display: none; }
     .tbtn { padding: 0 10px; font-size: 15px; height: 46px; }
@@ -835,9 +871,12 @@ const CATEGORIES = [
 ];
 
 const BATTLE_DEFAULTS = {
-  match: 5,          // tix per player per match
-  rematch: 6,        // tix per player for an instant rematch (5 + 1 skip-the-line fee)
-  weapon: 1,         // tix per extra weapon
+  match: 5,          // tix per player per match (sign-up, or Rematch back in line)
+  rematch: 5,        // tix per player for an instant rematch (plays right away)
+  rematchOnce: true, // an instant rematch can't be followed by another one
+  rematchMaxWaiting: 2, // instant rematch only while this many matches (or fewer) are waiting
+  weaponPrices: { spikes: 1, saw: 2 }, // one-time unlock; after that the weapon is free (sticker)
+  turnaroundMin: 2,  // minutes between matches (balloons, weapons), for wait estimates
   cardsPerPop: 3,    // Pokemon cards per balloon popped (cards come bundled in 3s)
   pvpRule: 'winner', // 'winner' = only the winner is paid (per balloon they popped); 'both' = both paid per pop
   pvpTie: 'both',    // vs Player tie: 'both' = each paid per own pop; 'none' = no cards (can't be gamed)
@@ -864,9 +903,15 @@ const OUTCOMES = [
   ['knockedOut', 'Knocked out', 'lost all 3 balloons'],
 ];
 const BALLOONS = 3;
+// Battle weapons: pay once to unlock (the kid gets a sticker), free after that.
+const WEAPONS = [
+  { id: 'spikes', name: 'Wheel spikes' },
+  { id: 'saw', name: 'Buzz saw' },
+];
+// Volunteer script for the robot controls (to be written with the team).
+const CONTROLS_SCRIPT = [];
 const NET_PER_TICKET = 0.90;           // CCA keeps 10%
 const PRIZE_DOLLARS_PER_CARD = 5 / 9;  // a 9-card prize costs about $5
-const DEFAULT_CYCLE_MIN = 3;           // ~2 min match + ~1 min balloon reset
 
 const AGES = [
   { id: 'kid', label: 'Kid', sub: '12 and under' },
@@ -988,6 +1033,18 @@ function hydrate(raw) {
   const merged = Object.assign(base, saved);
   // Until someone picks a tie rule on this laptop, follow the current default.
   if (!merged.settings.battle.pvpTieSet) merged.settings.battle.pvpTie = BATTLE_DEFAULTS.pvpTie;
+  // v1.7: weapons unlock once; rematch price follows the default until someone edits it.
+  const bt = merged.settings.battle;
+  bt.weaponPrices = Object.assign({}, BATTLE_DEFAULTS.weaponPrices, (ss.battle && ss.battle.weaponPrices) || {});
+  if (!bt.rematchSet) bt.rematch = BATTLE_DEFAULTS.rematch;
+  delete bt.weapon;
+  // v1.7: the queue is paid matches; the old name-only queue (practice data) is dropped.
+  merged.queue = [];
+  merged.matches.forEach(m => {
+    if (!m.paidAt) m.paidAt = m.startedAt;
+    if (m.qpos == null) m.qpos = 0;
+    if (m.status === 'playing' && m.goAt && m.runAt === undefined) { m.leftMs = (m.limitSec || bt.matchSeconds) * 1000; m.runAt = m.goAt; }
+  });
   // An item removed or renamed in the config would otherwise break saved data
   // on this laptop: an old clicker design counts as "Other design"; anything
   // else that no longer exists (e.g. Plinko) is dropped.
@@ -1041,8 +1098,9 @@ let state = load();
 applyPreset();
 save();
 
-const blankDraft = () => ({ name: '', weapons: 0, age: null, gender: null });
-const view = { screen: 'home', modal: null, pulse: null, pvpPops: [null, null], qDraft: blankDraft(), focusName: false,
+const blankPlayerDraft = () => ({ name: '', w: {}, age: null, gender: null });
+const blankDraft = () => ({ mode: 'house', players: [blankPlayerDraft(), blankPlayerDraft()] });
+const view = { screen: 'home', modal: null, pulse: null, pvpPops: [null, null], qDraft: blankDraft(), focusName: false, rmWho: 'both',
   combine: { files: [], plinko: '' } };
 const undoStack = [];
 const UNDO_LIMIT = 200;
@@ -1321,7 +1379,33 @@ const lastMatch = () => state.matches.find(m => m.id === state.lastMatchId) || n
 const matchTix = m => m.players.reduce((s, p) => s + p.tix, 0);
 const matchCards = m => m.players.reduce((s, p) => s + (p.cards || 0), 0);
 const matchTitle = m => m.mode === 'pvp' ? `${m.players[0].name} vs ${m.players[1].name}` : `${m.players[0].name} vs House`;
-const weaponsText = n => n ? plural(n, 'extra weapon') : 'no extra weapons';
+const weaponName = id => (WEAPONS.find(w => w.id === id) || { name: id }).name;
+const weaponPrice = id => (bs().weaponPrices || {})[id] || 0;
+// A match's tickets count from sign-up until it is refunded, paired into another
+// sign-up, or voided.
+const isPaid = m => !m.voided && m.status !== 'refunded' && m.status !== 'paired';
+const queuedMatches = () => state.matches.filter(m => m.status === 'queued' && !m.voided).sort((a, b) => a.qpos - b.qpos);
+const nextQpos = () => state.matches.reduce((mx, m) => Math.max(mx, m.qpos || 0), 0) + 1;
+// A solo sign-up still looking for an opponent.
+const isOpen = m => !!m.solo && m.mode === 'house' && m.status === 'queued';
+const ageTag = p => (p.age ? ` (${labelOf(AGES, p.age)})` : '');
+
+// Weapons a player has this match: bought now ({ id: tix paid }) or unlocked
+// earlier (sticker, free). Saves from before v1.7 only have a count.
+function weaponsOf(p) {
+  if (!p.buy) return p.weapons ? [{ id: 'extra', name: 'Extra weapon', qty: p.weapons, tix: p.tix - p.base, have: false }] : [];
+  return Object.keys(p.buy).map(id => ({ id, name: weaponName(id), qty: 1, tix: p.buy[id], have: false }))
+    .concat((p.have || []).map(id => ({ id, name: weaponName(id), qty: 1, tix: 0, have: true })));
+}
+const weaponIds = p => weaponsOf(p).filter(w => w.id !== 'extra').map(w => w.id);
+function weaponsText(p) {
+  const list = weaponsOf(p);
+  if (!list.length) return 'no weapons';
+  return list.map(w => (w.id === 'extra' ? plural(w.qty, 'extra weapon') : `${w.name}${w.have ? ' (sticker)' : ''}`)).join(', ');
+}
+function weaponAsk() {
+  return `Want to unlock ${WEAPONS.map(w => `${w.name.toLowerCase()} for ${plural(weaponPrice(w.id), 'ticket')}`).join(' or ')}? You keep it all day.`;
+}
 
 function cardsText(cards) {
   if (!cards) return '0 cards';
@@ -1330,119 +1414,180 @@ function cardsText(cards) {
   return plural(cards, 'card');
 }
 
-function queueAdd() {
-  const d = view.qDraft;
-  const name = d.name.trim() || `Walk-up ${state.queue.length + 1}`;
-  commit(() => {
-    state.queue.push({ id: uid(), name, weapons: d.weapons, age: d.age, gender: d.gender, addedAt: now() });
-    return `Queued ${name} (${weaponsText(d.weapons)})`;
-  });
-  view.qDraft = blankDraft();
-  view.focusName = true;
-  render();
+// Sign-up draft: weapon chips cycle none -> unlock (pay) -> has sticker (free) -> none.
+function cycleWeapon(w, id) {
+  if (!w[id]) w[id] = 'buy';
+  else if (w[id] === 'buy') w[id] = 'have';
+  else delete w[id];
 }
+const draftPlayers = d => (d.mode === 'pvp' ? d.players : [d.players[0]]);
+const boughtTix = w => Object.keys(w).filter(id => w[id] === 'buy').reduce((s, id) => s + weaponPrice(id), 0);
+const draftTix = d => draftPlayers(d).reduce((s, pd) => s + bs().match + boughtTix(pd.w), 0);
 
-function queueRemove(id) {
-  const q = state.queue.find(x => x.id === id);
-  if (!q) return;
-  commit(() => {
-    state.queue = state.queue.filter(x => x !== q);
-    return `Removed ${q.name} from the queue`;
+function makePlayer(src, base) {
+  const buy = {};
+  const have = [];
+  Object.keys(src.w || {}).forEach(id => {
+    if (src.w[id] === 'buy') buy[id] = weaponPrice(id);
+    else if (src.w[id] === 'have') have.push(id);
   });
-  render();
-}
-
-function queueWeapons(id, delta) {
-  const q = state.queue.find(x => x.id === id);
-  if (!q) return;
-  const next = Math.max(0, Math.min(9, q.weapons + delta));
-  if (next === q.weapons) return;
-  commit(() => {
-    const old = q.weapons;
-    q.weapons = next;
-    return `${q.name}: ${old} → ${next} extra weapons`;
-  });
-  render();
-}
-
-function makePlayer(entry, base) {
   return {
-    name: entry.name, weapons: entry.weapons || 0, age: entry.age || null, gender: entry.gender || null,
-    base, tix: base + (entry.weapons || 0) * bs().weapon,
-    pops: null, won: null, cards: 0, qid: entry.id || null, queuedAt: entry.addedAt || null,
+    name: src.name, age: src.age || null, gender: src.gender || null, base, buy, have,
+    tix: base + Object.values(buy).reduce((s, x) => s + x, 0),
+    pops: null, won: null, cards: 0,
   };
 }
 
-function collectToast(m) {
+function newMatch(mode, players, extra) {
+  return Object.assign({
+    id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode, rematch: false, solo: false,
+    status: 'queued', paidAt: now(), startedAt: null, goAt: null, runAt: null, leftMs: null, restarts: 0,
+    endedAt: null, voided: false, limitSec: bs().matchSeconds, qpos: nextQpos(), players,
+  }, extra || {});
+}
+
+const matchesText = n => `${n} match${n === 1 ? '' : 'es'}`;
+const signupTitle = m => (isOpen(m) ? `${m.players[0].name} (solo, wants an opponent)` : matchTitle(m));
+
+function collectToast(m, extra) {
   const parts = m.players.map(p => `${p.name} ${p.tix}`).join(' · ');
-  toast(`Collect ${matchTix(m)} tix: ${parts}`, 'ok');
+  const stickers = m.players.flatMap(p => Object.keys(p.buy || {}).map(weaponName));
+  toast(`Collect ${matchTix(m)} tix: ${parts}${stickers.length ? ` · give sticker: ${stickers.join(', ')}` : ''}${extra || ''}`, 'ok');
 }
 
-function startMatch(mode) {
-  if (playingMatch()) { toast('Finish the current match first', 'warn'); return; }
-  const need = mode === 'pvp' ? 2 : 1;
-  let entries = state.queue.slice(0, need);
-  if (mode === 'house' && !entries.length) entries = [{ name: 'Walk-up', weapons: 0 }];
-  if (entries.length < need) { toast('vs Player needs 2 people in the queue', 'warn'); return; }
+// Add the sign-up to the queue and collect its tickets. Asks about weapons
+// first when a player has none (force skips the ask).
+function queueAdd(force) {
+  const d = view.qDraft;
+  if (!force && draftPlayers(d).some(pd => !Object.keys(pd.w).length)) {
+    view.modal = { type: 'upsell' };
+    render();
+    return;
+  }
   let m = null;
   commit(() => {
-    const ids = entries.map(e => e.id).filter(Boolean);
-    state.queue = state.queue.filter(q => !ids.includes(q.id));
-    m = {
-      id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode, rematch: false,
-      startedAt: now(), goAt: null, endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
-      players: entries.map(e => makePlayer(e, bs().match)),
-    };
+    const no = state.nextMatchNo;
+    const players = draftPlayers(d).map((pd, i) => makePlayer(Object.assign({}, pd, {
+      name: pd.name.trim() || (i ? `Friend #${no}` : `Walk-up #${no}`),
+    }), bs().match));
+    m = newMatch(d.mode === 'pvp' ? 'pvp' : 'house', players, { solo: d.mode === 'solo' });
     state.matches.push(m);
+    return `Signed up #${m.no}: ${signupTitle(m)} (${matchTix(m)} tix)`;
+  });
+  view.qDraft = blankDraft();
+  if (view.modal && view.modal.type === 'upsell') view.modal = null;
+  view.focusName = true;
+  render();
+  const pos = queuedMatches().indexOf(m);
+  collectToast(m, ` · #${pos + 1} in line, ${waitText(pos)}`);
+}
+
+function queueRefund(id) {
+  const m = state.matches.find(x => x.id === id);
+  if (!m || m.status !== 'queued') return;
+  commit(() => {
+    m.status = 'refunded';
+    m.endedAt = now();
+    return `Refunded #${m.no} ${signupTitle(m)} (${matchTix(m)} tix)`;
+  });
+  render();
+  toast(`Hand back ${matchTix(m)} tix: ${m.players.map(p => `${p.name} ${p.tix}`).join(' · ')}`, 'warn');
+}
+
+function queueDown(id) {
+  const q = queuedMatches();
+  const i = q.findIndex(m => m.id === id);
+  if (i < 0 || i === q.length - 1) return;
+  commit(() => {
+    const a = q[i], b = q[i + 1];
+    [a.qpos, b.qpos] = [b.qpos, a.qpos];
+    return `Moved #${a.no} ${signupTitle(a)} down one`;
+  });
+  render();
+}
+
+// Matchmaking: the next solo behind this one who also wants an opponent.
+function pairCandidate(m) {
+  if (!isOpen(m)) return null;
+  const q = queuedMatches();
+  return q.slice(q.indexOf(m) + 1).find(isOpen) || null;
+}
+
+// Pair two solos into one vs Player match in the earlier spot. The later
+// sign-up is closed as "paired" so its tickets are only counted once.
+function pairUp(id) {
+  const a = state.matches.find(x => x.id === id);
+  const b = a && pairCandidate(a);
+  if (!b) return;
+  commit(() => {
+    a.mode = 'pvp';
+    a.players.push(JSON.parse(JSON.stringify(b.players[0])));
+    a.pairedFrom = b.no;
+    b.status = 'paired';
+    b.pairedInto = a.no;
+    b.endedAt = now();
+    return `Paired ${a.players[0].name} (#${a.no}) with ${b.players[0].name} (#${b.no})`;
+  });
+  render();
+  toast(`#${a.no} is now ${matchTitle(a)}`, 'ok');
+}
+
+function startQueued(id) {
+  const cur = playingMatch();
+  if (cur) { toast(`Finish match #${cur.no} first`, 'warn'); return; }
+  const m = id ? state.matches.find(x => x.id === id) : queuedMatches()[0];
+  if (!m || m.status !== 'queued') return;
+  commit(() => {
+    m.status = 'playing';
+    m.startedAt = now();
+    m.goAt = null; m.runAt = null; m.leftMs = null;
+    m.limitSec = bs().matchSeconds;
     state.matchId = m.id;
-    return `Started match #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
+    return `Called up match #${m.no}: ${matchTitle(m)}`;
   });
   view.pvpPops = [null, null];
   render();
-  collectToast(m);
 }
 
-function rematch() {
-  const lm = lastMatch();
-  if (!lm || lm.status !== 'done' || lm.voided || playingMatch()) return;
-  let m = null;
-  commit(() => {
-    m = {
-      id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode: lm.mode, rematch: true,
-      startedAt: now(), goAt: null, endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
-      players: lm.players.map(p => makePlayer({ name: p.name, weapons: p.weapons, age: p.age, gender: p.gender }, bs().rematch)),
-    };
-    state.matches.push(m);
-    state.matchId = m.id;
-    return `Rematch #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
-  });
-  view.pvpPops = [null, null];
-  render();
-  collectToast(m);
+// Clock: Ready until GO; pause / resume; restart goes back to Ready (free);
+// the time left can be edited.
+const clockLimitMs = m => (m.limitSec || bs().matchSeconds) * 1000;
+function clockLeft(m) {
+  const base = m.leftMs == null ? clockLimitMs(m) : m.leftMs;
+  return m.runAt ? base - (Date.now() - Date.parse(m.runAt)) : base;
 }
+function timerText(m) {
+  if (!m.goAt) return `Ready · ${fmtDur(clockLeft(m))}`;
+  const left = clockLeft(m);
+  if (left <= 0) return `Time! +${fmtDur(-left)}`;
+  return fmtDur(left) + (m.runAt ? '' : ' · paused');
+}
+const timerClass = m => (!m.goAt ? 'ready' : (clockLeft(m) <= 0 ? 'over' : (m.runAt ? '' : 'paused')));
 
-function matchWeapons(pi, delta) {
+function clockAct(kind, value) {
   const m = playingMatch();
   if (!m || m.status !== 'playing') return;
-  const p = m.players[pi];
-  const next = Math.max(0, Math.min(9, p.weapons + delta));
-  if (next === p.weapons) return;
   commit(() => {
-    const old = p.weapons;
-    p.weapons = next;
-    p.tix = p.base + next * bs().weapon;
-    return `${p.name}: ${old} → ${next} extra weapons (${delta > 0 ? '+' : '−'}${bs().weapon} tix)`;
-  });
-  render();
-}
-
-// Tickets are collected at Start; the countdown waits until the robots are ready.
-function goMatch() {
-  const m = playingMatch();
-  if (!m || m.status !== 'playing' || m.goAt) return;
-  commit(() => {
-    m.goAt = now();
-    return `Started the clock for match #${m.no}`;
+    const left = clockLeft(m);
+    if (kind === 'go') {
+      if (!m.goAt) m.goAt = now();
+      m.leftMs = left;
+      m.runAt = now();
+      return `Started the clock for match #${m.no}`;
+    }
+    if (kind === 'pause' && m.runAt) { m.leftMs = left; m.runAt = null; return `Paused match #${m.no} at ${fmtDur(left)}`; }
+    if (kind === 'resume' && !m.runAt && m.goAt) { m.runAt = now(); return `Resumed match #${m.no}`; }
+    if (kind === 'restart') {
+      m.goAt = null; m.runAt = null; m.leftMs = null;
+      m.restarts = (m.restarts || 0) + 1;
+      return `Restarted match #${m.no} (back to Ready, no new tickets)`;
+    }
+    if (kind === 'set') {
+      m.leftMs = value;
+      if (m.runAt) m.runAt = now();
+      return `Match #${m.no} clock set to ${fmtDur(value)}`;
+    }
+    return '';
   });
   render();
 }
@@ -1451,6 +1596,7 @@ function endMatch() {
   const m = playingMatch();
   if (!m || m.status !== 'playing') return;
   commit(() => {
+    if (m.runAt) { m.leftMs = clockLeft(m); m.runAt = null; }
     m.status = 'scoring';
     m.endedAt = now();
     return `Ended match #${m.no}`;
@@ -1459,23 +1605,116 @@ function endMatch() {
   render();
 }
 
-function cancelMatch() {
+// Not ready after all: the match goes back to the front of the queue, tickets kept.
+function backToQueue() {
   const m = playingMatch();
-  if (!m) return;
+  if (!m || m.status !== 'playing') return;
   commit(() => {
-    state.matches = state.matches.filter(x => x !== m);
+    const q = queuedMatches();
+    m.status = 'queued';
+    m.startedAt = null; m.goAt = null; m.runAt = null; m.leftMs = null;
+    m.qpos = q.length ? q[0].qpos - 1 : nextQpos();
     state.matchId = null;
-    // Put the players back at the front of the queue, in their original order.
-    const back = m.players.map(p => ({
-      id: p.qid || uid(), name: p.name, weapons: p.weapons, age: p.age, gender: p.gender, addedAt: p.queuedAt || m.startedAt,
-    }));
-    state.queue = back.concat(state.queue);
-    if (state.nextMatchNo === m.no + 1) state.nextMatchNo = m.no; // reuse the number
-    return `Cancelled match #${m.no} (no tix, players back in queue)`;
+    return `Match #${m.no} back to the front of the queue (tickets kept)`;
   });
   view.pvpPops = [null, null];
   render();
-  toast(`Match #${m.no} cancelled · hand back ${matchTix(m)} tix`, 'warn');
+}
+
+// Change weapons on a queued or current match; the toast says what to collect or hand back.
+function openWeapons(id) {
+  const m = state.matches.find(x => x.id === id);
+  if (!m || !['queued', 'playing'].includes(m.status)) return;
+  view.modal = {
+    type: 'weapons', id,
+    w: m.players.map(p => {
+      const w = {};
+      Object.keys(p.buy || {}).forEach(k => { w[k] = 'buy'; });
+      (p.have || []).forEach(k => { w[k] = 'have'; });
+      return w;
+    }),
+  };
+  render();
+}
+function weaponsDraftTix(m, md) {
+  return m.players.reduce((s, p, i) => s + p.base + Object.keys(md.w[i]).filter(id => md.w[i][id] === 'buy')
+    .reduce((t, id) => t + (p.buy && p.buy[id] != null ? p.buy[id] : weaponPrice(id)), 0), 0);
+}
+function saveWeapons() {
+  const md = view.modal;
+  const m = md && state.matches.find(x => x.id === md.id);
+  if (!m) return;
+  const before = matchTix(m);
+  commit(() => {
+    m.players.forEach((p, i) => {
+      const w = md.w[i];
+      const buy = {};
+      const have = [];
+      Object.keys(w).forEach(id => {
+        if (w[id] === 'buy') buy[id] = p.buy && p.buy[id] != null ? p.buy[id] : weaponPrice(id);
+        else have.push(id);
+      });
+      p.buy = buy;
+      p.have = have;
+      p.tix = p.base + Object.values(buy).reduce((s, x) => s + x, 0);
+    });
+    return `Match #${m.no} weapons: ${m.players.map(p => `${p.name} ${weaponsText(p)}`).join(' · ')}`;
+  });
+  view.modal = null;
+  render();
+  const diff = matchTix(m) - before;
+  toast(diff > 0 ? `Collect ${diff} more tix` : (diff < 0 ? `Hand back ${-diff} tix` : 'Weapons saved'), diff < 0 ? 'warn' : 'ok');
+}
+
+// Instant rematch: plays right away, once in a row, only while the line is short.
+// Rematch: same players back of the line at the normal price. Weapons stay unlocked.
+function rematchBlock(lm) {
+  if (!lm || lm.status !== 'done' || lm.voided) return 'No match to rematch';
+  if (playingMatch()) return 'A match is already running';
+  if (bs().rematchOnce && lm.rematch) return 'Already had their instant rematch';
+  const waiting = queuedMatches().length;
+  if (waiting > bs().rematchMaxWaiting) return `${matchesText(waiting)} waiting: line is too long`;
+  return '';
+}
+function rematchSources(lm, who) {
+  const list = lm.mode !== 'pvp' || who === 'both' ? lm.players : [lm.players[Number(who)]];
+  return list.map(p => {
+    const w = {};
+    weaponIds(p).forEach(id => { w[id] = 'have'; });
+    return { name: p.name, age: p.age, gender: p.gender, w };
+  });
+}
+function rematch(instant) {
+  const lm = lastMatch();
+  if (!lm || lm.status !== 'done' || lm.voided || lm.followUp) return;
+  if (instant) {
+    const why = rematchBlock(lm);
+    if (why) { toast(why, 'warn'); return; }
+  }
+  const who = view.rmWho || 'both';
+  let m = null;
+  commit(() => {
+    const src = rematchSources(lm, who);
+    m = newMatch(src.length === 2 ? 'pvp' : 'house', src.map(x => makePlayer(x, instant ? bs().rematch : bs().match)),
+      { rematch: !!instant, again: true });
+    state.matches.push(m);
+    lm.followUp = m.no;
+    if (instant) {
+      m.status = 'playing';
+      m.startedAt = now();
+      state.matchId = m.id;
+      return `Instant rematch #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
+    }
+    return `Rematch #${m.no} back in line: ${matchTitle(m)} (${matchTix(m)} tix)`;
+  });
+  view.rmWho = 'both';
+  view.pvpPops = [null, null];
+  render();
+  if (instant) collectToast(m);
+  else {
+    const pos = queuedMatches().indexOf(m);
+    collectToast(m, ` · #${pos + 1} in line, ${waitText(pos)}`);
+  }
 }
 
 function finishScoring(m, label) {
@@ -1617,25 +1856,28 @@ function setMatchVoided(id, voided) {
 function avg(list) { return list.reduce((s, x) => s + x, 0) / list.length; }
 
 function cycleMinutes() {
-  const starts = state.matches.filter(m => !m.voided).map(m => Date.parse(m.startedAt)).sort((a, b) => a - b);
+  const starts = state.matches.filter(m => isPaid(m) && m.startedAt).map(m => Date.parse(m.startedAt)).sort((a, b) => a - b);
   const gaps = [];
   for (let i = 1; i < starts.length; i++) {
     const g = (starts[i] - starts[i - 1]) / 60000;
     if (g > 0.3 && g < 15) gaps.push(g);
   }
   const recent = gaps.slice(-6);
-  return recent.length ? avg(recent) : DEFAULT_CYCLE_MIN;
+  return recent.length ? avg(recent) : bs().matchSeconds / 60 + (bs().turnaroundMin || 0);
 }
 
-function playersPerMatch() {
-  const recent = state.matches.filter(m => !m.voided).slice(-6);
-  return recent.length ? avg(recent.map(m => m.players.length)) : 1;
+// Minutes until the match at this queue position starts: what's left of the
+// current match plus turnaround, then one match cycle per match ahead.
+function waitMinutes(pos) {
+  const m = playingMatch();
+  const turn = bs().turnaroundMin || 0;
+  let cur = 0;
+  if (m) cur = m.status === 'playing' ? Math.max(0, clockLeft(m)) / 60000 + turn : turn;
+  return cur + pos * cycleMinutes();
 }
-
-function waitText(index) {
-  const ahead = Math.ceil((index + 1) / playersPerMatch()) - (playingMatch() ? 0 : 1);
-  if (ahead <= 0) return 'next up';
-  return `~${Math.max(1, Math.round(ahead * cycleMinutes()))} min`;
+function waitText(pos) {
+  const w = waitMinutes(pos);
+  return w < 0.5 ? 'next up' : `~${Math.max(1, Math.round(w))} min`;
 }
 
 /* ==========================================================================
@@ -1675,23 +1917,31 @@ function computeTotals() {
     const b = byItem[w.item] || (byItem[w.item] = { units: 0, tix: 0, walkoffs: 0 });
     b.walkoffs += w.qty;
   });
-  const matches = state.matches.filter(m => !m.voided);
+  // Battle tickets are collected at sign-up, so every paid match counts
+  // (queued, playing or played); the match stats use played ones.
+  const paid = state.matches.filter(isPaid);
+  const matches = paid.filter(m => m.status === 'done');
+  const refunds = state.matches.filter(m => m.status === 'refunded' && !m.voided);
   const battle = {
     matches: matches.length,
+    queued: paid.filter(m => m.status === 'queued').length,
     house: matches.filter(m => m.mode === 'house').length,
     pvp: matches.filter(m => m.mode === 'pvp').length,
     rematches: matches.filter(m => m.rematch).length,
+    again: matches.filter(m => m.again && !m.rematch).length,
     players: matches.reduce((s, m) => s + m.players.length, 0),
-    weapons: matches.reduce((s, m) => s + m.players.reduce((t, p) => t + p.weapons, 0), 0),
-    tix: matches.reduce((s, m) => s + matchTix(m), 0),
+    weapons: paid.reduce((s, m) => s + m.players.reduce((t, p) => t + weaponsOf(p).filter(w => !w.have).reduce((u, w) => u + w.qty, 0), 0), 0),
+    tix: paid.reduce((s, m) => s + matchTix(m), 0),
     cards: matches.reduce((s, m) => s + matchCards(m), 0),
+    refunds: refunds.length,
+    refundTix: refunds.reduce((s, m) => s + matchTix(m), 0),
     avgMin: null,
   };
-  const timed = matches.filter(m => m.status === 'done' && m.endedAt);
+  const timed = matches.filter(m => m.endedAt && m.startedAt);
   if (timed.length) battle.avgMin = avg(timed.map(m => (Date.parse(m.endedAt) - Date.parse(m.startedAt)) / 60000));
   if (battle.tix) byBox.battle = battle.tix;
   const tix = Object.values(byBox).reduce((s, x) => s + x, 0);
-  return { sold, byItem, byBox, battle, matches, tix, trades, byPrize, prizes };
+  return { sold, byItem, byBox, battle, matches, paid, tix, trades, byPrize, prizes };
 }
 
 /* ==========================================================================
@@ -1738,18 +1988,19 @@ function buildCSV() {
     rows.push([w.station, 'W' + w.no, w.voided ? 'voided' : 'walk-off', localStamp(w.at), localStamp(w.at),
       catById(it.cat).name, it.name, w.qty, 0, 0, '', ''].concat(blankBattle, [labelOf(WALKOFF_REASONS, w.reason), ''], tail(w.id)));
   });
+  const MATCH_STATUS = { done: 'played', queued: 'queued', refunded: 'refunded', paired: 'paired' };
   state.matches.forEach(m => {
-    const status = m.voided ? 'voided' : (m.status === 'done' ? 'played' : 'in progress');
+    const status = m.voided ? 'voided' : (MATCH_STATUS[m.status] || 'in progress');
     const total = matchTix(m);
     m.players.forEach((p, i) => {
-      const common = [m.station, 'B' + m.no, status, localStamp(m.startedAt), localStamp(m.endedAt), 'Balloon Battle'];
+      const common = [m.station, 'B' + m.no, status, localStamp(m.paidAt || m.startedAt), localStamp(m.endedAt), 'Balloon Battle'];
       const demo = [labelOf(AGES, p.age), labelOf(GENDERS, p.gender)];
       const mode = m.mode === 'pvp' ? 'vs player' : 'vs house';
       rows.push(common.concat([m.rematch ? 'Rematch' : 'Match', 1, p.base, total], demo,
         [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', ''], tail(m.id, p.outcome ? outcomeLabel(p.outcome) : [m.tie ? 'Tie' : '', p.knockedOut ? 'Knocked out' : (p.knockedOut === false ? 'Survived' : '')].filter(Boolean).join(' / '))));
-      if (p.weapons) {
-        rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '', ''], tail(m.id)));
-      }
+      weaponsOf(p).forEach(w => {
+        rows.push(common.concat([w.have ? `${w.name} (sticker)` : w.name, w.qty, w.tix, total], demo, [mode, 'P' + (i + 1), '', '', '', '', ''], tail(m.id)));
+      });
     });
   });
   return rows.map(r => r.map(csvCell).join(',')).join('\r\n');
@@ -1845,15 +2096,27 @@ function computeStats() {
     add('Copters', 'Add-on rate (extra prop, toroidal prop or ripcord)', pct(addOn, copterBuyers.length));
   }
   const b = t.battle;
-  if (b.matches) {
-    const players = t.matches.flatMap(m => m.players);
-    add('Battle', 'Matches', b.matches);
+  if (t.paid.length) {
+    const paidPlayers = t.paid.flatMap(m => m.players);
+    add('Battle', 'Matches played', b.matches);
+    add('Battle', 'Paid, waiting in the queue', b.queued);
     add('Battle', 'Players', b.players);
     add('Battle', 'Tickets', b.tix);
-    add('Battle', 'Avg tix per match', avgText(b.tix, b.matches));
-    add('Battle', 'Avg tix per player', avgText(b.tix, b.players));
-    add('Battle', 'Weapon rate (players with 1+ extra)', pct(players.filter(p => p.weapons > 0).length, players.length));
-    add('Battle', 'Rematch rate', pct(b.rematches, b.matches));
+    add('Battle', 'Avg tix per match', avgText(b.tix, t.paid.length));
+    add('Battle', 'Avg tix per player', avgText(b.tix, paidPlayers.length));
+    add('Battle', 'Weapon unlock rate (players who bought 1+)', pct(paidPlayers.filter(p => weaponsOf(p).some(w => !w.have)).length, paidPlayers.length));
+    WEAPONS.forEach(w => {
+      const bought = paidPlayers.flatMap(p => weaponsOf(p)).filter(x => x.id === w.id && !x.have);
+      add('Battle', `${w.name} unlocks`, `${bought.length} (${bought.reduce((s, x) => s + x.tix, 0)} tix)`);
+    });
+    add('Battle', 'Weapons used with a sticker (free)', paidPlayers.flatMap(p => weaponsOf(p)).filter(x => x.have).length);
+    add('Battle', 'Instant rematch rate', pct(b.rematches, b.matches));
+    add('Battle', 'Rematches back in line', b.again);
+    add('Battle', 'Solo sign-ups paired up', t.paid.filter(m => m.pairedFrom).length);
+    add('Battle', 'Refunds', `${b.refunds} (${b.refundTix} tix)`);
+    add('Battle', 'Clock restarts', t.paid.reduce((s, m) => s + (m.restarts || 0), 0));
+    const waits = t.paid.filter(m => m.startedAt && m.paidAt && !m.rematch).map(m => (Date.parse(m.startedAt) - Date.parse(m.paidAt)) / 60000);
+    add('Battle', 'Avg wait, sign-up to start (minutes)', waits.length ? avg(waits).toFixed(1) : '-');
     add('Battle', 'vs Player share', pct(b.pvp, b.matches));
     add('Battle', 'Avg match minutes', b.avgMin == null ? '-' : b.avgMin.toFixed(1));
     add('Battle', 'Cards paid out', b.cards);
@@ -1895,7 +2158,7 @@ function computeStats() {
     bk.n += 1; bk.tix += tix;
   };
   sold.forEach(c => bump(c.closedAt, customerTotal(c)));
-  t.matches.forEach(m => bump(m.startedAt, matchTix(m)));
+  t.paid.forEach(m => bump(m.paidAt || m.startedAt, matchTix(m)));
   t.trades.forEach(c => bump(c.closedAt, 0));
   const keys = Object.keys(buckets).map(Number).sort((x, y) => x - y);
   const label = k => `${fmtTime(new Date(k).toISOString())} to ${fmtTime(new Date(k + STATS_BUCKET_MIN * 60000).toISOString())}`;
@@ -1977,7 +2240,7 @@ function combineResult() {
     if (!r.record_id) { legacy += 1; kept.push(r); return; }
     if (best[`${r.laptop_id}|${r.record_id}`] === fi) kept.push(r);
   }));
-  const counted = r => ['sold', 'played', 'in progress', 'traded'].includes(r.status);
+  const counted = r => ['sold', 'played', 'in progress', 'queued', 'traded'].includes(r.status);
   const byCat = {};
   const prizes = {};
   let cardsPaid = 0, cardsRedeemed = 0;
@@ -2083,7 +2346,7 @@ function render() {
   let main;
   let panel;
   if (view.screen === 'home') { main = homeView(cats, c); panel = panelView(c); }
-  else if (view.screen === 'battle') { main = battleView(multi); panel = queuePanel(); }
+  else if (view.screen === 'battle') { main = battleView(multi); panel = signupPanel(); }
   else {
     const cat = catById(view.screen);
     const kind = cat.kind === 'prizes' ? 'trade' : 'sale';
@@ -2098,7 +2361,7 @@ function render() {
     + bannerView();
   view.pulse = null;
 
-  const focusId = view.focusName ? 'q-name' : (keep && keep.id);
+  const focusId = view.focusName ? 'q-name-0' : (keep && keep.id);
   view.focusName = false;
   if (focusId) {
     const el = document.getElementById(focusId);
@@ -2199,9 +2462,10 @@ function homeView(cats, c) {
     let badge = '';
     let hint = cat.hint;
     if (cat.kind === 'battle') {
-      hint = `${bs().match} tix per player · rematch ${bs().rematch}`;
-      if (playingMatch()) badge = 'Match in progress';
-      else if (state.queue.length) badge = `${state.queue.length} in queue`;
+      hint = `${bs().match} tix per player · weapons unlock once`;
+      const waiting = queuedMatches().length;
+      if (playingMatch()) badge = `Match in progress${waiting ? ` · ${waiting} in queue` : ''}`;
+      else if (waiting) badge = `${waiting} in queue`;
     } else if (cat.kind === 'prizes') {
       const tr = currentOf('trade');
       if (tr && tr.lines.length) badge = `${customerTotal(tr)} cards in this trade`;
@@ -2452,7 +2716,7 @@ function rulesLines() {
   const b = bs();
   const mins = b.matchSeconds % 60 ? `${Math.floor(b.matchSeconds / 60)} min ${b.matchSeconds % 60} s` : plural(b.matchSeconds / 60, 'minute');
   const lines = [
-    `${b.match} tickets each to play. Extra weapon: +${b.weapon} ticket each.`,
+    `${b.match} tickets each to play. Unlock a weapon: ${WEAPONS.map(w => `${w.name.toLowerCase()} +${weaponPrice(w.id)}`).join(', ')}. Pay once, keep your sticker, it's yours all day.`,
     `Each robot has ${BALLOONS} balloons. Pop the other robot's balloons!`,
     `The match lasts ${mins}, or until a robot loses all ${BALLOONS} balloons.`,
   ];
@@ -2474,8 +2738,20 @@ function rulesLines() {
     lines.push(`vs a friend: the winner gets ${b.cardsPerPop} cards for every balloon they popped${b.consolation ? `, and the other player gets ${plural(b.consolation, 'card')}` : ''}.`);
     lines.push(b.pvpTie === 'both' ? 'Tie when time runs out: each player gets cards for the balloons they popped.' : 'Tie when time runs out: no cards.');
   }
-  lines.push(`Trade your cards for prizes at the Prize Table. Instant rematch: ${b.rematch} tickets each, no waiting in line.`);
+  lines.push(`Go again: Rematch puts you back in line for ${b.match} tickets. Instant rematch plays right away for ${b.rematch}${b.rematchOnce ? ', once,' : ''} when the line is short.`);
+  lines.push('Trade your cards for prizes at the Prize Table.');
   return lines;
+}
+// One or two sentences for the sign-up panel.
+function scoringShort() {
+  const b = bs();
+  if (b.scoring === 'survive') return `Every balloon you pop is ${plural(b.cardsPerPop, 'Pokémon card')}, but you only keep them if your robot still has a balloon when the match ends.`;
+  if (b.scoring === 'outcome') {
+    const o = b.outcomeCards;
+    return `Knock them out before time: ${o.koWin} cards. Ahead when time runs out: ${o.timeWin}. Survive to the end: ${o.survive}.${o.knockedOut ? ` Knocked out: ${o.knockedOut}.` : ''}`;
+  }
+  if (b.pvpRule === 'both') return `Every balloon you pop is ${plural(b.cardsPerPop, 'Pokémon card')}.`;
+  return `vs our robot: ${b.cardsPerPop} cards per balloon you pop. vs a friend: the winner gets ${b.cardsPerPop} per balloon they popped.`;
 }
 function rulesScript() {
   const b = bs();
@@ -2485,7 +2761,9 @@ function rulesScript() {
   return [
     `"Want to battle robots? It's ${b.match} tickets to drive one against our robot or a friend."`,
     `"Pop the other robot's ${BALLOONS} balloons before time runs out: ${pay}."`,
-    `"Want an extra weapon? It's ${b.weapon} more ticket. Cards trade in for prizes over at the Prize Table."`,
+    `"${weaponAsk()}"`,
+    `"Good game! Go again? Instant rematch is ${b.rematch} tickets right now, or hop back in line for ${b.match}. Your weapons stay unlocked."`,
+    `"Cards trade in for prizes over at the Prize Table."`,
   ];
 }
 function rulesView() {
@@ -2493,6 +2771,7 @@ function rulesView() {
     ${dialogHead('Balloon Battle rules')}
     <ol class="rules-list">${rulesLines().map(l => `<li>${esc(l)}</li>`).join('')}</ol>
     <div class="script"><div class="f-label">Volunteer script</div>${rulesScript().map(l => `<p>${esc(l)}</p>`).join('')}</div>
+    <div class="script"><div class="f-label">Controls script</div>${CONTROLS_SCRIPT.length ? CONTROLS_SCRIPT.map(l => `<p>${esc(l)}</p>`).join('') : '<p>Coming soon: how to drive the robot.</p>'}</div>
   </div>`;
 }
 
@@ -2501,40 +2780,179 @@ function battleView(canBack) {
       ${canBack ? '<button class="back" data-act="home">← Back</button>' : ''}
       <div class="cat-title">Balloon Battle</div>
       <div class="spacer"></div>
-      <div class="cat-tip">Tickets are collected when a match starts<br>${bs().match} per player · +${bs().weapon} per extra weapon · rematch ${bs().rematch}</div>
+      <div class="cat-tip">Tickets are collected at sign-up<br>${bs().match} per player · unlock ${WEAPONS.map(w => `${w.name.toLowerCase()} +${weaponPrice(w.id)}`).join(', ')} · instant rematch ${bs().rematch}</div>
       <button class="walkoff-btn rules-btn" data-act="open" data-modal="rules">Rules / script</button>
     </div>
     ${payoutBar()}`;
   const m = playingMatch();
-  let body;
-  if (m && m.status === 'playing') body = playingView(m);
-  else if (m && m.status === 'scoring') body = m.mode === 'house' ? scoreHouseView(m) : scorePvpView(m);
-  else body = idleView();
-  return head + `<div class="arena">${body}</div>`;
+  let top;
+  if (m && m.status === 'playing') top = playingView(m);
+  else if (m && m.status === 'scoring') top = m.mode === 'house' ? scoreHouseView(m) : scorePvpView(m);
+  else top = resultView();
+  // Scoring needs the room; otherwise the queue sits under the pinned match.
+  const queue = m && m.status === 'scoring' ? '' : queueView();
+  return head + `<div class="arena">${top}${queue}</div>`;
 }
 
 function playingView(m) {
-  const limit = fmtDur((m.limitSec || bs().matchSeconds) * 1000);
-  const action = m.goAt
-    ? `<button class="huge go" data-act="endmatch">Match over · enter result<small>time ran out or someone lost all ${BALLOONS} balloons</small></button>`
-    : `<button class="huge yellow" data-act="gomatch">GO · start the ${limit} clock<small>tap when both robots are ready</small></button>
-    <button class="linkbtn" data-act="endmatch">Match already over? Enter the result</button>`;
-  return `<div class="now fill">
+  const st = clockState(m);
+  const limit = fmtDur(clockLeft(m));
+  const big = st === 'ready'
+    ? `<button class="huge yellow" data-act="gomatch">GO · start the ${limit} clock<small>tap when both robots are ready</small></button>
+       <button class="huge go" data-act="endmatch">Match over<small>enter the result</small></button>`
+    : `${st === 'running' ? '<button class="huge ink" data-act="pausematch">Pause</button>' : '<button class="huge yellow" data-act="resumematch">Resume</button>'}
+       <button class="huge go" data-act="endmatch">Match over · enter result<small>time ran out or someone lost all ${BALLOONS} balloons</small></button>`;
+  const who = m.players.map(p => `<div class="cp"><span class="cp-name">${esc(p.name)}</span><span class="cp-sub">${esc(weaponsText(p))} · paid ${p.tix} tix</span></div>`).join('')
+    + (m.mode === 'house' ? '<div class="cp house"><span class="cp-name">House bot</span><span class="cp-sub">driven by the crew</span></div>' : '');
+  return `<div class="now current">
     <div class="now-head">
-      <span class="now-title">Match #${m.no} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · rematch' : ''}</span>
-      <span class="timer${m.goAt ? '' : ' ready'}" id="match-timer">${m.goAt ? limit : `Ready · ${limit}`}</span>
+      <span class="now-title">Match #${m.no} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · instant rematch' : ''}</span>
+      <span class="timer ${timerClass(m)}" id="match-timer">${timerText(m)}</span>
     </div>
-    <div class="players">${m.players.map((p, i) => `<div class="pcard">
-      <div class="pname">${esc(p.name)}</div>
-      <div class="ptix">Collected <b>${p.tix} tix</b> (${p.base} + ${p.weapons} weapon${p.weapons === 1 ? '' : 's'})</div>
-      <div class="wrow">Extra weapons
-        <button class="step" data-act="mweapon" data-p="${i}" data-d="-1" aria-label="One fewer weapon">−</button>
-        <span class="wcount">${p.weapons}</span>
-        <button class="step" data-act="mweapon" data-p="${i}" data-d="1" aria-label="One more weapon">+</button>
+    <div class="cur-players">${who}</div>
+    <div class="ctl-row">${big}</div>
+    <div class="mini-row">
+      ${st !== 'ready' ? '<button class="btn slim" data-act="restartmatch">Restart (back to Ready)</button>' : ''}
+      <button class="btn slim" data-act="editclock">Edit clock</button>
+      <button class="btn slim" data-act="mweapons" data-id="${m.id}">Change weapons</button>
+      <button class="btn slim" data-act="backqueue">Not ready: back to queue</button>
+    </div>
+  </div>`;
+}
+const clockState = m => (!m.goAt ? 'ready' : (m.runAt ? 'running' : 'paused'));
+
+function resultView() {
+  const lm = lastMatch();
+  if (!lm || lm.status !== 'done' || lm.voided) return '';
+  const lines = lm.players.map(p => {
+    const what = p.outcome ? outcomeLabel(p.outcome).toLowerCase()
+      : `popped ${p.pops}${lm.mode === 'pvp' ? (p.won ? ' · won' : (lm.tie ? ' · tie' : '')) : ''}${p.knockedOut ? ' · knocked out' : ''}`;
+    const give = p.cards ? `<span class="give">give ${cardsText(p.cards)}</span>` : '<span class="none">0 cards</span>';
+    return `<div class="r-line">${esc(p.name)} ${what} → ${give}</div>`;
+  }).join('');
+  let again;
+  if (lm.followUp) {
+    again = `<p class="note">Rematch signed up as #${lm.followUp}.</p>`;
+  } else {
+    const who = view.rmWho || 'both';
+    const n = lm.mode === 'pvp' && who === 'both' ? 2 : 1;
+    const pick = lm.mode === 'pvp' ? `<div class="chips c3">${[['both', 'Both']].concat(lm.players.map((p, i) => [String(i), `Only ${p.name} (vs House)`]))
+      .map(([id, label]) => `<button class="chip sm${who === id ? ' on' : ''}" data-act="rmwho" data-val="${id}">${esc(label)}</button>`).join('')}</div>` : '';
+    const why = rematchBlock(lm);
+    const q = queuedMatches().length;
+    again = `${pick}
+      <div class="ask-line">Ask: “Go again? Instant rematch is ${bs().rematch} tickets right now, or hop back in line for ${bs().match}. Your weapons stay unlocked.”</div>
+      <div class="r-btns">
+        <button class="huge yellow" data-act="rematch" data-instant="1" ${why ? 'disabled' : ''}>Instant rematch · ${bs().rematch * n} tix<small>${why ? esc(why) + ' · use Rematch' : `plays right now · ${q ? matchesText(q) + ' waiting' : 'nobody waiting'}`}</small></button>
+        <button class="huge ink" data-act="rematch" data-instant="0">Rematch · back in line · ${bs().match * n} tix<small>#${q + 1} in line, ${waitText(q)}</small></button>
+      </div>`;
+  }
+  return `<div class="result">
+    <div class="r-title">Match #${lm.no} result · ${esc(matchTitle(lm))}</div>
+    ${lines}
+    ${again}
+  </div>`;
+}
+
+function queueView() {
+  const q = queuedMatches();
+  const cur = playingMatch();
+  const rows = q.map((x, i) => {
+    const cand = pairCandidate(x);
+    const names = x.players.map(p => `${esc(p.name)}${esc(ageTag(p))}`).join(' vs ');
+    const title = x.mode === 'pvp' ? names : `${names} vs House${isOpen(x) ? ' <span class="solo">solo · wants an opponent</span>' : ''}`;
+    const weapons = x.players.filter(p => weaponsOf(p).length).map(p => `${esc(p.name)}: ${esc(weaponsText(p))}`).join(' · ') || 'no weapons';
+    return `<div class="qrow${i === 0 ? ' first' : ''}">
+      <div class="q-pos">${i + 1}</div>
+      <div class="l-info">
+        <div class="l-name">${title} <span class="q-wait" id="qw-${x.id}">${waitText(i)}</span></div>
+        <div class="l-sub">#${x.no} · paid <b>${matchTix(x)}</b> tix · ${weapons}${x.again ? ' · rematch' : ''}</div>
+        ${cand ? `<button class="btn slim pair" data-act="pair" data-id="${x.id}">Pair with ${esc(cand.players[0].name)}${esc(ageTag(cand.players[0]))} (#${cand.no}) → vs Player</button>` : ''}
       </div>
-    </div>`).join('')}${m.mode === 'house' ? `<div class="pcard" style="border-style:dashed;color:var(--rb-gray-600)"><div class="pname">House bot</div><div class="ptix">Driven by the crew</div></div>` : ''}</div>
-    ${action}
-    <button class="linkbtn" data-act="cancelmatch">Cancel match (hand tickets back, players return to the front of the queue)</button>
+      <div class="l-ctl">
+        <button class="btn slim go" data-act="qstart" data-id="${x.id}" ${cur ? 'disabled' : ''}>Start</button>
+        <button class="btn slim" data-act="mweapons" data-id="${x.id}">Weapons</button>
+        <button class="step sm" data-act="qdown" data-id="${x.id}" ${i === q.length - 1 ? 'disabled' : ''} aria-label="Not ready: move #${x.no} down one">↓</button>
+        <button class="step sm" data-act="qrefund" data-id="${x.id}" aria-label="Remove #${x.no} and refund">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+  const next = !cur && q.length
+    ? `<button class="huge go" data-act="qstart" data-id="${q[0].id}">Start next: #${q[0].no} ${esc(matchTitle(q[0]))}</button>` : '';
+  return `<div class="queue-card">
+    <div class="qc-head"><span class="qc-title">Queue · ${q.length} waiting</span><span class="qc-sub">Start any match · ↓ not ready yet · ✕ remove and refund</span></div>
+    ${next}
+    <div class="qlist">${rows || '<div class="empty">Nobody in line. Sign kids up on the right.</div>'}</div>
+  </div>`;
+}
+
+function weaponChip(st, id, act, attrs) {
+  const sub = st === 'buy' ? `unlock · +${weaponPrice(id)} tix` : (st === 'have' ? 'has sticker · free' : `+${weaponPrice(id)} tix`);
+  return `<button class="chip wchip${st ? ' on ' + st : ''}" data-act="${act}" ${attrs} data-w="${id}">${esc(weaponName(id))}<small>${sub}</small></button>`;
+}
+
+function signupPanel() {
+  const d = view.qDraft;
+  const modes = [['house', 'vs House', 'one player'], ['pvp', 'vs Player', 'came as a pair'], ['solo', 'Solo', 'find an opponent']];
+  const two = d.mode === 'pvp';
+  const forms = draftPlayers(d).map((pd, i) => {
+    const demo = state.settings.demographics ? `<div class="chips c5">${AGES.map(a => [a.id, a.label, 'age']).concat(GENDERS.map(g => [g.id, g.label, 'gender']))
+      .map(([val, label, field]) => `<button class="chip sm${pd[field] === val ? ' on' : ''}" data-act="qdemo" data-p="${i}" data-field="${field}" data-val="${val}">${label}</button>`).join('')}</div>` : '';
+    return `<div class="pform">
+      <input id="q-name-${i}" placeholder="${two ? `Player ${i + 1} first name` : 'First name'}" value="${esc(pd.name)}" maxlength="24" autocomplete="off">
+      <div class="chips c2">${WEAPONS.map(w => weaponChip(pd.w[w.id], w.id, 'qweap', `data-p="${i}"`)).join('')}</div>
+      ${demo}
+    </div>`;
+  }).join('');
+  return `<aside class="panel" aria-label="Battle sign-up">
+    <div class="p-head">
+      <div class="p-title">Sign up</div>
+      <div class="p-sub">${queuedMatches().length} in queue<br>tickets collected now</div>
+    </div>
+    <div class="qform">
+      <div class="chips c3">${modes.map(([id, label, sub]) => `<button class="chip${d.mode === id ? ' on' : ''}" data-act="qmode" data-val="${id}">${label}<small>${sub}</small></button>`).join('')}</div>
+      <div class="ask-line">Ask: “${esc(weaponAsk())}”</div>
+      ${forms}
+      <p class="note">Weapon tap: unlock (pay, give a sticker) → already has the sticker (free) → none.</p>
+      <button class="qadd" data-act="qadd">Add to queue · collect ${draftTix(d)} tix</button>
+      <div class="script"><div class="f-label">Scoring (say it)</div><p>${esc(scoringShort())}</p></div>
+    </div>
+  </aside>`;
+}
+
+function upsellView() {
+  const d = view.qDraft;
+  return `<div class="dialog upsell" role="dialog" aria-label="Ask about weapons">
+    ${dialogHead('Ask about weapons!')}
+    <p class="ask-big">“${esc(weaponAsk())}”</p>
+    ${draftPlayers(d).map((pd, i) => `<div class="pvp-row"><div class="pvp-name">${esc(pd.name.trim() || (d.mode === 'pvp' ? `Player ${i + 1}` : 'Player'))}</div>
+      <div class="chips c2">${WEAPONS.map(w => weaponChip(pd.w[w.id], w.id, 'qweap', `data-p="${i}"`)).join('')}</div></div>`).join('')}
+    <button class="huge go" data-act="qaddgo">Add to queue · collect ${draftTix(d)} tix</button>
+  </div>`;
+}
+
+function weaponsView(md) {
+  const m = state.matches.find(x => x.id === md.id);
+  if (!m) return '';
+  const diff = weaponsDraftTix(m, md) - matchTix(m);
+  return `<div class="dialog upsell" role="dialog" aria-label="Change weapons">
+    ${dialogHead(`Weapons · match #${m.no}`)}
+    <p class="ask-big">“${esc(weaponAsk())}”</p>
+    ${m.players.map((p, i) => `<div class="pvp-row"><div class="pvp-name">${esc(p.name)}</div>
+      <div class="chips c2">${WEAPONS.map(w => weaponChip(md.w[i][w.id], w.id, 'mweap', `data-p="${i}"`)).join('')}</div></div>`).join('')}
+    <button class="huge go" data-act="mweapsave">${diff > 0 ? `Save · collect ${diff} more tix` : (diff < 0 ? `Save · hand back ${-diff} tix` : 'Save')}</button>
+  </div>`;
+}
+
+function clockView(md) {
+  const m = playingMatch();
+  if (!m) return '';
+  return `<div class="dialog narrow" role="dialog" aria-label="Edit clock">
+    ${dialogHead(`Clock · match #${m.no}`)}
+    <div class="clock-big">${fmtDur(md.sec * 1000)}</div>
+    <div class="chips c4">${[[-60, '−1:00'], [-10, '−0:10'], [10, '+0:10'], [60, '+1:00']].map(([d, l]) => `<button class="chip" data-act="clockadj" data-d="${d}">${l}</button>`).join('')}</div>
+    <button class="btn slim" data-act="clockfull">Back to full ${fmtDur(clockLimitMs(m))}</button>
+    <button class="huge go" data-act="clocksave">Set clock to ${fmtDur(md.sec * 1000)}<small>${clockState(m) === 'running' ? 'keeps running from there' : 'tap GO / Resume to run it'}</small></button>
   </div>`;
 }
 
@@ -2609,71 +3027,6 @@ function scorePvpView(m) {
   </div>`;
 }
 
-function idleView() {
-  const lm = lastMatch();
-  let result = '';
-  if (lm && lm.status === 'done' && !lm.voided) {
-    const lines = lm.players.map(p => {
-      const what = p.outcome ? outcomeLabel(p.outcome).toLowerCase()
-        : `popped ${p.pops}${lm.mode === 'pvp' ? (p.won ? ' · won' : (lm.tie ? ' · tie' : '')) : ''}${p.knockedOut ? ' · knocked out' : ''}`;
-      const give = p.cards ? `<span class="give">give ${cardsText(p.cards)}</span>` : '<span class="none">0 cards</span>';
-      return `<div class="r-line">${esc(p.name)} ${what} → ${give}</div>`;
-    }).join('');
-    const waiting = state.queue.length;
-    const rmTix = lm.players.map(p => bs().rematch + p.weapons * bs().weapon);
-    result = `<div class="result">
-      <div class="r-title">Match #${lm.no} result · ${esc(matchTitle(lm))}</div>
-      ${lines}
-      <button class="huge yellow" data-act="rematch">Instant rematch · ${rmTix.join(' + ')} tix<small>${waiting ? `${plural(waiting, 'person')} waiting in the queue` : 'nobody waiting'}</small></button>
-    </div>`;
-  }
-  const q = state.queue;
-  const houseSub = q.length ? `${esc(q[0].name)} · ${weaponsText(q[0].weapons)}` : 'Walk-up (queue is empty)';
-  const pvpSub = q.length >= 2 ? `${esc(q[0].name)} vs ${esc(q[1].name)}` : 'Needs 2 people in the queue';
-  return `${result}
-    <div class="starts">
-      <button class="start theme-red" data-act="startmatch" data-mode="house">
-        <span class="s-big">Start vs House</span><span class="s-sub">${houseSub}</span>
-      </button>
-      <button class="start theme-ink" data-act="startmatch" data-mode="pvp" ${q.length >= 2 ? '' : 'disabled'}>
-        <span class="s-big">Start vs Player</span><span class="s-sub">${pvpSub}</span>
-      </button>
-    </div>`;
-}
-
-function queuePanel() {
-  const d = view.qDraft;
-  const chip = (field, val, label, extra) => `<button class="chip sm${d[field] === val ? ' on' : ''}" data-act="qdraft" data-field="${field}" data-val="${val}">${label}${extra || ''}</button>`;
-  const demo = state.settings.demographics ? `<div class="d-label">Optional · who is it</div>
-    <div class="chips c5">${AGES.map(a => chip('age', a.id, a.label)).join('')}${GENDERS.map(g => chip('gender', g.id, g.label)).join('')}</div>` : '';
-  const rows = state.queue.map((q, i) => `<div class="qrow${i === 0 ? ' first' : ''}">
-      <div class="q-pos">${i + 1}</div>
-      <div class="l-info">
-        <div class="l-name">${esc(q.name)}</div>
-        <div class="l-sub"><b>${q.weapons}</b> extra weapon${q.weapons === 1 ? '' : 's'} · ${waitText(i)}</div>
-      </div>
-      <div class="l-ctl">
-        <button class="step sm" data-act="qweapon" data-id="${q.id}" data-d="-1" aria-label="One fewer weapon for ${esc(q.name)}">−</button>
-        <button class="step sm" data-act="qweapon" data-id="${q.id}" data-d="1" aria-label="One more weapon for ${esc(q.name)}">+</button>
-        <button class="step sm" data-act="qremove" data-id="${q.id}" aria-label="Remove ${esc(q.name)}">✕</button>
-      </div>
-    </div>`).join('');
-  return `<aside class="panel" aria-label="Battle queue">
-    <div class="p-head">
-      <div class="p-title">Queue</div>
-      <div class="p-sub">${state.queue.length} waiting<br>−/+ = extra weapons</div>
-    </div>
-    <div class="qform">
-      <input id="q-name" placeholder="First name" value="${esc(d.name)}" maxlength="24" autocomplete="off">
-      <div class="d-label">Extra weapons (+${bs().weapon} tix each)</div>
-      <div class="chips c4">${[0, 1, 2, 3].map(n => chip('weapons', n, String(n))).join('')}</div>
-      ${demo}
-      <button class="qadd" data-act="qadd">Add to queue</button>
-    </div>
-    <div class="lines">${rows || '<div class="empty">Nobody in line</div>'}</div>
-  </aside>`;
-}
-
 function bannerView() {
   if (!storageOK) return '<div class="banner">NOT SAVING: this browser is blocking storage. Close this window and open the tracker in a normal (not private) window.</div>';
   if (otherTab) return '<div class="banner">This booth is open in another tab or window. Close the extra one. Undo history was cleared to protect its sales.</div>';
@@ -2695,6 +3048,9 @@ function modalView() {
   else if (m.type === 'pace') inner = paceView();
   else if (m.type === 'combine') inner = combineView();
   else if (m.type === 'rules') inner = rulesView();
+  else if (m.type === 'upsell') inner = upsellView();
+  else if (m.type === 'weapons') inner = weaponsView(m);
+  else if (m.type === 'clock') inner = clockView(m);
   return `<div class="overlay" data-act="overlay">${inner}</div>`;
 }
 
@@ -2829,21 +3185,21 @@ function totalsView() {
     `<tr><td>${esc(name)}</td><td class="num">${stockStart(key)}</td><td class="num">${stockUsed(key)}</td><td class="num">${keyLeft(key)}</td></tr>`).join('');
 
   const b = t.battle;
-  const battleBlock = b.matches ? `<h3>Balloon Battle</h3>
+  const battleBlock = t.paid.length ? `<h3>Balloon Battle</h3>
     <div class="big-stats">
       <div class="stat"><div class="s-val">${b.matches}</div><div class="s-label">Matches (${b.house} vs House · ${b.pvp} vs Player · ${b.rematches} rematches)</div></div>
       <div class="stat"><div class="s-val">${b.cards}</div><div class="s-label">Cards paid out (≈ ${money(b.cards * PRIZE_DOLLARS_PER_CARD)} in prizes)</div></div>
       <div class="stat"><div class="s-val">${b.tix ? (b.cards / b.tix).toFixed(2) : '0'}</div><div class="s-label">Cards per ticket (target about 1)</div></div>
       <div class="stat"><div class="s-val">${b.avgMin == null ? '-' : b.avgMin.toFixed(1)}</div><div class="s-label">Average match, minutes</div></div>
     </div>
-    <p class="note">${plural(b.players, 'player')} · ${plural(b.weapons, 'extra weapon')} sold · ${b.tix} tix (≈ ${money(b.tix * NET_PER_TICKET)} after CCA's 10%) vs ≈ ${money(b.cards * PRIZE_DOLLARS_PER_CARD)} in prizes.</p>` : '';
+    <p class="note">${plural(b.players, 'player')} played · ${matchesText(b.queued)} paid and waiting · ${plural(b.weapons, 'weapon unlock')} · ${b.refunds ? `${plural(b.refunds, 'refund')} (${b.refundTix} tix handed back) · ` : ''}${b.tix} tix (≈ ${money(b.tix * NET_PER_TICKET)} after CCA's 10%) vs ≈ ${money(b.cards * PRIZE_DOLLARS_PER_CARD)} in prizes.</p>` : '';
 
   // Prize-only laptops have no tickets; leave the ticket figures out there.
   const hasTix = t.tix > 0 || t.sold.length > 0 || b.players > 0 || enabledCats().some(cat => cat.kind !== 'prizes');
 
   // Demographics: sale units and battle players per age / gender group.
   const usedSale = CATEGORIES.filter(cat => cat.kind === 'sale' && cat.items.some(it => t.byItem[it.id] && t.byItem[it.id].units));
-  const battlePlayers = t.matches.flatMap(m => m.players);
+  const battlePlayers = t.paid.flatMap(m => m.players);
   const demoTable = (title, list, field) => {
     const groups = list.map(o => ({ id: o.id, label: o.label })).concat([{ id: null, label: 'Not tagged' }]);
     const body = groups.map(g => {
@@ -2852,18 +3208,19 @@ function totalsView() {
       const ts = t.trades.filter(c => (c[field] || null) === g.id);
       if (!cs.length && !ps.length && !ts.length) return '';
       const cells = usedSale.map(cat => `<td class="num">${cs.reduce((s, c) => s + catUnits(c, cat.id), 0)}</td>`).join('');
-      const battleCell = b.matches ? `<td class="num">${ps.length}</td>` : '';
+      const battleCell = t.paid.length ? `<td class="num">${ps.length}</td>` : '';
       const prizeCell = pz.trades ? `<td class="num">${ts.reduce((s, c) => s + unitsOf(c), 0)}</td>` : '';
       const tix = cs.reduce((s, c) => s + customerTotal(c), 0) + ps.reduce((s, p) => s + p.tix, 0);
       return `<tr><td>${esc(g.label)}</td>${cells}${battleCell}${prizeCell}${hasTix ? `<td class="num">${tix}</td>` : ''}</tr>`;
     }).join('');
     if (!body) return '';
-    return `<h3>${title}</h3><table><thead><tr><th>${title}</th>${usedSale.map(cat => `<th class="num">${esc(cat.name)} units</th>`).join('')}${b.matches ? '<th class="num">Battle players</th>' : ''}${pz.trades ? '<th class="num">Prizes</th>' : ''}${hasTix ? '<th class="num">Tix</th>' : ''}</tr></thead><tbody>${body}</tbody></table>`;
+    return `<h3>${title}</h3><table><thead><tr><th>${title}</th>${usedSale.map(cat => `<th class="num">${esc(cat.name)} units</th>`).join('')}${t.paid.length ? '<th class="num">Battle players</th>' : ''}${pz.trades ? '<th class="num">Prizes</th>' : ''}${hasTix ? '<th class="num">Tix</th>' : ''}</tr></thead><tbody>${body}</tbody></table>`;
   };
 
   const pending = [];
   if (open && open.lines.length) pending.push(`customer #${open.no} still open (${customerTotal(open)} tix, not counted yet)`);
   if (playing) pending.push(`match #${playing.no} in progress (its ${matchTix(playing)} tix are counted)`);
+  if (b.queued) pending.push(`${plural(b.queued, 'sign-up')} waiting in the battle queue (their tix are counted)`);
   const openTrade = currentOf('trade');
   if (openTrade && openTrade.lines.length) pending.push(`trade #${openTrade.no} still open (${customerTotal(openTrade)} cards, not counted yet)`);
 
@@ -2897,7 +3254,7 @@ function totalsView() {
 function historyView() {
   const entries = [];
   state.customers.filter(c => c.lines.length).forEach(c => entries.push({ t: c.closedAt || c.openedAt, kind: 'sale', c }));
-  state.matches.forEach(m => entries.push({ t: m.startedAt, kind: 'match', m }));
+  state.matches.forEach(m => entries.push({ t: m.paidAt || m.startedAt, kind: 'match', m }));
   state.backorders.forEach(b => entries.push({ t: b.at, kind: 'backorder', b }));
   state.walkoffs.forEach(w => entries.push({ t: w.at, kind: 'walkoff', w }));
   entries.sort((a, b) => Date.parse(b.t) - Date.parse(a.t));
@@ -2938,18 +3295,19 @@ function historyView() {
       const who = m.players.map(p => {
         const res = p.outcome ? ` ${outcomeLabel(p.outcome).toLowerCase()}`
           : (p.pops == null ? '' : ` popped ${p.pops}${m.mode === 'pvp' && p.won ? ', won' : ''}${m.tie ? ', tie' : ''}`);
-        return `${p.name} (${weaponsText(p.weapons)})${res}${p.cards ? `, ${p.cards} cards` : ''}`;
+        return `${p.name} (${weaponsText(p)})${res}${p.cards ? `, ${p.cards} cards` : ''}`;
       }).join(' · ');
       const isOpen = m.status !== 'done';
-      const btn = isOpen ? '<span class="note">in progress</span>'
+      const note = { queued: 'in queue', refunded: 'refunded', paired: `paired into #${m.pairedInto}` }[m.status] || 'in progress';
+      const btn = isOpen ? `<span class="note">${note}</span>`
         : (m.voided ? `<button class="btn slim" data-act="mrestore" data-id="${m.id}">Restore</button>`
           : `<button class="btn slim" data-act="mvoid" data-id="${m.id}">Void</button>`);
       return `<div class="h-row${m.voided ? ' voided' : ''}${isOpen ? ' open' : ''}">
         <div class="h-main">
-          <div class="h-top">Battle #${m.no} · ${fmtTime(m.startedAt)} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · rematch' : ''}${m.voided ? ' · VOIDED' : ''}</div>
+          <div class="h-top">Battle #${m.no} · ${fmtTime(m.paidAt || m.startedAt)} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · instant rematch' : (m.again ? ' · rematch' : '')}${m.restarts ? ` · ${plural(m.restarts, 'restart')}` : ''}${m.voided ? ' · VOIDED' : ''}${m.status === 'refunded' ? ' · REFUNDED' : ''}</div>
           <div class="h-items">${esc(who)}</div>
         </div>
-        <div class="h-tix">${matchTix(m)} tix</div>
+        <div class="h-tix">${isPaid(m) ? matchTix(m) : 0} tix</div>
         ${btn}
       </div>`;
     }
@@ -3007,11 +3365,17 @@ function settingsView() {
     <div class="field">
       <div class="f-label">Balloon Battle prices (tickets per player; applies to new matches)</div>
       <div class="nums">
-        ${num('set-match', 'Match', b.match)}
+        ${num('set-match', 'Match (sign-up or Rematch)', b.match)}
         ${num('set-rematch', 'Instant rematch', b.rematch)}
-        ${num('set-weapon', 'Extra weapon', b.weapon)}
+        ${WEAPONS.map(w => num('set-wp-' + w.id, `Unlock ${w.name.toLowerCase()}`, weaponPrice(w.id))).join('')}
         ${num('set-cpp', 'Cards per balloon', b.cardsPerPop)}
         <label>Match length (minutes)<input type="number" id="set-length" min="0.25" max="30" step="0.25" value="${b.matchSeconds / 60}"></label>
+        <label>Turnaround between matches (minutes, for wait times)<input type="number" id="set-turn" min="0" max="15" step="0.5" value="${b.turnaroundMin}"></label>
+        ${num('set-rmwait', 'Instant rematch only with this many matches waiting or fewer', b.rematchMaxWaiting)}
+      </div>
+      <div class="toggles" style="margin-top:8px">
+        <button class="toggle" data-act="rmonce" data-val="1" aria-pressed="${!!b.rematchOnce}">Instant rematch once in a row</button>
+        <button class="toggle" data-act="rmonce" data-val="0" aria-pressed="${!b.rematchOnce}">Instant rematch any number of times</button>
       </div>
     </div>
     <div class="field">
@@ -3086,7 +3450,7 @@ function confirmClearView() {
   const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length + state.backorders.length;
   return `<div class="dialog narrow" role="dialog" aria-label="Confirm delete">
     ${dialogHead('Delete all data?')}
-    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, trades, battles, walk-offs, backorders, queue) from this booth on this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
+    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, trades, battles and the battle queue, walk-offs, backorders) from this booth on this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
     <div class="row">
       <button class="btn" data-act="open" data-modal="settings">Cancel</button>
       <button class="btn danger" data-act="clear">Delete all ${n}</button>
@@ -3110,12 +3474,15 @@ let lastPaceTick = 0;
 function tick() {
   const el = document.getElementById('match-timer');
   const m = playingMatch();
-  if (el && m && m.goAt) {
-    // Count down from the match's time limit once GO is tapped; past zero show overtime.
-    const left = (m.limitSec || bs().matchSeconds) * 1000 - (Date.now() - Date.parse(m.goAt));
-    el.textContent = left > 0 ? fmtDur(left) : `Time! +${fmtDur(-left)}`;
-    el.classList.toggle('over', left <= 0);
+  if (el && m && m.status === 'playing') {
+    // Counts down once GO is tapped; paused holds; past zero shows overtime.
+    el.textContent = timerText(m);
+    el.className = 'timer ' + timerClass(m);
   }
+  if (view.screen === 'battle') queuedMatches().forEach((x, i) => {
+    const w = document.getElementById('qw-' + x.id);
+    if (w) w.textContent = waitText(i);
+  });
   // Refresh the pace chip every 15 s without re-rendering the page.
   if (Date.now() - lastPaceTick > 15000) {
     lastPaceTick = Date.now();
@@ -3196,20 +3563,39 @@ const actions = {
   woreason: d => { view.modal.reason = d.val; render(); },
   wosave: saveWalkoff,
   // Balloon Battle
-  qdraft: d => {
-    const val = d.field === 'weapons' ? Number(d.val) : d.val;
-    const draft = view.qDraft;
-    draft[d.field] = d.field !== 'weapons' && draft[d.field] === val ? null : val;
+  qmode: d => { view.qDraft.mode = d.val; render(); },
+  qweap: d => { cycleWeapon(view.qDraft.players[Number(d.p)].w, d.w); render(); },
+  qdemo: d => {
+    const pd = view.qDraft.players[Number(d.p)];
+    pd[d.field] = pd[d.field] === d.val ? null : d.val;
     render();
   },
-  qadd: queueAdd,
-  qremove: d => queueRemove(d.id),
-  qweapon: d => queueWeapons(d.id, Number(d.d)),
-  startmatch: d => startMatch(d.mode),
-  mweapon: d => matchWeapons(Number(d.p), Number(d.d)),
-  gomatch: goMatch,
+  qadd: () => queueAdd(false),
+  qaddgo: () => queueAdd(true),
+  qstart: d => startQueued(d.id),
+  qdown: d => queueDown(d.id),
+  qrefund: d => queueRefund(d.id),
+  pair: d => pairUp(d.id),
+  mweapons: d => openWeapons(d.id),
+  mweap: d => { cycleWeapon(view.modal.w[Number(d.p)], d.w); render(); },
+  mweapsave: saveWeapons,
+  gomatch: () => clockAct('go'),
+  pausematch: () => clockAct('pause'),
+  resumematch: () => clockAct('resume'),
+  restartmatch: () => clockAct('restart'),
+  editclock: () => {
+    const m = playingMatch();
+    if (!m) return;
+    view.modal = { type: 'clock', sec: Math.max(0, Math.round(clockLeft(m) / 1000)) };
+    render();
+  },
+  clockadj: d => { view.modal.sec = Math.max(0, Math.min(3600, view.modal.sec + Number(d.d))); render(); },
+  clockfull: () => { const m = playingMatch(); if (m) { view.modal.sec = clockLimitMs(m) / 1000; render(); } },
+  clocksave: () => { const sec = view.modal.sec; view.modal = null; clockAct('set', sec * 1000); },
+  backqueue: backToQueue,
   endmatch: endMatch,
-  cancelmatch: cancelMatch,
+  rmwho: d => { view.rmWho = d.val; render(); },
+  rmonce: d => { state.settings.battle.rematchOnce = d.val === '1'; save(); render(); },
   scorehouse: d => scoreHouse(Number(d.n), d.ko === '1'),
   pvppop: d => { view.pvpPops[Number(d.p)] = Number(d.n); render(); },
   pvpsave: scorePvp,
@@ -3222,7 +3608,7 @@ const actions = {
   },
   scoringmode: d => { state.settings.battle.scoring = d.val; save(); render(); },
   pvptie: d => { state.settings.battle.pvpTie = d.val; state.settings.battle.pvpTieSet = true; save(); render(); },
-  rematch,
+  rematch: d => rematch(d.instant === '1'),
 };
 
 document.addEventListener('click', e => {
@@ -3236,12 +3622,12 @@ document.addEventListener('click', e => {
 });
 
 document.addEventListener('input', e => {
-  if (e.target.id === 'q-name') view.qDraft.name = e.target.value;
+  if (/^q-name-[01]$/.test(e.target.id)) view.qDraft.players[Number(e.target.id.slice(-1))].name = e.target.value;
   const bo = { 'bo-name': 'name', 'bo-contact': 'contact', 'bo-note': 'note' }[e.target.id];
   if (bo && view.modal && view.modal.type === 'backorder') view.modal[bo] = e.target.value;
 });
 
-const BATTLE_FIELDS = { 'set-match': 'match', 'set-rematch': 'rematch', 'set-weapon': 'weapon', 'set-cpp': 'cardsPerPop' };
+const BATTLE_FIELDS = { 'set-match': 'match', 'set-rematch': 'rematch', 'set-cpp': 'cardsPerPop', 'set-rmwait': 'rematchMaxWaiting' };
 document.addEventListener('change', e => {
   if (e.target.id === 'combine-files') {
     loadCombineFiles(e.target.files);
@@ -3309,10 +3695,25 @@ document.addEventListener('change', e => {
     save();
     render();
     toast('Scoring saved', 'ok');
+  } else if (/^set-wp-/.test(e.target.id)) {
+    const v = parseInt(e.target.value, 10);
+    if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    state.settings.battle.weaponPrices[e.target.id.slice(7)] = v;
+    save();
+    render();
+    toast('Weapon price saved · applies to new unlocks', 'ok');
+  } else if (e.target.id === 'set-turn') {
+    const v = parseFloat(e.target.value);
+    if (!Number.isFinite(v) || v < 0) { render(); toast('Enter minutes, e.g. 2', 'warn'); return; }
+    state.settings.battle.turnaroundMin = v;
+    save();
+    render();
+    toast('Turnaround saved · wait times updated', 'ok');
   } else if (BATTLE_FIELDS[e.target.id]) {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
     state.settings.battle[BATTLE_FIELDS[e.target.id]] = v;
+    if (e.target.id === 'set-rematch') state.settings.battle.rematchSet = true;
     save();
     render();
     toast('Saved · applies to new matches', 'ok');
@@ -3333,7 +3734,10 @@ document.addEventListener('keydown', e => {
   if (inField) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (e.target.id === 'q-name') queueAdd();
+      if (e.target.id === 'q-name-0' && view.qDraft.mode === 'pvp') {
+        const next = document.getElementById('q-name-1');
+        if (next) next.focus();
+      } else if (/^q-name-[01]$/.test(e.target.id)) queueAdd(false);
       else e.target.blur();
     } else if (e.key === 'Escape') {
       e.preventDefault();
@@ -3357,6 +3761,7 @@ document.addEventListener('keydown', e => {
     // Enter finishes a sale; Space does nothing (stops accidental re-clicks).
     e.preventDefault();
     if (e.key === 'Enter' && !m && view.screen !== 'battle') finish();
+    if (e.key === 'Enter' && m && m.type === 'upsell') queueAdd(true);
   }
 });
 
@@ -3430,6 +3835,16 @@ render();
   player paid per balloon popped only if they still have a balloon when the match ends; vs House result
   screen has a knocked-out row). Match clock waits for a GO tap instead of starting when tickets are
   collected. battle_outcome CSV column.
+  v1.7 (2026-10-16): Balloon Battle sign-up flow. Pick vs House, vs Player (a pair) or Solo (wants an
+  opponent), names, weapons per player, then Add to queue collects the tickets. Weapons are named (wheel
+  spikes +1, buzz saw +2) and unlock once: a kid with the sticker gets them free. Red Ask line plus a
+  pop-up when a player has no weapon. The queue holds paid matches with a wait estimate next to the names;
+  start any match, push one down, remove and refund, pair two solos into a vs Player match. The current
+  match stays pinned on top with GO, Pause / Resume, Restart (back to Ready, free), Edit clock, Change
+  weapons and Back to queue. Result card: Instant rematch (5 tix, once in a row, only while 2 or fewer
+  matches wait; all editable in Settings) or Rematch back in line. Short scoring script on the sign-up
+  panel; controls script slot in the Rules card. CSV: one row per weapon, queued / refunded / paired
+  statuses (Combine counts queued, skips refunded and paired). Old name-only queue entries are dropped.
 -->
 </body>
 </html>
