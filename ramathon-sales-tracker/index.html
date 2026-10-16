@@ -1,11 +1,11 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.7.1
+  version: 1.8
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
-  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: Clickers (per-design photo buttons) and Copters sales, Balloon Battle queue and matches, Prize Table card redemptions, walk-offs.
+  description: Huge-button, offline tracker for the Rambots Ram-a-thon booths: Clickers (per-design photo buttons) and Copters sales with cash-sale marking and free-card-with-purchase reminders, Balloon Battle queue and matches, Prize Table card redemptions, walk-offs.
   ai_update: Update last_updated and version. Keep the filename index.html so volunteers' links never break. Append a changelog entry at the bottom.
 -->
 <html lang="en">
@@ -325,8 +325,12 @@
     gap: 12px;
   }
   .p-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .p-title { font-size: 24px; font-weight: 700; }
+  .p-title { font-size: 24px; font-weight: 700; white-space: nowrap; }
   .p-sub { color: var(--rb-gray-600); font-size: 15px; text-align: right; }
+  .p-right { display: flex; align-items: center; gap: 8px; }
+  .cashbtn { min-width: 44px; height: 40px; border-radius: 10px; border: 2px solid var(--rb-gray-300); background: #fff; font-size: 22px; line-height: 1; padding: 0 6px; opacity: 0.55; }
+  .cashbtn.on { border-color: var(--rb-success); background: var(--rb-success); opacity: 1; }
+  .cashbtn:disabled { opacity: 0.25; cursor: default; }
   .lines { flex: 1; overflow: auto; min-height: 70px; display: flex; flex-direction: column; gap: 8px; }
   .empty { color: var(--rb-gray-500); font-size: 20px; text-align: center; margin: auto; padding: 16px; }
   .line {
@@ -368,6 +372,11 @@
   .total { display: flex; justify-content: space-between; align-items: baseline; border-top: 3px solid var(--rb-ink); padding-top: 10px; }
   .t-label { font-size: 22px; font-weight: 700; }
   .t-val { font-size: 46px; font-weight: 700; color: var(--rb-red); }
+  .t-val.cash { color: var(--rb-success-700); }
+  .bonus { background: var(--rb-yellow-100); border: 2px solid var(--rb-yellow); border-radius: 10px; padding: 4px 10px; margin-top: -4px; }
+  .bonus-title { font-size: 18px; font-weight: 700; }
+  .bonus-text { font-size: 13px; color: var(--rb-gray-700); line-height: 1.25; }
+  .bonus-ask { font-size: 14px; font-weight: 700; color: var(--rb-red-700); }
   .box-split { margin-top: -6px; display: flex; flex-direction: column; gap: 2px; font-size: 17px; color: var(--rb-gray-700); }
   .box-split div { display: flex; justify-content: space-between; }
   .box-split b { color: var(--rb-ink); }
@@ -590,6 +599,7 @@
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
   .toast.undo { background: var(--rb-yellow); color: var(--rb-ink); }
+  .toast.bonus { background: var(--rb-yellow); color: var(--rb-ink); border-color: var(--rb-ink); }
   .toast.ok { background: var(--rb-success); color: #fff; border-color: var(--rb-success-700); }
   .toast.warn { background: var(--rb-red); color: #fff; border-color: var(--rb-red-700); }
 
@@ -912,6 +922,12 @@ const WEAPONS = [
 // Volunteer script for the robot controls (to be written with the team).
 const CONTROLS_SCRIPT = [];
 const NET_PER_TICKET = 0.90;           // CCA keeps 10%
+const DOLLARS_PER_TICKET = 1;          // a cash sale is full price, $1 per ticket
+const CASH_ICON = '\u{1F4B5}';
+// Free Pokemon card with purchase: 1 card per this many tix in one sale
+// (Settings, 0 = off). "Ask" when the next card is this close.
+const BONUS_CARD_EVERY = 10;
+const BONUS_NUDGE_TIX = 3;
 const PRIZE_DOLLARS_PER_CARD = 5 / 9;  // a 9-card prize costs about $5
 
 const AGES = [
@@ -1006,6 +1022,7 @@ function defaultState() {
       station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS), prizes: {},
       stock: Object.assign({}, STOCK_DEFAULTS),
       goals: Object.assign({}, GOAL_DEFAULTS), event: Object.assign({}, EVENT_DEFAULTS), showPace: true,
+      cardEvery: BONUS_CARD_EVERY,
       laptopId: Math.random().toString(36).slice(2, 6),
     },
     customers: [], currentId: null, nextNo: 1, tradeId: null, nextTradeNo: 1,
@@ -1148,6 +1165,20 @@ const current = () => currentOf('sale');
 const activeKind = () => (view.screen === 'prizes' ? 'trade' : 'sale');
 const unitWord = kind => (kind === 'trade' ? 'cards' : 'tix');
 const recordWord = kind => (kind === 'trade' ? 'Trade' : 'Customer');
+// Cash sales are full price and count toward the goal, but their money is in
+// the cash box, not a ticket box.
+const isCash = c => !!(c && c.cash);
+function cashText(tix) {
+  const d = tix * DOLLARS_PER_TICKET;
+  return Number.isInteger(d) ? '$' + d : '$' + d.toFixed(2);
+}
+const cardEvery = () => state.settings.cardEvery || 0;
+function bonusDue(c) {
+  if (!c || kindOfCustomer(c) !== 'sale' || cardEvery() <= 0) return 0;
+  return Math.floor(customerTotal(c) / cardEvery());
+}
+// Finished sales keep the count they were told to hand over.
+const bonusOf = c => (c.closedAt ? (c.bonusCards || 0) : bonusDue(c));
 
 function ensureCurrent(kind) {
   let c = currentOf(kind);
@@ -1271,21 +1302,34 @@ function setDemo(field, val) {
   render();
 }
 
+function toggleCash() {
+  const c = current();
+  if (!c || !c.lines.length) return;
+  commit(() => {
+    c.cash = !c.cash;
+    return c.cash ? `Customer #${c.no} marked cash` : `Customer #${c.no} back to tickets`;
+  });
+  render();
+}
+
 function finish(kind) {
   kind = kind || activeKind();
   const c = currentOf(kind);
   if (!c || !c.lines.length) return;
   const total = customerTotal(c);
   const word = recordWord(kind);
+  const cards = bonusDue(c);
+  const paid = isCash(c) ? `${cashText(total)} cash` : `${total} ${unitWord(kind)}`;
   commit(() => {
     c.closedAt = now();
+    if (kind === 'sale') c.bonusCards = cards;
     state[curKey(kind)] = null;
-    return `Finished ${word.toLowerCase()} #${c.no} (${total} ${unitWord(kind)})`;
+    return `Finished ${word.toLowerCase()} #${c.no} (${paid})`;
   });
   view.screen = 'home';
   view.pulse = null;
   render();
-  toast(`${word} #${c.no} saved · ${total} ${unitWord(kind)}`, 'ok');
+  toast(`${word} #${c.no} saved · ${paid}${cards ? ` · give ${plural(cards, 'free Pokémon card')}` : ''}`, cards ? 'bonus' : 'ok');
 }
 
 function setVoided(id, voided) {
@@ -1903,15 +1947,20 @@ function computeTotals() {
     cards: Object.values(byPrize).reduce((s, b) => s + b.cards, 0),
   };
   const byItem = {};
-  const byBox = {};
+  const byBox = {};      // tickets that should be in each box
+  const cashByCat = {};  // cash sales: count toward the goal, not in a box
+  let cashTix = 0, bonusCards = 0;
   sold.forEach(c => {
     const tix = lineTixList(c);
+    bonusCards += bonusOf(c);
     c.lines.forEach((l, i) => {
       const b = byItem[l.item] || (byItem[l.item] = { units: 0, tix: 0, walkoffs: 0 });
       const t = tix[i];
+      const cat = ITEMS[l.item].cat;
       b.units += l.qty;
       b.tix += t;
-      byBox[ITEMS[l.item].cat] = (byBox[ITEMS[l.item].cat] || 0) + t;
+      if (isCash(c)) { cashByCat[cat] = (cashByCat[cat] || 0) + t; cashTix += t; }
+      else byBox[cat] = (byBox[cat] || 0) + t;
     });
   });
   state.walkoffs.filter(w => !w.voided).forEach(w => {
@@ -1942,7 +1991,10 @@ function computeTotals() {
   if (timed.length) battle.avgMin = avg(timed.map(m => (Date.parse(m.endedAt) - Date.parse(m.startedAt)) / 60000));
   if (battle.tix) byBox.battle = battle.tix;
   const tix = Object.values(byBox).reduce((s, x) => s + x, 0);
-  return { sold, byItem, byBox, battle, matches, paid, tix, trades, byPrize, prizes };
+  const byGoal = Object.assign({}, byBox);
+  Object.keys(cashByCat).forEach(k => { byGoal[k] = (byGoal[k] || 0) + cashByCat[k]; });
+  const cashSales = sold.filter(isCash).length;
+  return { sold, byItem, byBox, byGoal, cashTix, cashSales, bonusCards, battle, matches, paid, tix, trades, byPrize, prizes };
 }
 
 /* ==========================================================================
@@ -1964,7 +2016,7 @@ function buildCSV() {
   const header = ['station', 'record', 'status', 'opened_at', 'closed_at', 'category', 'item', 'qty',
     'item_tickets', 'record_total_tickets', 'age', 'gender',
     'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason', 'cards_redeemed',
-    'record_id', 'laptop_id', 'exported_at', 'battle_outcome'];
+    'record_id', 'laptop_id', 'exported_at', 'battle_outcome', 'paid_with', 'bonus_cards'];
   const rows = [header];
   // record_id + exported_at let the Combine screen keep only the newest copy
   // of each record when early and late exports are mixed.
@@ -1981,7 +2033,9 @@ function buildCSV() {
       const it = ITEMS[l.item];
       rows.push([c.station, (trade ? 'T' : 'S') + c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
         catById(it.cat).name, it.name, l.qty, trade ? 0 : amounts[i], trade ? 0 : total,
-        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['', trade ? amounts[i] : ''], tail(c.id)));
+        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['', trade ? amounts[i] : ''], tail(c.id),
+        // bonus_cards sits on the sale's first row only, so summing the column counts each sale once.
+        [trade ? '' : (isCash(c) ? 'cash' : 'tickets'), !trade && i === 0 ? bonusOf(c) : '']));
     });
   });
   state.walkoffs.forEach(w => {
@@ -2004,6 +2058,7 @@ function buildCSV() {
       });
     });
   });
+  rows.forEach(r => { while (r.length < header.length) r.push(''); });
   return rows.map(r => r.map(csvCell).join(',')).join('\r\n');
 }
 
@@ -2065,6 +2120,8 @@ function computeStats() {
     add('Sales', 'Tickets', tix);
     add('Sales', 'Avg tix per customer', avgText(tix, sold.length));
     add('Sales', 'Avg items per customer', avgText(sold.reduce((s, c) => s + unitsOf(c), 0), sold.length));
+    if (t.cashSales) add('Sales', 'Of which cash sales', `${t.cashSales} (${cashText(t.cashTix)})`);
+    if (t.bonusCards || cardEvery()) add('Sales', 'Free Pokémon cards with purchase', t.bonusCards);
   }
   const clickerBuyers = sold.filter(c => groupUnits(c, 'clicker') > 0);
   if (clickerBuyers.length) {
@@ -2244,7 +2301,7 @@ function combineResult() {
   const counted = r => ['sold', 'played', 'in progress', 'queued', 'traded'].includes(r.status);
   const byCat = {};
   const prizes = {};
-  let cardsPaid = 0, cardsRedeemed = 0;
+  let cardsPaid = 0, cardsRedeemed = 0, cashTix = 0, bonusCards = 0;
   const records = new Set();
   kept.forEach(r => {
     if (!counted(r)) return;
@@ -2252,11 +2309,13 @@ function combineResult() {
     byCat[cat] = (byCat[cat] || 0) + (Number(r.item_tickets) || 0);
     cardsPaid += Number(r.cards_paid) || 0;
     cardsRedeemed += Number(r.cards_redeemed) || 0;
+    if (r.paid_with === 'cash') cashTix += Number(r.item_tickets) || 0;
+    bonusCards += Number(r.bonus_cards) || 0;
     if (r.status === 'traded') prizes[r.item] = (prizes[r.item] || 0) + (Number(r.qty) || 0);
     if (r.record_id) records.add(`${r.laptop_id}|${r.record_id}`);
   });
   const laptops = new Set(kept.map(r => r.laptop_id).filter(Boolean));
-  return { files, kept, legacy, byCat, prizes, cardsPaid, cardsRedeemed, transactions: records.size, laptops: laptops.size,
+  return { files, kept, legacy, byCat, prizes, cardsPaid, cardsRedeemed, cashTix, bonusCards, transactions: records.size, laptops: laptops.size,
     dropped: files.reduce((s, f) => s + f.rows.length, 0) - kept.length };
 }
 
@@ -2288,12 +2347,13 @@ function combineView() {
       <div class="field"><label for="combine-plinko">Plinko bucket count (tix)</label><input type="number" id="combine-plinko" min="0" value="${esc(cb.plinko)}" placeholder="count at close"></div>
       <div class="big-stats">
         <div class="stat"><div class="s-val">${total}</div><div class="s-label">Event tickets (goal ${goalTotal})</div></div>
-        <div class="stat"><div class="s-val">${money(total * NET_PER_TICKET)}</div><div class="s-label">To Rambots after CCA's 10%</div></div>
+        <div class="stat"><div class="s-val">${money((total - r.cashTix) * NET_PER_TICKET)}</div><div class="s-label">To Rambots after CCA's 10%${r.cashTix ? ' (tickets only)' : ''}</div></div>
         <div class="stat"><div class="s-val">${pct(total, goalTotal)}</div><div class="s-label">Of goal</div></div>
       </div>
       <table><thead><tr><th>Booth</th><th class="num">Tix</th><th class="num">Goal</th><th class="num">%</th></tr></thead>
       <tbody>${rows}<tr><td>Plinko (bucket)</td><td class="num">${plinko}</td><td class="num">${PLINKO_GOAL}</td><td class="num">${pct(plinko, PLINKO_GOAL)}</td></tr></tbody></table>
-      ${r.cardsPaid || r.cardsRedeemed ? `<p class="note">Cards: Balloon Battle paid out ${r.cardsPaid}, Prize Table took back ${r.cardsRedeemed}.</p>` : ''}
+      ${r.cashTix ? `<p class="note">Cash sales: ${cashText(r.cashTix)}, counted in the event total and goal.</p>` : ''}
+      ${r.cardsPaid || r.cardsRedeemed || r.bonusCards ? `<p class="note">Cards: Balloon Battle paid out ${r.cardsPaid}, Sales gave ${r.bonusCards} free with purchases, Prize Table took back ${r.cardsRedeemed}.</p>` : ''}
       ${prizeRows ? `<h3>Prizes, most popular first</h3><table><tbody>${prizeRows}</tbody></table>` : ''}
       <div class="row"><button class="btn go" data-act="combinedownload">Download combined CSV</button></div>` : ''}
   </div>`;
@@ -2302,7 +2362,9 @@ function combineView() {
 function downloadCombined() {
   const r = combineResult();
   if (!r.kept.length) return;
-  const header = (r.files.find(f => f.header.includes('record_id')) || r.files[0]).header;
+  // Widest header wins, so mixing older and newer exports keeps every column.
+  const withIds = r.files.filter(f => f.header.includes('record_id'));
+  const header = (withIds.length ? withIds : r.files).reduce((a, f) => (f.header.length > a.length ? f.header : a), []);
   const rows = [header].concat(r.kept.map(row => header.map(h => row[h] == null ? '' : row[h])));
   const d = new Date();
   downloadCSV(`ramathon_combined_${r.laptops}-laptops_${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.csv`, rows);
@@ -2390,7 +2452,7 @@ function pace() {
   const frac = w.ok ? Math.min(1, Math.max(0, (nowMs - w.start) / (w.end - w.start))) : 0;
   const rows = enabledCats().filter(cat => cat.kind !== 'prizes').map(cat => {
     const goal = state.settings.goals[cat.id] || 0;
-    const actual = t.byBox[cat.id] || 0;
+    const actual = t.byGoal[cat.id] || 0;
     return { cat, goal, actual, target: goal * frac, diff: actual - goal * frac };
   });
   const goal = rows.reduce((s, r) => s + r.goal, 0);
@@ -2608,28 +2670,64 @@ function panelView(c, kind) {
     const g = PRICE_GROUPS[gid];
     const price = groupPrice(gid, n);
     const extra = groupPrice(gid, n + 1) - price;
+    const cardToo = kind === 'sale' && cardEvery() > 0 && Math.floor((total + extra) / cardEvery()) > Math.floor(total / cardEvery());
     const nudge = extra < groupPrice(gid, 1)
-      ? `<div class="g-nudge">Ask: 1 more is only +${extra} tix (${n + 1} for ${groupPrice(gid, n + 1)}, ${(groupPrice(gid, n + 1) / (n + 1)).toFixed(2)} each)</div>` : '';
+      ? `<div class="g-nudge">Ask: 1 more is only +${extra} tix (${n + 1} for ${groupPrice(gid, n + 1)}, ${(groupPrice(gid, n + 1) / (n + 1)).toFixed(2)} each)${cardToo ? ' + a free Pokémon card' : ''}</div>` : '';
     return `<div class="group-row">
       <div class="g-top"><span>${esc(g.name)} ×${n}</span><b>${price} tix</b></div>
       <div class="g-sub">${comboText(gid, n)} · ${(price / n).toFixed(2)} each</div>
       ${nudge}
     </div>`;
   }).join('') : '';
-  const ask = kind === 'sale' && has ? copterAsk(c) : '';
+  const sale = kind === 'sale';
+  const cash = sale && isCash(c);
+  const ask = sale && has ? copterAsk(c) : '';
+  // When "1 more clicker" also earns the next free card, say it once there.
+  const cardNudged = sale && has && cardEvery() > 0 && Object.keys(PRICE_GROUPS).some(gid => {
+    const n = groupUnits(c, gid);
+    const extra = groupPrice(gid, n + 1) - groupPrice(gid, n);
+    return n && extra < groupPrice(gid, 1) && Math.floor((total + extra) / cardEvery()) > bonusDue(c);
+  });
+  const cashBtn = sale ? `<button class="cashbtn${cash ? ' on' : ''}" data-act="cash" aria-pressed="${cash}" aria-label="Cash sale"
+      title="${cash ? 'Cash sale · tap to switch back to tickets' : 'Mark as cash sale'}" ${has ? '' : 'disabled'}>${CASH_ICON}</button>` : '';
   return `<aside class="panel" aria-label="Current ${word.toLowerCase()}">
     <div class="p-head">
       <div class="p-title">${c ? `${word} #${c.no}` : `Next ${word.toLowerCase()}`}</div>
-      <div class="p-sub">${has ? `${plural(units, kind === 'trade' ? 'prize' : 'item')} · tap a number to type` : ''}</div>
+      <div class="p-right">
+        <div class="p-sub">${has ? `${plural(units, kind === 'trade' ? 'prize' : 'item')} · tap a number to type` : ''}</div>
+        ${cashBtn}
+      </div>
     </div>
     <div class="lines">${has ? lines.map(lineView).join('') : `<div class="empty">${kind === 'trade' ? 'Tap a prize to start a trade' : 'Tap an item to start a sale'}</div>`}</div>
     ${groupRows}
     ${ask}
-    <div class="total"><span class="t-label">Collect</span><span class="t-val">${total} ${unit}</span></div>
-    ${split}
+    <div class="total"><span class="t-label">${cash ? 'Collect cash' : 'Collect'}</span><span class="t-val${cash ? ' cash' : ''}">${cash ? cashText(total) : `${total} ${unit}`}</span></div>
+    ${cash ? '' : split}
+    ${sale ? bonusView(c, cardNudged) : ''}
     ${state.settings.demographics ? demoView(c, has) : ''}
     <button class="done" data-act="finish" ${has ? '' : 'disabled'}>Done · Next ${word.toLowerCase()}<small>or press Enter</small></button>
   </aside>`;
+}
+
+// Free-card reminder under the total: how many cards to hand over, and an Ask
+// when a few more tix would earn the next one.
+function bonusView(c, nudged) {
+  const every = cardEvery();
+  if (!c || !c.lines.length || every <= 0) return '';
+  const total = customerTotal(c);
+  const due = bonusDue(c);
+  const short = (due + 1) * every - total;
+  const ask = !nudged && short <= BONUS_NUDGE_TIX ? `Ask: ${short} more tix gets ${due ? 'another' : 'a'} free Pokémon card` : '';
+  if (!due) return ask ? `<div class="g-nudge" id="bonus-ask">${ask}</div>` : '';
+  const cheapest = Math.max(1, Math.min(...CATEGORIES.find(cat => cat.id === 'prizes').items.map(it => cardsFor(it.id))));
+  const where = due >= cheapest
+    ? 'Say: that\'s a free prize at the Prize Table.'
+    : 'Say: win more at Plinko or Balloon Battle.';
+  return `<div class="bonus" id="bonus">
+    <div class="bonus-title">Give ${plural(due, 'free Pokémon card')}</div>
+    <div class="bonus-text">${where}</div>
+    ${ask ? `<div class="bonus-ask">${ask}</div>` : ''}
+  </div>`;
 }
 
 // Design photos: try each extension in turn, remember which one worked, and
@@ -3231,12 +3329,13 @@ function totalsView() {
       <div class="stat"><div class="s-val">${t.tix}</div><div class="s-label">Tickets that should be in the boxes</div></div>
       <div class="stat"><div class="s-val">${money(t.tix * NET_PER_TICKET)}</div><div class="s-label">To Rambots after CCA's 10%</div></div>
       <div class="stat"><div class="s-val">${t.sold.length + b.players}</div><div class="s-label">Customers + battle players</div></div>
+      ${t.cashTix ? `<div class="stat"><div class="s-val">${cashText(t.cashTix)}</div><div class="s-label">Cash sales (${t.cashSales}) · in the goal, not in the boxes</div></div>` : ''}
     </div>` : ''}
     ${pending.length ? `<p class="note">Note: ${pending.join('; ')}.</p>` : ''}
     ${boxRows ? `<h3>Per ticket box</h3><table><thead><tr><th>Box</th><th class="num">Tix</th><th class="num">After 10%</th></tr></thead><tbody>${boxRows}</tbody></table>` : (pz.trades ? '' : '<p class="note">Nothing sold yet.</p>')}
     ${itemRows ? `<h3>Items</h3><table><thead><tr><th>Item</th><th class="num">Sold</th><th class="num">Walk-offs</th><th class="num">Tix</th><th class="num">Left</th></tr></thead><tbody>${itemRows}</tbody></table>
       ${partRows ? `<h3>Copter parts left</h3><table><thead><tr><th>Part</th><th class="num">Start</th><th class="num">Used</th><th class="num">Left</th></tr></thead><tbody>${partRows}</tbody></table>` : ''}
-      <p class="note">Inventory check: before − after − walk-offs should equal sold.</p>` : ''}
+      <p class="note">Inventory check: before − after − walk-offs should equal sold.${t.bonusCards ? ` Free Pokémon cards handed out with purchases: ${t.bonusCards} (≈ ${money(t.bonusCards * PRIZE_DOLLARS_PER_CARD)}).` : ''}</p>` : ''}
     ${battleBlock}
     ${prizeBlock}
     ${demoTable('Age', AGES, 'age')}
@@ -3271,10 +3370,10 @@ function historyView() {
           : `<button class="btn slim" data-act="void" data-id="${c.id}">Void</button>`);
       return `<div class="h-row${c.voided ? ' voided' : ''}${isOpen ? ' open' : ''}">
         <div class="h-main">
-          <div class="h-top">${kindOfCustomer(c) === 'trade' ? 'Trade' : 'Sale'} #${c.no} · ${fmtTime(c.closedAt || c.openedAt)}${tags ? ' · ' + esc(tags) : ''}${c.voided ? ' · VOIDED' : ''}</div>
+          <div class="h-top">${kindOfCustomer(c) === 'trade' ? 'Trade' : 'Sale'} #${c.no} · ${fmtTime(c.closedAt || c.openedAt)}${tags ? ' · ' + esc(tags) : ''}${isCash(c) ? ' · cash' : ''}${bonusOf(c) ? ` · ${plural(bonusOf(c), 'free card')}` : ''}${c.voided ? ' · VOIDED' : ''}</div>
           <div class="h-items">${esc(items)}</div>
         </div>
-        <div class="h-tix">${customerTotal(c)} ${unitWord(kindOfCustomer(c))}</div>
+        <div class="h-tix">${isCash(c) ? `${cashText(customerTotal(c))} cash` : `${customerTotal(c)} ${unitWord(kindOfCustomer(c))}`}</div>
         ${btn}
       </div>`;
     }
@@ -3362,6 +3461,11 @@ function settingsView() {
     <div class="field">
       <div class="f-label">Demographic buttons (optional)</div>
       <div class="toggles"><button class="toggle" data-act="toggledemo" aria-pressed="${!!s.demographics}">${s.demographics ? 'Shown' : 'Hidden'}</button></div>
+    </div>
+    <div class="field">
+      <div class="f-label">Free Pokémon card with purchase (Clickers and Copters)</div>
+      <div class="nums"><label>1 card for every this many tix in one sale (0 = off)<input type="number" id="bonus-every" min="0" max="999" step="1" value="${s.cardEvery || 0}"></label></div>
+      <p class="note">The sale panel says how many cards to hand over, and asks for a few more tix when the next card is close. Changes apply to new sales.</p>
     </div>
     <div class="field">
       <div class="f-label">Balloon Battle prices (tickets per player; applies to new matches)</div>
@@ -3468,7 +3572,7 @@ function toast(msg, kind) {
   toastEl.textContent = msg;
   toastEl.className = 'toast show ' + (kind || 'info');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { toastEl.className = 'toast ' + (kind || 'info'); }, kind === 'undo' ? 4500 : 3200);
+  toastTimer = setTimeout(() => { toastEl.className = 'toast ' + (kind || 'info'); }, kind === 'undo' || kind === 'bonus' ? 4500 : 3200);
 }
 
 let lastPaceTick = 0;
@@ -3523,6 +3627,7 @@ const actions = {
   key: d => keypadPress(d.key),
   kpset: keypadSet,
   finish: () => finish(),
+  cash: toggleCash,
   demo: d => setDemo(d.field, d.val),
   open: d => { view.modal = { type: d.modal }; render(); },
   close: () => { view.modal = null; render(); },
@@ -3656,6 +3761,13 @@ document.addEventListener('change', e => {
     save();
     render();
     toast('Stock saved', 'ok');
+  } else if (e.target.id === 'bonus-every') {
+    const v = parseInt(e.target.value, 10);
+    if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    state.settings.cardEvery = v;
+    save();
+    render();
+    toast(v ? `1 free card per ${v} tix · applies to new sales` : 'Free cards with purchase are off', 'ok');
   } else if (/^goal-/.test(e.target.id)) {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
@@ -3848,6 +3960,14 @@ render();
   statuses (Combine counts queued, skips refunded and paired). Old name-only queue entries are dropped.
   v1.7.1 (2026-10-16): Removed sticker wording (the unlock token is undecided): "already unlocked" chip,
   "new unlock" in the collect toast, "(unlocked earlier)" in History, stats and CSV.
+  v1.8 (2026-10-16): Cash sale button (cash emoji in the sale panel): marks the whole sale as paid in cash at
+  full price ($1 per ticket); the panel says "Collect cash $N"; Totals keeps cash out of the ticket boxes but
+  counts it toward the goal and pace; History tags it. Free Pokemon card with purchase: 1 card per 10 tix in
+  one sale (Settings, 0 = off); the panel says how many cards to give (and that 3 or more is a free prize),
+  asks for a few more tix when the next card is close (the clicker "1 more" line says so too), and the Done
+  toast repeats it. Stats, Totals and Combine count cash sales and cards given. Sales CSV adds paid_with and
+  bonus_cards columns at the end; Combine reads older CSVs as ticket sales and keeps every column when
+  mixing old and new exports.
 -->
 </body>
 </html>
