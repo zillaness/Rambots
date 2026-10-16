@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.5.1
+  version: 1.6
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -434,6 +434,8 @@
   .linkbtn { background: none; border: 0; color: var(--rb-gray-600); font-size: 16px; text-decoration: underline; align-self: center; padding: 8px 12px; }
   .prompt { font-size: clamp(24px, 2.6vw, 38px); font-weight: 700; text-align: center; }
   .pops { flex: 1; display: grid; gap: 14px; min-height: 0; }
+  .pops.fit { flex: 1 0 auto; }
+  .prompt.sm { font-size: clamp(18px, 1.8vw, 26px); font-weight: 600; text-align: left; }
   .pops.c2 { grid-template-columns: repeat(2, 1fr); }
   .pops.c3 { grid-template-columns: repeat(3, 1fr); }
   .pops.c4 { grid-template-columns: repeat(4, 1fr); }
@@ -460,6 +462,26 @@
   .pvp-row { display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 14px; align-items: center; }
   .pvp-name { font-size: clamp(22px, 2.2vw, 32px); font-weight: 700; overflow-wrap: anywhere; }
   .pvp-preview { font-size: 22px; font-weight: 700; text-align: center; color: var(--rb-red); min-height: 30px; }
+  .pop.ko { background: var(--rb-gray-100); color: var(--rb-gray-600); }
+  .pop.outcome { font-size: clamp(22px, 2.4vw, 36px); padding: 10px; text-align: center; line-height: 1.1; min-height: 120px; }
+  .pop.outcome small { font-size: clamp(14px, 1.3vw, 19px); }
+  .payout-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 16px; }
+  .pb { border-radius: 999px; padding: 4px 12px; background: #fff; border: 2px solid var(--rb-gray-300); }
+  .pb small { color: var(--rb-gray-600); }
+  .pb.good { border-color: var(--rb-success); }
+  .pb.warn { border-color: var(--rb-yellow); background: var(--rb-yellow-100); }
+  .pb.bad { border-color: var(--rb-red); background: var(--rb-red-100); color: var(--rb-red-700); }
+  .pb-hint { font-size: 14px; color: var(--rb-gray-700); }
+  .rules-btn { border-style: solid; border-color: var(--rb-ink); color: var(--rb-ink); background: var(--rb-yellow); }
+  .dialog.rules { width: min(1100px, 100%); }
+  .rules-list { font-size: clamp(22px, 2.4vw, 34px); line-height: 1.35; font-weight: 700; padding-left: 1.4em; margin: 0 0 16px; }
+  .rules-list li { margin-bottom: 8px; }
+  .script { background: var(--rb-yellow-100); border: 2px solid var(--rb-yellow); border-radius: 14px; padding: 12px 16px; font-size: 19px; }
+  .script p { margin: 6px 0; }
+  .toggle.preset { display: flex; flex-direction: column; align-items: flex-start; padding: 8px 14px; text-align: left; }
+  .toggle.preset small { font-size: 13px; font-weight: 500; color: var(--rb-gray-600); }
+  .toggle.preset small.bad, .note b.bad { color: var(--rb-red); }
+  .timer.ready { color: var(--rb-gray-600); font-size: 32px; }
   .timer.over { color: #fff; background: var(--rb-red); border-radius: 12px; padding: 0 12px; animation: blink 1s steps(2) infinite; }
   @keyframes blink { 50% { opacity: 0.55; } }
   .result { background: var(--rb-yellow-100); border: 3px solid var(--rb-yellow); border-radius: 18px; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
@@ -820,7 +842,27 @@ const BATTLE_DEFAULTS = {
   pvpRule: 'winner', // 'winner' = only the winner is paid (per balloon they popped); 'both' = both paid per pop
   pvpTie: 'both',    // vs Player tie: 'both' = each paid per own pop; 'none' = no cards (can't be gamed)
   matchSeconds: 120, // match time limit (countdown); editable in Settings
+  scoring: 'survive', // 'survive' = per balloon, paid only if you still have a balloon at the end;
+                      // 'perBalloon' = per balloon (winner-only or both); 'outcome' = fixed cards per outcome
+  consolation: 0,    // cards for the vs Player loser (winner only) or a knocked-out player (survive)
+  outcomeCards: { koWin: 9, timeWin: 6, survive: 3, knockedOut: 1 },
 };
+
+// One-tap scoring setups for Settings (the team can still edit every number).
+const SCORING_PRESETS = [
+  { id: 's3', label: '3 per balloon, must survive to the end', set: { scoring: 'survive', cardsPerPop: 3, consolation: 0 } },
+  { id: 'w3', label: '3 per balloon, winner only', set: { scoring: 'perBalloon', cardsPerPop: 3, pvpRule: 'winner', pvpTie: 'both', consolation: 0 } },
+  { id: 'w3c', label: '3 per balloon, winner only + 1 for the loser', set: { scoring: 'perBalloon', cardsPerPop: 3, pvpRule: 'winner', pvpTie: 'both', consolation: 1 } },
+  { id: 'b2', label: '2 per balloon, everyone', set: { scoring: 'perBalloon', cardsPerPop: 2, pvpRule: 'both', consolation: 0 } },
+  { id: 'b3', label: '3 per balloon, everyone', set: { scoring: 'perBalloon', cardsPerPop: 3, pvpRule: 'both', consolation: 0 } },
+  { id: 'out', label: 'By outcome 9 / 6 / 3 / 1', set: { scoring: 'outcome', outcomeCards: { koWin: 9, timeWin: 6, survive: 3, knockedOut: 1 } } },
+];
+const OUTCOMES = [
+  ['koWin', 'Knockout win', 'popped all 3 before time'],
+  ['timeWin', 'Win on time', 'ahead when time ran out'],
+  ['survive', 'Survived to the end', 'still had a balloon at time'],
+  ['knockedOut', 'Knocked out', 'lost all 3 balloons'],
+];
 const BALLOONS = 3;
 const NET_PER_TICKET = 0.90;           // CCA keeps 10%
 const PRIZE_DOLLARS_PER_CARD = 5 / 9;  // a 9-card prize costs about $5
@@ -935,7 +977,9 @@ function hydrate(raw) {
   const ss = saved.settings || {};
   saved.settings = Object.assign({}, base.settings, ss, {
     cats: Object.assign({}, base.settings.cats, ss.cats || {}),
-    battle: Object.assign({}, base.settings.battle, ss.battle || {}),
+    battle: Object.assign({}, base.settings.battle, ss.battle || {}, {
+      outcomeCards: Object.assign({}, BATTLE_DEFAULTS.outcomeCards, (ss.battle && ss.battle.outcomeCards) || {}),
+    }),
     prizes: Object.assign({}, ss.prizes || {}),
     goals: Object.assign({}, base.settings.goals, ss.goals || {}),
     stock: Object.assign({}, base.settings.stock, ss.stock || {}),
@@ -1346,7 +1390,7 @@ function startMatch(mode) {
     state.queue = state.queue.filter(q => !ids.includes(q.id));
     m = {
       id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode, rematch: false,
-      startedAt: now(), endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
+      startedAt: now(), goAt: null, endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
       players: entries.map(e => makePlayer(e, bs().match)),
     };
     state.matches.push(m);
@@ -1365,7 +1409,7 @@ function rematch() {
   commit(() => {
     m = {
       id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode: lm.mode, rematch: true,
-      startedAt: now(), endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
+      startedAt: now(), goAt: null, endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
       players: lm.players.map(p => makePlayer({ name: p.name, weapons: p.weapons, age: p.age, gender: p.gender }, bs().rematch)),
     };
     state.matches.push(m);
@@ -1388,6 +1432,17 @@ function matchWeapons(pi, delta) {
     p.weapons = next;
     p.tix = p.base + next * bs().weapon;
     return `${p.name}: ${old} → ${next} extra weapons (${delta > 0 ? '+' : '−'}${bs().weapon} tix)`;
+  });
+  render();
+}
+
+// Tickets are collected at Start; the countdown waits until the robots are ready.
+function goMatch() {
+  const m = playingMatch();
+  if (!m || m.status !== 'playing' || m.goAt) return;
+  commit(() => {
+    m.goAt = now();
+    return `Started the clock for match #${m.no}`;
   });
   render();
 }
@@ -1431,31 +1486,98 @@ function finishScoring(m, label) {
   return label;
 }
 
-function scoreHouse(pops) {
+function scoreHouse(pops, ko) {
   const m = playingMatch();
   if (!m || m.status !== 'scoring' || m.mode !== 'house') return;
   const p = m.players[0];
+  const survive = bs().scoring === 'survive';
   commit(() => {
     p.pops = pops;
     p.won = pops === BALLOONS;
-    p.cards = pops * bs().cardsPerPop;
-    return finishScoring(m, `Match #${m.no}: ${p.name} popped ${pops} (${p.cards} cards)`);
+    p.knockedOut = survive ? !!ko : null;
+    p.cards = survive && ko ? (bs().consolation || 0) : pops * bs().cardsPerPop;
+    p.outcome = null;
+    return finishScoring(m, `Match #${m.no}: ${p.name} popped ${pops}${p.knockedOut ? ', knocked out' : ''} (${p.cards} cards)`);
   });
   render();
 }
 
-// Cards for a vs Player result. Winner-only pays the winner per balloon they
-// popped (time can run out before 3); a tie pays per the tie setting.
-function pvpPayout(pops) {
-  const per = bs().cardsPerPop;
+const outcomeCards = key => bs().outcomeCards[key] || 0;
+
+// Most cards one match can pay, per ticket, for a given battle setup.
+function worstCase(b) {
+  const pvpTix = b.match * 2;
+  let pvp, house;
+  if (b.scoring === 'outcome') {
+    const o = b.outcomeCards;
+    pvp = Math.max(o.koWin + o.knockedOut, o.timeWin + o.survive, o.survive * 2);
+    house = Math.max(o.koWin, o.timeWin, o.survive, o.knockedOut);
+  } else {
+    // Try every score; both popping 3 can't happen (the match ends at the first knockout).
+    pvp = 0;
+    for (let x = 0; x <= BALLOONS; x++) {
+      for (let y = 0; y <= BALLOONS; y++) {
+        if (x === BALLOONS && y === BALLOONS) continue;
+        const r = pvpPayout([x, y], b);
+        pvp = Math.max(pvp, r.cards[0] + r.cards[1]);
+      }
+    }
+    house = Math.max(BALLOONS * b.cardsPerPop, b.consolation || 0);
+  }
+  return { pvp, pvpTix, house, houseTix: b.match };
+}
+const outcomeLabel = key => (OUTCOMES.find(o => o[0] === key) || [key, key])[1];
+
+// Outcome scoring: one tap per match. vs House codes are the kid's outcome;
+// vs Player codes are ko0 / ko1 (player 0 / 1 knocked the other out),
+// time0 / time1 (ahead when time ran out) and tie.
+function outcomeResult(m, code) {
+  if (m.mode === 'house') return { outcomes: [code], win: code === 'koWin' || code === 'timeWin' ? 0 : null, tie: false };
+  if (code === 'tie') return { outcomes: ['survive', 'survive'], win: null, tie: true };
+  const w = Number(code.slice(-1));
+  const ko = code.startsWith('ko');
+  const outcomes = [];
+  outcomes[w] = ko ? 'koWin' : 'timeWin';
+  outcomes[1 - w] = ko ? 'knockedOut' : 'survive';
+  return { outcomes, win: w, tie: false };
+}
+
+function scoreOutcome(code) {
+  const m = playingMatch();
+  if (!m || m.status !== 'scoring') return;
+  const r = outcomeResult(m, code);
+  commit(() => {
+    m.players.forEach((p, i) => {
+      p.outcome = r.outcomes[i];
+      p.cards = outcomeCards(r.outcomes[i]);
+      p.won = r.win === i;
+      p.pops = null;
+    });
+    m.tie = r.tie;
+    const what = m.mode === 'house' ? `${m.players[0].name}: ${outcomeLabel(r.outcomes[0]).toLowerCase()}`
+      : (r.tie ? `${m.players[0].name} and ${m.players[1].name} tied on time`
+        : `${m.players[r.win].name} ${r.outcomes[r.win] === 'koWin' ? 'knocked out' : 'beat on time'} ${m.players[1 - r.win].name}`);
+    return finishScoring(m, `Match #${m.no}: ${what} (${matchCards(m)} cards)`);
+  });
+  render();
+}
+
+// Cards for a vs Player result. Survive pays each player per balloon they
+// popped if they still had a balloon at the end (the other player popped
+// fewer than 3). Winner-only pays the winner per balloon they popped (time can
+// run out before 3); a tie pays per the tie setting.
+function pvpPayout(pops, b = bs()) {
+  const per = b.cardsPerPop;
   const tie = pops[0] === pops[1];
   const win = tie ? null : (pops[0] > pops[1] ? 0 : 1);
+  const ko = pops.map((n, i) => pops[1 - i] >= BALLOONS);
   const cards = pops.map((n, i) => {
-    if (bs().pvpRule === 'both') return n * per;
-    if (tie) return bs().pvpTie === 'both' ? n * per : 0;
-    return i === win ? n * per : 0;
+    if (b.scoring === 'survive') return ko[i] ? (b.consolation || 0) : n * per;
+    if (b.pvpRule === 'both') return n * per;
+    if (tie) return b.pvpTie === 'both' ? n * per : 0;
+    return i === win ? n * per : (b.consolation || 0);
   });
-  return { win, tie, cards };
+  return { win, tie, cards, ko };
 }
 
 function scorePvp() {
@@ -1467,7 +1589,9 @@ function scorePvp() {
     m.players.forEach((p, i) => {
       p.pops = pops[i];
       p.won = r.tie ? false : i === r.win;
+      p.knockedOut = bs().scoring === 'survive' ? r.ko[i] : null;
       p.cards = r.cards[i];
+      p.outcome = null;
     });
     m.tie = r.tie;
     const a = m.players[0], b = m.players[1];
@@ -1589,12 +1713,12 @@ function buildCSV() {
   const header = ['station', 'record', 'status', 'opened_at', 'closed_at', 'category', 'item', 'qty',
     'item_tickets', 'record_total_tickets', 'age', 'gender',
     'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason', 'cards_redeemed',
-    'record_id', 'laptop_id', 'exported_at'];
+    'record_id', 'laptop_id', 'exported_at', 'battle_outcome'];
   const rows = [header];
   // record_id + exported_at let the Combine screen keep only the newest copy
   // of each record when early and late exports are mixed.
   const stamp = localStamp(now());
-  const tail = id => [id, state.settings.laptopId, stamp];
+  const tail = (id, outcome) => [id, state.settings.laptopId, stamp, outcome || ''];
   const blankBattle = ['', '', '', '', ''];
   state.customers.forEach(c => {
     if (!c.lines.length) return;
@@ -1622,7 +1746,7 @@ function buildCSV() {
       const demo = [labelOf(AGES, p.age), labelOf(GENDERS, p.gender)];
       const mode = m.mode === 'pvp' ? 'vs player' : 'vs house';
       rows.push(common.concat([m.rematch ? 'Rematch' : 'Match', 1, p.base, total], demo,
-        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', ''], tail(m.id)));
+        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', ''], tail(m.id, p.outcome ? outcomeLabel(p.outcome) : [m.tie ? 'Tie' : '', p.knockedOut ? 'Knocked out' : (p.knockedOut === false ? 'Survived' : '')].filter(Boolean).join(' / '))));
       if (p.weapons) {
         rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '', ''], tail(m.id)));
       }
@@ -1734,6 +1858,11 @@ function computeStats() {
     add('Battle', 'Avg match minutes', b.avgMin == null ? '-' : b.avgMin.toFixed(1));
     add('Battle', 'Cards paid out', b.cards);
     add('Battle', 'Cards per ticket', avgText(b.cards, b.tix));
+    const hs = payoutStats(m => m.mode === 'house');
+    const ps = payoutStats(m => m.mode === 'pvp');
+    if (hs.n) add('Battle', 'Cards per ticket vs House', hs.rate.toFixed(2));
+    if (ps.n) add('Battle', 'Cards per ticket vs Player', ps.rate.toFixed(2));
+    add('Battle', 'Scoring', scoringText());
   }
   if (t.prizes.trades) {
     const top = Object.keys(t.byPrize).sort((x, y) => t.byPrize[y].given - t.byPrize[x].given)[0];
@@ -2292,13 +2421,90 @@ function demoView(c, enabled) {
 }
 
 /* ---- Balloon Battle screen -------------------------------------------- */
+// Running cards-per-ticket so the crew knows when to tighten the house.
+function payoutStats(filter) {
+  const ms = state.matches.filter(m => !m.voided && m.status === 'done' && filter(m));
+  const tix = ms.reduce((s, m) => s + matchTix(m), 0);
+  const cards = ms.reduce((s, m) => s + matchCards(m), 0);
+  return { n: ms.length, tix, cards, rate: tix ? cards / tix : null };
+}
+function payoutBar() {
+  const all = payoutStats(() => true);
+  if (!all.n) return '';
+  const house = payoutStats(m => m.mode === 'house');
+  const pvp = payoutStats(m => m.mode === 'pvp');
+  const cls = r => (r == null ? '' : (r > 1 ? 'bad' : (r >= 0.9 ? 'warn' : 'good')));
+  const cell = (label, st) => (st.n ? `<span class="pb ${cls(st.rate)}">${label} <b>${st.rate.toFixed(2)}</b> <small>${st.cards} cards / ${st.tix} tix</small></span>` : '');
+  const hint = house.rate != null && house.rate > 1 ? 'House is paying too much: tighten up.'
+    : (all.rate > 1 ? 'Over 1 card per ticket: tighten the house.' : (all.rate >= 0.9 ? 'Close to the 1 card per ticket limit.' : 'Under 1 card per ticket.'));
+  return `<div class="payout-bar">${cell('All', all)}${cell('vs House', house)}${cell('vs Player', pvp)}<span class="pb-hint">${esc(hint)}</span></div>`;
+}
+
+function scoringText() {
+  const b = bs();
+  if (b.scoring === 'outcome') return `by outcome ${OUTCOMES.map(o => b.outcomeCards[o[0]]).join(' / ')}`;
+  if (b.scoring === 'survive') return `${b.cardsPerPop} per balloon, must survive to the end${b.consolation ? ` + ${b.consolation} if knocked out` : ''}`;
+  return `${b.cardsPerPop} per balloon, ${b.pvpRule === 'both' ? 'everyone' : 'winner only'}${b.consolation ? ` + ${b.consolation} for the loser` : ''}`;
+}
+
+// What volunteers say and what the kids see, built from the current settings.
+function rulesLines() {
+  const b = bs();
+  const mins = b.matchSeconds % 60 ? `${Math.floor(b.matchSeconds / 60)} min ${b.matchSeconds % 60} s` : plural(b.matchSeconds / 60, 'minute');
+  const lines = [
+    `${b.match} tickets each to play. Extra weapon: +${b.weapon} ticket each.`,
+    `Each robot has ${BALLOONS} balloons. Pop the other robot's balloons!`,
+    `The match lasts ${mins}, or until a robot loses all ${BALLOONS} balloons.`,
+  ];
+  if (b.scoring === 'outcome') {
+    const o = b.outcomeCards;
+    lines.push(`Knock out all ${BALLOONS} balloons before time: ${o.koWin} Pokémon cards.`);
+    lines.push(`Ahead when time runs out: ${o.timeWin} cards.`);
+    lines.push(`Still have a balloon at the end: ${o.survive} cards.`);
+    if (o.knockedOut) lines.push(`Knocked out: ${plural(o.knockedOut, 'card')} for playing.`);
+    lines.push('Tie when time runs out: both survived, so both get ' + o.survive + ' cards.');
+  } else if (b.scoring === 'survive') {
+    lines.push(`Every balloon you pop wins ${plural(b.cardsPerPop, 'Pokémon card')} (up to ${BALLOONS * b.cardsPerPop}).`);
+    lines.push('But you only keep them if your robot still has a balloon when the match ends!');
+    lines.push(`Lose all ${BALLOONS} balloons: ${b.consolation ? `${plural(b.consolation, 'card')} for playing` : 'no cards'}. Pop all ${BALLOONS} of theirs and you win right away.`);
+  } else if (b.pvpRule === 'both') {
+    lines.push(`Every balloon you pop wins ${plural(b.cardsPerPop, 'Pokémon card')}.`);
+  } else {
+    lines.push(`vs our robot: ${plural(b.cardsPerPop, 'Pokémon card')} for every balloon you pop (up to ${BALLOONS * b.cardsPerPop}).`);
+    lines.push(`vs a friend: the winner gets ${b.cardsPerPop} cards for every balloon they popped${b.consolation ? `, and the other player gets ${plural(b.consolation, 'card')}` : ''}.`);
+    lines.push(b.pvpTie === 'both' ? 'Tie when time runs out: each player gets cards for the balloons they popped.' : 'Tie when time runs out: no cards.');
+  }
+  lines.push(`Trade your cards for prizes at the Prize Table. Instant rematch: ${b.rematch} tickets each, no waiting in line.`);
+  return lines;
+}
+function rulesScript() {
+  const b = bs();
+  const pay = b.scoring === 'outcome' ? `a knockout win gets ${b.outcomeCards.koWin} Pokémon cards and everyone gets something`
+    : b.scoring === 'survive' ? `every balloon you pop is ${plural(b.cardsPerPop, 'Pokémon card')}, but only if your robot survives to the end`
+    : (b.pvpRule === 'both' ? `every balloon you pop is ${plural(b.cardsPerPop, 'Pokémon card')}` : `every balloon you pop is ${b.cardsPerPop} Pokémon cards if you win`);
+  return [
+    `"Want to battle robots? It's ${b.match} tickets to drive one against our robot or a friend."`,
+    `"Pop the other robot's ${BALLOONS} balloons before time runs out: ${pay}."`,
+    `"Want an extra weapon? It's ${b.weapon} more ticket. Cards trade in for prizes over at the Prize Table."`,
+  ];
+}
+function rulesView() {
+  return `<div class="dialog rules" role="dialog" aria-label="Balloon Battle rules">
+    ${dialogHead('Balloon Battle rules')}
+    <ol class="rules-list">${rulesLines().map(l => `<li>${esc(l)}</li>`).join('')}</ol>
+    <div class="script"><div class="f-label">Volunteer script</div>${rulesScript().map(l => `<p>${esc(l)}</p>`).join('')}</div>
+  </div>`;
+}
+
 function battleView(canBack) {
   const head = `<div class="cat-head">
       ${canBack ? '<button class="back" data-act="home">← Back</button>' : ''}
       <div class="cat-title">Balloon Battle</div>
       <div class="spacer"></div>
       <div class="cat-tip">Tickets are collected when a match starts<br>${bs().match} per player · +${bs().weapon} per extra weapon · rematch ${bs().rematch}</div>
-    </div>`;
+      <button class="walkoff-btn rules-btn" data-act="open" data-modal="rules">Rules / script</button>
+    </div>
+    ${payoutBar()}`;
   const m = playingMatch();
   let body;
   if (m && m.status === 'playing') body = playingView(m);
@@ -2308,10 +2514,15 @@ function battleView(canBack) {
 }
 
 function playingView(m) {
+  const limit = fmtDur((m.limitSec || bs().matchSeconds) * 1000);
+  const action = m.goAt
+    ? `<button class="huge go" data-act="endmatch">Match over · enter result<small>time ran out or someone lost all ${BALLOONS} balloons</small></button>`
+    : `<button class="huge yellow" data-act="gomatch">GO · start the ${limit} clock<small>tap when both robots are ready</small></button>
+    <button class="linkbtn" data-act="endmatch">Match already over? Enter the result</button>`;
   return `<div class="now fill">
     <div class="now-head">
       <span class="now-title">Match #${m.no} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · rematch' : ''}</span>
-      <span class="timer" id="match-timer">${fmtDur((m.limitSec || bs().matchSeconds) * 1000)}</span>
+      <span class="timer${m.goAt ? '' : ' ready'}" id="match-timer">${m.goAt ? limit : `Ready · ${limit}`}</span>
     </div>
     <div class="players">${m.players.map((p, i) => `<div class="pcard">
       <div class="pname">${esc(p.name)}</div>
@@ -2322,16 +2533,33 @@ function playingView(m) {
         <button class="step" data-act="mweapon" data-p="${i}" data-d="1" aria-label="One more weapon">+</button>
       </div>
     </div>`).join('')}${m.mode === 'house' ? `<div class="pcard" style="border-style:dashed;color:var(--rb-gray-600)"><div class="pname">House bot</div><div class="ptix">Driven by the crew</div></div>` : ''}</div>
-    <button class="huge go" data-act="endmatch">Match over · enter result<small>time ran out or someone lost all ${BALLOONS} balloons</small></button>
+    ${action}
     <button class="linkbtn" data-act="cancelmatch">Cancel match (hand tickets back, players return to the front of the queue)</button>
   </div>`;
 }
 
 function scoreHouseView(m) {
   const p = m.players[0];
+  if (bs().scoring === 'outcome') {
+    return `<div class="now fill">
+      <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
+      <div class="prompt">How did ${esc(p.name)}'s match end?</div>
+      <div class="pops c4">${OUTCOMES.map(([key, label, sub]) => `<button class="pop outcome${key === 'koWin' || key === 'timeWin' ? ' win' : ''}" data-act="outcome" data-code="${key}">${esc(label)}<small>${esc(sub)} · ${cardsText(outcomeCards(key))}</small></button>`).join('')}</div>
+    </div>`;
+  }
   const per = bs().cardsPerPop;
   const opts = [];
   for (let n = 0; n <= BALLOONS; n++) opts.push(n);
+  if (bs().scoring === 'survive') {
+    const con = bs().consolation || 0;
+    return `<div class="now fill">
+      <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
+      <div class="prompt sm"><b>Survived</b> (still had a balloon): how many House balloons did ${esc(p.name)} pop?</div>
+      <div class="pops c4 fit">${opts.map(n => `<button class="pop sm" data-act="scorehouse" data-n="${n}">${n}<small>${n ? `${n * per} cards` : 'no cards'}</small></button>`).join('')}</div>
+      <div class="prompt sm"><b>Knocked out</b> (lost all ${BALLOONS}): how many did ${esc(p.name)} pop first?</div>
+      <div class="pops c3 fit">${opts.slice(0, BALLOONS).map(n => `<button class="pop sm ko" data-act="scorehouse" data-n="${n}" data-ko="1">${n}<small>${con ? `${con} card${con === 1 ? '' : 's'}` : 'no cards'}</small></button>`).join('')}</div>
+    </div>`;
+  }
   return `<div class="now fill">
     <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
     <div class="prompt">How many House balloons did ${esc(p.name)} pop?</div>
@@ -2340,6 +2568,20 @@ function scoreHouseView(m) {
 }
 
 function scorePvpView(m) {
+  if (bs().scoring === 'outcome') {
+    const [a, b] = m.players.map(p => esc(p.name));
+    const btn = (code, label) => {
+      const r = outcomeResult(m, code);
+      const pay = m.players.map((p, i) => `${esc(p.name)} ${outcomeCards(r.outcomes[i])}`).join(' · ');
+      return `<button class="pop outcome${code === 'tie' ? '' : ' win'}" data-act="outcome" data-code="${code}">${label}<small>${pay} cards</small></button>`;
+    };
+    return `<div class="now fill">
+      <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
+      <div class="prompt">How did it end?</div>
+      <div class="pops c2">${btn('ko0', `${a} knocked out ${b}`)}${btn('ko1', `${b} knocked out ${a}`)}</div>
+      <div class="pops c3">${btn('time0', `${a} ahead on time`)}${btn('tie', 'Tie on time')}${btn('time1', `${b} ahead on time`)}</div>
+    </div>`;
+  }
   const pops = view.pvpPops;
   const opts = [];
   for (let n = 0; n <= BALLOONS; n++) opts.push(n);
@@ -2351,10 +2593,13 @@ function scorePvpView(m) {
   if (pops[0] != null && pops[1] != null) {
     const r = pvpPayout(pops);
     const who = r.tie ? `Tie ${pops[0]}–${pops[1]}` : `${m.players[r.win].name} wins ${Math.max(...pops)}–${Math.min(...pops)}`;
-    preview = `${who} · ` + m.players.map((p, i) => `${p.name}: ${r.cards[i] ? cardsText(r.cards[i]) : '0 cards'}`).join(' · ');
+    const koText = i => (bs().scoring === 'survive' && r.ko[i] ? ' (knocked out)' : '');
+    preview = `${who} · ` + m.players.map((p, i) => `${p.name}${koText(i)}: ${r.cards[i] ? cardsText(r.cards[i]) : '0 cards'}`).join(' · ');
   }
-  const rule = bs().pvpRule === 'both' ? 'Both players paid per balloon.'
-    : `Winner only, ${bs().cardsPerPop} cards per balloon the winner popped. Tie: ${bs().pvpTie === 'both' ? 'each paid for their own balloons' : 'no cards'}.`;
+  const con = bs().consolation || 0;
+  const rule = bs().scoring === 'survive' ? `${bs().cardsPerPop} cards per balloon popped, if you still have a balloon at the end. Popping all ${BALLOONS} knocks the other player out (${con ? plural(con, 'card') : 'no cards'}).`
+    : bs().pvpRule === 'both' ? `Both players paid ${bs().cardsPerPop} per balloon.`
+    : `Winner only, ${bs().cardsPerPop} cards per balloon the winner popped${bs().consolation ? `, loser gets ${plural(bs().consolation, 'card')}` : ''}. Tie: ${bs().pvpTie === 'both' ? 'each paid for their own balloons' : 'no cards'}.`;
   return `<div class="now fill">
     <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
     ${rows}
@@ -2369,7 +2614,8 @@ function idleView() {
   let result = '';
   if (lm && lm.status === 'done' && !lm.voided) {
     const lines = lm.players.map(p => {
-      const what = `popped ${p.pops}${lm.mode === 'pvp' ? (p.won ? ' · won' : (lm.tie ? ' · tie' : '')) : ''}`;
+      const what = p.outcome ? outcomeLabel(p.outcome).toLowerCase()
+        : `popped ${p.pops}${lm.mode === 'pvp' ? (p.won ? ' · won' : (lm.tie ? ' · tie' : '')) : ''}${p.knockedOut ? ' · knocked out' : ''}`;
       const give = p.cards ? `<span class="give">give ${cardsText(p.cards)}</span>` : '<span class="none">0 cards</span>';
       return `<div class="r-line">${esc(p.name)} ${what} → ${give}</div>`;
     }).join('');
@@ -2448,6 +2694,7 @@ function modalView() {
   else if (m.type === 'backorder') inner = backorderView(m);
   else if (m.type === 'pace') inner = paceView();
   else if (m.type === 'combine') inner = combineView();
+  else if (m.type === 'rules') inner = rulesView();
   return `<div class="overlay" data-act="overlay">${inner}</div>`;
 }
 
@@ -2689,7 +2936,8 @@ function historyView() {
     if (e.kind === 'match') {
       const m = e.m;
       const who = m.players.map(p => {
-        const res = p.pops == null ? '' : ` popped ${p.pops}${m.mode === 'pvp' && p.won ? ', won' : ''}${m.tie ? ', tie' : ''}`;
+        const res = p.outcome ? ` ${outcomeLabel(p.outcome).toLowerCase()}`
+          : (p.pops == null ? '' : ` popped ${p.pops}${m.mode === 'pvp' && p.won ? ', won' : ''}${m.tie ? ', tie' : ''}`);
         return `${p.name} (${weaponsText(p.weapons)})${res}${p.cards ? `, ${p.cards} cards` : ''}`;
       }).join(' · ');
       const isOpen = m.status !== 'done';
@@ -2767,7 +3015,21 @@ function settingsView() {
       </div>
     </div>
     <div class="field">
-      <div class="f-label">vs Player payout</div>
+      <div class="f-label">Balloon Battle scoring (applies to the next result you enter)</div>
+      <div class="toggles">${SCORING_PRESETS.map(pr => {
+        const wc = worstCase(Object.assign({}, b, pr.set, { outcomeCards: Object.assign({}, b.outcomeCards, pr.set.outcomeCards || {}) }));
+        const rate = wc.pvp / wc.pvpTix;
+        return `<button class="toggle preset" data-act="scoringpreset" data-id="${pr.id}">${esc(pr.label)}<small class="${rate > 1 ? 'bad' : ''}">vs Player up to ${wc.pvp} cards / ${wc.pvpTix} tix (${rate.toFixed(1)} per tix)</small></button>`;
+      }).join('')}</div>
+      <div class="toggles" style="margin-top:6px">
+        <button class="toggle" data-act="scoringmode" data-val="survive" aria-pressed="${b.scoring === 'survive'}">Per balloon, must survive</button>
+        <button class="toggle" data-act="scoringmode" data-val="perBalloon" aria-pressed="${b.scoring === 'perBalloon'}">Per balloon</button>
+        <button class="toggle" data-act="scoringmode" data-val="outcome" aria-pressed="${b.scoring === 'outcome'}">By outcome</button>
+      </div>
+      ${b.scoring === 'survive' ? `<div class="nums"><label>Knocked out (cards)<input type="number" id="set-consolation" min="0" max="9" value="${b.consolation || 0}"></label></div>
+      <p class="note">Each player gets ${b.cardsPerPop} cards per balloon they popped if they still have a balloon when the match ends. Losing all ${BALLOONS} pays the knocked-out amount.</p>` : b.scoring === 'outcome' ? `<div class="nums">${OUTCOMES.map(([key, label]) => `<label>${esc(label)} (cards)<input type="number" id="oc-${key}" min="0" max="99" value="${b.outcomeCards[key]}"></label>`).join('')}</div>` : `
+      <div class="nums"><label>Loser consolation (cards, winner-only)<input type="number" id="set-consolation" min="0" max="9" value="${b.consolation || 0}"></label></div>
+      <div class="f-label" style="margin-top:6px">vs Player payout</div>
       <div class="toggles">
         <button class="toggle" data-act="pvprule" data-val="winner" aria-pressed="${b.pvpRule === 'winner'}">Winner only, per balloon popped</button>
         <button class="toggle" data-act="pvprule" data-val="both" aria-pressed="${b.pvpRule === 'both'}">Both players, per balloon</button>
@@ -2776,8 +3038,9 @@ function settingsView() {
       <div class="toggles">
         <button class="toggle" data-act="pvptie" data-val="both" aria-pressed="${b.pvpTie === 'both'}">Each paid for own balloons</button>
         <button class="toggle" data-act="pvptie" data-val="none" aria-pressed="${b.pvpTie === 'none'}">No cards</button>
-      </div>
-      <p class="note">Winner only: the winner gets ${b.cardsPerPop} cards per balloon they popped (up to ${BALLOONS * b.cardsPerPop}); the other player gets none, so two kids gain nothing by letting each other pop. "Each paid" on a tie reopens that: a cooperative 2–2 tie pays ${4 * b.cardsPerPop} cards on ${b.match * 2} tix.</p>
+      </div>`}
+      ${(() => { const wc = worstCase(b); const r1 = wc.pvp / wc.pvpTix; const r2 = wc.house / wc.houseTix;
+        return `<p class="note">Current setup, worst single match: vs Player <b class="${r1 > 1 ? 'bad' : ''}">${wc.pvp} cards for ${wc.pvpTix} tix (${r1.toFixed(2)} per ticket)</b>; vs House <b class="${r2 > 1 ? 'bad' : ''}">${wc.house} cards for ${wc.houseTix} tix (${r2.toFixed(2)})</b>. vs House is kept under 1 on average by the house driver; the Battle screen shows the running rate.</p>`; })()}
     </div>
     <div class="field">
       <div class="f-label">Starting stock (blank = don't track). Buttons then show how many are left.</div>
@@ -2847,9 +3110,9 @@ let lastPaceTick = 0;
 function tick() {
   const el = document.getElementById('match-timer');
   const m = playingMatch();
-  if (el && m) {
-    // Count down from the match's time limit; past zero show overtime.
-    const left = (m.limitSec || bs().matchSeconds) * 1000 - (Date.now() - Date.parse(m.startedAt));
+  if (el && m && m.goAt) {
+    // Count down from the match's time limit once GO is tapped; past zero show overtime.
+    const left = (m.limitSec || bs().matchSeconds) * 1000 - (Date.now() - Date.parse(m.goAt));
     el.textContent = left > 0 ? fmtDur(left) : `Time! +${fmtDur(-left)}`;
     el.classList.toggle('over', left <= 0);
   }
@@ -2944,11 +3207,20 @@ const actions = {
   qweapon: d => queueWeapons(d.id, Number(d.d)),
   startmatch: d => startMatch(d.mode),
   mweapon: d => matchWeapons(Number(d.p), Number(d.d)),
+  gomatch: goMatch,
   endmatch: endMatch,
   cancelmatch: cancelMatch,
-  scorehouse: d => scoreHouse(Number(d.n)),
+  scorehouse: d => scoreHouse(Number(d.n), d.ko === '1'),
   pvppop: d => { view.pvpPops[Number(d.p)] = Number(d.n); render(); },
   pvpsave: scorePvp,
+  outcome: d => scoreOutcome(d.code),
+  scoringpreset: d => {
+    const pr = SCORING_PRESETS.find(x => x.id === d.id);
+    Object.assign(state.settings.battle, JSON.parse(JSON.stringify(pr.set)));
+    if (pr.set.pvpTie) state.settings.battle.pvpTieSet = true;
+    save(); render(); toast(`Scoring: ${pr.label}`, 'ok');
+  },
+  scoringmode: d => { state.settings.battle.scoring = d.val; save(); render(); },
   pvptie: d => { state.settings.battle.pvpTie = d.val; state.settings.battle.pvpTieSet = true; save(); render(); },
   rematch,
 };
@@ -3029,6 +3301,14 @@ document.addEventListener('change', e => {
     save();
     render();
     toast(`Match length ${fmtDur(state.settings.battle.matchSeconds * 1000)} · applies to new matches`, 'ok');
+  } else if (/^oc-/.test(e.target.id) || e.target.id === 'set-consolation') {
+    const v = parseInt(e.target.value, 10);
+    if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    if (e.target.id === 'set-consolation') state.settings.battle.consolation = v;
+    else state.settings.battle.outcomeCards[e.target.id.slice(3)] = v;
+    save();
+    render();
+    toast('Scoring saved', 'ok');
   } else if (BATTLE_FIELDS[e.target.id]) {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
@@ -3142,6 +3422,14 @@ render();
   switch to no cards); laptops that never chose a tie rule pick up the new default. Copter Ask box offers
   both extra propeller (1) and extra toroidal propeller (2); "Toroidal propeller" renamed "Extra toroidal
   propeller".
+  v1.6 (2026-10-16): All Balloon Battle scoring options, switchable in Settings with one-tap presets and a
+  worst-case cards-per-ticket check: per balloon (any cards per balloon, winner only or everyone, tie rule,
+  loser consolation) or by outcome (knockout win / win on time / survived / knocked out, one tap per
+  match). Live cards-per-ticket readout on the Battle screen (all, vs House, vs Player). Rules / script
+  card generated from the current settings. New default: per balloon, must survive to the end (each
+  player paid per balloon popped only if they still have a balloon when the match ends; vs House result
+  screen has a knocked-out row). Match clock waits for a GO tap instead of starting when tickets are
+  collected. battle_outcome CSV column.
 -->
 </body>
 </html>

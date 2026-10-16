@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.5.1
+version: 1.6
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -63,13 +63,24 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 
 1. **Queue:** type a first name, tap the number of extra weapons (so the crew can have them ready), **Add to queue** (or Enter). Wait times start at 3 minutes per match and adjust to the real pace.
 2. **Start vs House** (next person) or **Start vs Player** (next two). Tickets are collected now: 5 per player + 1 per extra weapon. The toast says exactly how many from whom.
-3. A countdown runs (default 2:00; **Settings > Match length** for any length, e.g. 1.5 or 3). At zero it flashes red **Time!** and counts overtime. Tap **Match over** when time runs out or someone loses all 3 balloons, then tap the result:
-   - vs House: how many House balloons the player popped (0 to 3).
-   - vs Player: how many balloons each player popped (0 to 3 each), then **Save result**. The tracker works out the winner and the cards.
+3. The clock shows **Ready** until the robots are set up. Tap **GO** to start the countdown (default 2:00; **Settings > Match length** for any length, e.g. 1.5 or 3). At zero it flashes red **Time!** and counts overtime. Tap **Match over** when time runs out or someone loses all 3 balloons, then tap the result:
+   - vs House: how many House balloons the player popped, on the **Survived** row or the **Knocked out** row.
+   - vs Player: how many balloons each player popped (0 to 3 each), then **Save result**. The tracker works out who was knocked out (the other player popped all 3) and the cards.
 4. The result card says how many 3-card bundles to hand over. **Instant rematch** runs the same players again at the rematch price (shows how many people are waiting).
 5. **Cancel match** if a bot fails before the match counts: hand tickets back, players go back to the front of the queue.
 
-Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default: the winner gets 3 cards per balloon they popped (a 2–1 win when time runs out pays 6), the other player gets none. **Ties** pay each player for their own balloons by default (a 1–1 tie pays 3 cards each); switch to "No cards" in Settings if kids start playing for ties. Or switch the whole rule to **both players, per balloon**. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
+Payout rules (**Settings > Balloon Battle scoring**, one tap per preset, each showing its worst single match in cards per ticket):
+
+| Preset | How it pays | Worst vs Player match |
+|---|---|---|
+| **3 per balloon, must survive to the end** (default) | 3 cards per balloon you popped, only if your robot still has a balloon when the match ends. Knocked out = 0 (or the "Knocked out" cards setting) | 12 cards / 10 tix (2–2 on time) |
+| 3 per balloon, winner only | Winner gets 3 per balloon they popped; tie rule in Settings | 12 / 10 (2–2 tie) |
+| 3 per balloon, winner only + 1 for the loser | Same, loser gets 1 | 12 / 10 |
+| 2 per balloon, everyone | Each player 2 per balloon | 10 / 10 |
+| 3 per balloon, everyone | Each player 3 per balloon | 15 / 10 |
+| By outcome 9 / 6 / 3 / 1 | Knockout win / win on time / survived / knocked out | 10 / 10 |
+
+vs House can pay up to 9 cards for 5 tix in any per-balloon preset; the house driver keeps it down. The Battle screen shows the running cards per ticket (all, vs House, vs Player) and turns red above 1. **Rules / script** (Battle screen) shows the rules and a volunteer script for whatever is set. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
 
 ## Clock, goal and pace
 
@@ -143,7 +154,7 @@ Every sales row carries `record_id`, `laptop_id` and `exported_at`. Each export 
 3. Copy the sales CSVs onto one laptop and use **Combine laptops' CSVs** for the event total. Player names are never exported.
 4. Inventory check per item: before − after − walk-offs = sold.
 
-Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason, cards_redeemed, record_id, laptop_id, exported_at`.
+Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = walk-off), status, opened_at, closed_at, category, item, qty, item_tickets, record_total_tickets, age, gender, battle_mode, player, balloons_popped, won, cards_paid, walkoff_reason, cards_redeemed, record_id, laptop_id, exported_at, battle_outcome` (Survived / Knocked out / Tie, or the outcome name).
 
 ## Known limits
 
@@ -163,3 +174,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.4.1 (2026-10-16): All six copter buttons have photos; home-screen tiles show the blue switch (Clickers) and the kid with a pull copter (Copters).
 - v1.5 (2026-10-16): Battle countdown with custom length; vs Player scored by balloons popped (winner paid per balloon, tie rule); stock left for clicker designs and copter parts.
 - v1.5.1 (2026-10-16): Ties pay each player for their own balloons by default.
+- v1.6 (2026-10-16): Every Balloon Battle scoring option as Settings presets with worst-case cards per ticket; new default "3 per balloon, must survive to the end"; live cards-per-ticket bar; Rules / script card; match clock waits for GO; battle_outcome CSV column.
