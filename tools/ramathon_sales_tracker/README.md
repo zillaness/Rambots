@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.7
+version: 1.7.1
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -64,8 +64,8 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 **Sign up (right side), tickets collected now:**
 1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
 2. Type the first name(s). Enter on player 1 jumps to player 2.
-3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2; hand over that weapon's sticker). Two taps = **already has the sticker** (free). Three taps = none. Weapons unlock once: a kid with the sticker never pays for that weapon again.
-4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, which stickers to give, and the place in line with the wait.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.0.md`.
+4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, any new unlocks, and the place in line with the wait.
 
 The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
 
@@ -157,7 +157,7 @@ Totals (and Settings) has three downloads:
 | Stats CSV | `ramathon_stats_...csv` | Averages, combo counts, add-on rates, busiest 30 minutes, goal vs actual |
 | Backorders CSV | `ramathon_backorders_...csv` | Backorder list with contact info (private) |
 
-Every sales row carries `record_id`, `laptop_id` and `exported_at`. Battle sign-ups export as `queued` until played; refunded and paired sign-ups export with those statuses and Combine skips them. Each weapon is its own row (e.g. `Buzz saw`, 2 tix; `Buzz saw (sticker)`, 0 tix). Each export is a full snapshot, so hourly backups repeat earlier rows.
+Every sales row carries `record_id`, `laptop_id` and `exported_at`. Battle sign-ups export as `queued` until played; refunded and paired sign-ups export with those statuses and Combine skips them. Each weapon is its own row (e.g. `Buzz saw`, 2 tix; `Buzz saw (unlocked earlier)`, 0 tix). Each export is a full snapshot, so hourly backups repeat earlier rows.
 
 **Combine laptops' CSVs** (Totals or Settings): pick the sales CSVs from all laptops, early backups included. Each record is counted once, from its newest export (a sale voided after a backup stays voided). Type the Plinko bucket count, then read the event total against the 1,300 goal or **Download combined CSV**.
 
@@ -190,3 +190,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.5.1 (2026-10-16): Ties pay each player for their own balloons by default.
 - v1.6 (2026-10-16): Every Balloon Battle scoring option as Settings presets with worst-case cards per ticket; new default "3 per balloon, must survive to the end"; live cards-per-ticket bar; Rules / script card; match clock waits for GO; battle_outcome CSV column.
 - v1.7 (2026-10-16): Balloon Battle sign-up flow (vs House / vs Player / Solo, named weapons that unlock once, tickets at sign-up, weapon Ask line and pop-up), queue of paid matches with waits next to names, start any match, push down, refund, pair solos; pinned match with GO, Pause, Edit clock, Restart, Change weapons, Back to queue; Instant rematch (5, once, short line) and Rematch back in line.
+- v1.7.1 (2026-10-16): Removed sticker wording (the weapon unlock token is undecided); points to the status file for decisions vs open items.
