@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.3
+  version: 1.4
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -211,7 +211,7 @@
   .style-outline { background: #fff; color: var(--rb-red); box-shadow: inset 0 0 0 5px var(--rb-red), var(--rb-shadow-md); }
   .style-accent { background: var(--rb-yellow); color: var(--rb-ink); }
   .style-ink { background: var(--rb-ink); color: #fff; }
-  .items.photos { grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .items.photos { grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); gap: 12px; }
   .photo-item { padding: 8px 8px 10px; gap: 6px; justify-content: flex-start; background: var(--rb-yellow); color: var(--rb-ink); }
   .photo-item .ph {
     flex: 1;
@@ -246,9 +246,6 @@
   .stock.low { background: var(--rb-red); color: #fff; border-color: var(--rb-red); }
   .stock.out { background: var(--rb-ink); color: #fff; }
   .group-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
     font-size: 18px;
     font-weight: 700;
     background: var(--rb-yellow-100);
@@ -256,6 +253,48 @@
     border-radius: 12px;
     padding: 8px 12px;
   }
+  .g-top { display: flex; justify-content: space-between; gap: 8px; }
+  .g-sub { font-size: 15px; font-weight: 600; color: var(--rb-gray-700); margin-top: 2px; }
+  .g-nudge { font-size: 15px; font-weight: 700; color: var(--rb-red); margin-top: 4px; }
+  .ask { background: var(--rb-red-100); border: 2px solid var(--rb-red); border-radius: 12px; padding: 8px 12px; }
+  .ask-title { font-size: 16px; font-weight: 700; color: var(--rb-red-700); }
+  .ask-text { font-size: 14px; color: var(--rb-gray-700); margin: 2px 0 6px; }
+  .ask-row { display: flex; gap: 8px; margin-top: 6px; }
+  .askbtn {
+    flex: 1;
+    min-height: 44px;
+    border-radius: 10px;
+    border: 2px solid var(--rb-red);
+    background: #fff;
+    color: var(--rb-red);
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .cat-copters { background: var(--rb-red); color: #fff; }
+  .cat-copters .i-cards { color: var(--rb-yellow); }
+  .photo-item .i-note { font-size: clamp(12px, 1.05vw, 15px); opacity: 0.9; }
+  .pace {
+    border: 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    padding: 4px 12px;
+    min-height: 54px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    line-height: 1.15;
+    max-width: 30vw;
+  }
+  .pace .p-main { font-size: 17px; font-weight: 700; white-space: nowrap; }
+  .pace .p-sub { font-size: 13px; white-space: nowrap; opacity: 0.9; }
+  .pace.ahead { background: var(--rb-success); }
+  .pace.behind { background: var(--rb-yellow); color: var(--rb-ink); }
+  td.good { color: var(--rb-success); font-weight: 700; }
+  td.bad { color: var(--rb-red); font-weight: 700; }
+  table.stats tr.sec td { font-weight: 700; background: var(--rb-gray-050); border-top: 2px solid var(--rb-gray-300); }
+  ul.files { margin: 0 0 8px; padding-left: 20px; font-size: 15px; }
   .typeqty {
     position: absolute;
     right: 12px;
@@ -616,6 +655,10 @@
   .toggle[aria-pressed="true"] { background: var(--rb-ink); border-color: var(--rb-ink); color: #fff; }
 
   /* ---- Small screens (phones, portrait tablets) ------------------------ */
+  .back, .walkoff-btn { white-space: nowrap; }
+  @media (max-width: 1500px) {
+    .brand span, .cat-tip { display: none; }
+  }
   @media (max-width: 860px) {
     body { overflow: auto; }
     :root { --top-h: 64px; }
@@ -623,17 +666,18 @@
     .main { min-height: 62vh; }
     .panel { border-left: 0; border-top: 1px solid var(--rb-gray-200); overflow: visible; }
     .items.cols-3 { grid-template-columns: repeat(2, 1fr); }
-    .items.photos { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 160px; }
+    .items.photos { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 170px; }
     .home { grid-auto-flow: row; grid-auto-rows: 1fr; grid-auto-columns: auto; }
     .starts { grid-template-columns: 1fr; }
     .pops.c4 { grid-template-columns: repeat(2, 1fr); }
-    .station, .brand span, .cat-tip { display: none; }
+    .station, .brand span, .cat-tip, .pace .p-sub { display: none; }
     .tbtn { padding: 0 10px; font-size: 15px; height: 46px; }
     .undo { width: auto; min-width: 96px; height: 52px; }
     .undo .u-sub { display: none; }
     .cat-head { flex-wrap: wrap; }
   }
   @media (max-width: 560px) {
+    .pace { display: none; }
     .top { gap: 6px; padding: 0 8px; }
     .brand { display: none; }
     .tbtn { flex: 1; padding: 0 4px; font-size: 14px; }
@@ -691,6 +735,18 @@ const PRIZES = [
   ['grand', 'Grand prize', 9],
 ];
 const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
+const COPTER_PHOTO_DIR = 'copter_photos/';
+
+// Ticket goals per booth (editable in Settings). Plinko is not tracked here;
+// its tickets go straight into a bucket that gets counted at close.
+const GOAL_DEFAULTS = { clickers: 500, copters: 500, battle: 200 };
+const PLINKO_GOAL = 100;
+const PLINKO_GOAL_NOTE = 'Plinko goal (100 tix) is counted from its bucket at close; type it into Combine.';
+const EVENT_DEFAULTS = { date: '2026-10-17', start: '10:30', end: '13:00' };
+const STATS_BUCKET_MIN = 30;
+
+// What volunteers say when a kit is in the cart. Edit freely.
+const TOROIDAL_PITCH = 'Looped blades instead of straight ones: the shape engineers are testing for quieter drones. Same launcher, no sharp blade tips.';
 
 const CATEGORIES = [
   {
@@ -702,16 +758,17 @@ const CATEGORIES = [
       .concat([{ id: 'clicker', name: 'Other design', group: 'clicker' }]),
   },
   {
-    id: 'copters', kind: 'sale', name: 'Copters', theme: 'red', walkoffs: true,
+    id: 'copters', kind: 'sale', name: 'Copters', theme: 'red', walkoffs: true, layout: 'photos', photoCols: 3,
     hint: 'Full kit = 5 tix · add-ons 1 to 3',
+    tip: 'Tap = +1 · tap the number on the right to type<br>Full kit = launcher 3 + propeller 1 + ripcord 1',
     items: [
-      { id: 'kit', name: 'Full kit', price: 5, style: 'primary', note: 'Launcher + propeller + ripcord' },
-      { id: 'kit_toroidal', name: 'Kit w/ toroidal', price: 6, style: 'primary', note: 'Launcher + toroidal + ripcord' },
-      { id: 'launcher', name: 'Launcher only', price: 3, style: 'outline', note: 'Rare: spares, group buys' },
-      { id: 'propeller', name: 'Extra propeller', price: 1, style: 'accent' },
-      { id: 'toroidal', name: 'Toroidal propeller', price: 2, style: 'accent' },
-      { id: 'ripcord', name: 'Extra ripcord', price: 1, style: 'accent' },
-    ],
+      { id: 'kit', name: 'Full kit', price: 5, note: 'Launcher + propeller + ripcord', photo: 'pullcopter' },
+      { id: 'kit_toroidal', name: 'Kit w/ toroidal', price: 6, note: 'Launcher + toroidal + ripcord', photo: 'toroidal_prop' },
+      { id: 'launcher', name: 'Launcher only', price: 3, note: 'Rare: spares, group buys', photo: 'pullcopter' },
+      { id: 'propeller', name: 'Extra propeller', price: 1, photo: 'regular_prop' },
+      { id: 'toroidal', name: 'Toroidal propeller', price: 2, photo: 'toroidal_prop' },
+      { id: 'ripcord', name: 'Extra ripcord', price: 1, photo: 'ripcord', letter: 'R' },
+    ].map(it => Object.assign({ photoDir: COPTER_PHOTO_DIR }, it)),
   },
   { id: 'battle', kind: 'battle', name: 'Balloon Battle', theme: 'ink', defaultOn: false },
   {
@@ -752,6 +809,7 @@ const WALKOFF_REASONS = [
 
 const STORAGE_BASE = 'rambots_ramathon_sales_v1';
 const DATA_KEYS = ['customers', 'currentId', 'nextNo', 'tradeId', 'nextTradeNo', 'walkoffs', 'nextWalkoffNo',
+  'backorders', 'nextBackorderNo',
   'queue', 'matches', 'matchId', 'lastMatchId', 'nextMatchNo'];
 
 /* ==========================================================================
@@ -821,9 +879,14 @@ function defaultState() {
   const cats = {};
   CATEGORIES.forEach(c => { cats[c.id] = c.defaultOn !== false; });
   return {
-    settings: { station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS), prizes: {} },
+    settings: {
+      station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS), prizes: {},
+      goals: Object.assign({}, GOAL_DEFAULTS), event: Object.assign({}, EVENT_DEFAULTS), showPace: true,
+      laptopId: Math.random().toString(36).slice(2, 6),
+    },
     customers: [], currentId: null, nextNo: 1, tradeId: null, nextTradeNo: 1,
     walkoffs: [], nextWalkoffNo: 1,
+    backorders: [], nextBackorderNo: 1,
     queue: [], matches: [], matchId: null, lastMatchId: null, nextMatchNo: 1,
     lastExport: null,
   };
@@ -838,6 +901,8 @@ function hydrate(raw) {
     cats: Object.assign({}, base.settings.cats, ss.cats || {}),
     battle: Object.assign({}, base.settings.battle, ss.battle || {}),
     prizes: Object.assign({}, ss.prizes || {}),
+    goals: Object.assign({}, base.settings.goals, ss.goals || {}),
+    event: Object.assign({}, base.settings.event, ss.event || {}),
   });
   const merged = Object.assign(base, saved);
   // An item removed or renamed in the config would otherwise break saved data
@@ -894,7 +959,8 @@ applyPreset();
 save();
 
 const blankDraft = () => ({ name: '', weapons: 0, age: null, gender: null });
-const view = { screen: 'home', modal: null, pulse: null, pvpWinner: null, qDraft: blankDraft(), focusName: false };
+const view = { screen: 'home', modal: null, pulse: null, pvpWinner: null, qDraft: blankDraft(), focusName: false,
+  combine: { files: [], plinko: '' } };
 const undoStack = [];
 const UNDO_LIMIT = 200;
 
@@ -1088,6 +1154,43 @@ function saveWalkoff() {
   view.modal = null;
   render();
   toast('Logged ' + label.toLowerCase(), 'ok');
+}
+
+/* ---- Backorders: interest list when something runs out (no tickets) ---- */
+function openBackorder(catId) {
+  const cat = catById(catId);
+  view.modal = { type: 'backorder', cat: catId, item: cat.items[0].id, qty: 1, name: '', contact: '', note: '' };
+  render();
+}
+
+function saveBackorder() {
+  const m = view.modal;
+  if (!m || m.type !== 'backorder') return;
+  if (!m.contact.trim()) { toast('Add a phone or email so someone can follow up', 'warn'); return; }
+  const it = ITEMS[m.item];
+  let no = 0;
+  commit(() => {
+    no = state.nextBackorderNo++;
+    state.backorders.push({
+      id: uid(), no, at: now(), station: state.settings.station, item: m.item, qty: m.qty,
+      name: m.name.trim(), contact: m.contact.trim(), note: m.note.trim(), voided: false,
+    });
+    return `Backorder #${no}: ${m.qty} ${it.name}`;
+  });
+  view.modal = null;
+  render();
+  toast(`Backorder #${no} saved · ${m.qty} ${it.name}`, 'ok');
+}
+
+function setBackorderVoided(id, voided) {
+  const b = state.backorders.find(x => x.id === id);
+  if (!b) return;
+  const label = commit(() => {
+    b.voided = voided;
+    return `${voided ? 'Voided' : 'Restored'} backorder #${b.no}`;
+  });
+  render();
+  toast(label, voided ? 'warn' : 'ok');
 }
 
 function setWalkoffVoided(id, voided) {
@@ -1405,8 +1508,13 @@ function labelOf(list, id) { const x = list.find(v => v.id === id); return x ? x
 function buildCSV() {
   const header = ['station', 'record', 'status', 'opened_at', 'closed_at', 'category', 'item', 'qty',
     'item_tickets', 'record_total_tickets', 'age', 'gender',
-    'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason', 'cards_redeemed'];
+    'battle_mode', 'player', 'balloons_popped', 'won', 'cards_paid', 'walkoff_reason', 'cards_redeemed',
+    'record_id', 'laptop_id', 'exported_at'];
   const rows = [header];
+  // record_id + exported_at let the Combine screen keep only the newest copy
+  // of each record when early and late exports are mixed.
+  const stamp = localStamp(now());
+  const tail = id => [id, state.settings.laptopId, stamp];
   const blankBattle = ['', '', '', '', ''];
   state.customers.forEach(c => {
     if (!c.lines.length) return;
@@ -1418,13 +1526,13 @@ function buildCSV() {
       const it = ITEMS[l.item];
       rows.push([c.station, (trade ? 'T' : 'S') + c.no, status, localStamp(c.openedAt), localStamp(c.closedAt),
         catById(it.cat).name, it.name, l.qty, trade ? 0 : amounts[i], trade ? 0 : total,
-        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['', trade ? amounts[i] : '']));
+        labelOf(AGES, c.age), labelOf(GENDERS, c.gender)].concat(blankBattle, ['', trade ? amounts[i] : ''], tail(c.id)));
     });
   });
   state.walkoffs.forEach(w => {
     const it = ITEMS[w.item];
     rows.push([w.station, 'W' + w.no, w.voided ? 'voided' : 'walk-off', localStamp(w.at), localStamp(w.at),
-      catById(it.cat).name, it.name, w.qty, 0, 0, '', ''].concat(blankBattle, [labelOf(WALKOFF_REASONS, w.reason), '']));
+      catById(it.cat).name, it.name, w.qty, 0, 0, '', ''].concat(blankBattle, [labelOf(WALKOFF_REASONS, w.reason), ''], tail(w.id)));
   });
   state.matches.forEach(m => {
     const status = m.voided ? 'voided' : (m.status === 'done' ? 'played' : 'in progress');
@@ -1434,20 +1542,25 @@ function buildCSV() {
       const demo = [labelOf(AGES, p.age), labelOf(GENDERS, p.gender)];
       const mode = m.mode === 'pvp' ? 'vs player' : 'vs house';
       rows.push(common.concat([m.rematch ? 'Rematch' : 'Match', 1, p.base, total], demo,
-        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', '']));
+        [mode, 'P' + (i + 1), p.pops == null ? '' : p.pops, p.won == null ? '' : (p.won ? 'yes' : 'no'), p.cards || 0, '', ''], tail(m.id)));
       if (p.weapons) {
-        rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '', '']));
+        rows.push(common.concat(['Extra weapon', p.weapons, p.tix - p.base, total], demo, [mode, 'P' + (i + 1), '', '', '', '', ''], tail(m.id)));
       }
     });
   });
   return rows.map(r => r.map(csvCell).join(',')).join('\r\n');
 }
 
-function exportCSV() {
-  const csv = buildCSV();
-  const slug = (state.settings.station || 'station').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+// ramathon_<kind>_<booth>_<station>_<laptop id>_<date>_<time>.csv
+function exportName(kind) {
+  const slug = v => String(v || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'x';
   const d = new Date();
-  const name = `ramathon_sales_${slug}_${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.csv`;
+  return `ramathon_${kind}_${slug(boothParam || 'all')}_${slug(state.settings.station)}_${state.settings.laptopId}_`
+    + `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.csv`;
+}
+
+function downloadCSV(name, rows) {
+  const csv = Array.isArray(rows) ? rows.map(r => r.map(csvCell).join(',')).join('\r\n') : rows;
   const bom = String.fromCharCode(0xfeff); // lets Excel read the file as UTF-8
   const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
@@ -1456,10 +1569,268 @@ function exportCSV() {
   document.body.appendChild(a);
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  toast('Downloaded ' + name, 'ok');
+}
+
+function exportCSV() {
+  downloadCSV(exportName('sales'), buildCSV());
   state.lastExport = now();
   save();
   render();
-  toast('Downloaded ' + name, 'ok');
+}
+
+function exportStats() {
+  const stamp = localStamp(now());
+  const rows = [['station', 'laptop_id', 'exported_at', 'section', 'metric', 'value']]
+    .concat(computeStats().map(r => [state.settings.station, state.settings.laptopId, stamp].concat(r)));
+  downloadCSV(exportName('stats'), rows);
+}
+
+function exportBackorders() {
+  const stamp = localStamp(now());
+  const rows = [['station', 'backorder', 'status', 'at', 'item', 'qty', 'name', 'contact', 'note', 'record_id', 'laptop_id', 'exported_at']]
+    .concat(state.backorders.map(b => [b.station, 'BO' + b.no, b.voided ? 'voided' : 'open', localStamp(b.at), ITEMS[b.item].name,
+      b.qty, b.name, b.contact, b.note, b.id, state.settings.laptopId, stamp]));
+  downloadCSV(exportName('backorders'), rows);
+}
+
+/* ---- Stats (shown in Totals, exported as their own CSV) ----------------- */
+const pct = (a, b) => (b ? `${Math.round((a / b) * 100)}%` : '-');
+const avgText = (a, b, digits = 2) => (b ? (a / b).toFixed(digits) : '-');
+
+function computeStats() {
+  const t = computeTotals();
+  const out = [];
+  const add = (section, metric, value) => out.push([section, metric, value]);
+  const sold = t.sold;
+  if (sold.length) {
+    const tix = sold.reduce((s, c) => s + customerTotal(c), 0);
+    add('Sales', 'Customers', sold.length);
+    add('Sales', 'Tickets', tix);
+    add('Sales', 'Avg tix per customer', avgText(tix, sold.length));
+    add('Sales', 'Avg items per customer', avgText(sold.reduce((s, c) => s + unitsOf(c), 0), sold.length));
+  }
+  const clickerBuyers = sold.filter(c => groupUnits(c, 'clicker') > 0);
+  if (clickerBuyers.length) {
+    let n = 0, tix = 0, threes = 0, twos = 0, ones = 0;
+    clickerBuyers.forEach(c => {
+      const u = groupUnits(c, 'clicker');
+      n += u; tix += groupPrice('clicker', u); threes += Math.floor(u / 3);
+      if (u % 3 === 2) twos += 1;
+      if (u % 3 === 1) ones += 1;
+    });
+    add('Clickers', 'Clickers sold', n);
+    add('Clickers', 'Clicker tickets', tix);
+    add('Clickers', 'Avg tix per clicker', avgText(tix, n));
+    add('Clickers', 'Customers buying clickers', clickerBuyers.length);
+    add('Clickers', 'Avg clickers per clicker customer', avgText(n, clickerBuyers.length));
+    add('Clickers', '3 for 10 deals', threes);
+    add('Clickers', '2 for 7 deals', twos);
+    add('Clickers', '1 for 4 (singles)', ones);
+  }
+  const copterBuyers = sold.filter(c => catUnits(c, 'copters') > 0);
+  if (copterBuyers.length) {
+    const kits = copterBuyers.reduce((s, c) => s + qtyOf(c, 'kit'), 0);
+    const tkits = copterBuyers.reduce((s, c) => s + qtyOf(c, 'kit_toroidal'), 0);
+    const addOn = copterBuyers.filter(c => ['propeller', 'toroidal', 'ripcord'].some(id => qtyOf(c, id) > 0)).length;
+    add('Copters', 'Copter customers', copterBuyers.length);
+    add('Copters', 'Copter tickets', copterBuyers.reduce((s, c) => s + catTix(c, 'copters'), 0));
+    add('Copters', 'Avg copter tix per copter customer', avgText(copterBuyers.reduce((s, c) => s + catTix(c, 'copters'), 0), copterBuyers.length));
+    add('Copters', 'Kits: regular / toroidal', `${kits} / ${tkits}`);
+    add('Copters', 'Toroidal upgrade rate', pct(tkits, kits + tkits));
+    add('Copters', 'Add-on rate (extra prop, toroidal prop or ripcord)', pct(addOn, copterBuyers.length));
+  }
+  const b = t.battle;
+  if (b.matches) {
+    const players = t.matches.flatMap(m => m.players);
+    add('Battle', 'Matches', b.matches);
+    add('Battle', 'Players', b.players);
+    add('Battle', 'Tickets', b.tix);
+    add('Battle', 'Avg tix per match', avgText(b.tix, b.matches));
+    add('Battle', 'Avg tix per player', avgText(b.tix, b.players));
+    add('Battle', 'Weapon rate (players with 1+ extra)', pct(players.filter(p => p.weapons > 0).length, players.length));
+    add('Battle', 'Rematch rate', pct(b.rematches, b.matches));
+    add('Battle', 'vs Player share', pct(b.pvp, b.matches));
+    add('Battle', 'Avg match minutes', b.avgMin == null ? '-' : b.avgMin.toFixed(1));
+    add('Battle', 'Cards paid out', b.cards);
+    add('Battle', 'Cards per ticket', avgText(b.cards, b.tix));
+  }
+  if (t.prizes.trades) {
+    const top = Object.keys(t.byPrize).sort((x, y) => t.byPrize[y].given - t.byPrize[x].given)[0];
+    add('Prizes', 'Trades', t.prizes.trades);
+    add('Prizes', 'Prizes given', t.prizes.given);
+    add('Prizes', 'Cards redeemed', t.prizes.cards);
+    add('Prizes', 'Avg cards per trade', avgText(t.prizes.cards, t.prizes.trades, 1));
+    add('Prizes', 'Most popular prize', ITEMS[top].name);
+    Object.keys(t.byPrize).forEach(id => add('Prizes', `Given: ${ITEMS[id].name}`, t.byPrize[id].given));
+  }
+  const bos = state.backorders.filter(x => !x.voided);
+  if (bos.length) {
+    add('Backorders', 'Requests', bos.length);
+    add('Backorders', 'Items requested', bos.reduce((s, x) => s + x.qty, 0));
+    const byItem = {};
+    bos.forEach(x => { byItem[x.item] = (byItem[x.item] || 0) + x.qty; });
+    Object.keys(byItem).forEach(id => add('Backorders', `Requested: ${ITEMS[id].name}`, byItem[id]));
+  }
+  const p = pace();
+  p.rows.forEach(r => add('Goal', `${r.cat.name}: actual / goal`, `${r.actual} / ${r.goal}`));
+  // Busiest stretches: tickets and transactions per 30 minutes.
+  const buckets = {};
+  const bump = (iso, tix) => {
+    const d = new Date(iso);
+    d.setMinutes(Math.floor(d.getMinutes() / STATS_BUCKET_MIN) * STATS_BUCKET_MIN, 0, 0);
+    const k = d.getTime();
+    const bk = buckets[k] || (buckets[k] = { n: 0, tix: 0 });
+    bk.n += 1; bk.tix += tix;
+  };
+  sold.forEach(c => bump(c.closedAt, customerTotal(c)));
+  t.matches.forEach(m => bump(m.startedAt, matchTix(m)));
+  t.trades.forEach(c => bump(c.closedAt, 0));
+  const keys = Object.keys(buckets).map(Number).sort((x, y) => x - y);
+  const label = k => `${fmtTime(new Date(k).toISOString())} to ${fmtTime(new Date(k + STATS_BUCKET_MIN * 60000).toISOString())}`;
+  keys.forEach(k => add('By time', label(k), `${buckets[k].n} transactions · ${buckets[k].tix} tix`));
+  if (keys.length) {
+    const best = keys.reduce((x, y) => (buckets[y].tix > buckets[x].tix ? y : x));
+    add('By time', 'Busiest 30 minutes', `${label(best)} (${buckets[best].tix} tix)`);
+  }
+  return out;
+}
+
+function statsTable() {
+  const rows = computeStats();
+  if (!rows.length) return '';
+  let lastSection = '';
+  const body = rows.map(([section, metric, value]) => {
+    const head = section !== lastSection ? `<tr class="sec"><td colspan="2">${esc(section)}</td></tr>` : '';
+    lastSection = section;
+    return `${head}<tr><td>${esc(metric)}</td><td class="num">${esc(value)}</td></tr>`;
+  }).join('');
+  return `<h3>Stats</h3><table class="stats">${body}</table>`;
+}
+
+/* ---- Combine: add up the CSVs from all laptops, newest copy of each record ---- */
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
+  const rows = [];
+  let row = [], field = '', quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (quoted) {
+      if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else quoted = false; }
+      else field += ch;
+    } else if (ch === '"') quoted = true;
+    else if (ch === ',') { row.push(field); field = ''; }
+    else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      row.push(field); rows.push(row); row = []; field = '';
+    } else field += ch;
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.length > 1 || r[0] !== '');
+}
+
+async function loadCombineFiles(fileList) {
+  const files = [];
+  for (const f of Array.from(fileList)) {
+    const grid = parseCSV(await f.text());
+    if (!grid.length) continue;
+    const header = grid[0];
+    if (!header.includes('category') || !header.includes('item_tickets')) {
+      files.push({ name: f.name, skipped: 'not a sales CSV (stats or backorders files are skipped)' });
+      continue;
+    }
+    const rows = grid.slice(1).map(r => Object.fromEntries(header.map((h, i) => [h, r[i] == null ? '' : r[i]])));
+    files.push({ name: f.name, header, rows, exportedAt: rows.reduce((mx, r) => (r.exported_at > mx ? r.exported_at : mx), '') });
+  }
+  view.combine.files = view.combine.files.concat(files);
+  render();
+}
+
+// Old category names from earlier versions map onto today's booths.
+const CAT_BY_NAME = { 'Fidget Clickers': 'clickers', 'Pull Copters': 'copters' };
+CATEGORIES.forEach(cat => { CAT_BY_NAME[cat.name] = cat.id; });
+
+function combineResult() {
+  const files = view.combine.files.filter(f => f.rows);
+  // For each record keep the rows from the newest file that has it.
+  const best = {};
+  files.forEach((f, fi) => f.rows.forEach(r => {
+    if (!r.record_id) return;
+    const key = `${r.laptop_id}|${r.record_id}`;
+    const cur = best[key];
+    if (!cur || f.exportedAt > files[cur].exportedAt) best[key] = fi;
+  }));
+  const kept = [];
+  let legacy = 0;
+  files.forEach((f, fi) => f.rows.forEach(r => {
+    if (!r.record_id) { legacy += 1; kept.push(r); return; }
+    if (best[`${r.laptop_id}|${r.record_id}`] === fi) kept.push(r);
+  }));
+  const counted = r => ['sold', 'played', 'in progress', 'traded'].includes(r.status);
+  const byCat = {};
+  const prizes = {};
+  let cardsPaid = 0, cardsRedeemed = 0;
+  const records = new Set();
+  kept.forEach(r => {
+    if (!counted(r)) return;
+    const cat = CAT_BY_NAME[r.category] || r.category;
+    byCat[cat] = (byCat[cat] || 0) + (Number(r.item_tickets) || 0);
+    cardsPaid += Number(r.cards_paid) || 0;
+    cardsRedeemed += Number(r.cards_redeemed) || 0;
+    if (r.status === 'traded') prizes[r.item] = (prizes[r.item] || 0) + (Number(r.qty) || 0);
+    if (r.record_id) records.add(`${r.laptop_id}|${r.record_id}`);
+  });
+  const laptops = new Set(kept.map(r => r.laptop_id).filter(Boolean));
+  return { files, kept, legacy, byCat, prizes, cardsPaid, cardsRedeemed, transactions: records.size, laptops: laptops.size,
+    dropped: files.reduce((s, f) => s + f.rows.length, 0) - kept.length };
+}
+
+function combineView() {
+  const cb = view.combine;
+  const r = combineResult();
+  const plinko = parseInt(cb.plinko, 10) || 0;
+  const goals = state.settings.goals;
+  const ticketCats = CATEGORIES.filter(cat => cat.kind !== 'prizes');
+  const rows = ticketCats.map(cat => {
+    const actual = r.byCat[cat.id] || 0;
+    const goal = goals[cat.id] || 0;
+    return `<tr><td>${esc(cat.name)}</td><td class="num">${actual}</td><td class="num">${goal}</td><td class="num">${goal ? pct(actual, goal) : ''}</td></tr>`;
+  }).join('');
+  const total = ticketCats.reduce((s, cat) => s + (r.byCat[cat.id] || 0), 0) + plinko;
+  const goalTotal = ticketCats.reduce((s, cat) => s + (goals[cat.id] || 0), 0) + PLINKO_GOAL;
+  const fileList = cb.files.map(f => `<li>${esc(f.name)}${f.skipped ? ` <span class="note">(${esc(f.skipped)})</span>`
+    : ` <span class="note">(${f.rows.length} rows, exported ${esc(f.exportedAt || 'unknown')})</span>`}</li>`).join('');
+  const prizeRows = Object.keys(r.prizes).sort((a, b) => r.prizes[b] - r.prizes[a])
+    .map(name => `<tr><td>${esc(name)}</td><td class="num">${r.prizes[name]}</td></tr>`).join('');
+  return `<div class="dialog" role="dialog" aria-label="Combine laptops">
+    ${dialogHead('Combine laptops')}
+    <p class="note">Pick the sales CSVs from every laptop (all at once or a few at a time). Early backups and later exports can be mixed: each record is counted once, from its newest export.</p>
+    <div class="field"><input type="file" id="combine-files" multiple accept=".csv,text/csv"></div>
+    ${fileList ? `<ul class="files">${fileList}</ul>
+      <div class="row"><button class="btn slim" data-act="combineclear">Start over</button></div>` : ''}
+    ${r.files.length ? `
+      <p class="note">${r.laptops} laptop${r.laptops === 1 ? '' : 's'} · ${r.transactions} records · ${r.dropped} duplicate rows ignored${r.legacy ? ` · ${r.legacy} rows from older exports could not be checked for duplicates` : ''}.</p>
+      <div class="field"><label for="combine-plinko">Plinko bucket count (tix)</label><input type="number" id="combine-plinko" min="0" value="${esc(cb.plinko)}" placeholder="count at close"></div>
+      <div class="big-stats">
+        <div class="stat"><div class="s-val">${total}</div><div class="s-label">Event tickets (goal ${goalTotal})</div></div>
+        <div class="stat"><div class="s-val">${money(total * NET_PER_TICKET)}</div><div class="s-label">To Rambots after CCA's 10%</div></div>
+        <div class="stat"><div class="s-val">${pct(total, goalTotal)}</div><div class="s-label">Of goal</div></div>
+      </div>
+      <table><thead><tr><th>Booth</th><th class="num">Tix</th><th class="num">Goal</th><th class="num">%</th></tr></thead>
+      <tbody>${rows}<tr><td>Plinko (bucket)</td><td class="num">${plinko}</td><td class="num">${PLINKO_GOAL}</td><td class="num">${pct(plinko, PLINKO_GOAL)}</td></tr></tbody></table>
+      ${r.cardsPaid || r.cardsRedeemed ? `<p class="note">Cards: Balloon Battle paid out ${r.cardsPaid}, Prize Table took back ${r.cardsRedeemed}.</p>` : ''}
+      ${prizeRows ? `<h3>Prizes, most popular first</h3><table><tbody>${prizeRows}</tbody></table>` : ''}
+      <div class="row"><button class="btn go" data-act="combinedownload">Download combined CSV</button></div>` : ''}
+  </div>`;
+}
+
+function downloadCombined() {
+  const r = combineResult();
+  if (!r.kept.length) return;
+  const header = (r.files.find(f => f.header.includes('record_id')) || r.files[0]).header;
+  const rows = [header].concat(r.kept.map(row => header.map(h => row[h] == null ? '' : row[h])));
+  const d = new Date();
+  downloadCSV(`ramathon_combined_${r.laptops}-laptops_${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.csv`, rows);
 }
 
 function clearAll() {
@@ -1528,11 +1899,78 @@ function render() {
   tick();
 }
 
+// Pace against the goal: a straight line from 0 at the start to the goal at
+// the end. Each laptop paces only the booths it runs.
+function eventWindow() {
+  const e = state.settings.event;
+  const start = new Date(`${e.date}T${e.start}:00`).getTime();
+  const end = new Date(`${e.date}T${e.end}:00`).getTime();
+  return { start, end, ok: Number.isFinite(start) && Number.isFinite(end) && end > start };
+}
+
+function pace() {
+  const w = eventWindow();
+  const t = computeTotals();
+  const nowMs = Date.now();
+  const frac = w.ok ? Math.min(1, Math.max(0, (nowMs - w.start) / (w.end - w.start))) : 0;
+  const rows = enabledCats().filter(cat => cat.kind !== 'prizes').map(cat => {
+    const goal = state.settings.goals[cat.id] || 0;
+    const actual = t.byBox[cat.id] || 0;
+    return { cat, goal, actual, target: goal * frac, diff: actual - goal * frac };
+  });
+  const goal = rows.reduce((s, r) => s + r.goal, 0);
+  const actual = rows.reduce((s, r) => s + r.actual, 0);
+  const target = goal * frac;
+  const minsLeft = w.ok ? Math.max(0, (w.end - nowMs) / 60000) : 0;
+  const phase = !w.ok ? 'unset' : (nowMs < w.start ? 'before' : (nowMs > w.end ? 'after' : 'during'));
+  return { rows, goal, actual, target, diff: actual - target, minsLeft, need: minsLeft > 0 ? Math.max(0, goal - actual) / minsLeft : 0, phase, w };
+}
+
+function paceChip() {
+  if (!state.settings.showPace) return '';
+  const p = pace();
+  const clock = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  let main = clock;
+  let sub = '';
+  let cls = '';
+  if (p.goal && p.phase === 'before') { sub = `Starts ${fmtTime(new Date(p.w.start).toISOString())} · goal ${p.goal} tix`; }
+  else if (p.goal && p.phase === 'after') {
+    main = `Ended · ${p.actual} of ${p.goal} tix`;
+    sub = p.actual >= p.goal ? 'Goal reached' : `${p.goal - p.actual} short`;
+    cls = p.actual >= p.goal ? ' ahead' : ' behind';
+  } else if (p.goal && p.phase === 'during') {
+    const d = Math.round(p.diff);
+    main = `${clock} · ${d >= 0 ? `+${d} ahead` : `${-d} behind`}`;
+    sub = `${p.actual} tix · target ${Math.round(p.target)} by now`;
+    cls = d >= 0 ? ' ahead' : ' behind';
+  } else if (p.phase === 'during' || p.phase === 'before') {
+    sub = `Event ${state.settings.event.start} to ${state.settings.event.end}`;
+  }
+  return `<button class="pace${cls}" id="pace-chip" data-act="open" data-modal="pace" title="Pace against the goal">
+    <span class="p-main">${esc(main)}</span>${sub ? `<span class="p-sub">${esc(sub)}</span>` : ''}</button>`;
+}
+
+function paceView() {
+  const p = pace();
+  const fmt = n => Math.round(n);
+  const rows = p.rows.map(r => `<tr><td>${esc(r.cat.name)}</td><td class="num">${r.goal}</td><td class="num">${fmt(r.target)}</td><td class="num">${r.actual}</td>
+    <td class="num ${r.diff >= 0 ? 'good' : 'bad'}">${r.diff >= 0 ? '+' : ''}${fmt(r.diff)}</td></tr>`).join('');
+  const phaseText = { unset: 'Set the event date and hours in Settings.', before: 'The event has not started yet.', after: 'The event is over.', during: `${Math.round(p.minsLeft)} minutes left. To finish on goal: ${p.need.toFixed(1)} tix per minute (${Math.round(p.need * 60)} per hour).` }[p.phase];
+  return `<div class="dialog" role="dialog" aria-label="Pace">
+    ${dialogHead('Pace · ' + esc(state.settings.station))}
+    <p class="note" style="font-size:18px">${phaseText}</p>
+    ${p.rows.length ? `<table><thead><tr><th>Booth</th><th class="num">Goal</th><th class="num">Target by now</th><th class="num">Actual</th><th class="num">+/−</th></tr></thead>
+    <tbody>${rows}<tr class="sub"><td>This laptop</td><td class="num">${p.goal}</td><td class="num">${fmt(p.target)}</td><td class="num">${p.actual}</td><td class="num ${p.diff >= 0 ? 'good' : 'bad'}">${p.diff >= 0 ? '+' : ''}${fmt(p.diff)}</td></tr></tbody></table>` : '<p class="note">This laptop has no ticket booths, so there is no ticket goal here.</p>'}
+    <p class="note">Target = where a steady pace from ${esc(state.settings.event.start)} to ${esc(state.settings.event.end)} would be right now. Each laptop only counts its own booths; finished sales and started battle matches count. ${esc(PLINKO_GOAL_NOTE)} Goals and hours are in Settings.</p>
+  </div>`;
+}
+
 function topBar() {
   const last = undoStack[undoStack.length - 1];
   return `<header class="top">
     <div class="brand">RAMBOTS <span>Ramathon Sales</span></div>
     <div class="station" title="Station name (change in Settings)">${esc(state.settings.station)}</div>
+    ${paceChip()}
     <div class="spacer"></div>
     <button class="tbtn" data-act="open" data-modal="totals">Totals</button>
     <button class="tbtn" data-act="open" data-modal="history">History</button>
@@ -1574,21 +2012,24 @@ function catView(cat, c, canBack) {
       <div class="cat-title">${esc(cat.name)}</div>
       <div class="spacer"></div>
       <div class="cat-tip">${cat.tip || 'Tap = +1<br>"Type qty" = punch in a number'}</div>
-      ${cat.walkoffs ? `<button class="walkoff-btn" data-act="walkoff" data-cat="${cat.id}">Log walk-off</button>` : ''}
+      ${cat.walkoffs ? `<button class="walkoff-btn" data-act="backorder" data-cat="${cat.id}">Backorder</button>
+      <button class="walkoff-btn" data-act="walkoff" data-cat="${cat.id}">Log walk-off</button>` : ''}
     </div>`;
   if (cat.layout === 'photos') {
     // One photo button per design; tap the number in the right panel to type a quantity.
-    const cols = Math.min(5, Math.max(3, cat.items.length));
-    return head + `<div class="items photos" style="grid-template-columns:repeat(${cols},1fr)">${cat.items.map(it => {
+    const cols = cat.photoCols || Math.min(5, Math.max(3, cat.items.length));
+    return head + `<div class="items photos" style="--cols:${cols}">${cat.items.map(it => {
       const q = qtyOf(c, it.id);
       const prize = it.cards != null;
+      const tag = prize ? `${cardsFor(it.id)} cards` : (it.price != null ? `${it.price} tix` : '');
       return `<div class="tile">
-        <button class="item photo-item${prize ? ' prize-item' : ''}" data-act="add" data-item="${it.id}">
+        <button class="item photo-item cat-${cat.id}${prize ? ' prize-item' : ''}" data-act="add" data-item="${it.id}">
           ${q ? `<span class="badge">×${q}</span>` : ''}
           ${prize ? stockPill(it.id) : ''}
           <span class="ph">${photoHtml(it)}</span>
           <span class="i-name">${esc(it.name)}</span>
-          ${prize ? `<span class="i-cards">${cardsFor(it.id)} cards</span>` : ''}
+          ${tag ? `<span class="i-cards">${tag}</span>` : ''}
+          ${it.note ? `<span class="i-note">${esc(it.note)}</span>` : ''}
         </button>
       </div>`;
     }).join('')}</div>`;
@@ -1608,6 +2049,51 @@ function catView(cat, c, canBack) {
         <button class="typeqty" data-act="keypad" data-item="${it.id}"># Type qty</button>
       </div>`;
     }).join('')}</div>`;
+}
+
+// "3 for 10 ×2 + 1 for 4": how a tier-priced count breaks into deals.
+function comboText(gid, n) {
+  const g = PRICE_GROUPS[gid];
+  const size = g.bundle.size;
+  const k = Math.floor(n / size);
+  const r = n % size;
+  const parts = [];
+  if (k) parts.push(`${size} for ${g.bundle.price}${k > 1 ? ` ×${k}` : ''}`);
+  if (r) parts.push(`${r} for ${g.tiers[r]}`);
+  return parts.join(' + ');
+}
+
+// Upsell prompts while a copter kit is in the cart.
+function copterAsk(c) {
+  const kits = qtyOf(c, 'kit');
+  const anyCopter = kits + qtyOf(c, 'kit_toroidal') + qtyOf(c, 'launcher');
+  if (!anyCopter) return '';
+  const upgrade = kits ? `<div class="ask-title">Ask: upgrade to a toroidal propeller? +${ITEMS.kit_toroidal.price - ITEMS.kit.price} tix</div>
+      <div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : '';
+  return `<div class="ask">
+    ${upgrade}
+    <div class="ask-title">Ask: want extra propellers? ${ITEMS.propeller.price} tix each</div>
+    <div class="ask-row">
+      ${kits ? '<button class="askbtn" data-act="upgrade">Upgrade 1 kit (+1)</button>' : ''}
+      <button class="askbtn" data-act="add" data-item="propeller">+ Extra propeller</button>
+    </div>
+  </div>`;
+}
+
+function upgradeKit() {
+  const c = current();
+  if (!c || !qtyOf(c, 'kit')) return;
+  const diff = ITEMS.kit_toroidal.price - ITEMS.kit.price;
+  commit(() => {
+    const kit = c.lines.find(l => l.item === 'kit');
+    kit.qty -= 1;
+    if (kit.qty <= 0) c.lines = c.lines.filter(l => l !== kit);
+    const tk = c.lines.find(l => l.item === 'kit_toroidal');
+    if (tk) tk.qty += 1; else c.lines.push(newLine('kit_toroidal', 1));
+    return `Upgraded 1 Full kit to toroidal (+${diff} tix)`;
+  });
+  view.pulse = 'kit_toroidal';
+  render();
 }
 
 function stockPill(itemId) {
@@ -1635,8 +2121,17 @@ function panelView(c, kind) {
     const n = groupUnits(c, gid);
     if (!n) return '';
     const g = PRICE_GROUPS[gid];
-    return `<div class="group-row"><span>${esc(g.name)} ×${n} together</span><b>${groupPrice(gid, n)} tix</b></div>`;
+    const price = groupPrice(gid, n);
+    const extra = groupPrice(gid, n + 1) - price;
+    const nudge = extra < groupPrice(gid, 1)
+      ? `<div class="g-nudge">Ask: 1 more is only +${extra} tix (${n + 1} for ${groupPrice(gid, n + 1)}, ${(groupPrice(gid, n + 1) / (n + 1)).toFixed(2)} each)</div>` : '';
+    return `<div class="group-row">
+      <div class="g-top"><span>${esc(g.name)} ×${n}</span><b>${price} tix</b></div>
+      <div class="g-sub">${comboText(gid, n)} · ${(price / n).toFixed(2)} each</div>
+      ${nudge}
+    </div>`;
   }).join('') : '';
+  const ask = kind === 'sale' && has ? copterAsk(c) : '';
   return `<aside class="panel" aria-label="Current ${word.toLowerCase()}">
     <div class="p-head">
       <div class="p-title">${c ? `${word} #${c.no}` : `Next ${word.toLowerCase()}`}</div>
@@ -1644,6 +2139,7 @@ function panelView(c, kind) {
     </div>
     <div class="lines">${has ? lines.map(lineView).join('') : `<div class="empty">${kind === 'trade' ? 'Tap a prize to start a trade' : 'Tap an item to start a sale'}</div>`}</div>
     ${groupRows}
+    ${ask}
     <div class="total"><span class="t-label">Collect</span><span class="t-val">${total} ${unit}</span></div>
     ${split}
     ${state.settings.demographics ? demoView(c, has) : ''}
@@ -1656,7 +2152,7 @@ function panelView(c, kind) {
 const photoState = {};
 const photoBase = it => (it.photoDir || PHOTO_DIR) + it.photo;
 const photoUrl = (base, i) => `${base}.${PHOTO_EXTS[i]}`;
-const photoPlaceholder = it => `<span class="ph-none" aria-hidden="true">${esc(it.photo ? it.name.charAt(0) : '?')}</span>`;
+const photoPlaceholder = it => `<span class="ph-none" aria-hidden="true">${esc(it.letter || (it.photo ? it.name.charAt(0) : '?'))}</span>`;
 
 function photoHtml(it) {
   if (!it.photo) return photoPlaceholder(it);
@@ -1857,6 +2353,9 @@ function modalView() {
   else if (m.type === 'settings') inner = settingsView();
   else if (m.type === 'confirmClear') inner = confirmClearView();
   else if (m.type === 'walkoff') inner = walkoffView(m);
+  else if (m.type === 'backorder') inner = backorderView(m);
+  else if (m.type === 'pace') inner = paceView();
+  else if (m.type === 'combine') inner = combineView();
   return `<div class="overlay" data-act="overlay">${inner}</div>`;
 }
 
@@ -1892,6 +2391,35 @@ function keypadView(m) {
     <div class="row">
       <button class="btn" data-act="close">Cancel</button>
       <button class="btn go" data-act="kpset" ${q == null ? 'disabled' : ''}>Set to ${q == null ? '...' : q}</button>
+    </div>
+  </div>`;
+}
+
+function backorderView(m) {
+  const cat = catById(m.cat);
+  const field = (id, label, val, ph, type) => `<div class="field"><label for="${id}">${label}</label>
+    <input id="${id}" type="${type || 'text'}" value="${esc(val)}" placeholder="${esc(ph)}" maxlength="80" autocomplete="off"></div>`;
+  return `<div class="dialog narrow" role="dialog" aria-label="Backorder">
+    ${dialogHead('Backorder')}
+    <p class="note">For when something is sold out. No tickets now; someone follows up after the event. Contact info stays on this laptop and only goes in the backorders file.</p>
+    <div class="field">
+      <div class="f-label">What</div>
+      <div class="toggles">${cat.items.map(it => `<button class="toggle" data-act="boitem" data-item="${it.id}" aria-pressed="${m.item === it.id}">${esc(it.name)}</button>`).join('')}</div>
+    </div>
+    <div class="field">
+      <div class="f-label">How many</div>
+      <div class="wrow">
+        <button class="step" data-act="boqty" data-d="-1" aria-label="One fewer">−</button>
+        <span class="wcount">${m.qty}</span>
+        <button class="step" data-act="boqty" data-d="1" aria-label="One more">+</button>
+      </div>
+    </div>
+    ${field('bo-name', "Parent's name", m.name, 'e.g. Sam (Alex\'s dad)')}
+    ${field('bo-contact', 'Phone or email (required)', m.contact, 'phone or email')}
+    ${field('bo-note', 'Note (optional)', m.note, 'e.g. any color is fine')}
+    <div class="row">
+      <button class="btn" data-act="close">Cancel</button>
+      <button class="btn go" data-act="bosave">Save backorder</button>
     </div>
   </div>`;
 }
@@ -2011,8 +2539,14 @@ function totalsView() {
     ${prizeBlock}
     ${demoTable('Age', AGES, 'age')}
     ${demoTable('Gender', GENDERS, 'gender')}
+    ${statsTable()}
     <p class="note">Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}. Export every hour or so as a backup.</p>
-    <div class="row"><button class="btn go" data-act="export">Download CSV</button></div>
+    <div class="row">
+      <button class="btn go" data-act="export">Sales CSV</button>
+      <button class="btn" data-act="exportstats">Stats CSV</button>
+      <button class="btn" data-act="exportbackorders" ${state.backorders.length ? '' : 'disabled'}>Backorders CSV</button>
+    </div>
+    <div class="row"><button class="btn" data-act="open" data-modal="combine">Combine laptops' CSVs</button></div>
   </div>`;
 }
 
@@ -2020,6 +2554,7 @@ function historyView() {
   const entries = [];
   state.customers.filter(c => c.lines.length).forEach(c => entries.push({ t: c.closedAt || c.openedAt, kind: 'sale', c }));
   state.matches.forEach(m => entries.push({ t: m.startedAt, kind: 'match', m }));
+  state.backorders.forEach(b => entries.push({ t: b.at, kind: 'backorder', b }));
   state.walkoffs.forEach(w => entries.push({ t: w.at, kind: 'walkoff', w }));
   entries.sort((a, b) => Date.parse(b.t) - Date.parse(a.t));
 
@@ -2038,6 +2573,19 @@ function historyView() {
           <div class="h-items">${esc(items)}</div>
         </div>
         <div class="h-tix">${customerTotal(c)} ${unitWord(kindOfCustomer(c))}</div>
+        ${btn}
+      </div>`;
+    }
+    if (e.kind === 'backorder') {
+      const b = e.b;
+      const btn = b.voided ? `<button class="btn slim" data-act="borestore" data-id="${b.id}">Restore</button>`
+        : `<button class="btn slim" data-act="bovoid" data-id="${b.id}">Void</button>`;
+      return `<div class="h-row${b.voided ? ' voided' : ''}">
+        <div class="h-main">
+          <div class="h-top">Backorder #${b.no} · ${fmtTime(b.at)}${b.voided ? ' · VOIDED' : ''}</div>
+          <div class="h-items">${esc(ITEMS[b.item].name)} ×${b.qty} · ${esc(b.name || 'no name')} · ${esc(b.contact)}${b.note ? ' · ' + esc(b.note) : ''}</div>
+        </div>
+        <div class="h-tix">0 tix</div>
         ${btn}
       </div>`;
     }
@@ -2082,7 +2630,7 @@ function historyView() {
 function settingsView() {
   const s = state.settings;
   const b = s.battle;
-  const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length;
+  const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length + state.backorders.length;
   const num = (id, label, val) => `<label>${label}<input type="number" id="${id}" min="0" max="99" step="1" value="${val}"></label>`;
   return `<div class="dialog" role="dialog" aria-label="Settings">
     ${dialogHead('Settings')}
@@ -2094,6 +2642,18 @@ function settingsView() {
       <div class="f-label">This laptop runs</div>
       <div class="toggles">${CATEGORIES.map(cat => `<button class="toggle" data-act="togglecat" data-cat="${cat.id}" aria-pressed="${!!s.cats[cat.id]}" ${preset ? 'disabled' : ''}>${esc(cat.name)}</button>`).join('')}</div>
       ${preset ? `<p class="note">Set by this laptop's link (?booth=${esc(boothParam)}). Open the link without "?booth=..." to choose booths by hand.</p>` : ''}
+    </div>
+    <div class="field">
+      <div class="f-label">Clock and goal</div>
+      <div class="toggles"><button class="toggle" data-act="pacetoggle" aria-pressed="${!!s.showPace}">Pace chip ${s.showPace ? 'shown' : 'hidden'}</button></div>
+      <div class="nums">
+        <label>Event date<input type="date" id="ev-date" value="${esc(s.event.date)}"></label>
+        <label>Start<input type="time" id="ev-start" value="${esc(s.event.start)}"></label>
+        <label>End<input type="time" id="ev-end" value="${esc(s.event.end)}"></label>
+      </div>
+      <div class="nums">${CATEGORIES.filter(cat => cat.kind !== 'prizes').map(cat =>
+        `<label>${esc(cat.name)} goal (tix)<input type="number" id="goal-${cat.id}" min="0" max="99999" value="${s.goals[cat.id] || 0}"></label>`).join('')}</div>
+      <p class="note">Each laptop paces the booths it runs. ${esc(PLINKO_GOAL_NOTE)}</p>
     </div>
     <div class="field">
       <div class="f-label">Demographic buttons (optional)</div>
@@ -2132,9 +2692,14 @@ function settingsView() {
     </div>
     <div class="field">
       <div class="f-label">Data on this laptop</div>
-      <p class="note">${plural(n, 'record')} saved. Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}.</p>
+      <p class="note">${plural(n, 'record')} saved. Last export: ${state.lastExport ? fmtTime(state.lastExport) : 'never'}. Laptop ID ${esc(state.settings.laptopId)} goes in every file name and row.</p>
       <div class="row">
-        <button class="btn go" data-act="export">Download CSV</button>
+        <button class="btn go" data-act="export">Sales CSV</button>
+        <button class="btn" data-act="exportstats">Stats CSV</button>
+        <button class="btn" data-act="exportbackorders" ${state.backorders.length ? '' : 'disabled'}>Backorders CSV</button>
+      </div>
+      <div class="row">
+        <button class="btn" data-act="open" data-modal="combine">Combine laptops' CSVs</button>
         <button class="btn danger" data-act="clearask" ${n ? '' : 'disabled'}>Delete all data</button>
       </div>
     </div>
@@ -2142,10 +2707,10 @@ function settingsView() {
 }
 
 function confirmClearView() {
-  const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length;
+  const n = state.customers.filter(c => c.lines.length).length + state.matches.length + state.walkoffs.length + state.backorders.length;
   return `<div class="dialog narrow" role="dialog" aria-label="Confirm delete">
     ${dialogHead('Delete all data?')}
-    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, trades, battles, walk-offs, queue) from this booth on this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
+    <p class="note" style="font-size:19px">This removes all ${plural(n, 'record')} (sales, trades, battles, walk-offs, backorders, queue) from this booth on this laptop. Download the CSV first. Undo can bring them back only until the page is reloaded.</p>
     <div class="row">
       <button class="btn" data-act="open" data-modal="settings">Cancel</button>
       <button class="btn danger" data-act="clear">Delete all ${n}</button>
@@ -2165,10 +2730,17 @@ function toast(msg, kind) {
   toastTimer = setTimeout(() => { toastEl.className = 'toast ' + (kind || 'info'); }, kind === 'undo' ? 4500 : 3200);
 }
 
+let lastPaceTick = 0;
 function tick() {
   const el = document.getElementById('match-timer');
   const m = playingMatch();
   if (el && m) el.textContent = fmtDur(Date.now() - Date.parse(m.startedAt));
+  // Refresh the pace chip every 15 s without re-rendering the page.
+  if (Date.now() - lastPaceTick > 15000) {
+    lastPaceTick = Date.now();
+    const chip = document.getElementById('pace-chip');
+    if (chip) chip.outerHTML = paceChip();
+  }
 }
 setInterval(tick, 1000);
 
@@ -2226,6 +2798,18 @@ const actions = {
   pvprule: d => { state.settings.battle.pvpRule = d.val; save(); render(); },
   // Walk-offs
   walkoff: d => openWalkoff(d.cat),
+  backorder: d => openBackorder(d.cat),
+  boitem: d => { view.modal.item = d.item; render(); },
+  boqty: d => { view.modal.qty = Math.max(1, Math.min(99, view.modal.qty + Number(d.d))); render(); },
+  bosave: saveBackorder,
+  bovoid: d => setBackorderVoided(d.id, true),
+  borestore: d => setBackorderVoided(d.id, false),
+  upgrade: upgradeKit,
+  exportstats: () => exportStats(),
+  exportbackorders: () => exportBackorders(),
+  pacetoggle: () => { state.settings.showPace = !state.settings.showPace; save(); render(); },
+  combineclear: () => { view.combine = { files: [], plinko: view.combine.plinko }; render(); },
+  combinedownload: downloadCombined,
   woitem: d => { view.modal.item = d.item; render(); },
   woqty: d => { view.modal.qty = Math.max(1, Math.min(99, view.modal.qty + Number(d.d))); render(); },
   woreason: d => { view.modal.reason = d.val; render(); },
@@ -2262,10 +2846,21 @@ document.addEventListener('click', e => {
 
 document.addEventListener('input', e => {
   if (e.target.id === 'q-name') view.qDraft.name = e.target.value;
+  const bo = { 'bo-name': 'name', 'bo-contact': 'contact', 'bo-note': 'note' }[e.target.id];
+  if (bo && view.modal && view.modal.type === 'backorder') view.modal[bo] = e.target.value;
 });
 
 const BATTLE_FIELDS = { 'set-match': 'match', 'set-rematch': 'rematch', 'set-weapon': 'weapon', 'set-cpp': 'cardsPerPop' };
 document.addEventListener('change', e => {
+  if (e.target.id === 'combine-files') {
+    loadCombineFiles(e.target.files);
+    return;
+  }
+  if (e.target.id === 'combine-plinko') {
+    view.combine.plinko = e.target.value;
+    render();
+    return;
+  }
   if (e.target.id === 'station-input') {
     state.settings.station = e.target.value.trim() || 'Station';
     const c = current();
@@ -2273,6 +2868,20 @@ document.addEventListener('change', e => {
     save();
     render();
     toast('Station name saved', 'ok');
+  } else if (/^goal-/.test(e.target.id)) {
+    const v = parseInt(e.target.value, 10);
+    if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    state.settings.goals[e.target.id.slice(5)] = v;
+    save();
+    render();
+    toast('Goal saved', 'ok');
+  } else if (['ev-date', 'ev-start', 'ev-end'].includes(e.target.id)) {
+    const key = { 'ev-date': 'date', 'ev-start': 'start', 'ev-end': 'end' }[e.target.id];
+    if (!e.target.value) { render(); return; }
+    state.settings.event[key] = e.target.value;
+    save();
+    render();
+    toast(eventWindow().ok ? 'Event time saved' : 'End must be after start', eventWindow().ok ? 'ok' : 'warn');
   } else if (/^pz-(cards|stock)-/.test(e.target.id)) {
     const [, what, itemId] = e.target.id.match(/^pz-(cards|stock)-(.+)$/);
     const raw = e.target.value.trim();
@@ -2310,6 +2919,10 @@ document.addEventListener('keydown', e => {
       e.preventDefault();
       if (e.target.id === 'q-name') queueAdd();
       else e.target.blur();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      e.target.blur(); // saves the field first (change event)
+      if (view.modal) actions.close();
     }
     return;
   }
@@ -2376,6 +2989,11 @@ render();
   arrives), trades collected in cards, optional starting stock with live "N left" / low / none-left pills,
   most-popular prizes and cards redeemed in Totals, T rows + cards_redeemed column in the CSV. ?booth=prizes
   link. Each booth link keeps its own storage. Fixed: undo in one tab could erase another tab's changes.
+  v1.4 (2026-10-16): Event clock + pace chip against per-booth goals (Settings: goals, date, hours, hide
+  chip). Clicker combo breakdown, per-clicker cost and "1 more" nudge; copter toroidal upgrade and extra
+  propeller prompts. Copter photo buttons. Backorder interest list (own CSV). Stats in Totals + stats CSV.
+  Export names carry kind, booth, station, laptop ID, date and time; rows carry record_id, laptop_id and
+  exported_at. Combine screen adds up all laptops' CSVs, counting each record once from its newest export.
 -->
 </body>
 </html>
