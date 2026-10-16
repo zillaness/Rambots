@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.4
+version: 1.5
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -63,13 +63,13 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 
 1. **Queue:** type a first name, tap the number of extra weapons (so the crew can have them ready), **Add to queue** (or Enter). Wait times start at 3 minutes per match and adjust to the real pace.
 2. **Start vs House** (next person) or **Start vs Player** (next two). Tickets are collected now: 5 per player + 1 per extra weapon. The toast says exactly how many from whom.
-3. **Match over** when someone loses all 3 balloons, then tap the result:
+3. A countdown runs (default 2:00; **Settings > Match length** for any length, e.g. 1.5 or 3). At zero it flashes red **Time!** and counts overtime. Tap **Match over** when time runs out or someone loses all 3 balloons, then tap the result:
    - vs House: how many House balloons the player popped (0 to 3).
-   - vs Player: who won, then how many the loser popped.
+   - vs Player: how many balloons each player popped (0 to 3 each), then **Save result**. The tracker works out the winner and the cards.
 4. The result card says how many 3-card bundles to hand over. **Instant rematch** runs the same players again at the rematch price (shows how many people are waiting).
 5. **Cancel match** if a bot fails before the match counts: hand tickets back, players go back to the front of the queue.
 
-Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default (always 9 cards, can't be gamed by two kids cooperating); switch to **both players, per balloon** if you prefer. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
+Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by default: the winner gets 3 cards per balloon they popped (a 2–1 win when time runs out pays 6), the other player gets none. **Ties** pay nothing by default (so two kids can't cooperate to a 2–2 tie for 12 cards); switch to "each paid for own balloons" if you prefer. Or switch the whole rule to **both players, per balloon**. Match, rematch, weapon prices and cards per balloon are editable in Settings and apply to new matches.
 
 ## Clock, goal and pace
 
@@ -84,6 +84,10 @@ Payout rules (Settings): 3 cards per balloon. vs Player is **winner only** by de
 ## Backorders
 
 Something sold out? **Backorder** (next to Log walk-off) logs the item, quantity, a parent's name and a phone or email (required). No tickets are taken. Backorders never count as sales and only appear in History, the stats and the **Backorders CSV**. That file contains contact info: keep it off the public repo.
+
+## Stock left
+
+**Settings > Starting stock:** type how many of each clicker design and each copter part you brought (blank = not tracked). Buttons then show **N left**, turn red when low and say **None left** at zero (tapping still works, with a warning that suggests a Backorder). Copters count by part: a Full kit uses a launcher, a propeller and a ripcord; a toroidal kit uses a toroidal propeller instead. Open, sold and walked-off items come off the count; voids put them back. Totals has a **Left** column and a **Copter parts left** table.
 
 ## Prize Table
 
@@ -156,3 +160,5 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.2.1 (2026-10-16): Booths renamed Clickers and Copters; all 13 clicker photos live.
 - v1.3 (2026-10-16): Prize Table replaces Plinko (cards in, prizes out, live stock, most-popular prizes); each booth link has its own storage; fixed two-tab undo.
 - v1.4 (2026-10-16): Clock and pace chip with per-booth goals, clicker combo breakdown and nudge, copter upgrade prompts, copter photos, backorders, stats CSV, new export names with record ids, Combine screen.
+- v1.4.1 (2026-10-16): All six copter buttons have photos; home-screen tiles show the blue switch (Clickers) and the kid with a pull copter (Copters).
+- v1.5 (2026-10-16): Battle countdown with custom length; vs Player scored by balloons popped (winner paid per balloon, tie rule); stock left for clicker designs and copter parts.
