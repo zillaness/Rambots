@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.4
+  version: 1.5
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -139,6 +139,10 @@
     text-align: center;
   }
   .cat .c-name { font-size: clamp(30px, 4.6vw, 84px); font-weight: 700; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.02em; }
+  .cat .c-photo { width: 100%; flex: 1; min-height: 0; max-height: 55%; border-radius: 16px; overflow: hidden; background: rgba(255, 255, 255, 0.12); }
+  .cat .c-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cat .c-photo.contain { background: #fff; }
+  .cat .c-photo.contain img { object-fit: contain; }
   .cat .c-hint { font-size: clamp(15px, 1.7vw, 26px); font-weight: 500; }
   .cat .c-go { font-size: clamp(14px, 1.4vw, 20px); opacity: 0.85; }
   .theme-red { background: var(--rb-red); color: #fff; }
@@ -287,8 +291,8 @@
     line-height: 1.15;
     max-width: 30vw;
   }
-  .pace .p-main { font-size: 17px; font-weight: 700; white-space: nowrap; }
-  .pace .p-sub { font-size: 13px; white-space: nowrap; opacity: 0.9; }
+  .pace .pc-main { font-size: 17px; font-weight: 700; white-space: nowrap; }
+  .pace .pc-sub { font-size: 13px; white-space: nowrap; color: inherit; opacity: 0.92; }
   .pace.ahead { background: var(--rb-success); }
   .pace.behind { background: var(--rb-yellow); color: var(--rb-ink); }
   td.good { color: var(--rb-success); font-weight: 700; }
@@ -451,6 +455,13 @@
   }
   .pop small { font-size: clamp(16px, 1.6vw, 24px); font-weight: 600; }
   .pop.win { background: var(--rb-red); color: #fff; font-size: clamp(32px, 4vw, 64px); }
+  .pop.sm { min-height: 92px; font-size: clamp(36px, 4vw, 60px); }
+  .pop.on { background: var(--rb-ink); color: #fff; }
+  .pvp-row { display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 14px; align-items: center; }
+  .pvp-name { font-size: clamp(22px, 2.2vw, 32px); font-weight: 700; overflow-wrap: anywhere; }
+  .pvp-preview { font-size: 22px; font-weight: 700; text-align: center; color: var(--rb-red); min-height: 30px; }
+  .timer.over { color: #fff; background: var(--rb-red); border-radius: 12px; padding: 0 12px; animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0.55; } }
   .result { background: var(--rb-yellow-100); border: 3px solid var(--rb-yellow); border-radius: 18px; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
   .r-title { font-size: 18px; font-weight: 700; color: var(--rb-gray-700); }
   .r-line { font-size: clamp(22px, 2.2vw, 32px); font-weight: 700; }
@@ -670,7 +681,7 @@
     .home { grid-auto-flow: row; grid-auto-rows: 1fr; grid-auto-columns: auto; }
     .starts { grid-template-columns: 1fr; }
     .pops.c4 { grid-template-columns: repeat(2, 1fr); }
-    .station, .brand span, .cat-tip, .pace .p-sub { display: none; }
+    .station, .brand span, .cat-tip, .pace .pc-sub { display: none; }
     .tbtn { padding: 0 10px; font-size: 15px; height: 46px; }
     .undo { width: auto; min-width: 96px; height: 52px; }
     .undo .u-sub { display: none; }
@@ -737,6 +748,26 @@ const PRIZES = [
 const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
 const COPTER_PHOTO_DIR = 'copter_photos/';
 
+// Starting stock, used for the "N left" counts (blank / missing = not tracked).
+// Clickers count per design (item id); copters count per part, because a kit
+// is built from parts. Settings can override any number on the day.
+const STOCK_DEFAULTS = {};
+const COPTER_PARTS = [
+  ['part_launcher', 'Launchers'],
+  ['part_propeller', 'Propellers'],
+  ['part_toroidal', 'Toroidal propellers'],
+  ['part_ripcord', 'Ripcords'],
+];
+// Which parts each copter item uses.
+const PARTS_USED = {
+  kit: { part_launcher: 1, part_propeller: 1, part_ripcord: 1 },
+  kit_toroidal: { part_launcher: 1, part_toroidal: 1, part_ripcord: 1 },
+  launcher: { part_launcher: 1 },
+  propeller: { part_propeller: 1 },
+  toroidal: { part_toroidal: 1 },
+  ripcord: { part_ripcord: 1 },
+};
+
 // Ticket goals per booth (editable in Settings). Plinko is not tracked here;
 // its tickets go straight into a bucket that gets counted at close.
 const GOAL_DEFAULTS = { clickers: 500, copters: 500, battle: 200 };
@@ -751,6 +782,7 @@ const TOROIDAL_PITCH = 'Looped blades instead of straight ones: the shape engine
 const CATEGORIES = [
   {
     id: 'clickers', kind: 'sale', name: 'Clickers', theme: 'yellow', walkoffs: true, layout: 'photos',
+    tilePhoto: PHOTO_DIR + 'clickerblueswitch.jpg', tileFit: 'contain', // home-screen tile
     hint: '1 = 4 tix · 2 = 7 · 3 = 10',
     tip: 'Tap a design = +1 · mix any designs<br>1 = 4 · 2 = 7 · 3 = 10 · 4 = 14 · 5 = 17 · 6 = 20',
     items: CLICKER_DESIGNS.map(([id, name, photo]) => ({ id: 'clicker_' + id, name, photo: photo || id, group: 'clicker' }))
@@ -759,13 +791,14 @@ const CATEGORIES = [
   },
   {
     id: 'copters', kind: 'sale', name: 'Copters', theme: 'red', walkoffs: true, layout: 'photos', photoCols: 3,
+    tilePhoto: COPTER_PHOTO_DIR + 'regular_prop.jpg', // home-screen tile
     hint: 'Full kit = 5 tix · add-ons 1 to 3',
     tip: 'Tap = +1 · tap the number on the right to type<br>Full kit = launcher 3 + propeller 1 + ripcord 1',
     items: [
       { id: 'kit', name: 'Full kit', price: 5, note: 'Launcher + propeller + ripcord', photo: 'pullcopter' },
-      { id: 'kit_toroidal', name: 'Kit w/ toroidal', price: 6, note: 'Launcher + toroidal + ripcord', photo: 'toroidal_prop' },
-      { id: 'launcher', name: 'Launcher only', price: 3, note: 'Rare: spares, group buys', photo: 'pullcopter' },
-      { id: 'propeller', name: 'Extra propeller', price: 1, photo: 'regular_prop' },
+      { id: 'kit_toroidal', name: 'Kit w/ toroidal', price: 6, note: 'Launcher + toroidal + ripcord', photo: 'toroidal_kit' },
+      { id: 'launcher', name: 'Launcher only', price: 3, note: 'Rare: spares, group buys', photo: 'launcher_only' },
+      { id: 'propeller', name: 'Extra propeller', price: 1, photo: 'propeller' },
       { id: 'toroidal', name: 'Toroidal propeller', price: 2, photo: 'toroidal_prop' },
       { id: 'ripcord', name: 'Extra ripcord', price: 1, photo: 'ripcord', letter: 'R' },
     ].map(it => Object.assign({ photoDir: COPTER_PHOTO_DIR }, it)),
@@ -784,7 +817,9 @@ const BATTLE_DEFAULTS = {
   rematch: 6,        // tix per player for an instant rematch (5 + 1 skip-the-line fee)
   weapon: 1,         // tix per extra weapon
   cardsPerPop: 3,    // Pokemon cards per balloon popped (cards come bundled in 3s)
-  pvpRule: 'winner', // 'winner' = only the winner is paid; 'both' = both players paid per pop
+  pvpRule: 'winner', // 'winner' = only the winner is paid (per balloon they popped); 'both' = both paid per pop
+  pvpTie: 'none',    // vs Player tie: 'none' = no cards (can't be gamed); 'both' = each paid per own pop
+  matchSeconds: 120, // match time limit (countdown); editable in Settings
 };
 const BALLOONS = 3;
 const NET_PER_TICKET = 0.90;           // CCA keeps 10%
@@ -881,6 +916,7 @@ function defaultState() {
   return {
     settings: {
       station: 'Laptop 1', cats, demographics: true, battle: Object.assign({}, BATTLE_DEFAULTS), prizes: {},
+      stock: Object.assign({}, STOCK_DEFAULTS),
       goals: Object.assign({}, GOAL_DEFAULTS), event: Object.assign({}, EVENT_DEFAULTS), showPace: true,
       laptopId: Math.random().toString(36).slice(2, 6),
     },
@@ -902,6 +938,7 @@ function hydrate(raw) {
     battle: Object.assign({}, base.settings.battle, ss.battle || {}),
     prizes: Object.assign({}, ss.prizes || {}),
     goals: Object.assign({}, base.settings.goals, ss.goals || {}),
+    stock: Object.assign({}, base.settings.stock, ss.stock || {}),
     event: Object.assign({}, base.settings.event, ss.event || {}),
   });
   const merged = Object.assign(base, saved);
@@ -959,7 +996,7 @@ applyPreset();
 save();
 
 const blankDraft = () => ({ name: '', weapons: 0, age: null, gender: null });
-const view = { screen: 'home', modal: null, pulse: null, pvpWinner: null, qDraft: blankDraft(), focusName: false,
+const view = { screen: 'home', modal: null, pulse: null, pvpPops: [null, null], qDraft: blankDraft(), focusName: false,
   combine: { files: [], plinko: '' } };
 const undoStack = [];
 const UNDO_LIMIT = 200;
@@ -987,7 +1024,7 @@ function undo() {
   if (!u) { toast('Nothing to undo', 'info'); return; }
   Object.assign(state, JSON.parse(u.snap));
   view.pulse = null;
-  view.pvpWinner = null;
+  view.pvpPops = [null, null];
   save();
   render();
   toast('Undid: ' + u.label, 'undo');
@@ -1022,23 +1059,48 @@ function ensureCurrent(kind) {
 
 // Prize stock: starting count from Settings minus every trade line (open
 // trades included). null = not tracked.
-function stockStart(itemId) {
-  const o = state.settings.prizes[itemId];
-  return o && Number.isFinite(o.stock) ? o.stock : null;
+// Starting count for a stock key: a prize, a clicker design, or a copter part.
+function stockStart(key) {
+  if (ITEMS[key] && isPrize(key)) {
+    const o = state.settings.prizes[key];
+    return o && Number.isFinite(o.stock) ? o.stock : null;
+  }
+  const v = state.settings.stock[key];
+  return Number.isFinite(v) ? v : null;
 }
-function stockLeft(itemId) {
-  const start = stockStart(itemId);
-  if (start == null) return null;
-  return start - state.customers.filter(c => kindOfCustomer(c) === 'trade' && !c.voided).reduce((s, c) => s + qtyOf(c, itemId), 0);
+// Units of a stock key used so far: every non-voided sale or trade (open ones
+// included) plus walk-offs.
+function stockUsed(key) {
+  const per = itemId => (PARTS_USED[itemId] ? (PARTS_USED[itemId][key] || 0) : (itemId === key ? 1 : 0));
+  let used = 0;
+  state.customers.forEach(c => { if (!c.voided) c.lines.forEach(l => { used += l.qty * per(l.item); }); });
+  state.walkoffs.forEach(w => { if (!w.voided) used += w.qty * per(w.item); });
+  return used;
 }
+const keyLeft = key => (stockStart(key) == null ? null : stockStart(key) - stockUsed(key));
+// What an item's button shows: its own count, or for a copter item the
+// scarcest tracked part it needs.
+function stockInfo(itemId) {
+  const keys = PARTS_USED[itemId] ? Object.keys(PARTS_USED[itemId]) : [itemId];
+  let best = null;
+  keys.forEach(k => {
+    const left = keyLeft(k);
+    if (left != null && (best == null || left < best.left)) best = { left, start: stockStart(k), key: k };
+  });
+  return best;
+}
+const stockLeft = itemId => { const i = stockInfo(itemId); return i ? i.left : null; };
+const stockKeyName = key => (ITEMS[key] ? ITEMS[key].name : (COPTER_PARTS.find(pp => pp[0] === key) || [key, key])[1]);
 
 /* ==========================================================================
    Sale actions
    ========================================================================== */
 function stockWarning(itemId) {
-  if (!isPrize(itemId)) return;
-  const left = stockLeft(itemId);
-  if (left != null && left < 0) toast(`Count says no ${ITEMS[itemId].name} left. Check the bin.`, 'warn');
+  const info = stockInfo(itemId);
+  if (!info || info.left >= 0) return;
+  const what = stockKeyName(info.key);
+  toast(isPrize(itemId) ? `Count says no ${what} left. Check the bin.`
+    : `Count says no ${what} left. Check the bin, or tap Backorder.`, 'warn');
 }
 
 function addItem(itemId, n) {
@@ -1282,14 +1344,14 @@ function startMatch(mode) {
     state.queue = state.queue.filter(q => !ids.includes(q.id));
     m = {
       id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode, rematch: false,
-      startedAt: now(), endedAt: null, status: 'playing', voided: false,
+      startedAt: now(), endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
       players: entries.map(e => makePlayer(e, bs().match)),
     };
     state.matches.push(m);
     state.matchId = m.id;
     return `Started match #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
   });
-  view.pvpWinner = null;
+  view.pvpPops = [null, null];
   render();
   collectToast(m);
 }
@@ -1301,14 +1363,14 @@ function rematch() {
   commit(() => {
     m = {
       id: uid(), no: state.nextMatchNo++, station: state.settings.station, mode: lm.mode, rematch: true,
-      startedAt: now(), endedAt: null, status: 'playing', voided: false,
+      startedAt: now(), endedAt: null, status: 'playing', voided: false, limitSec: bs().matchSeconds,
       players: lm.players.map(p => makePlayer({ name: p.name, weapons: p.weapons, age: p.age, gender: p.gender }, bs().rematch)),
     };
     state.matches.push(m);
     state.matchId = m.id;
     return `Rematch #${m.no}: ${matchTitle(m)} (${matchTix(m)} tix)`;
   });
-  view.pvpWinner = null;
+  view.pvpPops = [null, null];
   render();
   collectToast(m);
 }
@@ -1336,7 +1398,7 @@ function endMatch() {
     m.endedAt = now();
     return `Ended match #${m.no}`;
   });
-  view.pvpWinner = null;
+  view.pvpPops = [null, null];
   render();
 }
 
@@ -1354,7 +1416,7 @@ function cancelMatch() {
     if (state.nextMatchNo === m.no + 1) state.nextMatchNo = m.no; // reuse the number
     return `Cancelled match #${m.no} (no tix, players back in queue)`;
   });
-  view.pvpWinner = null;
+  view.pvpPops = [null, null];
   render();
   toast(`Match #${m.no} cancelled · hand back ${matchTix(m)} tix`, 'warn');
 }
@@ -1380,22 +1442,38 @@ function scoreHouse(pops) {
   render();
 }
 
-function scorePvpLoser(pops) {
-  const m = playingMatch();
-  const w = view.pvpWinner;
-  if (!m || m.status !== 'scoring' || m.mode !== 'pvp' || w == null) return;
-  const winner = m.players[w];
-  const loser = m.players[1 - w];
-  commit(() => {
-    winner.pops = BALLOONS;
-    winner.won = true;
-    winner.cards = BALLOONS * bs().cardsPerPop;
-    loser.pops = pops;
-    loser.won = false;
-    loser.cards = bs().pvpRule === 'both' ? pops * bs().cardsPerPop : 0;
-    return finishScoring(m, `Match #${m.no}: ${winner.name} beat ${loser.name} (${matchCards(m)} cards)`);
+// Cards for a vs Player result. Winner-only pays the winner per balloon they
+// popped (time can run out before 3); a tie pays per the tie setting.
+function pvpPayout(pops) {
+  const per = bs().cardsPerPop;
+  const tie = pops[0] === pops[1];
+  const win = tie ? null : (pops[0] > pops[1] ? 0 : 1);
+  const cards = pops.map((n, i) => {
+    if (bs().pvpRule === 'both') return n * per;
+    if (tie) return bs().pvpTie === 'both' ? n * per : 0;
+    return i === win ? n * per : 0;
   });
-  view.pvpWinner = null;
+  return { win, tie, cards };
+}
+
+function scorePvp() {
+  const m = playingMatch();
+  const pops = view.pvpPops;
+  if (!m || m.status !== 'scoring' || m.mode !== 'pvp' || pops[0] == null || pops[1] == null) return;
+  const r = pvpPayout(pops);
+  commit(() => {
+    m.players.forEach((p, i) => {
+      p.pops = pops[i];
+      p.won = r.tie ? false : i === r.win;
+      p.cards = r.cards[i];
+    });
+    m.tie = r.tie;
+    const a = m.players[0], b = m.players[1];
+    const what = r.tie ? `${a.name} and ${b.name} tied ${pops[0]}–${pops[1]}`
+      : `${m.players[r.win].name} beat ${m.players[1 - r.win].name} ${Math.max(...pops)}–${Math.min(...pops)}`;
+    return finishScoring(m, `Match #${m.no}: ${what} (${matchCards(m)} cards)`);
+  });
+  view.pvpPops = [null, null];
   render();
 }
 
@@ -1672,6 +1750,8 @@ function computeStats() {
     bos.forEach(x => { byItem[x.item] = (byItem[x.item] || 0) + x.qty; });
     Object.keys(byItem).forEach(id => add('Backorders', `Requested: ${ITEMS[id].name}`, byItem[id]));
   }
+  const stockKeys = CATEGORIES.find(cat => cat.id === 'clickers').items.map(it => it.id).concat(COPTER_PARTS.map(pp => pp[0]));
+  stockKeys.filter(k => stockStart(k) != null).forEach(k => add('Stock left', stockKeyName(k), `${keyLeft(k)} of ${stockStart(k)}`));
   const p = pace();
   p.rows.forEach(r => add('Goal', `${r.cat.name}: actual / goal`, `${r.actual} / ${r.goal}`));
   // Busiest stretches: tickets and transactions per 30 minutes.
@@ -1933,7 +2013,8 @@ function paceChip() {
   let main = clock;
   let sub = '';
   let cls = '';
-  if (p.goal && p.phase === 'before') { sub = `Starts ${fmtTime(new Date(p.w.start).toISOString())} · goal ${p.goal} tix`; }
+  const which = p.rows.filter(r => r.goal).map(r => r.cat.name).join(' + ');
+  if (p.goal && p.phase === 'before') { sub = `Starts ${fmtTime(new Date(p.w.start).toISOString())} · ${which} goal ${p.goal} tix`; }
   else if (p.goal && p.phase === 'after') {
     main = `Ended · ${p.actual} of ${p.goal} tix`;
     sub = p.actual >= p.goal ? 'Goal reached' : `${p.goal - p.actual} short`;
@@ -1941,13 +2022,13 @@ function paceChip() {
   } else if (p.goal && p.phase === 'during') {
     const d = Math.round(p.diff);
     main = `${clock} · ${d >= 0 ? `+${d} ahead` : `${-d} behind`}`;
-    sub = `${p.actual} tix · target ${Math.round(p.target)} by now`;
+    sub = `${p.actual} of ${p.goal} · target ${Math.round(p.target)} by now`;
     cls = d >= 0 ? ' ahead' : ' behind';
   } else if (p.phase === 'during' || p.phase === 'before') {
     sub = `Event ${state.settings.event.start} to ${state.settings.event.end}`;
   }
   return `<button class="pace${cls}" id="pace-chip" data-act="open" data-modal="pace" title="Pace against the goal">
-    <span class="p-main">${esc(main)}</span>${sub ? `<span class="p-sub">${esc(sub)}</span>` : ''}</button>`;
+    <span class="pc-main">${esc(main)}</span>${sub ? `<span class="pc-sub">${esc(sub)}</span>` : ''}</button>`;
 }
 
 function paceView() {
@@ -1999,6 +2080,7 @@ function homeView(cats, c) {
     }
     return `<button class="cat theme-${cat.theme}" data-act="cat" data-cat="${cat.id}">
       ${badge ? `<span class="badge">${esc(badge)}</span>` : ''}
+      ${cat.tilePhoto ? `<span class="c-photo${cat.tileFit === 'contain' ? ' contain' : ''}"><img alt="" draggable="false" src="${cat.tilePhoto}"></span>` : ''}
       <span class="c-name">${esc(cat.name)}</span>
       <span class="c-hint">${esc(hint)}</span>
       <span class="c-go">Tap to open</span>
@@ -2025,7 +2107,7 @@ function catView(cat, c, canBack) {
       return `<div class="tile">
         <button class="item photo-item cat-${cat.id}${prize ? ' prize-item' : ''}" data-act="add" data-item="${it.id}">
           ${q ? `<span class="badge">×${q}</span>` : ''}
-          ${prize ? stockPill(it.id) : ''}
+          ${stockPill(it.id)}
           <span class="ph">${photoHtml(it)}</span>
           <span class="i-name">${esc(it.name)}</span>
           ${tag ? `<span class="i-cards">${tag}</span>` : ''}
@@ -2068,14 +2150,19 @@ function copterAsk(c) {
   const kits = qtyOf(c, 'kit');
   const anyCopter = kits + qtyOf(c, 'kit_toroidal') + qtyOf(c, 'launcher');
   if (!anyCopter) return '';
-  const upgrade = kits ? `<div class="ask-title">Ask: upgrade to a toroidal propeller? +${ITEMS.kit_toroidal.price - ITEMS.kit.price} tix</div>
+  // Don't offer what the stock count says is gone.
+  const has = key => { const left = keyLeft(key); return left == null || left > 0; };
+  const canUpgrade = kits && has('part_toroidal');
+  const canProp = has('part_propeller');
+  if (!canUpgrade && !canProp) return '';
+  const upgrade = canUpgrade ? `<div class="ask-title">Ask: upgrade to a toroidal propeller? +${ITEMS.kit_toroidal.price - ITEMS.kit.price} tix</div>
       <div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : '';
   return `<div class="ask">
     ${upgrade}
-    <div class="ask-title">Ask: want extra propellers? ${ITEMS.propeller.price} tix each</div>
+    ${canProp ? `<div class="ask-title">Ask: want extra propellers? ${ITEMS.propeller.price} tix each</div>` : ''}
     <div class="ask-row">
-      ${kits ? '<button class="askbtn" data-act="upgrade">Upgrade 1 kit (+1)</button>' : ''}
-      <button class="askbtn" data-act="add" data-item="propeller">+ Extra propeller</button>
+      ${canUpgrade ? '<button class="askbtn" data-act="upgrade">Upgrade 1 kit (+1)</button>' : ''}
+      ${canProp ? '<button class="askbtn" data-act="add" data-item="propeller">+ Extra propeller</button>' : ''}
     </div>
   </div>`;
 }
@@ -2097,9 +2184,9 @@ function upgradeKit() {
 }
 
 function stockPill(itemId) {
-  const left = stockLeft(itemId);
-  if (left == null) return '';
-  const start = stockStart(itemId);
+  const info = stockInfo(itemId);
+  if (!info) return '';
+  const { left, start } = info;
   const cls = left <= 0 ? ' out' : (left <= Math.max(2, Math.ceil(start * 0.2)) ? ' low' : '');
   return `<span class="stock${cls}">${left <= 0 ? 'None left' : `${left} left`}</span>`;
 }
@@ -2220,7 +2307,7 @@ function playingView(m) {
   return `<div class="now fill">
     <div class="now-head">
       <span class="now-title">Match #${m.no} · ${m.mode === 'pvp' ? 'vs Player' : 'vs House'}${m.rematch ? ' · rematch' : ''}</span>
-      <span class="timer" id="match-timer">0:00</span>
+      <span class="timer" id="match-timer">${fmtDur((m.limitSec || bs().matchSeconds) * 1000)}</span>
     </div>
     <div class="players">${m.players.map((p, i) => `<div class="pcard">
       <div class="pname">${esc(p.name)}</div>
@@ -2231,7 +2318,7 @@ function playingView(m) {
         <button class="step" data-act="mweapon" data-p="${i}" data-d="1" aria-label="One more weapon">+</button>
       </div>
     </div>`).join('')}${m.mode === 'house' ? `<div class="pcard" style="border-style:dashed;color:var(--rb-gray-600)"><div class="pname">House bot</div><div class="ptix">Driven by the crew</div></div>` : ''}</div>
-    <button class="huge go" data-act="endmatch">Match over · enter result<small>someone lost all ${BALLOONS} balloons</small></button>
+    <button class="huge go" data-act="endmatch">Match over · enter result<small>time ran out or someone lost all ${BALLOONS} balloons</small></button>
     <button class="linkbtn" data-act="cancelmatch">Cancel match (hand tickets back, players return to the front of the queue)</button>
   </div>`;
 }
@@ -2249,26 +2336,27 @@ function scoreHouseView(m) {
 }
 
 function scorePvpView(m) {
-  const w = view.pvpWinner;
-  if (w == null) {
-    return `<div class="now fill">
-      <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
-      <div class="prompt">Who won?</div>
-      <div class="pops c2">${m.players.map((p, i) => `<button class="pop win" data-act="pvpwinner" data-p="${i}">${esc(p.name)}<small>won</small></button>`).join('')}</div>
-    </div>`;
-  }
-  const winner = m.players[w];
-  const loser = m.players[1 - w];
-  const per = bs().cardsPerPop;
-  const both = bs().pvpRule === 'both';
+  const pops = view.pvpPops;
   const opts = [];
-  for (let n = 0; n < BALLOONS; n++) opts.push(n);
+  for (let n = 0; n <= BALLOONS; n++) opts.push(n);
+  const rows = m.players.map((p, i) => `<div class="pvp-row">
+      <div class="pvp-name">${esc(p.name)} popped</div>
+      <div class="pops c4">${opts.map(n => `<button class="pop sm${pops[i] === n ? ' on' : ''}" data-act="pvppop" data-p="${i}" data-n="${n}">${n}</button>`).join('')}</div>
+    </div>`).join('');
+  let preview = 'Tap how many balloons each player popped.';
+  if (pops[0] != null && pops[1] != null) {
+    const r = pvpPayout(pops);
+    const who = r.tie ? `Tie ${pops[0]}–${pops[1]}` : `${m.players[r.win].name} wins ${Math.max(...pops)}–${Math.min(...pops)}`;
+    preview = `${who} · ` + m.players.map((p, i) => `${p.name}: ${r.cards[i] ? cardsText(r.cards[i]) : '0 cards'}`).join(' · ');
+  }
+  const rule = bs().pvpRule === 'both' ? 'Both players paid per balloon.'
+    : `Winner only, ${bs().cardsPerPop} cards per balloon the winner popped. Tie: ${bs().pvpTie === 'both' ? 'each paid for their own balloons' : 'no cards'}.`;
   return `<div class="now fill">
-    <div class="now-head"><span class="now-title">Match #${m.no} result · ${esc(winner.name)} won</span></div>
-    <div class="prompt">How many of ${esc(winner.name)}'s balloons did ${esc(loser.name)} pop?</div>
-    <div class="pops c3">${opts.map(n => `<button class="pop" data-act="pvploser" data-n="${n}">${n}<small>${esc(loser.name)}: ${both && n ? cardsText(n * per) : '0 cards'}</small></button>`).join('')}</div>
-    <p class="note" style="text-align:center">${both ? 'Payout rule: both players paid per balloon.' : 'Payout rule: winner only. The count is still logged.'}</p>
-    <button class="linkbtn" data-act="pvpwinner" data-p="">Wrong winner? Pick again</button>
+    <div class="now-head"><span class="now-title">Match #${m.no} result</span></div>
+    ${rows}
+    <div class="pvp-preview">${esc(preview)}</div>
+    <button class="huge go" data-act="pvpsave" ${pops[0] == null || pops[1] == null ? 'disabled' : ''}>Save result</button>
+    <p class="note" style="text-align:center">${esc(rule)}</p>
   </div>`;
 }
 
@@ -2277,7 +2365,7 @@ function idleView() {
   let result = '';
   if (lm && lm.status === 'done' && !lm.voided) {
     const lines = lm.players.map(p => {
-      const what = lm.mode === 'pvp' ? (p.won ? 'won' : `popped ${p.pops}`) : `popped ${p.pops}`;
+      const what = `popped ${p.pops}${lm.mode === 'pvp' ? (p.won ? ' · won' : (lm.tie ? ' · tie' : '')) : ''}`;
       const give = p.cards ? `<span class="give">give ${cardsText(p.cards)}</span>` : '<span class="none">0 cards</span>';
       return `<div class="r-line">${esc(p.name)} ${what} → ${give}</div>`;
     }).join('');
@@ -2465,9 +2553,10 @@ function totalsView() {
     let u = 0, tx = 0, w = 0;
     const body = rows.map(it => {
       const b = t.byItem[it.id]; u += b.units; tx += b.tix; w += b.walkoffs;
-      return `<tr><td>${esc(it.name)}</td><td class="num">${b.units}</td><td class="num">${b.walkoffs || ''}</td><td class="num">${b.tix}</td></tr>`;
+      const left = stockLeft(it.id);
+      return `<tr><td>${esc(it.name)}</td><td class="num">${b.units}</td><td class="num">${b.walkoffs || ''}</td><td class="num">${b.tix}</td><td class="num">${left == null ? '' : left}</td></tr>`;
     }).join('');
-    return body + `<tr class="sub"><td>${esc(cat.name)} total</td><td class="num">${u}</td><td class="num">${w || ''}</td><td class="num">${tx}</td></tr>`;
+    return body + `<tr class="sub"><td>${esc(cat.name)} total</td><td class="num">${u}</td><td class="num">${w || ''}</td><td class="num">${tx}</td><td></td></tr>`;
   }).join('');
 
   const pz = t.prizes;
@@ -2484,6 +2573,9 @@ function totalsView() {
     </div>
     <table><thead><tr><th>Prize (most popular first)</th><th class="num">Given</th><th class="num">Cards</th><th class="num">Left</th></tr></thead><tbody>${prizeRows}</tbody></table>
     ${t.battle.cards ? `<p class="note">On this laptop: Balloon Battle paid out ${t.battle.cards} cards; ${pz.cards} redeemed.</p>` : ''}` : '';
+
+  const partRows = COPTER_PARTS.filter(([key]) => stockStart(key) != null).map(([key, name]) =>
+    `<tr><td>${esc(name)}</td><td class="num">${stockStart(key)}</td><td class="num">${stockUsed(key)}</td><td class="num">${keyLeft(key)}</td></tr>`).join('');
 
   const b = t.battle;
   const battleBlock = b.matches ? `<h3>Balloon Battle</h3>
@@ -2533,7 +2625,8 @@ function totalsView() {
     </div>` : ''}
     ${pending.length ? `<p class="note">Note: ${pending.join('; ')}.</p>` : ''}
     ${boxRows ? `<h3>Per ticket box</h3><table><thead><tr><th>Box</th><th class="num">Tix</th><th class="num">After 10%</th></tr></thead><tbody>${boxRows}</tbody></table>` : (pz.trades ? '' : '<p class="note">Nothing sold yet.</p>')}
-    ${itemRows ? `<h3>Items</h3><table><thead><tr><th>Item</th><th class="num">Sold</th><th class="num">Walk-offs</th><th class="num">Tix</th></tr></thead><tbody>${itemRows}</tbody></table>
+    ${itemRows ? `<h3>Items</h3><table><thead><tr><th>Item</th><th class="num">Sold</th><th class="num">Walk-offs</th><th class="num">Tix</th><th class="num">Left</th></tr></thead><tbody>${itemRows}</tbody></table>
+      ${partRows ? `<h3>Copter parts left</h3><table><thead><tr><th>Part</th><th class="num">Start</th><th class="num">Used</th><th class="num">Left</th></tr></thead><tbody>${partRows}</tbody></table>` : ''}
       <p class="note">Inventory check: before − after − walk-offs should equal sold.</p>` : ''}
     ${battleBlock}
     ${prizeBlock}
@@ -2592,7 +2685,7 @@ function historyView() {
     if (e.kind === 'match') {
       const m = e.m;
       const who = m.players.map(p => {
-        const res = p.pops == null ? '' : (m.mode === 'pvp' && p.won ? ' won' : ` popped ${p.pops}`);
+        const res = p.pops == null ? '' : ` popped ${p.pops}${m.mode === 'pvp' && p.won ? ', won' : ''}${m.tie ? ', tie' : ''}`;
         return `${p.name} (${weaponsText(p.weapons)})${res}${p.cards ? `, ${p.cards} cards` : ''}`;
       }).join(' · ');
       const isOpen = m.status !== 'done';
@@ -2653,7 +2746,7 @@ function settingsView() {
       </div>
       <div class="nums">${CATEGORIES.filter(cat => cat.kind !== 'prizes').map(cat =>
         `<label>${esc(cat.name)} goal (tix)<input type="number" id="goal-${cat.id}" min="0" max="99999" value="${s.goals[cat.id] || 0}"></label>`).join('')}</div>
-      <p class="note">Each laptop paces the booths it runs. ${esc(PLINKO_GOAL_NOTE)}</p>
+      <p class="note">This laptop's goal: <b>${pace().goal} tix</b> (${esc(pace().rows.filter(r => r.goal).map(r => `${r.cat.name} ${r.goal}`).join(' + ') || 'no ticket booths on')}). Each laptop only paces the booths turned on above. ${esc(PLINKO_GOAL_NOTE)}</p>
     </div>
     <div class="field">
       <div class="f-label">Demographic buttons (optional)</div>
@@ -2666,15 +2759,31 @@ function settingsView() {
         ${num('set-rematch', 'Instant rematch', b.rematch)}
         ${num('set-weapon', 'Extra weapon', b.weapon)}
         ${num('set-cpp', 'Cards per balloon', b.cardsPerPop)}
+        <label>Match length (minutes)<input type="number" id="set-length" min="0.25" max="30" step="0.25" value="${b.matchSeconds / 60}"></label>
       </div>
     </div>
     <div class="field">
       <div class="f-label">vs Player payout</div>
       <div class="toggles">
-        <button class="toggle" data-act="pvprule" data-val="winner" aria-pressed="${b.pvpRule === 'winner'}">Winner only (${BALLOONS * b.cardsPerPop} cards)</button>
+        <button class="toggle" data-act="pvprule" data-val="winner" aria-pressed="${b.pvpRule === 'winner'}">Winner only, per balloon popped</button>
         <button class="toggle" data-act="pvprule" data-val="both" aria-pressed="${b.pvpRule === 'both'}">Both players, per balloon</button>
       </div>
-      <p class="note">Winner only can't be gamed by two kids cooperating and costs the same every match. Both-per-balloon pays up to ${(BALLOONS * 2 - 1) * b.cardsPerPop} cards on ${b.match * 2} tix.</p>
+      <div class="f-label" style="margin-top:6px">Tie when time runs out (winner-only rule)</div>
+      <div class="toggles">
+        <button class="toggle" data-act="pvptie" data-val="none" aria-pressed="${b.pvpTie === 'none'}">No cards</button>
+        <button class="toggle" data-act="pvptie" data-val="both" aria-pressed="${b.pvpTie === 'both'}">Each paid for own balloons</button>
+      </div>
+      <p class="note">Winner only: the winner gets ${b.cardsPerPop} cards per balloon they popped (up to ${BALLOONS * b.cardsPerPop}); the other player gets none, so two kids gain nothing by letting each other pop. "Each paid" on a tie reopens that: a cooperative 2–2 tie pays ${4 * b.cardsPerPop} cards on ${b.match * 2} tix.</p>
+    </div>
+    <div class="field">
+      <div class="f-label">Starting stock (blank = don't track). Buttons then show how many are left.</div>
+      <div class="nums">
+        ${CATEGORIES.find(cat => cat.id === 'clickers').items.map(it => `<label>${esc(it.name)}<input type="number" id="stock-${it.id}" min="0" max="9999" value="${stockStart(it.id) == null ? '' : stockStart(it.id)}" placeholder="not tracked"></label>`).join('')}
+      </div>
+      <div class="nums" style="margin-top:8px">
+        ${COPTER_PARTS.map(([key, name]) => `<label>${esc(name)}<input type="number" id="stock-${key}" min="0" max="9999" value="${stockStart(key) == null ? '' : stockStart(key)}" placeholder="not tracked"></label>`).join('')}
+      </div>
+      <p class="note">Copters are counted by part: a Full kit uses a launcher, a propeller and a ripcord. Sold, open and walked-off items all come off the count.</p>
     </div>
     <div class="field">
       <div class="f-label">Prize Table: cards per prize and starting stock (blank = don't track stock)</div>
@@ -2734,7 +2843,12 @@ let lastPaceTick = 0;
 function tick() {
   const el = document.getElementById('match-timer');
   const m = playingMatch();
-  if (el && m) el.textContent = fmtDur(Date.now() - Date.parse(m.startedAt));
+  if (el && m) {
+    // Count down from the match's time limit; past zero show overtime.
+    const left = (m.limitSec || bs().matchSeconds) * 1000 - (Date.now() - Date.parse(m.startedAt));
+    el.textContent = left > 0 ? fmtDur(left) : `Time! +${fmtDur(-left)}`;
+    el.classList.toggle('over', left <= 0);
+  }
   // Refresh the pace chip every 15 s without re-rendering the page.
   if (Date.now() - lastPaceTick > 15000) {
     lastPaceTick = Date.now();
@@ -2829,8 +2943,9 @@ const actions = {
   endmatch: endMatch,
   cancelmatch: cancelMatch,
   scorehouse: d => scoreHouse(Number(d.n)),
-  pvpwinner: d => { view.pvpWinner = d.p === '' ? null : Number(d.p); render(); },
-  pvploser: d => scorePvpLoser(Number(d.n)),
+  pvppop: d => { view.pvpPops[Number(d.p)] = Number(d.n); render(); },
+  pvpsave: scorePvp,
+  pvptie: d => { state.settings.battle.pvpTie = d.val; save(); render(); },
   rematch,
 };
 
@@ -2868,6 +2983,16 @@ document.addEventListener('change', e => {
     save();
     render();
     toast('Station name saved', 'ok');
+  } else if (/^stock-/.test(e.target.id)) {
+    const key = e.target.id.slice(6);
+    const raw = e.target.value.trim();
+    const v = parseInt(raw, 10);
+    if (raw === '') delete state.settings.stock[key];
+    else if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
+    else state.settings.stock[key] = v;
+    save();
+    render();
+    toast('Stock saved', 'ok');
   } else if (/^goal-/.test(e.target.id)) {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
@@ -2893,6 +3018,13 @@ document.addEventListener('change', e => {
     save();
     render();
     toast(what === 'cards' ? 'Saved · applies to new trades' : 'Starting stock saved', 'ok');
+  } else if (e.target.id === 'set-length') {
+    const v = parseFloat(e.target.value);
+    if (!Number.isFinite(v) || v < 0.25) { render(); toast('Enter minutes, e.g. 2 or 1.5', 'warn'); return; }
+    state.settings.battle.matchSeconds = Math.round(v * 60);
+    save();
+    render();
+    toast(`Match length ${fmtDur(state.settings.battle.matchSeconds * 1000)} · applies to new matches`, 'ok');
   } else if (BATTLE_FIELDS[e.target.id]) {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
@@ -2994,6 +3126,14 @@ render();
   propeller prompts. Copter photo buttons. Backorder interest list (own CSV). Stats in Totals + stats CSV.
   Export names carry kind, booth, station, laptop ID, date and time; rows carry record_id, laptop_id and
   exported_at. Combine screen adds up all laptops' CSVs, counting each record once from its newest export.
+  v1.4.1 (2026-10-16): Copter buttons use the new photos: toroidal kit, launcher only, propeller, ripcord.
+  Home-screen tiles get pictures: the earlier propeller photo on Copters, the blue switch on Clickers.
+  Pace chip text no longer borrows the panel's grey style.
+  v1.5 (2026-10-16): Balloon Battle countdown timer (default 2:00, custom length in Settings, red "Time!"
+  with overtime). vs Player scoring: tap balloons popped for each player; winner-only pays the winner per
+  balloon they popped (not always 9); tie rule in Settings. Pace chip names the booths behind its goal.
+  Stock for every sale item: per clicker design and per copter part (kits use launcher + propeller +
+  ripcord), "N left" on buttons, Left column and copter parts table in Totals, stock in the stats CSV.
 -->
 </body>
 </html>
