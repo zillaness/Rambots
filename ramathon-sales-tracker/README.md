@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.8.3
+version: 1.8.4
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -70,7 +70,7 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 **Sign up (right side), tickets collected now:**
 1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
 2. Type the first name(s). Enter on player 1 jumps to player 2.
-3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.4.md`.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.5.md`.
 4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, any new unlocks, and the place in line with the wait.
 
 The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
@@ -109,7 +109,7 @@ vs House can pay up to 9 cards for 5 tix in any per-balloon preset; the house dr
 ## Upsell prompts
 
 - **Clickers:** the right panel breaks the price into deals (e.g. `3 for 10 + 2 for 7 · 3.40 each`) and, when it saves money, says "Ask: 1 more is only +3 tix".
-- **Copters:** with a Full kit in the cart, a small red **Ask: toroidal upgrade?** box offers **Toroidal kit +1**, **+ Prop 1** and **+ Toroidal prop 2** in one row. Tap **Why toroidal?** for the one-line pitch (it lives in `TOROIDAL_PITCH` at the top of the script).
+- **Copters:** with a Full kit in the cart, a small red **Ask: toroidal upgrade?** box offers **Toroidal kit +1**, **+ Prop 1** and **+ Toroidal prop 2** in one row. Under the Ask: "Toroid = donut: quieter blades that look cool." (`TOROIDAL_PITCH` at the top of the script). The longer story for curious parents: the two blades loop into each other like a ring, which cuts noise and tip turbulence; MIT engineers designed the shape for quieter drones (boat versions came first). On a pull copter they mostly just look cool.
 
 ## Backorders
 
@@ -126,7 +126,7 @@ Something sold out? **Backorder** (next to Log walk-off) logs the item, quantity
 3. With stock entered, each button shows **N left**, turns red when low, and says **None left** at zero (it still lets you log it and warns you to check the bin).
 4. **Totals** lists prizes most-popular first, cards redeemed, average cards per trade, and an estimated prize cost.
 
-Prize buttons: **Toy car** (1 card), **Pen** (1), **Capsule toy** (1), **Cheese squish** (3), **Mini plush** (3), **Dino plush** (9), plus **Other small / medium / grand prize** (1 / 3 / 9) for anything without its own button. Capsule toy and mini plush levels are best guesses: tap **Prize levels** on the Prize Table screen to switch any prize to Small, Medium or Grand in one tap (new trades only). Levels: small 1 card, medium 3, grand 9 (Sam, 2026-10-16). Card price changes in Settings apply to new trades only.
+Prize buttons: **Toy car** (1 card), **Pen** (1), **Capsule toy** (1), **Cheese squish** (3), **Mini plush** (3), **Dino plush** (9), plus **Other small / medium / grand prize** (1 / 3 / 9) for anything without its own button. Capsule toy and mini plush levels are best guesses: tap **Prize levels** on the Prize Table screen to switch any prize to Small, Medium or Grand in one tap (new trades only). Levels: small 1 card, medium 3, grand 9 (Sam, 2026-10-16). Card price changes in Settings apply to new trades only. The buttons are grouped by level, cheapest first, with a line between levels; changing a level moves the prize to its new group. Prize stock isn't counted yet: type counts in Settings > Prize Table when you have them.
 
 ## Everywhere
 
@@ -202,3 +202,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.8.1 (2026-10-16): Smaller Sales prompts (clicker summary on one line, copter Ask in one row with the pitch behind "Why toroidal?", free-card reminder on one line naming the prize it covers) so the panel fits a 768-pixel screen. Prize defaults Small 1, Medium 3, Grand 9.
 - v1.8.2 (2026-10-16): Booth renamed Clickers & Fidget Toys; Creeper infinity cube in the clicker deal; starting stock built in for clickers and copter parts; fixed stray backslashes in the v1.8.1 entry.
 - v1.8.3 (2026-10-16): Real prize buttons with photos (Toy car, Pen, Capsule toy, Cheese squish, Mini plush, Dino plush) plus Other small / medium / grand; Creeper infinity cube photo; free-card reminder names the prize level.
+- v1.8.4 (2026-10-16): Prize Table grouped by level (cheapest first, line between levels). One-line toroidal pitch under the copter Ask. Capsule toy, Mini plush and Prize levels button (v1.8.3).
