@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.3
+version: 1.4
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -38,6 +38,7 @@ Until a design has a photo, its button shows the design's first letter.
 | LEGO brick | `lego.jpg` |
 | WD-40 | `wd40.jpg` |
 | Burger (maybe) | `burger.jpg` |
+| Creeper infinity cube (fidget toy) | `creeper_cube.jpg` |
 
 `clickerblueswitch.jpg` (blue keyboard switch) is the picture on the **Clickers** tile of the home screen.
 
@@ -49,3 +50,4 @@ Got a design that isn't listed? Use lowercase words joined by underscores (e.g. 
 - v1.1 (2026-10-16): Xiao long bao renamed Dumpling; upload to the live folder on the presentations branch.
 - v1.2 (2026-10-16): All 13 photos uploaded; file names for LEGO and Spam musubi now lego.jpg and musubi.jpg; photos re-encoded as 800 px JPEGs (originals in git history).
 - v1.3 (2026-10-16): Added clickerblueswitch.jpg for the home-screen Clickers tile.
+- v1.4 (2026-10-16): Added the Creeper infinity cube (creeper_cube.jpg).

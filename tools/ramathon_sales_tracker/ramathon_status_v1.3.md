@@ -1,6 +1,6 @@
 ---
-file: ramathon_status_v1.2.md
-version: 1.2
+file: ramathon_status_v1.3.md
+version: 1.3
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: status and handoff
 
-Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.1** is live.
+Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.2** is live.
 
 ## Where things are
 
@@ -70,6 +70,9 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 - 30 tix earns a free prize: 3 free cards. Nothing extra on top. (Claude proposed this reading; Sam approved it.) With the prize prices below, 1 free card is a Small prize and 3 is a Medium prize.
 - Prize Table prices: Small 1 card, Medium 3, Grand 9 (Sam said "1 ticket" for the Small prize; the tracker reads it as 1 card).
 - The Sales prompts (clicker Ask, copter Ask, free-card box) were too big and covered the panel; v1.8.1 shrinks them.
+- The Pokémon card is the voucher (screens keep saying "Pokémon card").
+- Creeper infinity fidget cubes go under clickers at the clicker price (mix and match). The booth is "Clickers & Fidget Toys".
+- Stock (counted Oct 16): Egg tart 8, Hot dog bun 22, S'mores 9, Chocolate bar 15, Avocado 12, Dumpling 24, Creeper clicker 10, Oreo about 4 (may be slightly defective), Spam musubi 6, Salmon nigiri 23, LEGO brick 4, WD-40 15, Creeper infinity cube about 9. Burger: none printed yet, maybe tonight (button kept, not counted). Copters: launchers 93, ripcords 105, standard propellers 158, fancy (toroidal) propellers 44; the "small" rows (20 standard, 10 fancy) are full size and are included.
 - Freebie button: deprioritized for this event. If built later: track only, no cap; at Battle, both a free match and bonus cards.
 - Walk-off logging: Sam considers it unnecessary. The button stays and is optional.
 - Partner club referrals: an optional tag like the demographics, built only once a partner club agrees. Sam will ask the students which other clubs they are in.
@@ -102,18 +105,17 @@ Check these with the team. Everything except the Plinko board is a Settings chan
 - **3-card cap scope.** Applied to Plinko only. Balloon Battle still pays up to 9 cards per match (3 per balloon). Ask whether the cap should apply to battle too.
 - **Toroidal pitch behind a tap (v1.8.1):** to keep the copter Ask small, the pitch shows only after tapping "Why toroidal?". Sam's earlier decision was to always give a short explanation; the crew should still say it.
 - **Launcher-only price** is 3 tix in the tracker. Confirm.
-- **Screen wording** says "Pokémon cards". Sam has also said "vouchers". Confirm which.
 - **Upgrade cleanup:** practice names sitting in the old name-only battle queue were dropped when laptops upgraded to v1.7.
 
 ## Still needed from Sam
 
-1. Clicker stock per design (Burger was a maybe: in or out?).
-2. Copter parts stock: launchers, propellers, toroidal propellers, ripcords (plus pre-bagged kit counts if any).
+1. Burger count if any get printed tonight (Settings > Starting stock on the sales laptop).
+2. Pre-bagged kit counts, if any (the parts counts are in).
 3. Prize list: how many of each prize, and optional real names and photos (upload to `ramathon-sales-tracker/prize_photos/`). Card prices are decided.
 4. Plinko board facts: peg rows, number of drop holes, final slot payouts, tickets per drop. Optional: 50 test-drop tallies.
 5. Plinko stickers: how many and the rough cost each.
 6. Toroidal pitch wording check (`TOROIDAL_PITCH` in `index.html`).
-7. Cards or vouchers wording.
+7. A photo of the Creeper infinity cube: `ramathon-sales-tracker/clicker_photos/creeper_cube.jpg` on the presentations branch.
 8. Controls script for the battle robots.
 9. Any new clicker designs (name and photo).
 10. A stack of Pokémon cards at the Sales table for the free card with purchase.
@@ -161,3 +163,4 @@ These are tracked with notes on the open-items page.
 - v1.0 (2026-10-16): Initial status and handoff after tracker v1.7.1.
 - v1.1 (2026-10-16): Tracker v1.8 (cash sale button, free Pokémon card per 10 tix). Sam's sales add-on decisions. Source branch renamed `ramathon-carnival`.
 - v1.2 (2026-10-16): Tracker v1.8.1 (smaller Sales prompts). Prize prices decided: Small 1, Medium 3, Grand 9.
+- v1.3 (2026-10-16): Tracker v1.8.2. Card is the voucher; Creeper infinity cube under Clickers & Fidget Toys; clicker and copter stock counts.

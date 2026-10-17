@@ -1,6 +1,6 @@
 /**
- * @file sales_walkoff_test_v1.0.mjs
- * @version 1.0
+ * @file sales_walkoff_test_v1.1.mjs
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -30,6 +30,8 @@ await ev(() => { state.settings.battle.scoring = 'perBalloon'; save(); });
 
 // ---- Sales regression on the shared clickers + copters laptop
 ok(JSON.stringify(await ev(() => [1,2,3,4,5,6,7].map(n => linePrice('clicker', n)))) === '[4,7,10,14,17,20,24]', 'tiers');
+ok(await ev(() => ITEMS.clicker_creeper_cube.group === 'clicker' && stockStart('clicker_creeper_cube') === 9), 'Creeper infinity cube is in the clicker deal, 9 in stock');
+ok(await ev(() => [stockStart('part_launcher'), stockStart('part_propeller'), stockStart('part_toroidal'), stockStart('part_ripcord'), stockStart('clicker_oreo'), stockStart('clicker_burger')].join()) === '93,158,44,105,4,', 'built-in stock: copter parts, Oreo 4, Burger untracked');
 await page.click('.cat.theme-yellow');
 await page.click('.item[data-item="clicker"]'); await page.click('.item[data-item="clicker"]');
 await page.click('.back');
@@ -37,7 +39,7 @@ await page.click('.cat.theme-red');
 await page.click('.item[data-item="kit"]');
 ok(await total() === '12 tix', '2 clickers + kit = 12 (got ' + await total() + ')');
 const split = await page.textContent('.box-split');
-ok(split.includes('Clickers box') && split.includes('7 tix') && split.includes('Copters box') && split.includes('5 tix'), 'box split shown: ' + split.replace(/\s+/g, ' ').trim());
+ok(split.includes('Clickers & Fidget Toys box') && split.includes('7 tix') && split.includes('Copters box') && split.includes('5 tix'), 'box split shown: ' + split.replace(/\s+/g, ' ').trim());
 await page.screenshot({ path: SHOTS + '/v11_1_split.png' });
 await page.click('.item[data-item="toroidal"]');
 await page.click('.qty[data-item="toroidal"]'); await page.keyboard.press('2'); await page.keyboard.press('Enter');
@@ -66,4 +68,5 @@ await browser.close();
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
+ * v1.1 (2026-10-16): Booth renamed Clickers & Fidget Toys; checks for the Creeper infinity cube and built-in stock (v1.8.2).
  */

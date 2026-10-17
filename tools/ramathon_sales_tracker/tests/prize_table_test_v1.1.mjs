@@ -1,6 +1,6 @@
 /**
- * @file prize_table_test_v1.0.mjs
- * @version 1.0
+ * @file prize_table_test_v1.1.mjs
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -116,4 +116,5 @@ await browser.close();
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
+ * v1.1 (2026-10-16): Prize defaults Small 1, Medium 3, Grand 9 (v1.8.1).
  */

@@ -1,6 +1,6 @@
 /**
- * @file cash_bonus_test_v1.0.mjs
- * @version 1.0
+ * @file cash_bonus_test_v1.1.mjs
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -201,4 +201,5 @@ await browser.close();
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial suite for tracker v1.8 (cash sale button, free card with purchase).
+ * v1.1 (2026-10-16): Wording for the one-line free-card reminder (names the prize it covers) and the shorter clicker Ask (v1.8.1).
  */

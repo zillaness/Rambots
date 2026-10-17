@@ -1,6 +1,6 @@
 /**
- * @file stock_test_v1.0.mjs
- * @version 1.0
+ * @file stock_test_v1.1.mjs
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -45,7 +45,7 @@ ok(await ev(() => keyLeft('part_launcher')) === 2, 'walk-off launcher: 5 - 2 kit
 
 // Clicker design stock
 await page.click('.back'); await page.click('.cat.theme-yellow');
-ok(await pill('clicker_oreo') === '3 left' && await pill('clicker_avocado') === '', 'oreo 3 left, untracked designs show nothing');
+ok(await pill('clicker_oreo') === '3 left' && await pill('clicker_avocado') === '12 left' && await pill('clicker_burger') === '', 'oreo 3 left (Settings override), avocado 12 (built in), untracked Burger shows nothing');
 for (let i = 0; i < 3; i++) await page.click('.photo-item[data-item="clicker_oreo"]');
 ok(await pill('clicker_oreo') === 'None left', 'oreo none left after 3');
 await page.click('.photo-item[data-item="clicker_oreo"]');
@@ -67,4 +67,5 @@ await browser.close();
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
+ * v1.1 (2026-10-16): Designs now have built-in stock; Burger is the untracked example (v1.8.2).
  */
