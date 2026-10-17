@@ -1,6 +1,6 @@
 ---
-file: ramathon_status_v1.5.md
-version: 1.5
+file: ramathon_status_v1.6.md
+version: 1.6
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: status and handoff
 
-Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.4** is live.
+Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.5** is live.
 
 ## Where things are
 
@@ -51,6 +51,7 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 **Balloon Battle**
 - Never more than 1 card per ticket paid out on average. A 9-card prize costs about $5.
 - Scoring Sam picked: **3 cards (or vouchers) for every balloon you pop, but only if your robot survives to the end of the match.** Sam also said to keep every scoring option switchable in Settings, and wants to workshop scoring with the business team.
+- Knocked out pays **1 pity card** (Sam, Oct 16). The default and the survive preset both use it.
 - Flow: choose vs House or vs Player first, record add-ons for each player, add to the queue and collect tickets, then start the match from the queue when ready.
 - A started match can be restarted. Sign-ups continue while the countdown stays on top.
 - The clock shows Ready until GO. Restart goes back to Ready for free. Pause and edit the clock.
@@ -131,7 +132,6 @@ These are tracked with notes on the open-items page.
 
 - **Battle:**
   - Scoring (keep the survive rule?).
-  - Knocked out pays 0 or 1.
   - Instant rematch 5 or 7, and when it is allowed.
   - Weapon prices and list.
   - Unlock token.
@@ -171,3 +171,4 @@ These are tracked with notes on the open-items page.
 - v1.3 (2026-10-16): Tracker v1.8.2. Card is the voucher; Creeper infinity cube under Clickers & Fidget Toys; clicker and copter stock counts.
 - v1.4 (2026-10-16): Tracker v1.8.3. Prize buttons and levels; photos; old branch merged into ramathon-carnival.
 - v1.5 (2026-10-16): Tracker v1.8.4. Prize Table by level with dividers; toroidal pitch from Sam; Prize levels button.
+- v1.6 (2026-10-16): Tracker v1.8.5. Knocked-out pity card (1) is the default.

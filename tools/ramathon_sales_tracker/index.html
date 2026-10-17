@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.8.4
+  version: 1.8.5
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -926,13 +926,13 @@ const BATTLE_DEFAULTS = {
   matchSeconds: 120, // match time limit (countdown); editable in Settings
   scoring: 'survive', // 'survive' = per balloon, paid only if you still have a balloon at the end;
                       // 'perBalloon' = per balloon (winner-only or both); 'outcome' = fixed cards per outcome
-  consolation: 0,    // cards for the vs Player loser (winner only) or a knocked-out player (survive)
+  consolation: 1,    // cards for the vs Player loser (winner only) or a knocked-out player (survive): Sam's pity card
   outcomeCards: { koWin: 9, timeWin: 6, survive: 3, knockedOut: 1 },
 };
 
 // One-tap scoring setups for Settings (the team can still edit every number).
 const SCORING_PRESETS = [
-  { id: 's3', label: '3 per balloon, must survive to the end', set: { scoring: 'survive', cardsPerPop: 3, consolation: 0 } },
+  { id: 's3', label: '3 per balloon, must survive to the end, 1 if knocked out', set: { scoring: 'survive', cardsPerPop: 3, consolation: 1 } },
   { id: 'w3', label: '3 per balloon, winner only', set: { scoring: 'perBalloon', cardsPerPop: 3, pvpRule: 'winner', pvpTie: 'both', consolation: 0 } },
   { id: 'w3c', label: '3 per balloon, winner only + 1 for the loser', set: { scoring: 'perBalloon', cardsPerPop: 3, pvpRule: 'winner', pvpTie: 'both', consolation: 1 } },
   { id: 'b2', label: '2 per balloon, everyone', set: { scoring: 'perBalloon', cardsPerPop: 2, pvpRule: 'both', consolation: 0 } },
@@ -1084,6 +1084,9 @@ function hydrate(raw) {
   const merged = Object.assign(base, saved);
   // Until someone picks a tie rule on this laptop, follow the current default.
   if (!merged.settings.battle.pvpTieSet) merged.settings.battle.pvpTie = BATTLE_DEFAULTS.pvpTie;
+  // v1.8.5: a knocked-out player gets 1 pity card by default. Laptops still on the
+  // survive rule that never chose a knocked-out amount pick up the new default.
+  if (!merged.settings.battle.consolationSet && merged.settings.battle.scoring === 'survive') merged.settings.battle.consolation = BATTLE_DEFAULTS.consolation;
   // v1.7: weapons unlock once; rematch price follows the default until someone edits it.
   const bt = merged.settings.battle;
   bt.weaponPrices = Object.assign({}, BATTLE_DEFAULTS.weaponPrices, (ss.battle && ss.battle.weaponPrices) || {});
@@ -3775,6 +3778,7 @@ const actions = {
     const pr = SCORING_PRESETS.find(x => x.id === d.id);
     Object.assign(state.settings.battle, JSON.parse(JSON.stringify(pr.set)));
     if (pr.set.pvpTie) state.settings.battle.pvpTieSet = true;
+    state.settings.battle.consolationSet = true;
     save(); render(); toast(`Scoring: ${pr.label}`, 'ok');
   },
   scoringmode: d => { state.settings.battle.scoring = d.val; save(); render(); },
@@ -3868,7 +3872,7 @@ document.addEventListener('change', e => {
   } else if (/^oc-/.test(e.target.id) || e.target.id === 'set-consolation') {
     const v = parseInt(e.target.value, 10);
     if (!Number.isFinite(v) || v < 0) { render(); toast('Enter a whole number', 'warn'); return; }
-    if (e.target.id === 'set-consolation') state.settings.battle.consolation = v;
+    if (e.target.id === 'set-consolation') { state.settings.battle.consolation = v; state.settings.battle.consolationSet = true; }
     else state.settings.battle.outcomeCards[e.target.id.slice(3)] = v;
     save();
     render();
@@ -4049,6 +4053,8 @@ render();
   v1.8.4 (2026-10-16): Prize Table grouped by level, cheapest first, with a line between levels (follows
   Prize levels changes). Toroidal pitch is one short line always shown with the upgrade Ask ("Toroid = donut:
   quieter blades that look cool."); "Why toroidal?" removed. Slightly tighter panel spacing.
+  v1.8.5 (2026-10-16): Balloon Battle default: a knocked-out player gets 1 pity card (survive rule: 3 per
+  balloon popped if you survive, 1 if knocked out). Laptops that never chose a knocked-out amount switch to 1.
 -->
 </body>
 </html>

@@ -1,6 +1,6 @@
 /**
- * @file tie_migration_test_v1.0.mjs
- * @version 1.0
+ * @file tie_migration_test_v1.1.mjs
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -16,8 +16,17 @@ await page.goto('http://localhost:8766/ramathon-sales-tracker/?booth=battle');
 await page.evaluate(() => { const s = JSON.parse(localStorage.getItem(STORAGE_KEY)); s.settings.battle.pvpTie = 'none'; delete s.settings.battle.pvpTieSet; localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); });
 await page.reload();
 ok(await page.evaluate(() => state.settings.battle.pvpTie) === 'both', 'unchosen old default migrates to each-paid');
+// v1.8.5: a laptop saved with knocked-out 0 (old default) switches to the 1 pity card
+await page.evaluate(() => { const s = JSON.parse(localStorage.getItem(STORAGE_KEY)); s.settings.battle.consolation = 0; s.settings.battle.scoring = 'survive'; delete s.settings.battle.consolationSet; localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); });
+await page.reload();
+ok(await page.evaluate(() => state.settings.battle.consolation) === 1, 'unchosen knocked-out 0 migrates to the 1 pity card');
+// ...but a laptop where someone chose 0 keeps it
+await page.evaluate(() => { const s = JSON.parse(localStorage.getItem(STORAGE_KEY)); s.settings.battle.consolation = 0; s.settings.battle.consolationSet = true; localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); });
+await page.reload();
+ok(await page.evaluate(() => state.settings.battle.consolation) === 0, 'a chosen 0 stays 0');
 await browser.close();
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
+ * v1.1 (2026-10-16): Also covers the knocked-out 0 to 1 migration (tracker v1.8.5).
  */

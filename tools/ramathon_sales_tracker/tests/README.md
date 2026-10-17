@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.2.1
+version: 1.3
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -41,12 +41,12 @@ After changing `index.html`, copy it into `/tmp/site/ramathon-sales-tracker/` ag
 |---|---|
 | `battle_flow_test_v1.0.mjs` | Battle sign-up, weapon unlocks, queue, clock, rematch, pairing, CSV, Combine, migration, phone |
 | `cash_bonus_test_v1.1.mjs` | Cash sale button and free card with purchase: panel, toast, Totals, History, stats, CSV, Combine, Settings, migration, phone |
-| `battle_scoring_test_v1.0.mjs` | Scoring modes, survive default, knocked-out row, presets, rules card |
+| `battle_scoring_test_v1.1.mjs` | Scoring modes, survive default, knocked-out row, presets, rules card |
 | `exports_combine_test_v1.1.1.mjs` | Stats, export names, record ids, backorders, Combine across laptops |
 | `sales_walkoff_test_v1.1.mjs` | Sales basics and walk-offs |
 | `prize_table_test_v1.1.1.mjs` | Prize Table trades and stock |
 | `stock_test_v1.1.mjs` | Starting stock and stock left |
-| `tie_migration_test_v1.0.mjs` | Tie-rule default migration |
+| `tie_migration_test_v1.1.mjs` | Tie-rule default migration |
 | `phone_overflow_test_v1.0.mjs` | No sideways scroll at phone width (prints one line per screen; `"bad":[]` is a pass) |
 
 ## CHANGELOG
@@ -55,3 +55,4 @@ After changing `index.html`, copy it into `/tmp/site/ramathon-sales-tracker/` ag
 - v1.1 (2026-10-16): Added the cash and free-card suite (tracker v1.8).
 - v1.2 (2026-10-16): Five suites bumped to v1.1 for tracker v1.8.1 and v1.8.2.
 - v1.2.1 (2026-10-16): Prize and Combine suites at v1.1.1 for tracker v1.8.3.
+- v1.3 (2026-10-16): Battle scoring and migration suites at v1.1 for the knocked-out pity card (tracker v1.8.5).

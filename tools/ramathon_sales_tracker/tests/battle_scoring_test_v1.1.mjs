@@ -1,6 +1,6 @@
 /**
- * @file battle_scoring_test_v1.0.mjs
- * @version 1.0
+ * @file battle_scoring_test_v1.1.mjs
+ * @version 1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -75,14 +75,14 @@ ok((await page.textContent('.note')).includes('if you still have a balloon at th
 await page.click('[data-act="pvpsave"]');
 ok(await cards() === '6,6' && await kos() === 'false,false', '2-2 time-out: 6 / 6, both survived');
 
-// 3-1: the knockout winner gets 9, the knocked-out player gets 0 even though they popped 1
+// 3-1: the knockout winner gets 9, the knocked-out player gets the 1 pity card even though they popped 1
 await page.click('[data-act="rematch"][data-instant="1"]'); await page.click('[data-act="gomatch"]'); await page.click('[data-act="endmatch"]');
 await pvp(1, 3);
 prev = (await page.textContent('.pvp-preview')).trim();
-ok(prev.includes('Ava (knocked out): 0 cards') && prev.includes('Ben: 3 bundles (9 cards)'), 'preview KO: ' + prev);
+ok(prev.includes('Ava (knocked out): 1 card') && prev.includes('Ben: 3 bundles (9 cards)'), 'preview KO: ' + prev);
 await page.screenshot({ path: SHOTS + '/v16_3_pvp_ko.png' });
 await page.click('[data-act="pvpsave"]');
-ok(await cards() === '0,9' && await kos() === 'true,false', '1-3 knockout: 0 / 9');
+ok(await cards() === '1,9' && await kos() === 'true,false', '1-3 knockout: 1 / 9');
 ok((await page.textContent('.result')).includes('popped 1 · knocked out'), 'result card says knocked out');
 
 // vs House: survived row and knocked-out row
@@ -94,17 +94,21 @@ await page.click('[data-act="scorehouse"][data-n="2"]:not([data-ko])');
 ok(await cards() === '6' && await kos() === 'false', 'house survived, popped 2: 6');
 await page.click('[data-act="rematch"][data-instant="1"]'); await page.click('[data-act="gomatch"]'); await page.click('[data-act="endmatch"]');
 await page.click('[data-act="scorehouse"][data-n="1"][data-ko="1"]');
-ok(await cards() === '0' && await kos() === 'true', 'house knocked out after popping 1: 0');
+ok(await cards() === '1' && await kos() === 'true', 'house knocked out after popping 1: 1 pity card');
 
-// Knocked-out consolation 1
+// Knocked-out pity card: 1 by default (v1.8.5); 0 still works when chosen
 await page.click('[data-modal="settings"]');
-await page.fill('#set-consolation', '1'); await page.keyboard.press('Enter');
-ok(await ev(() => state.settings.battle.consolation) === 1, 'knocked-out cards set to 1');
+ok(await ev(() => state.settings.battle.consolation) === 1, 'knocked-out default is 1');
 ok((await page.textContent('.dialog')).replace(/\s+/g, ' ').includes('vs Player 12 cards for 10 tix'), 'worst case with 1 for knocked out stays 12 (2-2 beats 9 + 1)');
+await page.fill('#set-consolation', '0'); await page.keyboard.press('Enter');
+ok(await ev(() => state.settings.battle.consolation === 0 && state.settings.battle.consolationSet === true), 'knocked-out set to 0 and marked as chosen');
 await page.keyboard.press('Escape');
 await page.click('[data-act="rematch"][data-instant="1"]'); await page.click('[data-act="endmatch"]');
 await page.click('[data-act="scorehouse"][data-n="0"][data-ko="1"]');
-ok(await cards() === '1', 'knocked out with consolation: 1 card');
+ok(await cards() === '0', 'knocked out with 0 chosen: 0 cards');
+await page.click('[data-modal="settings"]');
+await page.fill('#set-consolation', '1'); await page.keyboard.press('Enter');
+await page.keyboard.press('Escape');
 
 // Rules card + script
 await page.click('[data-act="open"][data-modal="rules"]');
@@ -143,7 +147,7 @@ await page.click('[data-act="outcome"][data-code="ko0"]');
 ok(await cards() === '9,1', 'outcome KO: 9 / 1');
 await page.click('[data-modal="settings"]');
 await page.click('[data-act="scoringpreset"][data-id="s3"]');
-ok(await ev(() => state.settings.battle.scoring === 'survive' && state.settings.battle.consolation === 0), 'survive preset restores 3 per balloon, 0 when knocked out');
+ok(await ev(() => state.settings.battle.scoring === 'survive' && state.settings.battle.consolation === 1), 'survive preset restores 3 per balloon, 1 when knocked out');
 await page.keyboard.press('Escape');
 
 // Payout bar reflects everything
@@ -162,4 +166,5 @@ await browser.close();
 
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
+ * v1.1 (2026-10-16): Knocked-out pity card is 1 by default; 0 still works when chosen (tracker v1.8.5).
  */
