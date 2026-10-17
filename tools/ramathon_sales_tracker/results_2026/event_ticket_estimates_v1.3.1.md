@@ -1,6 +1,6 @@
 ---
-file: event_ticket_estimates_v1.3.md
-version: 1.3
+file: event_ticket_estimates_v1.3.1.md
+version: 1.3.1
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-17
@@ -18,6 +18,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 - Rambots: about 830 (actual count, in the Target bags)
 - Rambots also handed about 70 tickets (about 5 each) to helpers for food. Those were spent at food booths, so they sit in other groups' containers, not ours. Rambots earned about 900 in all.
 - The big jar belonged to High School Executive Student Gov
+- Exec Student Gov also collects the 10% cut from every group, about 700 of the 7,000 tickets, so they out-earned Rambots overall. The big jar may not be their only container.
 - There were two Ziploc bags: the flatter one is WCO's, the stuffed one belongs to one of the class governments
 - WCO's labeled cup was nearly empty; their tickets are in the flatter bag
 - Each grade had its own container
@@ -65,7 +66,7 @@ The average of the 19 other groups is about 325 (6,170 ÷ 19). Rambots' 830 is a
 - **Two grades are still pure assumption.** Their ~600 combined tickets assume they match Freshman. If they were emptier, every other group's number goes up.
 - **WCO's bag is barely visible.** Only an edge of the flatter bag shows in the photos. The ~1 cup figure is a guess with a plausible range of about 175 to 525.
 - **Three clubs are filled in at the average.** Interact, PTF, and Literary Atelier are in the pile, but their fill levels can't be read from the photos.
-- **Top three are close.** The Exec jar and the class gov bag could each plausibly hold 500 to 850 tickets. Rambots is likely first, but not certainly.
+- **Top three are close.** The Exec jar and the class gov bag could each plausibly hold 500 to 850 tickets, and Exec may have had more jars or bags. Rambots may be first in direct sales, but not certainly. Counting the 10% cut, Exec is first overall.
 - **The middle of the table is noise.** Fifteen groups fall between 250 and 350. At ±30%, their order relative to each other means nothing.
 - **Packing density varies.** Business is pressed flat against the walls; Sketch and Aerospace/Aviation are loose curls. The same fill line can mean a 1.5x difference in count.
 - **Our ~70 helper tickets are inside someone else's count.** Whichever groups sold food got them, so those groups' real "earned from the public" numbers are a little lower than their containers suggest.
@@ -95,3 +96,4 @@ About 10 minutes for all groups, accurate to within a few percent.
 - v1.1 (2026-10-17): Identified "D…" as Dance and "…m Alive" as Youth Alive (?). Assigned the Ziploc bag to WCO and removed the separate near-empty WCO row. Added Interact, PTF, and Literary Atelier at assumed average fill, replacing the "other hidden cups" bucket. Recalibrated from ~390 to ~345 tickets per cup.
 - v1.2 (2026-10-17): Split the Ziploc into two bags. Reassigned the stuffed bag (~2 cups) to an upper-grade class government, replacing one assumed grade row. Added WCO's flatter bag at ~1 cup. Recalibrated to ~340 tickets per cup.
 - v1.3 (2026-10-17): Corrected Rambots from 850 to 830 (actual count) and added the ~70 tickets fed to helpers (~900 earned). Recalibrated to ~343 tickets per cup; every other group's rounded estimate is unchanged. Added the average-group figure (~325) and the weak spot about helper tickets sitting in food booths' containers.
+- v1.3.1 (2026-10-17): Noted that Exec Student Gov collects the 10% cut (~700 tickets) and may have more containers, so they out-earned Rambots overall and direct sales are a toss-up.
