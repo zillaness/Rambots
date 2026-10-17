@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  file: ramathon_2026_infographic_v1.1.6.html
-  version: 1.1.6
+  file: ramathon_2026_infographic_v1.1.7.html
+  version: 1.1.7
   author: Sam Cao
   created: 2026-10-17
   last_updated: 2026-10-17
@@ -73,14 +73,15 @@
   .clubs-head > div { display: flex; align-items: center; gap: 10px; }
   .clubs-head .num { font-size: 40px; font-weight: 800; color: var(--rb-red); line-height: 1; flex: none; }
   .clubs-head .lab { font-size: 18px; color: var(--ink-2); line-height: 1.18; }
-  .clubs { display: grid; grid-template-columns: 250px 1fr 190px; row-gap: 14px; align-items: center; margin-top: 18px; }
+  .clubs { display: grid; grid-template-columns: 250px 1fr 190px; row-gap: 12px; align-items: center; margin-top: 14px; }
   .clubs .name { font-size: 24px; font-weight: 700; }
   .clubs .name.us { font-weight: 800; color: var(--rb-red); }
-  .ctrack { display: flex; height: 44px; align-items: stretch; }
-  .seg { height: 44px; }
+  .ctrack { display: flex; height: 42px; align-items: stretch; }
+  .seg { height: 42px; }
   .seg.us { background: var(--rb-red); }
   .seg.fed { background: repeating-linear-gradient(135deg, var(--rb-yellow) 0 7px, #F8C766 7px 11px); margin-left: 2px; border-radius: 0 4px 4px 0; }
   .seg.oth { background: var(--other); border-radius: 0 4px 4px 0; }
+  .seg.inl { display: flex; align-items: center; padding-left: 10px; font-size: 17px; font-weight: 700; color: var(--ink); white-space: nowrap; }
   .seg.tax { background: repeating-linear-gradient(135deg, var(--other) 0 7px, #CFCDC7 7px 11px); margin-left: 2px; border-radius: 0 4px 4px 0; }
   .seg.avg { background: transparent; border: 2px dashed var(--ink-2); border-left: none; border-radius: 0 4px 4px 0; }
   .clubs .val { font-size: 23px; color: var(--ink-2); padding-left: 12px; white-space: nowrap; }
@@ -171,14 +172,14 @@
         <div class="val"><b>830</b> + ~70 fed</div>
 
         <div class="name">Exec Student Gov</div>
-        <div class="ctrack"><div class="seg oth" style="width:46.6%;border-radius:0"></div><div class="seg tax" style="width:48.3%"></div></div>
-        <div class="val"><b>~1,375?</b></div>
+        <div class="ctrack"><div class="seg oth inl" style="width:46.6%;border-radius:0">direct sales</div><div class="seg tax inl" style="width:48.3%">10% cut</div></div>
+        <div class="val"><b>~675?</b> + <b>~700</b></div>
 
         <div class="name">Average group</div>
         <div class="ctrack"><div class="seg avg" style="width:22.4%"></div></div>
         <div class="val"><b>~325</b></div>
       </div>
-      <div class="note"><b style="color:var(--rb-red)">Red</b> = our box, <b style="color:#B47A00">yellow</b> = tickets we fed helpers. Exec = ~675 in the jar we saw + <b>striped</b> ~700, their 10% cut of all tickets. The jar is a ±30% photo estimate and they may have more jars or bags, so their own sales may or may not beat ours.</div>
+      <div class="note"><b style="color:var(--rb-red)">Red</b> = our box, <b style="color:#B47A00">yellow</b> = tickets we fed helpers. Exec's direct sales are a ±30% photo estimate of the jar we saw, and they may have more jars or bags, so they may or may not beat ours. <b>Striped</b> = their 10% cut of all 7,000 tickets.</div>
     </section>
 
     <section>
@@ -195,7 +196,7 @@
     <section class="three">
       <div class="tile"><div class="head">Ran short</div><div class="num">~16</div><div class="lab">more clickers (~56 tix) if our top 3 hadn't sold out early.</div></div>
       <div class="tile"><div class="head">Wrong mix</div><div class="num">36</div><div class="lab">leftovers for the blowout: Hot dog bun 12, WD-40 7, S'mores 6.</div></div>
-      <div class="tile"><div class="head">Copters <img class="ph" src="infographic_photos/pullcopter.jpg" alt=""></div><div class="num">27 tix</div><div class="lab">vs ~450 last year, same prices. Down about 95%.</div></div>
+      <div class="tile"><div class="head">Copters <img class="ph" src="infographic_photos/pullcopter.jpg" alt=""></div><div class="num">27 tix</div><div class="lab">after two strong years (~450 last year, same prices). Down ~95%.</div></div>
     </section>
 
     <section class="facts">
@@ -209,7 +210,7 @@
   </main>
 
   <footer>
-    <b>Next year:</b> 2x the Creepers, more Dumpling, Salmon nigiri, and Avocado, fewer Hot dog buns and S'mores. Track every booth. Tag Elementary / Middle / High school.
+    <b>If we do this again next year:</b> 2x the Creepers, more Dumpling, Salmon nigiri, and Avocado, fewer Hot dog buns and S'mores. Track every booth. Tag Elementary / Middle / High school.
     <div class="src">Data: sales laptop export (69 sales), team estimates (Plinko, Battle, blowout), event_ticket_estimates_v1.3.1 (other groups).</div>
   </footer>
 </div>
@@ -260,4 +261,5 @@
   v1.1.4 (2026-10-17): Exec's bar adds their 10% cut of all tickets (~700) to the ~675 jar estimate, flagged as possibly more containers; headline is '#1?' in direct sales, since Exec's own sales may or may not beat ours (Sam).
   v1.1.5 (2026-10-17): Question mark moved from the #1 headline to Exec's number (~1,375?) (Sam).
   v1.1.6 (2026-10-17): #1 callout says 'Student government' instead of 'Exec' (Sam).
+  v1.1.7 (2026-10-17): Exec's bar split and labeled as estimated direct sales (~675?) + their 10% cut (~700) (Sam). Footer reads 'If we do this again next year' (Sam). Copters tile notes two strong years before this one (Sam).
 -->
