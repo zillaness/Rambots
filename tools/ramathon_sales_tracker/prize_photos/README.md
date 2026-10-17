@@ -19,8 +19,9 @@ Levels: small 1 card, medium 3, grand 9.
 | Toy car | small (1) | `toy_car.jpg` |
 | Pen | small (1) | `pen.jpg` |
 | Cheese squish | medium (3) | `cheese_squish.jpg` |
+| Mini plush | medium (3), best guess | `mini_plush.jpg` |
 | Dino plush | grand (9) | `dino_plush.jpg` |
-| Capsule toy | not set yet (use an Other button) | `capsule_toy.jpg` |
+| Capsule toy | small (1), best guess | `capsule_toy.jpg` |
 
 The **Other small / medium / grand prize** buttons (1 / 3 / 9 cards) cover any prize without its own button.
 

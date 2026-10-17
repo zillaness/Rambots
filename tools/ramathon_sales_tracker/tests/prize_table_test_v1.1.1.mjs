@@ -66,6 +66,15 @@ ok((await page.textContent('.kp-price')).includes('= 10 cards'), 'keypad preview
 await page.keyboard.press('Enter');
 await page.keyboard.press('Enter');
 
+// Prize levels on the Prize Table screen (v1.8.3)
+ok((await page.textContent('.prize-item[data-item="prize_toy_car"] .i-cards')).trim() === '1 card', 'prize button says 1 card');
+await page.click('[data-modal="levels"]');
+await page.click('[data-act="pzlevel"][data-id="prize_capsule_toy"][data-val="3"]');
+ok(await ev(() => cardsFor('prize_capsule_toy')) === 3 && (await toastText()).includes('Capsule toy: 3 cards'), 'Prize levels: capsule toy set to Medium (3)');
+ok(await page.isVisible('[data-act="pzlevel"][data-id="prize_capsule_toy"][data-val="3"][aria-pressed="true"]') && !(await page.$('[data-act="pzlevel"][data-id="prize_small"]')), 'level shows as picked; Other buttons are not in the list');
+await page.screenshot({ path: SHOTS + '/v183_levels.png' });
+await page.keyboard.press('Escape');
+
 // Totals: most popular first
 await page.click('[data-modal="totals"]');
 await page.screenshot({ path: SHOTS + '/v13_3_totals.png' });
@@ -117,5 +126,5 @@ await browser.close();
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
  * v1.1 (2026-10-16): Prize defaults Small 1, Medium 3, Grand 9 (v1.8.1).
- * v1.1.1 (2026-10-16): Placeholder prizes renamed Other small / medium / grand prize (v1.8.3).
+ * v1.1.1 (2026-10-16): Placeholder prizes renamed Other small / medium / grand prize; Prize levels dialog and "1 card" label (v1.8.3).
  */

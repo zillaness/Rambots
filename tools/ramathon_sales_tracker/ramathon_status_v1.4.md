@@ -69,7 +69,7 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 - Free Pokémon card for every 10 tix spent, with a reminder on screen. It costs little and sends kids to Plinko or Balloon Battle.
 - 30 tix earns a free prize: 3 free cards. Nothing extra on top. (Claude proposed this reading; Sam approved it.) With the prize prices below, 1 free card is a Small prize and 3 is a Medium prize.
 - Prize Table prices: Small 1 card, Medium 3, Grand 9 (Sam said "1 ticket" for the Small prize; the tracker reads it as 1 card).
-- Prize levels (Sam, unsure, Oct 16): Dino plush grand, Cheese squish medium, Toy car small, Pen small ("I would assume"). Capsule toy level not set.
+- Prize levels (Sam, unsure, Oct 16): Dino plush grand, Cheese squish medium, Toy car small, Pen small ("I would assume"). Capsule toy small and Mini plush medium are Sam's best guesses ("unsure").
 - One source branch: the old branch's photo uploads were merged into `ramathon-carnival`.
 - The Sales prompts (clicker Ask, copter Ask, free-card box) were too big and covered the panel; v1.8.1 shrinks them.
 - The Pokémon card is the voucher (screens keep saying "Pokémon card").
@@ -113,7 +113,7 @@ Check these with the team. Everything except the Plinko board is a Settings chan
 
 1. Burger count if any get printed tonight (Settings > Starting stock on the sales laptop).
 2. Pre-bagged kit counts, if any (the parts counts are in).
-3. Capsule toy level (small, medium or grand), and how many of each prize if you want live stock.
+3. How many of each prize, if you want live stock.
 4. Plinko board facts: peg rows, number of drop holes, final slot payouts, tickets per drop. Optional: 50 test-drop tallies.
 5. Plinko stickers: how many and the rough cost each.
 6. Toroidal pitch wording check (`TOROIDAL_PITCH` in `index.html`).
@@ -137,7 +137,7 @@ These are tracked with notes on the open-items page.
   - The house driver's target (vs House at or under 1 card per ticket).
   - Refunds.
 - **Plinko:** drop rule and multiplier, slot payouts, tickets per drop.
-- **Prize Table:** prize levels (Sam was unsure: dino grand, cheese medium, toy car and pen small, capsule toy not set).
+- **Prize Table:** prize levels (Sam was unsure: dino grand; cheese and mini plush medium; toy car, pen and capsule toy small).
 - **Sales:** confirm prices, goals, and who follows up on backorders. Free card rate (1 per 10 tix) and the 30-tix free prize.
 - **Partner club:** which club, and what each side gives referred kids (a freebie, not a discount).
 - **Running the day:** who runs each laptop, and who exports hourly and combines at the end.

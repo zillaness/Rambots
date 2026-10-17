@@ -278,6 +278,9 @@
     font-weight: 700;
     white-space: nowrap;
   }
+  .lv-list { display: flex; flex-direction: column; gap: 10px; }
+  .lv-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+  .lv-name { font-size: 18px; font-weight: 700; }
   .whybtn { border: 0; background: none; padding: 0; color: var(--rb-red-700); font-size: 13px; font-weight: 600; text-decoration: underline; white-space: nowrap; }
   .cat-copters { background: var(--rb-red); color: #fff; }
   .cat-copters .i-cards { color: var(--rb-yellow); }
@@ -814,13 +817,16 @@ const PHOTO_DIR = 'clicker_photos/';
 
 // Prize Table: [id, button label, cards, letter for a button with no photo].
 // Photos go in prize_photos/<id>.jpg. Levels (Sam, Oct 16): small 1 card,
-// medium 3, grand 9. The three "Other" buttons cover any prize without its own
-// button (the capsule toy for now) and keep the ids of the v1.3 placeholders.
+// medium 3, grand 9 (capsule toy small and mini plush medium are Sam's best
+// guesses). The three "Other" buttons cover any prize without its own button
+// and keep the ids of the v1.3 placeholders.
 // Card prices and starting stock can be changed per laptop in Settings.
 const PRIZES = [
   ['toy_car', 'Toy car', 1],
   ['pen', 'Pen', 1],
+  ['capsule_toy', 'Capsule toy', 1],
   ['cheese_squish', 'Cheese squish', 3],
+  ['mini_plush', 'Mini plush', 3],
   ['dino_plush', 'Dino plush', 9],
   ['small', 'Other small prize', 1, '1'],
   ['medium', 'Other medium prize', 3, '3'],
@@ -2575,6 +2581,7 @@ function catView(cat, c, canBack) {
       <div class="cat-title">${esc(cat.name)}</div>
       <div class="spacer"></div>
       <div class="cat-tip">${cat.tip || 'Tap = +1<br>"Type qty" = punch in a number'}</div>
+      ${cat.kind === 'prizes' ? '<button class="walkoff-btn" data-act="open" data-modal="levels">Prize levels</button>' : ''}
       ${cat.walkoffs ? `<button class="walkoff-btn" data-act="backorder" data-cat="${cat.id}">Backorder</button>
       <button class="walkoff-btn" data-act="walkoff" data-cat="${cat.id}">Log walk-off</button>` : ''}
     </div>`;
@@ -2584,7 +2591,7 @@ function catView(cat, c, canBack) {
     return head + `<div class="items photos" style="--cols:${cols}">${cat.items.map(it => {
       const q = qtyOf(c, it.id);
       const prize = it.cards != null;
-      const tag = prize ? `${cardsFor(it.id)} cards` : (it.price != null ? `${it.price} tix` : '');
+      const tag = prize ? plural(cardsFor(it.id), 'card') : (it.price != null ? `${it.price} tix` : '');
       return `<div class="tile">
         <button class="item photo-item cat-${cat.id}${prize ? ' prize-item' : ''}" data-act="add" data-item="${it.id}">
           ${q ? `<span class="badge">×${q}</span>` : ''}
@@ -3161,6 +3168,7 @@ function modalView() {
   else if (m.type === 'settings') inner = settingsView();
   else if (m.type === 'confirmClear') inner = confirmClearView();
   else if (m.type === 'walkoff') inner = walkoffView(m);
+  else if (m.type === 'levels') inner = levelsView();
   else if (m.type === 'backorder') inner = backorderView(m);
   else if (m.type === 'pace') inner = paceView();
   else if (m.type === 'combine') inner = combineView();
@@ -3233,6 +3241,22 @@ function backorderView(m) {
       <button class="btn" data-act="close">Cancel</button>
       <button class="btn go" data-act="bosave">Save backorder</button>
     </div>
+  </div>`;
+}
+
+// Prize levels, set right on the Prize Table screen: one tap per prize. The
+// levels are the cards on the three "Other" buttons (small 1, medium 3, grand 9).
+function levelsView() {
+  const levels = PRIZE_LEVELS.slice().reverse().map(([id, label]) => [label, cardsFor(id)]);
+  const rows = CATEGORIES.find(cat => cat.id === 'prizes').items.filter(it => !it.letter).map(it => {
+    const cur = cardsFor(it.id);
+    return `<div class="lv-row"><div class="lv-name">${esc(it.name)}</div><div class="toggles">${levels.map(([label, cards]) =>
+      `<button class="toggle" data-act="pzlevel" data-id="${it.id}" data-val="${cards}" aria-pressed="${cur === cards}">${label} · ${cards}</button>`).join('')}</div></div>`;
+  }).join('');
+  return `<div class="dialog narrow" role="dialog" aria-label="Prize levels">
+    ${dialogHead('Prize levels')}
+    <p class="note">Tap a level for each prize. It applies to new trades on this laptop; trades already saved keep their cards. Exact card counts and starting stock are in Settings > Prize Table.</p>
+    <div class="lv-list">${rows}</div>
   </div>`;
 }
 
@@ -3646,6 +3670,13 @@ const actions = {
   kpset: keypadSet,
   finish: () => finish(),
   cash: toggleCash,
+  pzlevel: d => {
+    const o = state.settings.prizes[d.id] || (state.settings.prizes[d.id] = {});
+    o.cards = Number(d.val);
+    save();
+    render();
+    toast(`${ITEMS[d.id].name}: ${plural(o.cards, 'card')} · applies to new trades`, 'ok');
+  },
   why: () => { view.why = !view.why; render(); },
   demo: d => setDemo(d.field, d.val),
   open: d => { view.modal = { type: d.modal }; render(); },
@@ -3995,9 +4026,11 @@ render();
   clicker deal (photo: clicker_photos/creeper_cube.jpg). Starting stock built in from Sam's counts: 13 clicker
   designs plus the cube, and copter parts (launchers 93, propellers 158, toroidal 44, ripcords 105). Combine
   still reads exports that say "Clickers".
-  v1.8.3 (2026-10-16): Real prize buttons with photos: Toy car 1 card, Pen 1, Cheese squish 3, Dino plush 9,
+  v1.8.3 (2026-10-16): Real prize buttons with photos: Toy car 1 card, Pen 1, Capsule toy 1, Cheese squish 3,
+  Mini plush 3, Dino plush 9,
   plus Other small / medium / grand prize buttons (1 / 3 / 9) for anything else. Creeper infinity cube photo.
-  The free-card reminder names the prize level (Small / Medium / Grand).
+  The free-card reminder names the prize level (Small / Medium / Grand). "Prize levels" button on the Prize
+  Table screen sets each prize to Small / Medium / Grand in one tap. Prize buttons say "1 card", not "1 cards".
 -->
 </body>
 </html>
