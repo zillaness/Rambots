@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.8.3
+  version: 1.8.4
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -217,6 +217,10 @@
   .style-accent { background: var(--rb-yellow); color: var(--rb-ink); }
   .style-ink { background: var(--rb-ink); color: #fff; }
   .items.photos { grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); gap: 12px; }
+  .tiers { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .tier { flex: 1; display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+  .tier + .tier { border-top: 3px solid var(--rb-gray-300); padding-top: 6px; }
+  .tier-head { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--rb-gray-700); }
   .photo-item { padding: 8px 8px 10px; gap: 6px; justify-content: flex-start; background: var(--rb-yellow); color: var(--rb-ink); }
   .photo-item .ph {
     flex: 1;
@@ -264,7 +268,7 @@
   .g-nudge { font-size: 14px; font-weight: 700; color: var(--rb-red); margin-top: 2px; }
   .ask { background: var(--rb-red-100); border: 2px solid var(--rb-red); border-radius: 10px; padding: 5px 10px; }
   .ask-title { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 15px; font-weight: 700; color: var(--rb-red-700); }
-  .ask-text { font-size: 13px; color: var(--rb-gray-700); margin-top: 2px; }
+  .ask-text { font-size: 13px; color: var(--rb-gray-700); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ask-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
   .askbtn {
     flex: 1 1 auto;
@@ -281,7 +285,6 @@
   .lv-list { display: flex; flex-direction: column; gap: 10px; }
   .lv-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
   .lv-name { font-size: 18px; font-weight: 700; }
-  .whybtn { border: 0; background: none; padding: 0; color: var(--rb-red-700); font-size: 13px; font-weight: 600; text-decoration: underline; white-space: nowrap; }
   .cat-copters { background: var(--rb-red); color: #fff; }
   .cat-copters .i-cards { color: var(--rb-yellow); }
   .photo-item .i-note { font-size: clamp(12px, 1.05vw, 15px); opacity: 0.9; }
@@ -329,8 +332,8 @@
     flex-direction: column;
     min-height: 0;
     overflow: auto;
-    padding: 16px;
-    gap: 12px;
+    padding: 14px 16px;
+    gap: 10px;
   }
   .p-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .p-title { font-size: 24px; font-weight: 700; white-space: nowrap; }
@@ -874,7 +877,8 @@ const EVENT_DEFAULTS = { date: '2026-10-17', start: '10:30', end: '13:00' };
 const STATS_BUCKET_MIN = 30;
 
 // What volunteers say when a kit is in the cart. Edit freely.
-const TOROIDAL_PITCH = 'Looped blades instead of straight ones: the shape engineers are testing for quieter drones. Same launcher, no sharp blade tips.';
+// One line under the upgrade Ask (Sam's pitch, shortened). The longer story is in README.md.
+const TOROIDAL_PITCH = 'Toroid = donut: quieter blades that look cool.';
 
 const CATEGORIES = [
   {
@@ -2588,7 +2592,7 @@ function catView(cat, c, canBack) {
   if (cat.layout === 'photos') {
     // One photo button per design; tap the number in the right panel to type a quantity.
     const cols = cat.photoCols || Math.min(5, Math.max(3, cat.items.length));
-    return head + `<div class="items photos" style="--cols:${cols}">${cat.items.map(it => {
+    const tile = it => {
       const q = qtyOf(c, it.id);
       const prize = it.cards != null;
       const tag = prize ? plural(cardsFor(it.id), 'card') : (it.price != null ? `${it.price} tix` : '');
@@ -2602,7 +2606,19 @@ function catView(cat, c, canBack) {
           ${it.note ? `<span class="i-note">${esc(it.note)}</span>` : ''}
         </button>
       </div>`;
-    }).join('')}</div>`;
+    };
+    if (cat.kind === 'prizes') {
+      // One row per prize level, cheapest first, with a line between levels.
+      // Levels follow the current card prices, so Prize levels changes regroup them.
+      const byCards = {};
+      cat.items.forEach(it => { (byCards[cardsFor(it.id)] = byCards[cardsFor(it.id)] || []).push(it); });
+      return head + `<div class="tiers">${Object.keys(byCards).map(Number).sort((a, b) => a - b).map(cards => {
+        const level = PRIZE_LEVELS.find(([id]) => cardsFor(id) === cards);
+        return `<section class="tier"><div class="tier-head">${level ? `${level[1]} · ` : ''}${plural(cards, 'card')}</div>
+          <div class="items photos" style="--cols:5">${byCards[cards].map(tile).join('')}</div></section>`;
+      }).join('')}</div>`;
+    }
+    return head + `<div class="items photos" style="--cols:${cols}">${cat.items.map(tile).join('')}</div>`;
   }
   const cols = cat.items.length >= 3 ? 'cols-3' : 'cols-1';
   return head + `
@@ -2647,8 +2663,8 @@ function copterAsk(c) {
   const diff = ITEMS.kit_toroidal.price - ITEMS.kit.price;
   const title = canUpgrade ? 'Ask: toroidal upgrade?' : 'Ask: extra propellers?';
   return `<div class="ask">
-    <div class="ask-title"><span>${title}</span>${canUpgrade ? `<button class="whybtn" data-act="why" aria-expanded="${!!view.why}">${view.why ? 'Hide' : 'Why toroidal?'}</button>` : ''}</div>
-    ${canUpgrade && view.why ? `<div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : ''}
+    <div class="ask-title"><span>${title}</span></div>
+    ${canUpgrade ? `<div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : ''}
     <div class="ask-row">
       ${canUpgrade ? `<button class="askbtn" data-act="upgrade">Toroidal kit +${diff}</button>` : ''}
       ${canProp ? `<button class="askbtn" data-act="add" data-item="propeller">+ Prop ${ITEMS.propeller.price}</button>` : ''}
@@ -3677,7 +3693,6 @@ const actions = {
     render();
     toast(`${ITEMS[d.id].name}: ${plural(o.cards, 'card')} · applies to new trades`, 'ok');
   },
-  why: () => { view.why = !view.why; render(); },
   demo: d => setDemo(d.field, d.val),
   open: d => { view.modal = { type: d.modal }; render(); },
   close: () => { view.modal = null; render(); },
@@ -4031,6 +4046,9 @@ render();
   plus Other small / medium / grand prize buttons (1 / 3 / 9) for anything else. Creeper infinity cube photo.
   The free-card reminder names the prize level (Small / Medium / Grand). "Prize levels" button on the Prize
   Table screen sets each prize to Small / Medium / Grand in one tap. Prize buttons say "1 card", not "1 cards".
+  v1.8.4 (2026-10-16): Prize Table grouped by level, cheapest first, with a line between levels (follows
+  Prize levels changes). Toroidal pitch is one short line always shown with the upgrade Ask ("Toroid = donut:
+  quieter blades that look cool."); "Why toroidal?" removed. Slightly tighter panel spacing.
 -->
 </body>
 </html>

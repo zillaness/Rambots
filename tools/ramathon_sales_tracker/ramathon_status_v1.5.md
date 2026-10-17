@@ -1,6 +1,6 @@
 ---
-file: ramathon_status_v1.4.md
-version: 1.4
+file: ramathon_status_v1.5.md
+version: 1.5
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: status and handoff
 
-Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.3** is live.
+Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.4** is live.
 
 ## Where things are
 
@@ -71,6 +71,9 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 - Prize Table prices: Small 1 card, Medium 3, Grand 9 (Sam said "1 ticket" for the Small prize; the tracker reads it as 1 card).
 - Prize levels (Sam, unsure, Oct 16): Dino plush grand, Cheese squish medium, Toy car small, Pen small ("I would assume"). Capsule toy small and Mini plush medium are Sam's best guesses ("unsure").
 - One source branch: the old branch's photo uploads were merged into `ramathon-carnival`.
+- Prize levels must be easy to change on the day: a Prize levels button on the Prize Table screen.
+- Prize Table ordered cheapest to most expensive, each level separated by a line.
+- Toroidal pitch (Sam's text): looped, ring-like blades that cut noise and tip turbulence; MIT designed them for drones (boat designs came first); on pull copters they mostly look cool; toroid means donut. Prize counts: not counted yet.
 - The Sales prompts (clicker Ask, copter Ask, free-card box) were too big and covered the panel; v1.8.1 shrinks them.
 - The Pokémon card is the voucher (screens keep saying "Pokémon card").
 - Creeper infinity fidget cubes go under clickers at the clicker price (mix and match). The booth is "Clickers & Fidget Toys".
@@ -105,7 +108,7 @@ Check these with the team. Everything except the Plinko board is a Settings chan
   - Claude designed this from Sam's multiplier and the 3-card cap.
   - The odds come from an idealized board model that assumes 9 drop holes over 9 slots. It needs about 50 test drops on the real board.
 - **3-card cap scope.** Applied to Plinko only. Balloon Battle still pays up to 9 cards per match (3 per balloon). Ask whether the cap should apply to battle too.
-- **Toroidal pitch behind a tap (v1.8.1):** to keep the copter Ask small, the pitch shows only after tapping "Why toroidal?". Sam's earlier decision was to always give a short explanation; the crew should still say it.
+- **Toroidal pitch, shortened (v1.8.4):** "Toroid = donut: quieter blades that look cool." shows under the copter Ask; the long version is in README.md.
 - **Launcher-only price** is 3 tix in the tracker. Confirm.
 - **Upgrade cleanup:** practice names sitting in the old name-only battle queue were dropped when laptops upgraded to v1.7.
 
@@ -116,7 +119,7 @@ Check these with the team. Everything except the Plinko board is a Settings chan
 3. How many of each prize, if you want live stock.
 4. Plinko board facts: peg rows, number of drop holes, final slot payouts, tickets per drop. Optional: 50 test-drop tallies.
 5. Plinko stickers: how many and the rough cost each.
-6. Toroidal pitch wording check (`TOROIDAL_PITCH` in `index.html`).
+6. Check the shortened toroidal line reads right (`TOROIDAL_PITCH` in `index.html`).
 7. Photos go to the live branch `presentations`, folder `ramathon-sales-tracker/clicker_photos/` or `prize_photos/` (or tell Claude where they are).
 8. Controls script for the battle robots.
 9. Any new clicker designs (name and photo).
@@ -167,3 +170,4 @@ These are tracked with notes on the open-items page.
 - v1.2 (2026-10-16): Tracker v1.8.1 (smaller Sales prompts). Prize prices decided: Small 1, Medium 3, Grand 9.
 - v1.3 (2026-10-16): Tracker v1.8.2. Card is the voucher; Creeper infinity cube under Clickers & Fidget Toys; clicker and copter stock counts.
 - v1.4 (2026-10-16): Tracker v1.8.3. Prize buttons and levels; photos; old branch merged into ramathon-carnival.
+- v1.5 (2026-10-16): Tracker v1.8.4. Prize Table by level with dividers; toroidal pitch from Sam; Prize levels button.
