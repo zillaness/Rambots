@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  file: ramathon_2026_infographic_v1.1.7.html
-  version: 1.1.7
+  file: ramathon_2026_infographic_v1.2.html
+  version: 1.2
   author: Sam Cao
   created: 2026-10-17
   last_updated: 2026-10-17
@@ -39,7 +39,13 @@
     font-family: FreeSans, "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: var(--ink);
   }
-  .page { width: 1080px; height: 1920px; display: flex; flex-direction: column; }
+  .page { width: 1080px; height: 1920px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+
+  /* Watermark: repeated diagonal text over everything, faint enough to read through */
+  .wm { position: absolute; inset: -500px; transform: rotate(-28deg); display: flex; flex-direction: column; justify-content: center; gap: 120px; pointer-events: none; z-index: 10; }
+  .wm div { white-space: nowrap; font-size: 44px; font-weight: 800; letter-spacing: 4px; color: rgba(27, 27, 27, 0.075); }
+  .wm div:nth-child(even) { margin-left: -380px; }
+  .hdr-tag { position: absolute; right: 48px; bottom: 20px; border: 2px solid var(--rb-yellow); color: var(--rb-yellow); font-size: 16px; font-weight: 800; letter-spacing: 1.5px; padding: 5px 12px; border-radius: 6px; }
 
   header { background: var(--rb-red); color: #fff; padding: 20px 48px 18px; position: relative; }
   header .kicker { font-size: 22px; letter-spacing: 3px; font-weight: 700; color: var(--rb-yellow); }
@@ -129,6 +135,7 @@
     <h1>RAM-A-THON 2026</h1>
     <div class="sub">Rambots booths · Sat Oct 17 · CCA Hayward</div>
     <div class="team"><b>RAMBOTS</b>Team 2204</div>
+    <div class="hdr-tag">INTERNAL · DO NOT SHARE OR REPOST</div>
   </header>
 
   <main>
@@ -213,6 +220,7 @@
     <b>If we do this again next year:</b> 2x the Creepers, more Dumpling, Salmon nigiri, and Avocado, fewer Hot dog buns and S'mores. Track every booth. Tag Elementary / Middle / High school.
     <div class="src">Data: sales laptop export (69 sales), team estimates (Plinko, Battle, blowout), event_ticket_estimates_v1.3.1 (other groups).</div>
   </footer>
+  <div class="wm" id="wm" aria-hidden="true"></div>
 </div>
 
 <script>
@@ -231,6 +239,12 @@
     ["S'mores", 0.906, "snacks", "6 left", false, "smores"],
     ["LEGO brick", 0.604, "workshop", "2 left", false, "lego"],
   ];
+  const wm = document.getElementById("wm");
+  for (let i = 0; i < 18; i++) {
+    const d = document.createElement("div");
+    d.textContent = "INTERNAL ESTIMATE ONLY · DO NOT SHARE · DO NOT REPOST · ".repeat(4);
+    wm.append(d);
+  }
   const max = 7.106, maxPx = 400;
   const el = document.getElementById("clickers");
   for (const [name, rate, theme, tag, hot, photo] of rows) {
@@ -262,4 +276,5 @@
   v1.1.5 (2026-10-17): Question mark moved from the #1 headline to Exec's number (~1,375?) (Sam).
   v1.1.6 (2026-10-17): #1 callout says 'Student government' instead of 'Exec' (Sam).
   v1.1.7 (2026-10-17): Exec's bar split and labeled as estimated direct sales (~675?) + their 10% cut (~700) (Sam). Footer reads 'If we do this again next year' (Sam). Copters tile notes two strong years before this one (Sam).
+  v1.2 (2026-10-17): Added a diagonal 'INTERNAL ESTIMATE ONLY / DO NOT SHARE / DO NOT REPOST' watermark and a header tag (Sam).
 -->

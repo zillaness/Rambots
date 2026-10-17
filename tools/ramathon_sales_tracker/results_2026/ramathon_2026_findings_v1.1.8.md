@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.7.md
-version: 1.1.7
+file: ramathon_2026_findings_v1.1.8.md
+version: 1.1.8
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-17
@@ -10,6 +10,8 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: what the data says
 
+> **Internal estimates only. Do not share or repost.** Other groups' numbers are eyeballed from photos.
+
 We grossed about **900 tickets** (830 counted, plus about 70 handed to helpers for food). That's about **$810 after CCA's 10%** and **69%** of the 1,300-ticket goal. Clickers carried the sales table, Plinko quietly tripled its goal, and copters fell off a cliff.
 
 Only the sales laptop exported. Every number below is either **tracked** (from its 69 sales) or marked **~estimated** (from your end-of-day counts).
@@ -18,7 +20,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.1.7.png` | 1080x1920 recap image (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `ramathon_2026_infographic_v1.2.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -216,3 +218,4 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - v1.1.5 (2026-10-17): Points to infographic v1.1.5 (question mark moved to Exec's number).
 - v1.1.6 (2026-10-17): Points to infographic v1.1.6 (#1 callout says student government instead of Exec).
 - v1.1.7 (2026-10-17): Points to infographic v1.1.7; Exec shown as direct sales (~675?) + their 10% cut (~700), here and in the image. Next-year advice is conditional ("if we do this again"). Copters note two good years before this one.
+- v1.1.8 (2026-10-17): Added an internal-only notice; points to infographic v1.2 (watermarked).
