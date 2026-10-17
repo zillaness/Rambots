@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.4.md
-version: 1.1.4
+file: ramathon_2026_findings_v1.1.5.md
+version: 1.1.5
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-17
@@ -18,7 +18,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.1.4.png` | 1080x1920 recap image (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `ramathon_2026_infographic_v1.1.5.png` | 1080x1920 recap image (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -210,3 +210,4 @@ Why it dropped is a guess until we test it:
 - v1.1.2 (2026-10-17): Points to infographic v1.1.2, whose club chart is Rambots vs the average group only (no individual student governments).
 - v1.1.3 (2026-10-17): Points to infographic v1.1.3, which adds Exec Student Gov (~675) back between Rambots and the average group.
 - v1.1.4 (2026-10-17): Exec now includes their 10% cut (~700), so they out-earned us overall; whether their own sales beat ours is unclear. Points to infographic v1.1.4 and estimates v1.3.1.
+- v1.1.5 (2026-10-17): Points to infographic v1.1.5 (question mark moved to Exec's number).
