@@ -1,6 +1,6 @@
 ---
-file: ramathon_status_v1.1.md
-version: 1.1
+file: ramathon_status_v1.2.md
+version: 1.2
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: status and handoff
 
-Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8** is live.
+Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.1** is live.
 
 ## Where things are
 
@@ -67,7 +67,9 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 - Policy: don't discount. If people are unhappy, give extra or a freebie instead.
 - Cash: no cash discount (tabled). A small cash-emoji button marks a sale as a cash sale at full price; cash sales count toward the goal. Sales first; Battle only if cash shows up there.
 - Free Pokémon card for every 10 tix spent, with a reminder on screen. It costs little and sends kids to Plinko or Balloon Battle.
-- 30 tix earns a free prize: 3 free cards, which is a Small prize at the Prize Table. Nothing extra on top. (Claude proposed this reading; Sam approved it.)
+- 30 tix earns a free prize: 3 free cards. Nothing extra on top. (Claude proposed this reading; Sam approved it.) With the prize prices below, 1 free card is a Small prize and 3 is a Medium prize.
+- Prize Table prices: Small 1 card, Medium 3, Grand 9 (Sam said "1 ticket" for the Small prize; the tracker reads it as 1 card).
+- The Sales prompts (clicker Ask, copter Ask, free-card box) were too big and covered the panel; v1.8.1 shrinks them.
 - Freebie button: deprioritized for this event. If built later: track only, no cap; at Battle, both a free match and bonus cards.
 - Walk-off logging: Sam considers it unnecessary. The button stays and is optional.
 - Partner club referrals: an optional tag like the demographics, built only once a partner club agrees. Sam will ask the students which other clubs they are in.
@@ -98,7 +100,7 @@ Check these with the team. Everything except the Plinko board is a Settings chan
   - Claude designed this from Sam's multiplier and the 3-card cap.
   - The odds come from an idealized board model that assumes 9 drop holes over 9 slots. It needs about 50 test drops on the real board.
 - **3-card cap scope.** Applied to Plinko only. Balloon Battle still pays up to 9 cards per match (3 per balloon). Ask whether the cap should apply to battle too.
-- **Prize Table buttons** are placeholders (Small 3, Medium 6, Grand 9 cards).
+- **Toroidal pitch behind a tap (v1.8.1):** to keep the copter Ask small, the pitch shows only after tapping "Why toroidal?". Sam's earlier decision was to always give a short explanation; the crew should still say it.
 - **Launcher-only price** is 3 tix in the tracker. Confirm.
 - **Screen wording** says "Pokémon cards". Sam has also said "vouchers". Confirm which.
 - **Upgrade cleanup:** practice names sitting in the old name-only battle queue were dropped when laptops upgraded to v1.7.
@@ -107,7 +109,7 @@ Check these with the team. Everything except the Plinko board is a Settings chan
 
 1. Clicker stock per design (Burger was a maybe: in or out?).
 2. Copter parts stock: launchers, propellers, toroidal propellers, ripcords (plus pre-bagged kit counts if any).
-3. Prize list: name, cards to redeem, count, photo (upload to `ramathon-sales-tracker/prize_photos/`).
+3. Prize list: how many of each prize, and optional real names and photos (upload to `ramathon-sales-tracker/prize_photos/`). Card prices are decided.
 4. Plinko board facts: peg rows, number of drop holes, final slot payouts, tickets per drop. Optional: 50 test-drop tallies.
 5. Plinko stickers: how many and the rough cost each.
 6. Toroidal pitch wording check (`TOROIDAL_PITCH` in `index.html`).
@@ -158,3 +160,4 @@ These are tracked with notes on the open-items page.
 
 - v1.0 (2026-10-16): Initial status and handoff after tracker v1.7.1.
 - v1.1 (2026-10-16): Tracker v1.8 (cash sale button, free Pokémon card per 10 tix). Sam's sales add-on decisions. Source branch renamed `ramathon-carnival`.
+- v1.2 (2026-10-16): Tracker v1.8.1 (smaller Sales prompts). Prize prices decided: Small 1, Medium 3, Grand 9.

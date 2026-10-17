@@ -55,17 +55,17 @@ ok(await ev(() => document.querySelector('.cashbtn').disabled), 'cash button dis
 await add('clicker_oreo', 2);
 ok(await text('.t-val') === '7 tix', '2 clickers = 7 tix');
 const nudge = await text('.g-nudge');
-ok(nudge.includes('1 more is only +3 tix') && nudge.includes('+ a free Pokémon card'), 'clicker nudge mentions the free card: ' + nudge);
+ok(nudge.includes('1 more is only +3 tix') && nudge.includes('+ a free card'), 'clicker nudge mentions the free card: ' + nudge);
 ok(!(await page.$('#bonus-ask')) && !(await page.$('#bonus')), 'no second Ask and no card box at 7 tix');
 await add('clicker_oreo');
 ok(await text('.t-val') === '10 tix', '3 clickers = 10 tix');
 const box = await text('#bonus');
-ok(box.includes('Give 1 free Pokémon card') && box.includes('Say: win more at Plinko or Balloon Battle'), 'card box at 10 tix: ' + box);
-ok(!box.includes('free prize'), 'one card is not called a free prize');
+ok(box.includes('Give 1 free Pokémon card') && box.includes('= a free Small prize'), 'card box at 10 tix: ' + box);
+ok(!(await page.$('#bonus-ask')), 'no Ask right at 10 tix');
 await page.screenshot({ path: SHOTS + '/v18_1_card_box.png' });
 await openCat('red');
 await add('propeller');
-ok(!(await text('#bonus')).includes('Ask'), 'no Ask at 11 tix (9 short)');
+ok(!(await page.$('#bonus-ask')), 'no Ask at 11 tix (9 short)');
 await page.keyboard.press('Enter');
 ok((await toastText()).includes('saved · 11 tix · give 1 free Pokémon card'), 'Done toast repeats the card: ' + await toastText());
 ok(await ev(() => document.getElementById('toast').classList.contains('bonus')), 'card toast uses the yellow style');
@@ -74,13 +74,13 @@ ok(await ev(() => state.customers.find(c => c.no === 1 && c.kind === 'sale' && c
 // Ask when a few tix short, then 30 tix = 3 cards = a free prize
 await openCat('red');
 await add('kit'); await add('launcher');
-ok(await text('#bonus-ask') === 'Ask: 2 more tix gets a free Pokémon card', '8 tix asks for 2 more: ' + await text('#bonus-ask'));
+ok(await text('#bonus-ask') === 'Ask: 2 more tix = a free Pokémon card', '8 tix asks for 2 more: ' + await text('#bonus-ask'));
 await add('kit', 3);
 await openCat('yellow');
 await add('clicker_creeper', 2);
 ok(await text('.t-val') === '30 tix', 'launcher + 4 kits + 2 clickers... = ' + await text('.t-val'));
 const big = await text('#bonus');
-ok(big.includes('Give 3 free Pokémon cards') && big.includes("Say: that's a free prize at the Prize Table"), '30 tix = 3 cards = a free prize: ' + big);
+ok(big.includes('Give 3 free Pokémon cards') && big.includes('= a free Medium prize'), '30 tix = 3 cards = a free prize: ' + big);
 await page.screenshot({ path: SHOTS + '/v18_2_three_cards.png' });
 await page.keyboard.press('Enter');
 ok((await toastText()).includes('give 3 free Pokémon cards'), '3-card toast');

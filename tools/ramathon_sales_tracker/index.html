@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.8
+  version: 1.8.1
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -249,31 +249,35 @@
   }
   .stock.low { background: var(--rb-red); color: #fff; border-color: var(--rb-red); }
   .stock.out { background: var(--rb-ink); color: #fff; }
+  /* Sales prompts stay small: one summary line, one Ask line, one row of buttons. */
   .group-row {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
     background: var(--rb-yellow-100);
     border: 2px solid var(--rb-yellow);
-    border-radius: 12px;
-    padding: 8px 12px;
-  }
-  .g-top { display: flex; justify-content: space-between; gap: 8px; }
-  .g-sub { font-size: 15px; font-weight: 600; color: var(--rb-gray-700); margin-top: 2px; }
-  .g-nudge { font-size: 15px; font-weight: 700; color: var(--rb-red); margin-top: 4px; }
-  .ask { background: var(--rb-red-100); border: 2px solid var(--rb-red); border-radius: 12px; padding: 8px 12px; }
-  .ask-title { font-size: 16px; font-weight: 700; color: var(--rb-red-700); }
-  .ask-text { font-size: 14px; color: var(--rb-gray-700); margin: 2px 0 6px; }
-  .ask-row { display: flex; gap: 8px; margin-top: 6px; }
-  .askbtn {
-    flex: 1;
-    min-height: 44px;
     border-radius: 10px;
+    padding: 4px 10px;
+  }
+  .g-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .g-top small { font-size: 13px; font-weight: 600; color: var(--rb-gray-700); }
+  .g-nudge { font-size: 14px; font-weight: 700; color: var(--rb-red); margin-top: 2px; }
+  .ask { background: var(--rb-red-100); border: 2px solid var(--rb-red); border-radius: 10px; padding: 5px 10px; }
+  .ask-title { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 15px; font-weight: 700; color: var(--rb-red-700); }
+  .ask-text { font-size: 13px; color: var(--rb-gray-700); margin-top: 2px; }
+  .ask-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .askbtn {
+    flex: 1 1 auto;
+    min-height: 38px;
+    padding: 0 8px;
+    border-radius: 8px;
     border: 2px solid var(--rb-red);
     background: #fff;
     color: var(--rb-red);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
+    white-space: nowrap;
   }
+  .whybtn { border: 0; background: none; padding: 0; color: var(--rb-red-700); font-size: 13px; font-weight: 600; text-decoration: underline; white-space: nowrap; }
   .cat-copters { background: var(--rb-red); color: #fff; }
   .cat-copters .i-cards { color: var(--rb-yellow); }
   .photo-item .i-note { font-size: clamp(12px, 1.05vw, 15px); opacity: 0.9; }
@@ -373,14 +377,14 @@
   .t-label { font-size: 22px; font-weight: 700; }
   .t-val { font-size: 46px; font-weight: 700; color: var(--rb-red); }
   .t-val.cash { color: var(--rb-success-700); }
-  .bonus { background: var(--rb-yellow-100); border: 2px solid var(--rb-yellow); border-radius: 10px; padding: 4px 10px; margin-top: -4px; }
-  .bonus-title { font-size: 18px; font-weight: 700; }
-  .bonus-text { font-size: 13px; color: var(--rb-gray-700); line-height: 1.25; }
-  .bonus-ask { font-size: 14px; font-weight: 700; color: var(--rb-red-700); }
+  .bonus { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; background: var(--rb-yellow-100); border: 2px solid var(--rb-yellow); border-radius: 10px; padding: 3px 10px; margin-top: -6px; }
+  .bonus-title { font-size: 16px; font-weight: 700; }
+  .bonus-text { font-size: 13px; font-weight: 600; color: var(--rb-gray-700); white-space: nowrap; }
   .box-split { margin-top: -6px; display: flex; flex-direction: column; gap: 2px; font-size: 17px; color: var(--rb-gray-700); }
   .box-split div { display: flex; justify-content: space-between; }
   .box-split b { color: var(--rb-ink); }
-  .demo { display: flex; flex-direction: column; gap: 8px; }
+  .demo { display: flex; flex-direction: column; gap: 6px; }
+  .demo .chip { min-height: 40px; font-size: 16px; }
   .d-label { font-size: 14px; font-weight: 700; color: var(--rb-gray-600); text-transform: uppercase; letter-spacing: 0.04em; }
   .chips { display: grid; gap: 8px; }
   .chips.c2 { grid-template-columns: repeat(2, 1fr); }
@@ -809,8 +813,8 @@ const PHOTO_DIR = 'clicker_photos/';
 // Placeholders until the real prize list and photos arrive. Card prices and
 // starting stock can be changed per laptop in Settings.
 const PRIZES = [
-  ['small', 'Small prize', 3],
-  ['medium', 'Medium prize', 6],
+  ['small', 'Small prize', 1],
+  ['medium', 'Medium prize', 3],
   ['grand', 'Grand prize', 9],
 ];
 const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
@@ -2614,16 +2618,16 @@ function copterAsk(c) {
   const canProp = has('part_propeller');
   const canTorProp = has('part_toroidal');
   if (!canUpgrade && !canProp && !canTorProp) return '';
-  const upgrade = canUpgrade ? `<div class="ask-title">Ask: upgrade to a toroidal propeller? +${ITEMS.kit_toroidal.price - ITEMS.kit.price} tix</div>
-      <div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : '';
+  const diff = ITEMS.kit_toroidal.price - ITEMS.kit.price;
+  const title = canUpgrade ? 'Ask: toroidal upgrade?' : 'Ask: extra propellers?';
   return `<div class="ask">
-    ${upgrade}
-    ${canUpgrade ? '<div class="ask-row"><button class="askbtn" data-act="upgrade">Upgrade 1 kit to toroidal (+1)</button></div>' : ''}
-    ${canProp || canTorProp ? `<div class="ask-title">Ask: want extra propellers? Regular ${ITEMS.propeller.price} tix · toroidal ${ITEMS.toroidal.price} tix</div>
+    <div class="ask-title"><span>${title}</span>${canUpgrade ? `<button class="whybtn" data-act="why" aria-expanded="${!!view.why}">${view.why ? 'Hide' : 'Why toroidal?'}</button>` : ''}</div>
+    ${canUpgrade && view.why ? `<div class="ask-text">${esc(TOROIDAL_PITCH)}</div>` : ''}
     <div class="ask-row">
-      ${canProp ? `<button class="askbtn" data-act="add" data-item="propeller">+ Extra propeller (${ITEMS.propeller.price})</button>` : ''}
-      ${canTorProp ? `<button class="askbtn" data-act="add" data-item="toroidal">+ Extra toroidal (${ITEMS.toroidal.price})</button>` : ''}
-    </div>` : ''}
+      ${canUpgrade ? `<button class="askbtn" data-act="upgrade">Toroidal kit +${diff}</button>` : ''}
+      ${canProp ? `<button class="askbtn" data-act="add" data-item="propeller">+ Prop ${ITEMS.propeller.price}</button>` : ''}
+      ${canTorProp ? `<button class="askbtn" data-act="add" data-item="toroidal">+ Toroidal prop ${ITEMS.toroidal.price}</button>` : ''}
+    </div>
   </div>`;
 }
 
@@ -2672,10 +2676,9 @@ function panelView(c, kind) {
     const extra = groupPrice(gid, n + 1) - price;
     const cardToo = kind === 'sale' && cardEvery() > 0 && Math.floor((total + extra) / cardEvery()) > Math.floor(total / cardEvery());
     const nudge = extra < groupPrice(gid, 1)
-      ? `<div class="g-nudge">Ask: 1 more is only +${extra} tix (${n + 1} for ${groupPrice(gid, n + 1)}, ${(groupPrice(gid, n + 1) / (n + 1)).toFixed(2)} each)${cardToo ? ' + a free Pokémon card' : ''}</div>` : '';
+      ? `<div class="g-nudge">Ask: 1 more is only +${extra} tix (${n + 1} for ${groupPrice(gid, n + 1)})${cardToo ? ' + a free card' : ''}</div>` : '';
     return `<div class="group-row">
-      <div class="g-top"><span>${esc(g.name)} ×${n}</span><b>${price} tix</b></div>
-      <div class="g-sub">${comboText(gid, n)} · ${(price / n).toFixed(2)} each</div>
+      <div class="g-top"><span>${esc(g.name)} ×${n} <small>${comboText(gid, n)} · ${(price / n).toFixed(2)} each</small></span><b>${price} tix</b></div>
       ${nudge}
     </div>`;
   }).join('') : '';
@@ -2717,17 +2720,14 @@ function bonusView(c, nudged) {
   const total = customerTotal(c);
   const due = bonusDue(c);
   const short = (due + 1) * every - total;
-  const ask = !nudged && short <= BONUS_NUDGE_TIX ? `Ask: ${short} more tix gets ${due ? 'another' : 'a'} free Pokémon card` : '';
-  if (!due) return ask ? `<div class="g-nudge" id="bonus-ask">${ask}</div>` : '';
-  const cheapest = Math.max(1, Math.min(...CATEGORIES.find(cat => cat.id === 'prizes').items.map(it => cardsFor(it.id))));
-  const where = due >= cheapest
-    ? 'Say: that\'s a free prize at the Prize Table.'
-    : 'Say: win more at Plinko or Balloon Battle.';
-  return `<div class="bonus" id="bonus">
-    <div class="bonus-title">Give ${plural(due, 'free Pokémon card')}</div>
-    <div class="bonus-text">${where}</div>
-    ${ask ? `<div class="bonus-ask">${ask}</div>` : ''}
-  </div>`;
+  const ask = !nudged && short <= BONUS_NUDGE_TIX
+    ? `<div class="g-nudge" id="bonus-ask">Ask: ${short} more tix = ${due ? 'another' : 'a'} free Pokémon card</div>` : '';
+  if (!due) return ask;
+  // The best prize the free cards cover on their own, so the crew can say it.
+  const covers = CATEGORIES.find(cat => cat.id === 'prizes').items
+    .filter(it => cardsFor(it.id) <= due).sort((a, b) => cardsFor(b.id) - cardsFor(a.id))[0];
+  return `<div class="bonus" id="bonus"><span class="bonus-title">Give ${plural(due, 'free Pokémon card')}</span>
+    <span class="bonus-text">${covers ? `= a free ${esc(covers.name)}` : 'win more at Plinko or Battle'}</span></div>${ask}`;
 }
 
 // Design photos: try each extension in turn, remember which one worked, and
@@ -3628,6 +3628,7 @@ const actions = {
   kpset: keypadSet,
   finish: () => finish(),
   cash: toggleCash,
+  why: () => { view.why = !view.why; render(); },
   demo: d => setDemo(d.field, d.val),
   open: d => { view.modal = { type: d.modal }; render(); },
   close: () => { view.modal = null; render(); },
@@ -3968,6 +3969,10 @@ render();
   toast repeats it. Stats, Totals and Combine count cash sales and cards given. Sales CSV adds paid_with and
   bonus_cards columns at the end; Combine reads older CSVs as ticket sales and keeps every column when
   mixing old and new exports.
+  v1.8.1 (2026-10-16): Smaller Sales prompts so the item list and Done stay on screen: clicker summary on
+  one line with a shorter "1 more" Ask; copter Ask is one line plus one row of small buttons, with the
+  toroidal pitch behind "Why toroidal?"; free-card reminder is one line naming the prize the cards cover.
+  Prize Table defaults: Small 1, Medium 3, Grand 9 cards.
 -->
 </body>
 </html>

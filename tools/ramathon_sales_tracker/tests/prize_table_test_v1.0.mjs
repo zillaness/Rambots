@@ -35,16 +35,16 @@ await page.screenshot({ path: SHOTS + '/v13_1_settings.png' });
 await page.keyboard.press('Escape');
 ok((await page.textContent('.prize-item[data-item="prize_grand"] .stock')).trim() === '3 left', 'grand shows 3 left');
 
-// Trade 1: grand + small = 12 cards, tagged Kid
+// Trade 1: grand + small = 10 cards, tagged Kid
 await page.click('.prize-item[data-item="prize_grand"]');
 await page.click('.prize-item[data-item="prize_small"]');
-ok(await total() === '12 cards', 'trade collects 12 cards (got ' + await total() + ')');
+ok(await total() === '10 cards', 'trade collects 10 cards (got ' + await total() + ')');
 ok((await page.textContent('.p-title')).trim() === 'Trade #1', 'panel says Trade #1');
 ok((await page.textContent('.prize-item[data-item="prize_grand"] .stock')).trim() === '2 left' && await page.isVisible('.prize-item[data-item="prize_grand"] .stock.low'), 'grand 2 left and marked low');
 await page.click('.chip[data-val="kid"]');
 await page.screenshot({ path: SHOTS + '/v13_2_trade.png' });
 await page.keyboard.press('Enter');
-ok((await toastText()).includes('Trade #1 saved · 12 cards'), 'finish trade: ' + await toastText());
+ok((await toastText()).includes('Trade #1 saved · 10 cards'), 'finish trade: ' + await toastText());
 
 // Card price change applies to new trades only
 await page.click('[data-modal="settings"]');
@@ -53,7 +53,7 @@ await page.keyboard.press('Escape');
 await page.click('.prize-item[data-item="prize_grand"]');
 await page.click('.prize-item[data-item="prize_grand"]');
 ok(await total() === '20 cards', 'new grand price 10 x2 = 20');
-ok(await ev(() => computeTotals().prizes.cards) === 12, 'old trade keeps its 12 cards');
+ok(await ev(() => computeTotals().prizes.cards) === 10, 'old trade keeps its 10 cards');
 // Third grand -> stock goes negative -> warning
 await page.click('.prize-item[data-item="prize_grand"]');
 ok((await toastText()).includes('Count says no Grand prize left'), 'out-of-stock warning: ' + await toastText());
@@ -72,14 +72,14 @@ await page.screenshot({ path: SHOTS + '/v13_3_totals.png' });
 const firstRow = await page.$eval('h3 + .big-stats + table tbody tr td', td => td.textContent);
 ok(firstRow === 'Grand prize', 'most popular prize first: ' + firstRow);
 const pz = await ev(() => computeTotals().prizes);
-ok(pz.trades === 2 && pz.given === 3 && pz.cards === 22, 'prize totals ' + JSON.stringify(pz));
+ok(pz.trades === 2 && pz.given === 3 && pz.cards === 20, 'prize totals ' + JSON.stringify(pz));
 ok(await ev(() => computeTotals().tix) === 0, 'cards never count as tickets');
 const [dl] = await Promise.all([page.waitForEvent('download'), page.click('[data-act="export"]')]);
 const csv = fs.readFileSync(await dl.path(), 'utf8').trim().split(/\r\n/);
 const head = csv[0].replace(/^﻿/, '').split(',');
 const rows = csv.slice(1).map(r => r.split(','));
 ok(head[18] === 'cards_redeemed' && head.includes('record_id') && rows.every(r => r.length === head.length), 'CSV has cards_redeemed, record_id and even columns');
-ok(rows.every(r => r[1].startsWith('T') && r[8] === '0') && rows.reduce((s, r) => s + Number(r[18]), 0) === 22, 'trade rows: T#, 0 tix, 22 cards');
+ok(rows.every(r => r[1].startsWith('T') && r[8] === '0') && rows.reduce((s, r) => s + Number(r[18]), 0) === 20, 'trade rows: T#, 0 tix, 20 cards');
 console.log(csv.join('\n'));
 await page.keyboard.press('Escape');
 
