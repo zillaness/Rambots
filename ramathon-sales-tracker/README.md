@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.8.4
+version: 1.8.5
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -70,7 +70,7 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 **Sign up (right side), tickets collected now:**
 1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
 2. Type the first name(s). Enter on player 1 jumps to player 2.
-3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.5.md`.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.6.md`.
 4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, any new unlocks, and the place in line with the wait.
 
 The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
@@ -92,7 +92,7 @@ Payout rules (**Settings > Balloon Battle scoring**, one tap per preset, each sh
 
 | Preset | How it pays | Worst vs Player match |
 |---|---|---|
-| **3 per balloon, must survive to the end** (default) | 3 cards per balloon you popped, only if your robot still has a balloon when the match ends. Knocked out = 0 (or the "Knocked out" cards setting) | 12 cards / 10 tix (2–2 on time) |
+| **3 per balloon, must survive to the end, 1 if knocked out** (default) | 3 cards per balloon you popped, only if your robot still has a balloon when the match ends. Knocked out = 1 pity card (the "Knocked out" cards setting) | 12 cards / 10 tix (2–2 on time) |
 | 3 per balloon, winner only | Winner gets 3 per balloon they popped; tie rule in Settings | 12 / 10 (2–2 tie) |
 | 3 per balloon, winner only + 1 for the loser | Same, loser gets 1 | 12 / 10 |
 | 2 per balloon, everyone | Each player 2 per balloon | 10 / 10 |
@@ -203,3 +203,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.8.2 (2026-10-16): Booth renamed Clickers & Fidget Toys; Creeper infinity cube in the clicker deal; starting stock built in for clickers and copter parts; fixed stray backslashes in the v1.8.1 entry.
 - v1.8.3 (2026-10-16): Real prize buttons with photos (Toy car, Pen, Capsule toy, Cheese squish, Mini plush, Dino plush) plus Other small / medium / grand; Creeper infinity cube photo; free-card reminder names the prize level.
 - v1.8.4 (2026-10-16): Prize Table grouped by level (cheapest first, line between levels). One-line toroidal pitch under the copter Ask. Capsule toy, Mini plush and Prize levels button (v1.8.3).
+- v1.8.5 (2026-10-16): Balloon Battle default: a knocked-out player gets 1 pity card.
