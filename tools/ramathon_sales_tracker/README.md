@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.8.2
+version: 1.8.3
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -70,7 +70,7 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 **Sign up (right side), tickets collected now:**
 1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
 2. Type the first name(s). Enter on player 1 jumps to player 2.
-3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.3.md`.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.4.md`.
 4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, any new unlocks, and the place in line with the wait.
 
 The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
@@ -126,7 +126,7 @@ Something sold out? **Backorder** (next to Log walk-off) logs the item, quantity
 3. With stock entered, each button shows **N left**, turns red when low, and says **None left** at zero (it still lets you log it and warns you to check the bin).
 4. **Totals** lists prizes most-popular first, cards redeemed, average cards per trade, and an estimated prize cost.
 
-Prize prices: Small 1, Medium 3, Grand 9 cards (Sam, 2026-10-16). Card price changes in Settings apply to new trades only. Real prize names and photos can still be added.
+Prize buttons: **Toy car** (1 card), **Pen** (1), **Cheese squish** (3), **Dino plush** (9), plus **Other small / medium / grand prize** (1 / 3 / 9) for anything without its own button, such as the capsule toys. Levels: small 1 card, medium 3, grand 9 (Sam, 2026-10-16). Card price changes in Settings apply to new trades only.
 
 ## Everywhere
 
@@ -151,7 +151,7 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 | Instant rematch (per player) | 5 |
 | Unlock wheel spikes (once) | 1 |
 | Unlock buzz saw (once) | 2 |
-| Prize Table (cards, not tix) | Small 1, Medium 3, Grand 9 (editable) |
+| Prize Table (cards, not tix) | Toy car 1, Pen 1, Cheese squish 3, Dino plush 9, Other small / medium / grand 1 / 3 / 9 (editable) |
 
 ## Exports and combining the laptops
 
@@ -201,3 +201,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.8 (2026-10-16): Cash sale button (full price, counts toward the goal, kept out of the ticket boxes). Free Pokémon card with purchase (1 per 10 tix) with panel reminder, Ask line and toast. New CSV columns `paid_with` and `bonus_cards`. Source branch renamed `ramathon-carnival`.
 - v1.8.1 (2026-10-16): Smaller Sales prompts (clicker summary on one line, copter Ask in one row with the pitch behind "Why toroidal?", free-card reminder on one line naming the prize it covers) so the panel fits a 768-pixel screen. Prize defaults Small 1, Medium 3, Grand 9.
 - v1.8.2 (2026-10-16): Booth renamed Clickers & Fidget Toys; Creeper infinity cube in the clicker deal; starting stock built in for clickers and copter parts; fixed stray backslashes in the v1.8.1 entry.
+- v1.8.3 (2026-10-16): Real prize buttons with photos (Toy car, Pen, Cheese squish, Dino plush) plus Other small / medium / grand; Creeper infinity cube photo; free-card reminder names the prize level.

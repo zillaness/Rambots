@@ -1,6 +1,6 @@
 /**
- * @file prize_table_test_v1.1.mjs
- * @version 1.1
+ * @file prize_table_test_v1.1.1.mjs
+ * @version 1.1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -56,7 +56,7 @@ ok(await total() === '20 cards', 'new grand price 10 x2 = 20');
 ok(await ev(() => computeTotals().prizes.cards) === 10, 'old trade keeps its 10 cards');
 // Third grand -> stock goes negative -> warning
 await page.click('.prize-item[data-item="prize_grand"]');
-ok((await toastText()).includes('Count says no Grand prize left'), 'out-of-stock warning: ' + await toastText());
+ok((await toastText()).includes('Count says no Other grand prize left'), 'out-of-stock warning: ' + await toastText());
 ok((await page.textContent('.prize-item[data-item="prize_grand"] .stock')).trim() === 'None left', 'pill says None left');
 await page.keyboard.press('Control+z');
 ok(await total() === '20 cards', 'undo third grand');
@@ -70,7 +70,7 @@ await page.keyboard.press('Enter');
 await page.click('[data-modal="totals"]');
 await page.screenshot({ path: SHOTS + '/v13_3_totals.png' });
 const firstRow = await page.$eval('h3 + .big-stats + table tbody tr td', td => td.textContent);
-ok(firstRow === 'Grand prize', 'most popular prize first: ' + firstRow);
+ok(firstRow === 'Other grand prize', 'most popular prize first: ' + firstRow);
 const pz = await ev(() => computeTotals().prizes);
 ok(pz.trades === 2 && pz.given === 3 && pz.cards === 20, 'prize totals ' + JSON.stringify(pz));
 ok(await ev(() => computeTotals().tix) === 0, 'cards never count as tickets');
@@ -117,4 +117,5 @@ await browser.close();
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
  * v1.1 (2026-10-16): Prize defaults Small 1, Medium 3, Grand 9 (v1.8.1).
+ * v1.1.1 (2026-10-16): Placeholder prizes renamed Other small / medium / grand prize (v1.8.3).
  */

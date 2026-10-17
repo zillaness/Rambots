@@ -1,6 +1,6 @@
 /**
- * @file exports_combine_test_v1.1.mjs
- * @version 1.1
+ * @file exports_combine_test_v1.1.1.mjs
+ * @version 1.1.1
  * @author Sam Cao
  * @created 2026-10-16
  * @lastUpdated 2026-10-16
@@ -152,7 +152,7 @@ const r = await page.evaluate(() => combineResult());
 ok(r.byCat.clickers === 20 && r.byCat.copters === 3 && r.byCat.battle === 5, 'combined per booth (void respected, no double count): ' + JSON.stringify(r.byCat));
 ok(r.laptops === 3 && r.dropped > 0, `3 laptops, ${r.dropped} duplicate rows ignored`);
 ok(cmb.includes('108') && cmb.includes('goal 1300'), 'event total 20+3+5+80 = 108 vs goal 1300');
-ok(r.prizes['Medium prize'] === 1 && r.cardsPaid === 6 && r.cardsRedeemed === 3, 'cards paid 6 / redeemed 3 (Medium prize), prize counted');
+ok(r.prizes['Other medium prize'] === 1 && r.cardsPaid === 6 && r.cardsRedeemed === 3, 'cards paid 6 / redeemed 3 (Medium prize), prize counted');
 ok(cmb.includes('not a sales CSV'), 'stats file skipped with a note');
 await page.screenshot({ path: SHOTS + '/v14_7_combine.png', fullPage: true });
 const merged = await download(page, '[data-act="combinedownload"]');
@@ -166,4 +166,5 @@ await browser.close();
 /** CHANGELOG
  * v1.0 (2026-10-16): Initial commit from the build session (tracker v1.7.1).
  * v1.1 (2026-10-16): Shorter clicker Ask wording; Medium prize is 3 cards (v1.8.1).
+ * v1.1.1 (2026-10-16): Medium placeholder renamed Other medium prize (v1.8.3).
  */

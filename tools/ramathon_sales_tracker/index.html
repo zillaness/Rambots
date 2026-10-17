@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.8.2
+  version: 1.8.3
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -812,14 +812,22 @@ const CLICKER_DESIGNS = [
 ];
 const PHOTO_DIR = 'clicker_photos/';
 
-// Prize Table: [id, button label, cards]. Photos go in prize_photos/<id>.jpg.
-// Placeholders until the real prize list and photos arrive. Card prices and
-// starting stock can be changed per laptop in Settings.
+// Prize Table: [id, button label, cards, letter for a button with no photo].
+// Photos go in prize_photos/<id>.jpg. Levels (Sam, Oct 16): small 1 card,
+// medium 3, grand 9. The three "Other" buttons cover any prize without its own
+// button (the capsule toy for now) and keep the ids of the v1.3 placeholders.
+// Card prices and starting stock can be changed per laptop in Settings.
 const PRIZES = [
-  ['small', 'Small prize', 1],
-  ['medium', 'Medium prize', 3],
-  ['grand', 'Grand prize', 9],
+  ['toy_car', 'Toy car', 1],
+  ['pen', 'Pen', 1],
+  ['cheese_squish', 'Cheese squish', 3],
+  ['dino_plush', 'Dino plush', 9],
+  ['small', 'Other small prize', 1, '1'],
+  ['medium', 'Other medium prize', 3, '3'],
+  ['grand', 'Other grand prize', 9, '9'],
 ];
+// Prize levels for the free-card reminder, highest first.
+const PRIZE_LEVELS = [['prize_grand', 'Grand'], ['prize_medium', 'Medium'], ['prize_small', 'Small']];
 const PHOTO_EXTS = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
 const COPTER_PHOTO_DIR = 'copter_photos/';
 
@@ -891,7 +899,7 @@ const CATEGORIES = [
     id: 'prizes', kind: 'prizes', name: 'Prize Table', theme: 'paper', defaultOn: false, layout: 'photos',
     hint: 'Trade Pokemon cards for prizes',
     tip: 'Tap a prize = +1<br>Collect the cards shown on the right',
-    items: PRIZES.map(([id, name, cards]) => ({ id: 'prize_' + id, name, cards, photo: id, photoDir: 'prize_photos/' })),
+    items: PRIZES.map(([id, name, cards, letter]) => ({ id: 'prize_' + id, name, cards, photo: letter ? null : id, letter, photoDir: 'prize_photos/' })),
   },
 ];
 
@@ -2734,11 +2742,10 @@ function bonusView(c, nudged) {
   const ask = !nudged && short <= BONUS_NUDGE_TIX
     ? `<div class="g-nudge" id="bonus-ask">Ask: ${short} more tix = ${due ? 'another' : 'a'} free Pokémon card</div>` : '';
   if (!due) return ask;
-  // The best prize the free cards cover on their own, so the crew can say it.
-  const covers = CATEGORIES.find(cat => cat.id === 'prizes').items
-    .filter(it => cardsFor(it.id) <= due).sort((a, b) => cardsFor(b.id) - cardsFor(a.id))[0];
+  // The best prize level the free cards cover on their own, so the crew can say it.
+  const level = PRIZE_LEVELS.find(([id]) => cardsFor(id) <= due);
   return `<div class="bonus" id="bonus"><span class="bonus-title">Give ${plural(due, 'free Pokémon card')}</span>
-    <span class="bonus-text">${covers ? `= a free ${esc(covers.name)}` : 'win more at Plinko or Battle'}</span></div>${ask}`;
+    <span class="bonus-text">${level ? `= a free ${level[1]} prize` : 'win more at Plinko or Battle'}</span></div>${ask}`;
 }
 
 // Design photos: try each extension in turn, remember which one worked, and
@@ -3988,6 +3995,9 @@ render();
   clicker deal (photo: clicker_photos/creeper_cube.jpg). Starting stock built in from Sam's counts: 13 clicker
   designs plus the cube, and copter parts (launchers 93, propellers 158, toroidal 44, ripcords 105). Combine
   still reads exports that say "Clickers".
+  v1.8.3 (2026-10-16): Real prize buttons with photos: Toy car 1 card, Pen 1, Cheese squish 3, Dino plush 9,
+  plus Other small / medium / grand prize buttons (1 / 3 / 9) for anything else. Creeper infinity cube photo.
+  The free-card reminder names the prize level (Small / Medium / Grand).
 -->
 </body>
 </html>

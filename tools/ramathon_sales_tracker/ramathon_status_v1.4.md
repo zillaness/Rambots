@@ -1,6 +1,6 @@
 ---
-file: ramathon_status_v1.3.md
-version: 1.3
+file: ramathon_status_v1.4.md
+version: 1.4
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Ram-a-thon 2026: status and handoff
 
-Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.2** is live.
+Event: **Saturday Oct 17, 10:30 AM to 1:00 PM, CCA Hayward.** Tracker **v1.8.3** is live.
 
 ## Where things are
 
@@ -69,6 +69,8 @@ Deploy rule: copy files with `cp` (rsync is not installed in the cloud container
 - Free Pokémon card for every 10 tix spent, with a reminder on screen. It costs little and sends kids to Plinko or Balloon Battle.
 - 30 tix earns a free prize: 3 free cards. Nothing extra on top. (Claude proposed this reading; Sam approved it.) With the prize prices below, 1 free card is a Small prize and 3 is a Medium prize.
 - Prize Table prices: Small 1 card, Medium 3, Grand 9 (Sam said "1 ticket" for the Small prize; the tracker reads it as 1 card).
+- Prize levels (Sam, unsure, Oct 16): Dino plush grand, Cheese squish medium, Toy car small, Pen small ("I would assume"). Capsule toy level not set.
+- One source branch: the old branch's photo uploads were merged into `ramathon-carnival`.
 - The Sales prompts (clicker Ask, copter Ask, free-card box) were too big and covered the panel; v1.8.1 shrinks them.
 - The Pokémon card is the voucher (screens keep saying "Pokémon card").
 - Creeper infinity fidget cubes go under clickers at the clicker price (mix and match). The booth is "Clickers & Fidget Toys".
@@ -111,11 +113,11 @@ Check these with the team. Everything except the Plinko board is a Settings chan
 
 1. Burger count if any get printed tonight (Settings > Starting stock on the sales laptop).
 2. Pre-bagged kit counts, if any (the parts counts are in).
-3. Prize list: how many of each prize, and optional real names and photos (upload to `ramathon-sales-tracker/prize_photos/`). Card prices are decided.
+3. Capsule toy level (small, medium or grand), and how many of each prize if you want live stock.
 4. Plinko board facts: peg rows, number of drop holes, final slot payouts, tickets per drop. Optional: 50 test-drop tallies.
 5. Plinko stickers: how many and the rough cost each.
 6. Toroidal pitch wording check (`TOROIDAL_PITCH` in `index.html`).
-7. A photo of the Creeper infinity cube: `ramathon-sales-tracker/clicker_photos/creeper_cube.jpg` on the presentations branch.
+7. Photos go to the live branch `presentations`, folder `ramathon-sales-tracker/clicker_photos/` or `prize_photos/` (or tell Claude where they are).
 8. Controls script for the battle robots.
 9. Any new clicker designs (name and photo).
 10. A stack of Pokémon cards at the Sales table for the free card with purchase.
@@ -135,7 +137,7 @@ These are tracked with notes on the open-items page.
   - The house driver's target (vs House at or under 1 card per ticket).
   - Refunds.
 - **Plinko:** drop rule and multiplier, slot payouts, tickets per drop.
-- **Prize Table:** cards per prize.
+- **Prize Table:** prize levels (Sam was unsure: dino grand, cheese medium, toy car and pen small, capsule toy not set).
 - **Sales:** confirm prices, goals, and who follows up on backorders. Free card rate (1 per 10 tix) and the 30-tix free prize.
 - **Partner club:** which club, and what each side gives referred kids (a freebie, not a discount).
 - **Running the day:** who runs each laptop, and who exports hourly and combines at the end.
@@ -164,3 +166,4 @@ These are tracked with notes on the open-items page.
 - v1.1 (2026-10-16): Tracker v1.8 (cash sale button, free Pokémon card per 10 tix). Sam's sales add-on decisions. Source branch renamed `ramathon-carnival`.
 - v1.2 (2026-10-16): Tracker v1.8.1 (smaller Sales prompts). Prize prices decided: Small 1, Medium 3, Grand 9.
 - v1.3 (2026-10-16): Tracker v1.8.2. Card is the voucher; Creeper infinity cube under Clickers & Fidget Toys; clicker and copter stock counts.
+- v1.4 (2026-10-16): Tracker v1.8.3. Prize buttons and levels; photos; old branch merged into ramathon-carnival.
