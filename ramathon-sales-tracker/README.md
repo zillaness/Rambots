@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.8.1
+version: 1.8.2
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -10,13 +10,13 @@ ai_update: Update last_updated and version. Keep the filename README.md. Append 
 
 # Ramathon Sales Tracker
 
-One web page with huge buttons for the Ram-a-thon booths: Clickers and Copters (shared sales laptop), Balloon Battle (its own laptop) and the Prize Table (its own laptop, Pokemon cards in, prizes out). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
+One web page with huge buttons for the Ram-a-thon booths: Clickers & Fidget Toys and Copters (shared sales laptop), Balloon Battle (its own laptop) and the Prize Table (its own laptop, Pokemon cards in, prizes out). Every tap saves to that laptop's browser immediately. Once the page has been opened once, it reopens even with no wifi.
 
 ## Event-day links (one per laptop)
 
 | Laptop | Link | What it shows |
 |---|---|---|
-| Sales table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales | Clickers and Copters |
+| Sales table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=sales | Clickers & Fidget Toys, and Copters |
 | Balloon Battle | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=battle | Battle queue and matches |
 | Prize Table | https://zillaness.github.io/Rambots/ramathon-sales-tracker/?booth=prizes | Card-for-prize trades |
 
@@ -49,7 +49,7 @@ The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) 
 
 | Do this | What happens |
 |---|---|
-| Tap **Clickers** or **Copters** | Opens that booth's photo buttons |
+| Tap **Clickers & Fidget Toys** or **Copters** | Opens that booth's photo buttons |
 | Tap an item (clickers: tap the design's photo) | Adds 1 to the current customer |
 | The number in the right panel | Keypad to punch in an exact quantity |
 | **−** / **+** in the right panel | Adjust one line |
@@ -70,7 +70,7 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 **Sign up (right side), tickets collected now:**
 1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
 2. Type the first name(s). Enter on player 1 jumps to player 2.
-3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.2.md`.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.3.md`.
 4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, any new unlocks, and the place in line with the wait.
 
 The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
@@ -117,7 +117,7 @@ Something sold out? **Backorder** (next to Log walk-off) logs the item, quantity
 
 ## Stock left
 
-**Settings > Starting stock:** type how many of each clicker design and each copter part you brought (blank = not tracked). Buttons then show **N left**, turn red when low and say **None left** at zero (tapping still works, with a warning that suggests a Backorder). Copters count by part: a Full kit uses a launcher, a propeller and a ripcord; a toroidal kit uses a toroidal propeller instead. Open, sold and walked-off items come off the count; voids put them back. Totals has a **Left** column and a **Copter parts left** table.
+**Starting stock is built in** from Sam's counts (Oct 16): clickers Egg tart 8, Hot dog bun 22, S'mores 9, Chocolate bar 15, Avocado 12, Dumpling 24, Creeper 10, Oreo 4, Spam musubi 6, Salmon nigiri 23, LEGO brick 4, WD-40 15, Creeper infinity cube 9; Burger and Other design not tracked. Copter parts: launchers 93, propellers 158, toroidal propellers 44, ripcords 105. **Settings > Starting stock** changes any of them on that laptop (blank = back to the built-in count). Buttons then show **N left**, turn red when low and say **None left** at zero (tapping still works, with a warning that suggests a Backorder). Copters count by part: a Full kit uses a launcher, a propeller and a ripcord; a toroidal kit uses a toroidal propeller instead. Open, sold and walked-off items come off the count; voids put them back. Totals has a **Left** column and a **Copter parts left** table.
 
 ## Prize Table
 
@@ -140,7 +140,7 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 
 | Item | Tix |
 |---|---|
-| Fidget clicker (any design) | 1 = 4, 2 = 7, 3 = 10, stacked after 3 |
+| Fidget clicker (any design) or Creeper infinity cube, mixed freely | 1 = 4, 2 = 7, 3 = 10, stacked after 3 |
 | Pull copter full kit (launcher + propeller + ripcord) | 5 |
 | Kit with toroidal propeller | 6 |
 | Launcher only | 3 |
@@ -199,4 +199,5 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.7 (2026-10-16): Balloon Battle sign-up flow (vs House / vs Player / Solo, named weapons that unlock once, tickets at sign-up, weapon Ask line and pop-up), queue of paid matches with waits next to names, start any match, push down, refund, pair solos; pinned match with GO, Pause, Edit clock, Restart, Change weapons, Back to queue; Instant rematch (5, once, short line) and Rematch back in line.
 - v1.7.1 (2026-10-16): Removed sticker wording (the weapon unlock token is undecided); points to the status file for decisions vs open items.
 - v1.8 (2026-10-16): Cash sale button (full price, counts toward the goal, kept out of the ticket boxes). Free Pokémon card with purchase (1 per 10 tix) with panel reminder, Ask line and toast. New CSV columns `paid_with` and `bonus_cards`. Source branch renamed `ramathon-carnival`.
-- v1.8.1 (2026-10-16): Smaller Sales prompts (clicker summary on one line, copter Ask in one row with the pitch behind \"Why toroidal?\", free-card reminder on one line naming the prize it covers) so the panel fits a 768-pixel screen. Prize defaults Small 1, Medium 3, Grand 9.
+- v1.8.1 (2026-10-16): Smaller Sales prompts (clicker summary on one line, copter Ask in one row with the pitch behind "Why toroidal?", free-card reminder on one line naming the prize it covers) so the panel fits a 768-pixel screen. Prize defaults Small 1, Medium 3, Grand 9.
+- v1.8.2 (2026-10-16): Booth renamed Clickers & Fidget Toys; Creeper infinity cube in the clicker deal; starting stock built in for clickers and copter parts; fixed stray backslashes in the v1.8.1 entry.

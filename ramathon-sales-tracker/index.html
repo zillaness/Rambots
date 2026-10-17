@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   file: index.html (Ramathon sales tracker)
-  version: 1.8.1
+  version: 1.8.2
   author: Sam Cao
   created: 2026-10-16
   last_updated: 2026-10-16
@@ -139,6 +139,7 @@
     text-align: center;
   }
   .cat .c-name { font-size: clamp(30px, 4.6vw, 84px); font-weight: 700; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.02em; }
+  .cat .c-name.long { font-size: clamp(24px, 3vw, 56px); }
   .cat .c-photo { width: 100%; flex: 1; min-height: 0; max-height: 55%; border-radius: 16px; overflow: hidden; background: rgba(255, 255, 255, 0.12); }
   .cat .c-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cat .c-photo.contain { background: #fff; }
@@ -806,6 +807,8 @@ const CLICKER_DESIGNS = [
   ['lego_brick', 'LEGO brick', 'lego'],
   ['wd40', 'WD-40'],
   ['burger', 'Burger'],
+  // Not a clicker, but sold in the same booth at the clicker price (mix and match).
+  ['creeper_cube', 'Creeper infinity cube'],
 ];
 const PHOTO_DIR = 'clicker_photos/';
 
@@ -823,7 +826,15 @@ const COPTER_PHOTO_DIR = 'copter_photos/';
 // Starting stock, used for the "N left" counts (blank / missing = not tracked).
 // Clickers count per design (item id); copters count per part, because a kit
 // is built from parts. Settings can override any number on the day.
-const STOCK_DEFAULTS = {};
+// Starting stock Sam counted the night before (2026-10-16). Settings can override
+// any of these on a laptop; Burger and "Other design" are not tracked.
+const STOCK_DEFAULTS = {
+  clicker_egg_tart: 8, clicker_hot_dog_bun: 22, clicker_smores: 9, clicker_chocolate_bar: 15,
+  clicker_avocado: 12, clicker_dumpling: 24, clicker_creeper: 10, clicker_oreo: 4,
+  clicker_spam_musubi: 6, clicker_salmon_nigiri: 23, clicker_lego_brick: 4, clicker_wd40: 15,
+  clicker_creeper_cube: 9,
+  part_launcher: 93, part_propeller: 158, part_toroidal: 44, part_ripcord: 105,
+};
 const COPTER_PARTS = [
   ['part_launcher', 'Launchers'],
   ['part_propeller', 'Propellers'],
@@ -853,10 +864,10 @@ const TOROIDAL_PITCH = 'Looped blades instead of straight ones: the shape engine
 
 const CATEGORIES = [
   {
-    id: 'clickers', kind: 'sale', name: 'Clickers', theme: 'yellow', walkoffs: true, layout: 'photos',
+    id: 'clickers', kind: 'sale', name: 'Clickers & Fidget Toys', theme: 'yellow', walkoffs: true, layout: 'photos',
     tilePhoto: PHOTO_DIR + 'clickerblueswitch.jpg', tileFit: 'contain', // home-screen tile
     hint: '1 = 4 tix · 2 = 7 · 3 = 10',
-    tip: 'Tap a design = +1 · mix any designs<br>1 = 4 · 2 = 7 · 3 = 10 · 4 = 14 · 5 = 17 · 6 = 20',
+    tip: 'Tap a design = +1 · mix any designs (cube too)<br>1 = 4 · 2 = 7 · 3 = 10 · 4 = 14 · 5 = 17 · 6 = 20',
     items: CLICKER_DESIGNS.map(([id, name, photo]) => ({ id: 'clicker_' + id, name, photo: photo || id, group: 'clicker' }))
       // "clicker" keeps its v1.0 id so older saved sales still load.
       .concat([{ id: 'clicker', name: 'Other design', group: 'clicker' }]),
@@ -2283,7 +2294,7 @@ async function loadCombineFiles(fileList) {
 }
 
 // Old category names from earlier versions map onto today's booths.
-const CAT_BY_NAME = { 'Fidget Clickers': 'clickers', 'Pull Copters': 'copters' };
+const CAT_BY_NAME = { 'Fidget Clickers': 'clickers', Clickers: 'clickers', 'Pull Copters': 'copters' };
 CATEGORIES.forEach(cat => { CAT_BY_NAME[cat.name] = cat.id; });
 
 function combineResult() {
@@ -2543,7 +2554,7 @@ function homeView(cats, c) {
     return `<button class="cat theme-${cat.theme}" data-act="cat" data-cat="${cat.id}">
       ${badge ? `<span class="badge">${esc(badge)}</span>` : ''}
       ${cat.tilePhoto ? `<span class="c-photo${cat.tileFit === 'contain' ? ' contain' : ''}"><img alt="" draggable="false" src="${cat.tilePhoto}"></span>` : ''}
-      <span class="c-name">${esc(cat.name)}</span>
+      <span class="c-name${cat.name.length > 14 ? ' long' : ''}">${esc(cat.name)}</span>
       <span class="c-hint">${esc(hint)}</span>
       <span class="c-go">Tap to open</span>
     </button>`;
@@ -3973,6 +3984,10 @@ render();
   one line with a shorter "1 more" Ask; copter Ask is one line plus one row of small buttons, with the
   toroidal pitch behind "Why toroidal?"; free-card reminder is one line naming the prize the cards cover.
   Prize Table defaults: Small 1, Medium 3, Grand 9 cards.
+  v1.8.2 (2026-10-16): Booth renamed "Clickers & Fidget Toys". New Creeper infinity cube button, priced in the
+  clicker deal (photo: clicker_photos/creeper_cube.jpg). Starting stock built in from Sam's counts: 13 clicker
+  designs plus the cube, and copter parts (launchers 93, propellers 158, toroidal 44, ripcords 105). Combine
+  still reads exports that say "Clickers".
 -->
 </body>
 </html>
