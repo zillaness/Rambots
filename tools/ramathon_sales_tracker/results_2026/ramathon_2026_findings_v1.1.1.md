@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.md
-version: 1.1
+file: ramathon_2026_findings_v1.1.1.md
+version: 1.1.1
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-17
@@ -18,7 +18,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.1.png` | 1080x1920 recap image (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `ramathon_2026_infographic_v1.1.1.png` | 1080x1920 recap image (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
 | `event_ticket_estimates_v1.3.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -205,3 +205,4 @@ Why it dropped is a guess until we test it:
 
 - v1.0 (2026-10-17): Initial release.
 - v1.1 (2026-10-17): Added how we stacked up against other groups (Rambots corrected to 830 + ~70 fed), Plinko vs the average group, and prize sell-outs. Dumpling fact now says the sale cleared out every one we had left. Infographic is now v1.1 (1080x1920).
+- v1.1.1 (2026-10-17): Points to infographic v1.1.1, whose club chart shows only Rambots, Class Gov, Exec Student Gov, and the average group. The full top-6 table stays here.
