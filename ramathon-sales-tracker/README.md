@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.8
+version: 1.8.1
 author: Sam Cao
 created: 2026-10-16
 last_updated: 2026-10-16
@@ -55,11 +55,11 @@ The `?booth=` part locks the laptop to its booth. The plain link (no `?booth=`) 
 | **−** / **+** in the right panel | Adjust one line |
 | **Kid / Teen / Adult**, **Male / Female** | Optional. Tag who the items are *for*. Tap again to clear |
 | **💵** (small button, top right of the panel) | Marks the whole sale as a **cash sale** at full price ($1 per ticket). The panel says **Collect cash $N**. Tap again (or Undo) to switch back to tickets |
-| Yellow **Give N free Pokémon cards** box | Hand the cards over with the items: 1 free card for every 10 tix in one sale (3 cards at 30 tix is enough for a free prize) |
+| Yellow **Give N free Pokémon cards** box | Hand the cards over with the items: 1 free card for every 10 tix in one sale. The box names the prize the cards cover (1 card = a Small prize, 3 = Medium, 9 = Grand) |
 | **Done · Next customer** (or Enter) | Saves the sale, resets the panel. The toast repeats how many free cards to give |
 | **Log walk-off** | Stock that left without tickets (demo unit, giveaway, broken) |
 
-**Free Pokémon card with purchase.** When a sale is 1 to 3 tix short of the next card, the panel asks for it ("Ask: 2 more tix gets a free Pokémon card"; with 2 clickers the "1 more" line says "+ a free Pokémon card"). Script: "Win more at Plinko or Balloon Battle and trade them at the Prize Table." Change the rate or turn it off (0) in **Settings > Free Pokémon card with purchase**; changes apply to new sales.
+**Free Pokémon card with purchase.** When a sale is 1 to 3 tix short of the next card, the panel asks for it ("Ask: 2 more tix = a free Pokémon card"; with 2 clickers the "1 more" line says "+ a free card"). Script: "Win more at Plinko or Balloon Battle and trade them at the Prize Table." Change the rate or turn it off (0) in **Settings > Free Pokémon card with purchase**; changes apply to new sales.
 
 **Cash sales** count toward the goal and pace like any sale, but their money goes in the cash box, so Totals leaves them out of "Tickets that should be in the boxes" and shows them on their own line.
 
@@ -70,7 +70,7 @@ The panel shows **Collect N tix**. When one customer buys from both booths it al
 **Sign up (right side), tickets collected now:**
 1. Pick **vs House** (one player), **vs Player** (came as a pair) or **Solo** (wants an opponent).
 2. Type the first name(s). Enter on player 1 jumps to player 2.
-3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.1.md`.
+3. Read the red **Ask** line and tap weapons per player. One tap = **unlock** (wheel spikes +1, buzz saw +2). Two taps = **already unlocked** earlier (free). Three taps = none. Weapons unlock once. How the crew checks an earlier unlock (sticker, stamp or nothing) is not decided yet; see `ramathon_status_v1.2.md`.
 4. **Add to queue · collect N tix.** If a player has no weapon, a pop-up asks about weapons first. The toast says what to collect, any new unlocks, and the place in line with the wait.
 
 The short scoring script sits under the form; **Rules / script** has the full rules, the volunteer script and a slot for the controls script.
@@ -109,7 +109,7 @@ vs House can pay up to 9 cards for 5 tix in any per-balloon preset; the house dr
 ## Upsell prompts
 
 - **Clickers:** the right panel breaks the price into deals (e.g. `3 for 10 + 2 for 7 · 3.40 each`) and, when it saves money, says "Ask: 1 more is only +3 tix".
-- **Copters:** with a Full kit in the cart, a red **Ask** box offers **Upgrade 1 kit to toroidal (+1)** (with a one-line explanation of what toroidal means), then **+ Extra propeller (1)** and **+ Extra toroidal (2)**. The wording lives in `TOROIDAL_PITCH` at the top of the script.
+- **Copters:** with a Full kit in the cart, a small red **Ask: toroidal upgrade?** box offers **Toroidal kit +1**, **+ Prop 1** and **+ Toroidal prop 2** in one row. Tap **Why toroidal?** for the one-line pitch (it lives in `TOROIDAL_PITCH` at the top of the script).
 
 ## Backorders
 
@@ -126,7 +126,7 @@ Something sold out? **Backorder** (next to Log walk-off) logs the item, quantity
 3. With stock entered, each button shows **N left**, turns red when low, and says **None left** at zero (it still lets you log it and warns you to check the bin).
 4. **Totals** lists prizes most-popular first, cards redeemed, average cards per trade, and an estimated prize cost.
 
-Card price changes in Settings apply to new trades only. The buttons are placeholders (Small 3, Medium 6, Grand 9) until the real prize list and photos arrive.
+Prize prices: Small 1, Medium 3, Grand 9 cards (Sam, 2026-10-16). Card price changes in Settings apply to new trades only. Real prize names and photos can still be added.
 
 ## Everywhere
 
@@ -151,7 +151,7 @@ Sale prices live in `PRICE_GROUPS` and `CATEGORIES` at the top of the script (cl
 | Instant rematch (per player) | 5 |
 | Unlock wheel spikes (once) | 1 |
 | Unlock buzz saw (once) | 2 |
-| Prize Table (cards, not tix) | Small 3, Medium 6, Grand 9 (editable) |
+| Prize Table (cards, not tix) | Small 1, Medium 3, Grand 9 (editable) |
 
 ## Exports and combining the laptops
 
@@ -180,7 +180,7 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 
 - Data lives in each laptop's browser. Clearing browser data deletes it, so export before anyone touches browser settings.
 - Undo history resets when the page reloads (the saved data doesn't).
-- On a screen 768 pixels tall, a sale with the copter Ask box pushes **Done** below the edge of the panel. Press **Enter**, scroll the panel, or zoom Chrome to 80% (Ctrl and minus) on that laptop.
+- On a screen 768 pixels tall the whole panel fits, Done included. With 3 or more different items the item list in the panel scrolls (the photo buttons still show ×N). If Done ever goes below the edge, press **Enter** or zoom Chrome to 90% (Ctrl and minus).
 - A local copy works too if you download the whole `ramathon-sales-tracker` folder (photos included) and always open it from the same place; it just won't pick up updates. The hosted link is simpler.
 - Each laptop, and each booth link, keeps its own data. The hosted link and a local copy are different storage, so pick one and stick to it.
 
@@ -199,3 +199,4 @@ Sales CSV columns: `station, record (S = sale, T = prize trade, B = battle, W = 
 - v1.7 (2026-10-16): Balloon Battle sign-up flow (vs House / vs Player / Solo, named weapons that unlock once, tickets at sign-up, weapon Ask line and pop-up), queue of paid matches with waits next to names, start any match, push down, refund, pair solos; pinned match with GO, Pause, Edit clock, Restart, Change weapons, Back to queue; Instant rematch (5, once, short line) and Rematch back in line.
 - v1.7.1 (2026-10-16): Removed sticker wording (the weapon unlock token is undecided); points to the status file for decisions vs open items.
 - v1.8 (2026-10-16): Cash sale button (full price, counts toward the goal, kept out of the ticket boxes). Free Pokémon card with purchase (1 per 10 tix) with panel reminder, Ask line and toast. New CSV columns `paid_with` and `bonus_cards`. Source branch renamed `ramathon-carnival`.
+- v1.8.1 (2026-10-16): Smaller Sales prompts (clicker summary on one line, copter Ask in one row with the pitch behind \"Why toroidal?\", free-card reminder on one line naming the prize it covers) so the panel fits a 768-pixel screen. Prize defaults Small 1, Medium 3, Grand 9.
