@@ -1,10 +1,10 @@
 ---
-file: ramathon_2026_findings_v1.0.md
-version: 1.0
+file: ramathon_2026_findings_v1.1.md
+version: 1.1
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-17
-description: Ram-a-thon 2026 results for team and mentors: fun data points, clicker rankings, stockouts, themes, demographics, Plinko estimate, copters, and next-year changes.
+description: Ram-a-thon 2026 results for team and mentors: fun data points, clicker rankings, stockouts, themes, demographics, Plinko estimate, copters, how we compared to other groups, and next-year changes.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 ---
 
@@ -18,13 +18,14 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.0.png` | 1080x1350 recap image (source: the `.html` next to it) |
+| `ramathon_2026_infographic_v1.1.png` | 1080x1920 recap image (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `event_ticket_estimates_v1.3.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
 
 ## Fun data points
 
-1. **One parent bought 8 Dumplings in one sale** (27 tickets), the biggest sale of the day. It also emptied the Dumpling bin.
+1. **One parent cleared us out of Dumplings:** all 8 we had left at the time, in one sale at 12:42 PM (27 tickets). It was the biggest sale of the day.
 2. **Creeper sold out first.** All 10 were gone by 11:48 AM, about 90 minutes before the last sale.
 3. **Plinko took about 330 drops** (inferred), about 3.3x its 100-ticket goal. It was our second-biggest booth, and we have zero data on it.
 4. **The last two sales, 12 seconds apart,** took the final 4 Salmon nigiri and the last 2 Spam musubi.
@@ -38,6 +39,8 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 12. **24 free Pokémon cards** went out with purchases, across 23 sales.
 13. **20 sales were exactly the 3-for-10 deal.** More kids stopped at 3 clickers (20 sales) than at 2 (12).
 14. **88 copter launchers** are still in the bin.
+15. **Plinko alone (~330 tickets) out-earned the average group** at the event (~325).
+16. **The Prize Table ran out** of cheese squishes and dino plushes.
 
 ## Clicker leaderboard
 
@@ -147,6 +150,25 @@ Every gender-tagged copter buyer was a boy. Groups under about 5 sales are hints
 
 Plinko math: 900 gross, minus 500 to 530 for clickers and copters, minus 50 to 60 for Battle, leaves 310 to 350. At 1 ticket per drop, that's about 330 drops.
 
+## How we stacked up against other groups
+
+The event sold 7,000 tickets across 20 groups. Ours is the only real count; every other group is eyeballed from container photos (±30%, see `event_ticket_estimates_v1.3.md`).
+
+| Group | Tickets |
+|---|---|
+| **Rambots** | **830 in the box, + ~70 fed to helpers (~900 earned)** |
+| Exec Student Gov | ~675 |
+| Class Gov (stuffed bag, grade unknown) | ~675 |
+| WCO | ~350 |
+| Business Club | ~350 |
+| Fitness | ~350 |
+| Average of the other 19 | ~325 |
+
+- **About 12%** of every ticket at the event landed in our box.
+- That's **about 2.5x** the average group.
+- **Most likely #1** of 20. Exec and the class gov bag could each plausibly be 500 to 850, so it isn't certain.
+- The ~70 tickets we fed helpers were spent at food booths, so they sit in other groups' containers.
+
 ## Copters
 
 5 kits for 27 tickets, about 24 net. Last year was about 450 net at the same prices, so we're **down about 95%**. 2 of the 5 kits were toroidal. All 3 gender-tagged buyers were boys.
@@ -182,3 +204,4 @@ Why it dropped is a guess until we test it:
 ## CHANGELOG
 
 - v1.0 (2026-10-17): Initial release.
+- v1.1 (2026-10-17): Added how we stacked up against other groups (Rambots corrected to 830 + ~70 fed), Plinko vs the average group, and prize sell-outs. Dumpling fact now says the sale cleared out every one we had left. Infographic is now v1.1 (1080x1920).
