@@ -1,0 +1,210 @@
+<!doctype html>
+<!--
+  file: ramathon_2026_infographic_v1.0.html
+  version: 1.0
+  author: Sam Cao
+  created: 2026-10-17
+  last_updated: 2026-10-17
+  description: Ram-a-thon 2026 results infographic for team and mentors, 1080x1350 portrait, rendered to PNG.
+  ai_update: Update last_updated and version. Rename file to match. Append changelog comment at bottom.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Ram-a-thon 2026 Results</title>
+<style>
+  :root {
+    --rb-red: #A31F36;
+    --rb-red-dark: #7E1729;
+    --rb-yellow: #F4A81C;
+    --ink: #1B1B1B;
+    --ink-2: #4A4A48;
+    --ink-3: #75746F;
+    --paper: #FCFCFB;
+    --card: #FFFFFF;
+    --rule: #E4E2DD;
+    --track: #EFEDE8;
+    /* Theme slots: validated all-pairs on light (validate_palette.js, 2026-10-17) */
+    --t-asian: #A31F36;
+    --t-snacks: #D18E00;
+    --t-minecraft: #1BAF7A;
+    --t-workshop: #2A78D6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body {
+    width: 1080px; height: 1350px; overflow: hidden;
+    /* FreeSans is a Helvetica clone; listed first so Linux renders don't fall back to a substitute */
+    font-family: FreeSans, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+  }
+  .page { width: 1080px; height: 1350px; display: flex; flex-direction: column; }
+
+  header {
+    background: var(--rb-red); color: #fff;
+    padding: 24px 48px 20px; position: relative;
+  }
+  header .kicker { font-size: 22px; letter-spacing: 3px; font-weight: 700; color: var(--rb-yellow); }
+  header h1 { font-size: 62px; line-height: 1; font-weight: 800; letter-spacing: -1px; margin-top: 6px; color: var(--rb-yellow); }
+  header .sub { font-size: 23px; margin-top: 8px; color: #fff; }
+  header .team { position: absolute; right: 48px; top: 28px; text-align: right; font-size: 20px; line-height: 1.3; color: #fff; }
+  header .team b { display: block; font-size: 30px; color: var(--rb-yellow); letter-spacing: 1px; }
+
+  main { flex: 1; padding: 18px 48px 0; display: flex; flex-direction: column; gap: 15px; }
+
+  .hero { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 14px; }
+  .tile { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 12px 18px 12px; }
+  .hero .num { font-size: 52px; font-weight: 800; line-height: 1; color: var(--rb-red); letter-spacing: -1px; }
+  .hero .lab { font-size: 21px; color: var(--ink-2); margin-top: 4px; line-height: 1.2; }
+
+  h2 { font-size: 27px; font-weight: 800; color: var(--ink); }
+  h2 small { font-size: 20px; font-weight: 400; color: var(--ink-3); margin-left: 8px; }
+
+  /* Booths vs goal */
+  .booths { display: grid; grid-template-columns: 170px 1fr 230px; row-gap: 6px; align-items: center; margin-top: 8px; }
+  .booths .name { font-size: 22px; font-weight: 700; }
+  .track { position: relative; height: 24px; }
+  .bar { position: absolute; left: 0; top: 0; height: 24px; border-radius: 0 4px 4px 0; background: var(--rb-red); }
+  .bar.est { background: repeating-linear-gradient(135deg, var(--rb-red) 0 7px, #C55A6C 7px 11px); }
+  .goal { position: absolute; top: -4px; width: 3px; height: 32px; background: var(--ink); border-radius: 2px; }
+  .booths .val { font-size: 21px; color: var(--ink-2); padding-left: 14px; }
+  .booths .val b { color: var(--ink); font-size: 23px; }
+  .note { font-size: 17px; color: var(--ink-3); margin-top: 6px; }
+
+  /* Clicker leaderboard */
+  .legend { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 6px; font-size: 19px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .sw { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+  .legend b { color: var(--ink); }
+  .clickers { display: grid; grid-template-columns: 228px 1fr; row-gap: 3px; margin-top: 8px; align-items: center; }
+  .clickers .name { font-size: 20px; font-weight: 600; white-space: nowrap; }
+  .crow { display: flex; align-items: center; gap: 12px; height: 24px; }
+  .cbar { height: 18px; border-radius: 0 4px 4px 0; flex: none; }
+  .crow .v { font-size: 20px; font-weight: 700; white-space: nowrap; }
+  .crow .tag { font-size: 18px; color: var(--ink-3); white-space: nowrap; }
+  .crow .tag.hot { color: var(--rb-red); font-weight: 700; }
+
+  .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .three .num { font-size: 36px; font-weight: 800; line-height: 1; color: var(--rb-red); }
+  .three .head { font-size: 19px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .three .lab { font-size: 19px; color: var(--ink-2); margin-top: 4px; line-height: 1.25; }
+
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 26px; }
+  .fact { font-size: 19px; line-height: 1.25; color: var(--ink-2); padding-left: 16px; border-left: 4px solid var(--rb-yellow); }
+  .fact b { color: var(--ink); }
+
+  footer {
+    background: var(--ink); color: #fff; padding: 13px 48px 13px; margin-top: 14px;
+    font-size: 20px; line-height: 1.3;
+  }
+  footer b { color: var(--rb-yellow); }
+  footer .src { font-size: 15px; color: #B9B8B2; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="kicker">BY THE NUMBERS</div>
+    <h1>RAM-A-THON 2026</h1>
+    <div class="sub">Rambots booths · Sat Oct 17 · CCA Hayward</div>
+    <div class="team"><b>RAMBOTS</b>Team 2204</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="tile"><div class="num">~900</div><div class="lab">tickets grossed (830 counted, ~70 to helpers for food)</div></div>
+      <div class="tile"><div class="num">~$810</div><div class="lab">for the team after CCA's 10%</div></div>
+      <div class="tile"><div class="num">69%</div><div class="lab">of our 1,300-ticket goal</div></div>
+    </section>
+
+    <section>
+      <h2>Where the tickets came from <small>bar = tickets, line = goal</small></h2>
+      <div class="booths">
+        <div class="name">Clickers</div>
+        <div class="track"><div class="bar est" style="width:97.6%"></div><div class="goal" style="left:100%"></div></div>
+        <div class="val"><b>~488</b> · 98% of goal</div>
+
+        <div class="name">Plinko</div>
+        <div class="track"><div class="bar est" style="width:66%"></div><div class="goal" style="left:20%"></div></div>
+        <div class="val"><b>~330</b> · <b style="color:var(--rb-red)">3.3x</b> goal</div>
+
+        <div class="name">Balloon Battle</div>
+        <div class="track"><div class="bar est" style="width:11%"></div><div class="goal" style="left:40%"></div></div>
+        <div class="val"><b>~55</b> · 28% of goal</div>
+
+        <div class="name">Copters</div>
+        <div class="track"><div class="bar" style="width:5.4%"></div><div class="goal" style="left:100%"></div></div>
+        <div class="val"><b>27</b> · 5% of goal</div>
+      </div>
+      <div class="note">Striped = estimated. Plinko is what's left of ~900 after the other booths: about 330 drops.</div>
+    </section>
+
+    <section>
+      <h2>Fastest-selling clickers <small>units per hour while on the table</small></h2>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--t-asian)"></i>Asian food <b>100% sold</b></span>
+        <span><i class="sw" style="background:var(--t-minecraft)"></i>Minecraft <b>95%</b></span>
+        <span><i class="sw" style="background:var(--t-snacks)"></i>Snacks &amp; treats <b>62%</b></span>
+        <span><i class="sw" style="background:var(--t-workshop)"></i>Workshop <b>53%</b></span>
+      </div>
+      <div class="clickers" id="clickers"></div>
+    </section>
+
+    <section class="three">
+      <div class="tile"><div class="head">Ran short</div><div class="num">~16</div><div class="lab">more clickers (~56 tix) if Creeper, Dumpling, and Avocado hadn't sold out early.</div></div>
+      <div class="tile"><div class="head">Wrong mix</div><div class="num">36</div><div class="lab">leftovers for the blowout: Hot dog bun 12, WD-40 7, S'mores 6.</div></div>
+      <div class="tile"><div class="head">Copters</div><div class="num">27 tix</div><div class="lab">vs ~450 last year, same prices. Down about 95%.</div></div>
+    </section>
+
+    <section class="facts">
+      <div class="fact"><b>Biggest sale:</b> 8 Dumplings at once (27 tix).</div>
+      <div class="fact"><b>Teens' pick:</b> Salmon nigiri (6 of 9 sales).</div>
+      <div class="fact"><b>Boys:</b> Creeper, WD-40. <b>Girls:</b> Egg tart.</div>
+      <div class="fact"><b>Rush hour:</b> 11:00 to 11:30 (21 sales).</div>
+      <div class="fact"><b>Top combo:</b> Avocado + Dumpling (4 sales).</div>
+      <div class="fact"><b>Variety:</b> 30 of 35 multi-buys mixed designs.</div>
+    </section>
+  </main>
+
+  <footer>
+    <b>Next year:</b> 2x the Creepers, more Dumpling, Salmon nigiri, and Avocado, fewer Hot dog buns and S'mores. Track every booth. Tag Elementary / Middle / High school.
+    <div class="src">Data: sales laptop export (69 sales, 10:01 AM to 1:20 PM) + team estimates for Plinko, Battle, and the blowout.</div>
+  </footer>
+</div>
+
+<script>
+  // Sales rate per design (units/hr on the table), from build_ramathon_2026_results_v1.0.py metrics
+  const rows = [
+    ["Dumpling", 7.106, "asian", "sold out 12:42"],
+    ["Salmon nigiri", 6.943, "asian", "sold out 1:20"],
+    ["Creeper", 5.638, "minecraft", "SOLD OUT FIRST 11:48", true],
+    ["Avocado", 4.4499, "snacks", "sold out 12:43"],
+    ["Egg tart", 3.321, "asian", "restocked day-of"],
+    ["Chocolate bar", 3.321, "snacks", "4 left"],
+    ["Hot dog bun", 3.019, "snacks", "12 of 22 left", true],
+    ["WD-40", 2.415, "workshop", "7 left"],
+    ["Creeper infinity cube", 2.415, "minecraft", "1 left"],
+    ["Spam musubi", 1.811, "asian", "only 6 made, sold out 1:20"],
+    ["S'mores", 0.906, "snacks", "6 left"],
+    ["LEGO brick", 0.604, "workshop", "2 left"],
+  ];
+  const max = 7.106, maxPx = 430;
+  const el = document.getElementById("clickers");
+  for (const [name, rate, theme, tag, hot] of rows) {
+    const n = document.createElement("div");
+    n.className = "name";
+    n.textContent = name;
+    const r = document.createElement("div");
+    r.className = "crow";
+    r.innerHTML =
+      `<div class="cbar" style="width:${Math.round(rate / max * maxPx)}px;background:var(--t-${theme})"></div>` +
+      `<span class="v">${rate.toFixed(1)}/hr</span><span class="tag${hot ? " hot" : ""}">${tag}</span>`;
+    el.append(n, r);
+  }
+</script>
+</body>
+</html>
+<!-- CHANGELOG
+  v1.0 (2026-10-17): Initial release.
+-->

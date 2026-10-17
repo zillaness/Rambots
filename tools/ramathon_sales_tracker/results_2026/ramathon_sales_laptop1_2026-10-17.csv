@@ -1,0 +1,114 @@
+station,record,status,opened_at,closed_at,category,item,qty,item_tickets,record_total_tickets,age,gender,battle_mode,player,balloons_popped,won,cards_paid,walkoff_reason,cards_redeemed,record_id,laptop_id,exported_at,battle_outcome,paid_with,bonus_cards
+Laptop 1,S1,sold,2026-10-17 10:01:54,2026-10-17 10:10:51,Clickers & Fidget Toys,Spam musubi,1,4,10,Kid,Female,,,,,,,,mvcn94ytgejrw,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S1,sold,2026-10-17 10:01:54,2026-10-17 10:10:51,Clickers & Fidget Toys,Dumpling,1,3,10,Kid,Female,,,,,,,,mvcn94ytgejrw,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S1,sold,2026-10-17 10:01:54,2026-10-17 10:10:51,Clickers & Fidget Toys,WD-40,1,3,10,Kid,Female,,,,,,,,mvcn94ytgejrw,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S2,sold,2026-10-17 10:15:12,2026-10-17 10:15:51,Clickers & Fidget Toys,Creeper,1,4,4,Kid,Male,,,,,,,,mvcnq991rt1kz,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S3,sold,2026-10-17 10:20:17,2026-10-17 10:21:03,Clickers & Fidget Toys,Dumpling,1,4,4,Kid,Male,,,,,,,,mvcnwsgqmpjw0,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S4,sold,2026-10-17 10:21:12,2026-10-17 10:21:21,Clickers & Fidget Toys,Creeper infinity cube,1,4,7,Teen,Male,,,,,,,,mvcnxyi3sbdq9,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S4,sold,2026-10-17 10:21:12,2026-10-17 10:21:21,Clickers & Fidget Toys,Avocado,1,3,7,Teen,Male,,,,,,,,mvcnxyi3sbdq9,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S5,sold,2026-10-17 10:21:28,2026-10-17 10:21:30,Clickers & Fidget Toys,Avocado,1,4,4,,,,,,,,,,mvcnybda2qup5,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S6,sold,2026-10-17 10:23:27,2026-10-17 10:23:31,Clickers & Fidget Toys,Chocolate bar,1,4,10,,,,,,,,,,mvco0uqkdko5q,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S6,sold,2026-10-17 10:23:27,2026-10-17 10:23:31,Clickers & Fidget Toys,Salmon nigiri,1,3,10,,,,,,,,,,mvco0uqkdko5q,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S6,sold,2026-10-17 10:23:27,2026-10-17 10:23:31,Clickers & Fidget Toys,Creeper,1,3,10,,,,,,,,,,mvco0uqkdko5q,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S7,sold,2026-10-17 10:26:03,2026-10-17 10:26:05,Clickers & Fidget Toys,Spam musubi,1,4,7,,,,,,,,,,mvco471ozku0g,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S7,sold,2026-10-17 10:26:03,2026-10-17 10:26:05,Clickers & Fidget Toys,Salmon nigiri,1,3,7,,,,,,,,,,mvco471ozku0g,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S8,sold,2026-10-17 10:35:57,2026-10-17 10:36:04,Clickers & Fidget Toys,WD-40,1,4,7,Kid,Male,,,,,,,,mvcogxh7ip98k,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S8,sold,2026-10-17 10:35:57,2026-10-17 10:36:04,Clickers & Fidget Toys,Hot dog bun,1,3,7,Kid,Male,,,,,,,,mvcogxh7ip98k,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S9,sold,2026-10-17 10:37:39,2026-10-17 10:37:42,Copters,Kit w/ toroidal,1,6,6,Kid,Male,,,,,,,,mvcoj4okclz7x,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S10,sold,2026-10-17 10:37:48,2026-10-17 10:37:57,Clickers & Fidget Toys,Creeper infinity cube,1,4,10,Teen,Male,,,,,,,,mvcojb9zesapf,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S10,sold,2026-10-17 10:37:48,2026-10-17 10:37:57,Clickers & Fidget Toys,Salmon nigiri,2,6,10,Teen,Male,,,,,,,,mvcojb9zesapf,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S11,sold,2026-10-17 10:41:15,2026-10-17 10:41:18,Clickers & Fidget Toys,Avocado,1,4,10,,,,,,,,,,mvconrc0qffgs,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S11,sold,2026-10-17 10:41:15,2026-10-17 10:41:18,Clickers & Fidget Toys,Salmon nigiri,1,3,10,,,,,,,,,,mvconrc0qffgs,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S11,sold,2026-10-17 10:41:15,2026-10-17 10:41:18,Clickers & Fidget Toys,LEGO brick,1,3,10,,,,,,,,,,mvconrc0qffgs,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S12,sold,2026-10-17 10:42:00,2026-10-17 10:42:15,Clickers & Fidget Toys,Chocolate bar,1,4,10,Teen,Female,,,,,,,,mvcoopvqajuay,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S12,sold,2026-10-17 10:42:00,2026-10-17 10:42:15,Clickers & Fidget Toys,Salmon nigiri,1,3,10,Teen,Female,,,,,,,,mvcoopvqajuay,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S12,sold,2026-10-17 10:42:00,2026-10-17 10:42:15,Clickers & Fidget Toys,LEGO brick,1,3,10,Teen,Female,,,,,,,,mvcoopvqajuay,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S13,sold,2026-10-17 10:43:24,2026-10-17 10:43:29,Clickers & Fidget Toys,Salmon nigiri,1,4,4,Teen,Male,,,,,,,,mvcoqioost784,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S14,sold,2026-10-17 10:45:17,2026-10-17 10:45:46,Clickers & Fidget Toys,Creeper infinity cube,1,4,10,Kid,Male,,,,,,,,mvcosxfe6wv5v,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S14,sold,2026-10-17 10:45:17,2026-10-17 10:45:46,Clickers & Fidget Toys,Creeper,1,3,10,Kid,Male,,,,,,,,mvcosxfe6wv5v,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S14,sold,2026-10-17 10:45:17,2026-10-17 10:45:46,Clickers & Fidget Toys,Dumpling,1,3,10,Kid,Male,,,,,,,,mvcosxfe6wv5v,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S15,sold,2026-10-17 10:49:23,2026-10-17 10:49:31,Clickers & Fidget Toys,Chocolate bar,1,4,4,Kid,Female,,,,,,,,mvcoy7ves6r8y,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S16,sold,2026-10-17 10:51:39,2026-10-17 10:52:09,Clickers & Fidget Toys,Dumpling,1,4,4,Kid,Male,,,,,,,,mvcp14hq48uxn,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S17,sold,2026-10-17 10:52:16,2026-10-17 10:52:20,Clickers & Fidget Toys,Creeper infinity cube,1,4,4,Kid,Female,,,,,,,,mvcp1x8j6p98s,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S18,sold,2026-10-17 10:57:05,2026-10-17 10:57:10,Clickers & Fidget Toys,S'mores,2,7,10,Teen,Female,,,,,,,,mvcp84dk3qife,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S18,sold,2026-10-17 10:57:05,2026-10-17 10:57:10,Clickers & Fidget Toys,Salmon nigiri,1,3,10,Teen,Female,,,,,,,,mvcp84dk3qife,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S19,sold,2026-10-17 11:00:13,2026-10-17 11:00:32,Clickers & Fidget Toys,Salmon nigiri,1,4,4,Kid,Male,,,,,,,,mvcpc55x7x4m8,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S20,sold,2026-10-17 11:02:28,2026-10-17 11:02:33,Copters,Full kit,1,5,5,,,,,,,,,,mvcpf1l061kpk,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S21,sold,2026-10-17 11:06:09,2026-10-17 11:06:11,Clickers & Fidget Toys,Chocolate bar,1,4,4,Kid,Male,,,,,,,,mvcpjro984w97,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S22,sold,2026-10-17 11:06:56,2026-10-17 11:07:54,Clickers & Fidget Toys,Egg tart,1,4,4,,,,,,,,,,mvcpkrujfjei5,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S23,sold,2026-10-17 11:08:22,2026-10-17 11:08:31,Clickers & Fidget Toys,Creeper infinity cube,1,4,10,Kid,Male,,,,,,,,mvcpmmjatvk84,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S23,sold,2026-10-17 11:08:22,2026-10-17 11:08:31,Clickers & Fidget Toys,Chocolate bar,1,3,10,Kid,Male,,,,,,,,mvcpmmjatvk84,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S23,sold,2026-10-17 11:08:22,2026-10-17 11:08:31,Clickers & Fidget Toys,WD-40,1,3,10,Kid,Male,,,,,,,,mvcpmmjatvk84,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S24,sold,2026-10-17 11:08:37,2026-10-17 11:08:49,Clickers & Fidget Toys,Hot dog bun,1,4,10,Kid,Male,,,,,,,,mvcpmy3q825a2,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S24,sold,2026-10-17 11:08:37,2026-10-17 11:08:49,Clickers & Fidget Toys,Dumpling,1,3,10,Kid,Male,,,,,,,,mvcpmy3q825a2,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S24,sold,2026-10-17 11:08:37,2026-10-17 11:08:49,Clickers & Fidget Toys,Creeper,1,3,10,Kid,Male,,,,,,,,mvcpmy3q825a2,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S25,sold,2026-10-17 11:14:16,2026-10-17 11:14:17,Clickers & Fidget Toys,Salmon nigiri,1,4,4,Kid,Male,,,,,,,,mvcpu7dp3sdud,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S26,sold,2026-10-17 11:14:53,2026-10-17 11:14:55,Clickers & Fidget Toys,Dumpling,1,4,4,Kid,Female,,,,,,,,mvcpuzu84l2mg,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S27,sold,2026-10-17 11:15:20,2026-10-17 11:15:23,Clickers & Fidget Toys,Egg tart,1,4,4,Teen,Female,,,,,,,,mvcpvl6w6x4sn,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S28,sold,2026-10-17 11:15:28,2026-10-17 11:15:30,Clickers & Fidget Toys,Chocolate bar,1,4,4,Kid,Female,,,,,,,,mvcpvqvcf5z75,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S29,sold,2026-10-17 11:15:45,2026-10-17 11:16:03,Clickers & Fidget Toys,Chocolate bar,1,4,4,,,,,,,,,,mvcpw48lqpxo0,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S30,sold,2026-10-17 11:16:04,2026-10-17 11:16:07,Clickers & Fidget Toys,Creeper,1,4,4,Kid,Male,,,,,,,,mvcpwj6zug8yy,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S31,sold,2026-10-17 11:16:42,2026-10-17 11:16:44,Clickers & Fidget Toys,Chocolate bar,1,4,4,,,,,,,,,,mvcpxcawjtvn2,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S32,sold,2026-10-17 11:17:08,2026-10-17 11:17:10,Clickers & Fidget Toys,Salmon nigiri,1,4,4,Kid,Female,,,,,,,,mvcpxw4f9q1l0,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S33,sold,2026-10-17 11:19:39,2026-10-17 11:19:41,Clickers & Fidget Toys,Chocolate bar,1,4,7,,,,,,,,,,mvcq14unliyfw,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S33,sold,2026-10-17 11:19:39,2026-10-17 11:19:41,Clickers & Fidget Toys,Hot dog bun,1,3,7,,,,,,,,,,mvcq14unliyfw,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S34,sold,2026-10-17 11:19:52,2026-10-17 11:19:53,Clickers & Fidget Toys,Chocolate bar,1,4,4,,,,,,,,,,mvcq1f6jx1pvr,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S35,sold,2026-10-17 11:21:09,2026-10-17 11:21:10,Clickers & Fidget Toys,S'mores,1,4,4,,,,,,,,,,mvcq3231bnn0i,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S36,sold,2026-10-17 11:21:35,2026-10-17 11:21:40,Clickers & Fidget Toys,Creeper,1,4,4,Teen,Male,,,,,,,,mvcq3me2kxrly,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S37,sold,2026-10-17 11:22:20,2026-10-17 11:22:22,Clickers & Fidget Toys,Creeper,1,4,4,,,,,,,,,,mvcq4l2oy1dwg,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S38,sold,2026-10-17 11:23:14,2026-10-17 11:23:19,Clickers & Fidget Toys,Avocado,1,4,10,,,,,,,,,,mvcq5qysi9e0r,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S38,sold,2026-10-17 11:23:14,2026-10-17 11:23:19,Clickers & Fidget Toys,Salmon nigiri,1,3,10,,,,,,,,,,mvcq5qysi9e0r,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S38,sold,2026-10-17 11:23:14,2026-10-17 11:23:19,Clickers & Fidget Toys,Dumpling,1,3,10,,,,,,,,,,mvcq5qysi9e0r,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S39,sold,2026-10-17 11:25:26,2026-10-17 11:26:42,Clickers & Fidget Toys,Creeper,1,4,7,Adult,Male,,,,,,,,mvcq8kc36qd9t,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S39,sold,2026-10-17 11:25:26,2026-10-17 11:26:42,Clickers & Fidget Toys,Dumpling,1,3,7,Adult,Male,,,,,,,,mvcq8kc36qd9t,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S40,sold,2026-10-17 11:32:03,2026-10-17 11:32:49,Clickers & Fidget Toys,Creeper,1,4,10,Kid,Female,,,,,,,,mvcqh2pek0xeh,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S40,sold,2026-10-17 11:32:03,2026-10-17 11:32:49,Clickers & Fidget Toys,Hot dog bun,1,3,10,Kid,Female,,,,,,,,mvcqh2pek0xeh,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S40,sold,2026-10-17 11:32:03,2026-10-17 11:32:49,Clickers & Fidget Toys,Chocolate bar,1,3,10,Kid,Female,,,,,,,,mvcqh2pek0xeh,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S41,sold,2026-10-17 11:33:36,2026-10-17 11:33:56,Clickers & Fidget Toys,WD-40,2,7,10,Kid,Male,,,,,,,,mvcqj2wh0bvju,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S41,sold,2026-10-17 11:33:36,2026-10-17 11:33:56,Clickers & Fidget Toys,Egg tart,1,3,10,Kid,Male,,,,,,,,mvcqj2wh0bvju,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S42,sold,2026-10-17 11:34:45,2026-10-17 11:35:50,Clickers & Fidget Toys,Egg tart,2,7,14,Kid,Female,,,,,,,,mvcqkjo630c9b,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S42,sold,2026-10-17 11:34:45,2026-10-17 11:35:50,Clickers & Fidget Toys,Dumpling,1,3,14,Kid,Female,,,,,,,,mvcqkjo630c9b,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S42,sold,2026-10-17 11:34:45,2026-10-17 11:35:50,Clickers & Fidget Toys,Avocado,1,4,14,Kid,Female,,,,,,,,mvcqkjo630c9b,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S43,sold,2026-10-17 11:36:19,2026-10-17 11:38:04,Clickers & Fidget Toys,WD-40,1,4,4,Adult,Male,,,,,,,,mvcqmk68ki48s,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S44,sold,2026-10-17 11:38:59,2026-10-17 11:39:04,Clickers & Fidget Toys,Salmon nigiri,1,4,4,Kid,,,,,,,,,mvcqpzn2te0jn,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S45,sold,2026-10-17 11:48:16,2026-10-17 11:48:19,Clickers & Fidget Toys,Creeper,1,4,4,Kid,Male,,,,,,,,mvcr1xtsjaup2,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S46,sold,2026-10-17 11:50:28,2026-10-17 11:50:33,Clickers & Fidget Toys,Dumpling,2,7,7,Kid,Female,,,,,,,,mvcr4r9ravvc6,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S47,sold,2026-10-17 11:51:08,2026-10-17 11:51:12,Clickers & Fidget Toys,Hot dog bun,1,4,4,Kid,Male,,,,,,,,mvcr5mpcduc25,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S48,sold,2026-10-17 11:52:28,2026-10-17 11:52:35,Clickers & Fidget Toys,Hot dog bun,1,4,10,Kid,Male,,,,,,,,mvcr7c0h4k7zh,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S48,sold,2026-10-17 11:52:28,2026-10-17 11:52:35,Clickers & Fidget Toys,Dumpling,1,3,10,Kid,Male,,,,,,,,mvcr7c0h4k7zh,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S48,sold,2026-10-17 11:52:28,2026-10-17 11:52:35,Clickers & Fidget Toys,Avocado,1,3,10,Kid,Male,,,,,,,,mvcr7c0h4k7zh,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S49,sold,2026-10-17 11:54:07,2026-10-17 11:54:13,Clickers & Fidget Toys,Egg tart,1,4,7,,Female,,,,,,,,mvcr9g5sen3am,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S49,sold,2026-10-17 11:54:07,2026-10-17 11:54:13,Clickers & Fidget Toys,Avocado,1,3,7,,Female,,,,,,,,mvcr9g5sen3am,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S50,sold,2026-10-17 11:56:56,2026-10-17 11:57:48,Clickers & Fidget Toys,Spam musubi,1,4,10,,,,,,,,,,mvcrd2rjrfvnf,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S50,sold,2026-10-17 11:56:56,2026-10-17 11:57:48,Clickers & Fidget Toys,Avocado,1,3,10,,,,,,,,,,mvcrd2rjrfvnf,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S50,sold,2026-10-17 11:56:56,2026-10-17 11:57:48,Clickers & Fidget Toys,Hot dog bun,1,3,10,,,,,,,,,,mvcrd2rjrfvnf,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S51,sold,2026-10-17 11:58:50,2026-10-17 11:59:08,Clickers & Fidget Toys,Egg tart,1,4,4,Kid,Female,,,,,,,,mvcrfj19jziez,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S52,sold,2026-10-17 12:01:45,2026-10-17 12:01:48,Clickers & Fidget Toys,Hot dog bun,1,4,7,Kid,Male,,,,,,,,mvcrj9saukmpm,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S52,sold,2026-10-17 12:01:45,2026-10-17 12:01:48,Clickers & Fidget Toys,WD-40,1,3,7,Kid,Male,,,,,,,,mvcrj9saukmpm,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S53,sold,2026-10-17 12:05:15,2026-10-17 12:06:35,Clickers & Fidget Toys,Avocado,1,4,10,,,,,,,,,,mvcrnrzs0k63a,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S53,sold,2026-10-17 12:05:15,2026-10-17 12:06:35,Clickers & Fidget Toys,Dumpling,1,3,10,,,,,,,,,,mvcrnrzs0k63a,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S53,sold,2026-10-17 12:05:15,2026-10-17 12:06:35,Clickers & Fidget Toys,Egg tart,1,3,10,,,,,,,,,,mvcrnrzs0k63a,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S54,sold,2026-10-17 12:13:59,2026-10-17 12:14:47,Clickers & Fidget Toys,Salmon nigiri,1,4,7,Teen,Female,,,,,,,,mvcrz06b435oh,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S54,sold,2026-10-17 12:13:59,2026-10-17 12:14:47,Clickers & Fidget Toys,Dumpling,1,3,7,Teen,Female,,,,,,,,mvcrz06b435oh,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S55,sold,2026-10-17 12:16:38,2026-10-17 12:16:42,Copters,Full kit,1,5,5,,,,,,,,,,mvcs2eru390ua,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S56,sold,2026-10-17 12:19:53,2026-10-17 12:19:54,Clickers & Fidget Toys,Hot dog bun,1,4,4,,,,,,,,,,mvcs6lmc6nomz,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S57,sold,2026-10-17 12:22:21,2026-10-17 12:22:44,Clickers & Fidget Toys,Hot dog bun,1,4,4,,,,,,,,,,mvcs9rs7h3x9f,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S58,sold,2026-10-17 12:30:36,2026-10-17 12:30:39,Copters,Full kit,1,5,5,Kid,Male,,,,,,,,mvcskdqv1ortb,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S59,sold,2026-10-17 12:33:44,2026-10-17 12:34:08,Clickers & Fidget Toys,Dumpling,1,4,7,,Male,,,,,,,,mvcsoe6d11ocg,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S59,sold,2026-10-17 12:33:44,2026-10-17 12:34:08,Clickers & Fidget Toys,WD-40,1,3,7,,Male,,,,,,,,mvcsoe6d11ocg,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S60,sold,2026-10-17 12:34:17,2026-10-17 12:35:31,Clickers & Fidget Toys,Spam musubi,1,4,10,,,,,,,,,,mvcsp4avlwefp,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S60,sold,2026-10-17 12:34:17,2026-10-17 12:35:31,Clickers & Fidget Toys,Egg tart,1,3,10,,,,,,,,,,mvcsp4avlwefp,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S60,sold,2026-10-17 12:34:17,2026-10-17 12:35:31,Clickers & Fidget Toys,Dumpling,1,3,10,,,,,,,,,,mvcsp4avlwefp,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S61,sold,2026-10-17 12:40:43,2026-10-17 12:40:46,Copters,Kit w/ toroidal,1,6,6,Kid,Male,,,,,,,,mvcsxdienekom,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S62,sold,2026-10-17 12:40:56,2026-10-17 12:41:17,Clickers & Fidget Toys,Egg tart,1,4,7,Adult,Female,,,,,,,,mvcsxnqdhg68y,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S62,sold,2026-10-17 12:40:56,2026-10-17 12:41:17,Clickers & Fidget Toys,Salmon nigiri,1,3,7,Adult,Female,,,,,,,,mvcsxnqdhg68y,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S63,sold,2026-10-17 12:42:00,2026-10-17 12:42:19,Clickers & Fidget Toys,Dumpling,8,27,27,,Male,,,,,,,,mvcsz1bku1w2v,69z8,2026-10-17 13:51:54,,tickets,2
+Laptop 1,S64,sold,2026-10-17 12:43:25,2026-10-17 12:43:28,Clickers & Fidget Toys,Creeper infinity cube,3,10,10,,,,,,,,,,mvct0upwlt1zp,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S65,sold,2026-10-17 12:43:37,2026-10-17 12:43:42,Clickers & Fidget Toys,Avocado,3,10,10,,Male,,,,,,,,mvct142i29d4y,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S66,sold,2026-10-17 12:43:54,2026-10-17 12:51:34,Clickers & Fidget Toys,Burger,1,4,14,Kid,,,,,,,,,mvct1hkzcups8,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S66,sold,2026-10-17 12:43:54,2026-10-17 12:51:34,Clickers & Fidget Toys,Salmon nigiri,3,10,14,Kid,,,,,,,,,mvct1hkzcups8,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S67,sold,2026-10-17 13:06:02,2026-10-17 13:06:06,Clickers & Fidget Toys,Egg tart,1,4,7,Kid,Female,,,,,,,,mvctty0xxmycd,69z8,2026-10-17 13:51:54,,tickets,0
+Laptop 1,S67,sold,2026-10-17 13:06:02,2026-10-17 13:06:06,Clickers & Fidget Toys,Salmon nigiri,1,3,7,Kid,Female,,,,,,,,mvctty0xxmycd,69z8,2026-10-17 13:51:54,,tickets,
+Laptop 1,S68,sold,2026-10-17 13:20:21,2026-10-17 13:20:27,Clickers & Fidget Toys,Salmon nigiri,3,10,10,Teen,,,,,,,,,mvcucd11w4w1r,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S69,sold,2026-10-17 13:20:34,2026-10-17 13:20:39,Clickers & Fidget Toys,Spam musubi,2,7,10,Adult,Female,,,,,,,,mvcucmgmhimry,69z8,2026-10-17 13:51:54,,tickets,1
+Laptop 1,S69,sold,2026-10-17 13:20:34,2026-10-17 13:20:39,Clickers & Fidget Toys,Salmon nigiri,1,3,10,Adult,Female,,,,,,,,mvcucmgmhimry,69z8,2026-10-17 13:51:54,,tickets,
