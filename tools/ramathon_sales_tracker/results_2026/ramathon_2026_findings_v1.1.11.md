@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.10.md
-version: 1.1.10
+file: ramathon_2026_findings_v1.1.11.md
+version: 1.1.11
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-18
@@ -20,7 +20,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.2.2.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `ramathon_2026_infographic_v1.2.3.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -35,7 +35,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 6. **Rush hour: 11:00 to 11:30 AM**, with 21 sales and 109 tickets.
 7. **Teens went for Salmon nigiri:** 6 of 9 teen sales included one.
 8. **Creeper and WD-40 went to boys** (7 of 8 gender-tagged units each). **Egg tart went to girls** (7 of 8).
-9. **Top combo: Avocado + Dumpling** (4 sales).
+9. **Top combo: Avocado + Dumpling** (4 sales). Both have cutesy faces.
 10. **Salmon nigiri was the social one.** It showed up in 12 mixed sales alongside 10 different designs.
 11. **Half of all clickers sold were Asian food designs** (64 of 129). Every one with a known count sold out.
 12. **24 free Pokémon cards** went out with purchases, across 23 sales.
@@ -221,3 +221,4 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - v1.1.8 (2026-10-17): Added an internal-only notice; points to infographic v1.2 (watermarked).
 - v1.1.9 (2026-10-17): Overall goal is 1,000 net = 1,112 gross; ~900 gross is about 19% short (was 69% of the tracker's 1,300 booth-goal sum). Points to infographic v1.2.1.
 - v1.1.10 (2026-10-18): Goal framed as 81% of the 1,112 gross goal instead of 19% short. Points to infographic v1.2.2.
+- v1.1.11 (2026-10-18): Top combo fact notes both designs have cutesy faces. Points to infographic v1.2.3.
