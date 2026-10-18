@@ -1,8 +1,8 @@
 <title>Ram-a-thon Debrief</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: ramathon_2026_debrief_deck_v1.0.html
-  version: 1.0
+  file: ramathon_2026_debrief_deck_v1.1.html
+  version: 1.1
   author: Sam Cao
   created: 2026-10-18
   last_updated: 2026-10-18
@@ -203,6 +203,30 @@ svg text{font-family:var(--font)}
 .opt button{font-size:20px;font-weight:700;padding:12px 0;border-radius:10px;border:2px solid var(--red);background:var(--surface);color:var(--red)}
 .opt button:hover{background:var(--red);color:var(--red-ink)}
 .opt button:disabled{opacity:.45;cursor:not-allowed}
+.brain{display:flex;flex-direction:column;gap:14px;min-height:0}
+.hmw{font-size:26px;font-weight:700;line-height:1.25;max-width:32ch}
+.ideas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:auto;min-height:0;flex:1;align-content:start}
+.idea{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:8px 12px;font-size:21px;min-height:52px}
+.idea > *:not(.ofill){position:relative;z-index:1}
+.idea .ofill,.opt .ofill{position:absolute;left:0;top:0;bottom:0;background:var(--soft);transition:width .3s ease;z-index:0}
+.idea .tx{flex:1;min-width:0;overflow-wrap:anywhere}
+.idea .mt{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase}
+.idea .c{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.idea .x{border:0;background:none;font-size:22px;line-height:1;color:var(--ink-3);padding:2px 6px;border-radius:4px}
+.idea .x:hover{color:var(--red)}
+.idea .plus{font-size:18px;font-weight:700;padding:8px 14px;border-radius:8px;border:2px solid var(--red);background:var(--surface);color:var(--red)}
+.idea .plus:hover{background:var(--red);color:var(--red-ink)}
+.idea .plus:disabled{opacity:.45;cursor:not-allowed}
+.ideas .empty{grid-column:1/-1;color:var(--ink-3);font-style:italic;font-size:20px}
+.howto{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:8px;font-size:18px;color:var(--ink-2);line-height:1.3}
+.howto b{color:var(--ink)}
+.opt.sm{grid-template-columns:1fr 52px 76px;padding:12px 14px;gap:10px}
+.opt.sm h4{font-size:21px}
+.opt.sm p{font-size:16px}
+.opt.sm .c{font-size:32px}
+.opt.sm button{font-size:18px;padding:10px 0}
+.card.nx{padding:16px 20px;gap:6px}
+.card.nx p{font-size:19px}
 .undo{align-self:flex-start;border:1px solid var(--rule);background:var(--surface);border-radius:8px;padding:8px 14px;font-size:16px}
 
 /* budget */
@@ -226,19 +250,26 @@ svg text{font-family:var(--font)}
 .kits i.k1{background:var(--b-cop)}
 .kits i.k2{background:var(--other)}
 
-/* plan grid */
-.plan{display:grid;grid-template-columns:430px 1fr;gap:28px;min-height:0}
-.must{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.must li{font-size:19px;display:flex;gap:10px;align-items:flex-start;line-height:1.3}
-.must li::before{content:"";flex:none;width:18px;height:18px;border:2px solid var(--ink-3);border-radius:4px;margin-top:2px}
-.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;min-height:0}
-.day{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.day h4{margin:0;font-size:19px}
-.day h4 small{display:block;font-size:14px;font-weight:400;color:var(--ink-3)}
-.day.off{background:var(--soft)}
-.day.ev{border:2px solid var(--red)}
-.day p{font-size:16px;color:var(--ink-2);line-height:1.3}
-.day .who{margin-top:auto;border-top:1.5px dashed var(--rule);padding-top:8px;font-size:14px;color:var(--ink-3)}
+/* plan */
+.plan{display:grid;grid-template-columns:560px 1fr;gap:28px;min-height:0}
+.chk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;overflow:auto;min-height:0;flex:1}
+.chk li{display:grid;grid-template-columns:26px 1fr 118px 28px;gap:8px;align-items:center}
+.chk li.empty{display:block;color:var(--ink-3);font-style:italic;font-size:18px}
+.chk input[type=checkbox]{width:22px;height:22px;accent-color:var(--b-cop);margin:0}
+.fld{font-size:18px;padding:6px 8px;border:1px solid transparent;border-radius:6px;background:transparent;width:100%;min-width:0;color:var(--ink)}
+.fld:hover{border-color:var(--rule)}
+.fld:focus{border-color:var(--focus);background:var(--slide);outline:none}
+.fld.who{border-color:var(--rule);background:var(--slide);font-size:16px}
+.fld:disabled{cursor:default}
+.chk li.done .fld.tx{text-decoration:line-through;color:var(--ink-3)}
+.chk .x{border:0;background:none;font-size:22px;line-height:1;color:var(--ink-3);padding:2px 4px;border-radius:4px}
+.chk .x:hover{color:var(--red)}
+.days2{display:flex;flex-direction:column;gap:8px;min-height:0}
+.drow{display:grid;grid-template-columns:150px 1fr 170px;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:8px 12px}
+.drow h4{margin:0;font-size:19px}
+.drow h4 small{display:block;font-size:14px;font-weight:400;color:var(--ink-3)}
+.drow.off{background:var(--soft)}
+.drow.ev{border:2px solid var(--red)}
 table.t2{border-collapse:collapse;font-size:19px;width:100%}
 table.t2 th{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:700;padding:6px 10px;border-bottom:1.5px solid var(--rule)}
 table.t2 td{padding:6px 10px;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
@@ -276,7 +307,7 @@ table.t2 td.n{text-align:right}
       <div class="step"><div class="n">1</div><h3>What did we expect?</h3><p>The goal and the booth targets. Slide 3.</p></div>
       <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 11.</p></div>
       <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 12 and 13.</p></div>
-      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, then planning Trunk or Treat. Slides 14 to 19.</p></div>
+      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, Christmas orders, then Trunk or Treat. Slides 14 to 20.</p></div>
     </div>
     <div class="rules">
       <div class="card"><div class="k">Read the numbers right</div><p>Only the sales laptop exported. Clicker and copter numbers are tracked. Plinko and Balloon Battle are estimates, marked with ~ and striped bars.</p></div>
@@ -336,7 +367,7 @@ table.t2 td.n{text-align:right}
 
 <!-- 5 money split -->
 <section class="slide" data-title="Where the money came from">
-  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Clickers made more than half the money. Plinko made a third, and we have no data on it.</h2></div>
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Clickers brought in over half the money. Plinko brought in about a third.</h2></div>
   <div class="body" style="grid-template-rows:auto auto;align-content:start;gap:40px">
     <div id="moneyChart"></div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
@@ -347,7 +378,7 @@ table.t2 td.n{text-align:right}
     </div>
   </div>
   <div class="ft"><span>Source: findings v1.1.21, How fast we sold · rates spread over 10:02 AM to 1:21 PM, gross</span><span class="pg"></span></div>
-  <aside class="notes">The whole booth averaged about $272 an hour gross, about $245 net. Plinko and Battle together were about 40% of the money with no tracking at all. Next year: every booth on the tracker.</aside>
+  <aside class="notes">The whole booth averaged about $272 an hour gross, about $245 net. Plinko and Battle tickets went into the shared total, so their numbers are worked out from the end-of-day count. The plan was a separate Plinko bucket, but it was a busy day and there was no time Friday or that morning to train volunteers.</aside>
 </section>
 
 <!-- 6 leaderboard -->
@@ -363,9 +394,9 @@ table.t2 td.n{text-align:right}
       <div class="lb" id="lb" style="flex:1;min-height:0"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px">
-      <div class="card"><div class="k">Creeper is the story</div><p>Third-fastest seller with less than half the stock of the top two, so it was gone by 11:48 AM.</p></div>
-      <div class="card"><div class="k">How rate works</div><p>Units sold per hour while the design was on the table. One sale counts at most 3 of a design, so the parent who bought 8 Dumplings doesn't skew it.</p></div>
-      <div class="card"><div class="k">Raw units mislead</div><p>We printed different amounts of each design. Units sold mostly measures what we printed.</p></div>
+      <div class="card nx"><div class="k">Creeper is the story</div><p>Third-fastest seller with less than half the stock of the top two, so it was gone by 11:48 AM.</p></div>
+      <div class="card nx"><div class="k">How rate works</div><p>Units sold per hour while the design was on the table. One sale counts at most 3 of a design, so the parent who bought 8 Dumplings doesn't skew it.</p></div>
+      <div class="card nx"><div class="k">Slow isn't always unwanted</div><p>We printed different amounts, and on a crowded table some designs may not have been noticed. LEGO sold twice in two minutes, then never again.</p></div>
     </div>
   </div>
   <div class="ft"><span>Source: findings v1.1.21, Clicker leaderboard · leftovers went to the blowout</span><span class="pg"></span></div>
@@ -374,29 +405,29 @@ table.t2 td.n{text-align:right}
 
 <!-- 7 sales chart -->
 <section class="slide" data-title="Sold out while still selling fast" data-iframe="1">
-  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t" style="font-size:44px">Creeper, Dumpling and Avocado were speeding up when they ran out</h2>
-    <p class="lede" style="font-size:22px;max-width:none">About 16 clickers lost (~56 tickets) at their own pace, up to ~22 (~78 tickets) at their late pace. Click a line or a photo to compare two.</p></div>
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t" style="font-size:44px">Creeper sold out at 11:48. Dumpling and Avocado followed by 12:43.</h2>
+    <p class="lede" style="font-size:22px;max-width:none">Their pace climbed through the late-morning rush. They ran out heading into lunch, our slowest stretch, so we probably lost fewer than the ~16 clickers (~56 tickets) their average pace suggests.</p></div>
   <div class="frame"><div class="ph">Loading the sales chart…</div><iframe data-src="ramathon_2026_clicker_sales_curve_v1.5.html" title="Interactive clicker sales chart"></iframe></div>
   <div class="ft"><span>Chart v1.5 · full screen: <a href="https://zillaness.github.io/Rambots/ramathon-2026-results/sales-chart.html" target="_blank" rel="noopener" style="color:inherit">zillaness.github.io/Rambots/ramathon-2026-results/sales-chart.html</a></span><span class="pg"></span></div>
-  <aside class="notes">Arrow keys go to the chart once you click inside it. Use the arrows in the bottom bar to move on. Good views: per design with projections on, then "tickets per hour".</aside>
+  <aside class="notes">The chart's dotted "if we had enough stock" lines use each design's pace, which includes the rush, so read them as the high end. Click a line or photo to compare two. Arrow keys go to the chart once you click inside it; use the bottom bar to move on.</aside>
 </section>
 
 <!-- 8 pace -->
 <section class="slide" data-title="Pace through the day">
-  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Rush at 11:00, lull at noon</h2></div>
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Busy at the start, slow at lunch</h2></div>
   <div class="body" style="grid-template-columns:1fr 340px">
     <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
       <div class="tbtns"><button class="tbtn" id="paceToggle" aria-pressed="false" type="button">Take out the one 27-ticket sale</button></div>
       <div id="paceChart" style="flex:1;min-height:0"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px">
-      <div class="card"><div class="k">Busiest half hour</div><div class="big" style="font-size:52px">11:00</div><p>21 sales and 109 tickets, a sale every 1.4 minutes</p></div>
-      <div class="card"><div class="k">Median checkout</div><div class="big" style="font-size:52px">5 sec</div><p>The fastest sale took 1 second</p></div>
-      <div class="card"><div class="k">Longest gap</div><div class="big" style="font-size:52px">14.5 min</div><p>between two sales</p></div>
+      <div class="card"><div class="k">Same shape as past years</div><p>A rush once the doors open, a cool-down, then sometimes a smaller bump near the end.</p></div>
+      <div class="card"><div class="k">Lunch is food time</div><p>We've never sold food. At meal times people buy food instead of activities or items, so lunch is always our slow stretch.</p></div>
+      <div class="card"><div class="k">The last half hour</div><p>Other booths blow out their food or give things away free, which pulls kids away and muddies the numbers.</p></div>
     </div>
   </div>
   <div class="ft"><span>Source: findings v1.1.21, How fast we sold · sales laptop only, gross dollars per hour</span><span class="pg"></span></div>
-  <aside class="notes">Ask: what happened at noon? Lunch, stockouts starting, or staffing? The 12:30 bump is mostly the one 27-ticket Dumpling sale. Toggle it off.</aside>
+  <aside class="notes">This matches what we've seen in past years. Toggle off the 27-ticket sale: the bump near the end gets smaller but is still there. Question for the room: at lunch, when people are buying food, what would still pull them to us?</aside>
 </section>
 
 <!-- 9 who bought what -->
@@ -445,7 +476,7 @@ table.t2 td.n{text-align:right}
     <div style="display:flex;flex-direction:column;gap:16px">
       <div class="card"><div class="big">~2.5x</div><p>the average group. The event sold 7,000 tickets across 20 groups.</p></div>
       <div class="card"><div class="k">#1 in direct sales?</div><p>Unclear. Group A's ~675 is one jar in one photo, and it may have had more.</p></div>
-      <div class="card"><div class="k">Overall</div><p>One group also kept the event's 10% cut (~700), so it out-earned us overall.</p></div>
+      <div class="card"><div class="k">Overall</div><p>Student government also keeps the event's 10% cut (~700 tickets), so it out-earned us overall.</p></div>
     </div>
   </div>
   <div class="ft"><span>Source: findings v1.1.21 and event_ticket_estimates v1.3.1 · other groups anonymized</span><span class="pg"></span></div>
@@ -487,18 +518,36 @@ table.t2 td.n{text-align:right}
 <!-- 14 next year -->
 <section class="slide" data-title="If we run it again">
   <div class="hd"><div class="chip">4 · Next</div><h2 class="t">If we run it again</h2></div>
-  <div class="body" style="grid-template-columns:600px 1fr">
-    <div style="min-height:0;overflow:auto"><table class="t2" id="printTable"><thead><tr><th>Design</th><th style="text-align:right">Had</th><th style="text-align:right">Next time</th><th style="text-align:right">Change</th></tr></thead><tbody></tbody></table></div>
-    <div style="display:flex;flex-direction:column;gap:16px">
-      <div class="card"><div class="k">1 · Rebalance the print queue</div><p>Same print time, aimed at what sold. About twice the Creepers, more Dumpling, Salmon nigiri and Avocado, fewer Hot dog buns and S'mores. 173 total vs about 160.</p></div>
-      <div class="card"><div class="k">2 · Every booth on the tracker</div><p>Plinko and Battle were about 40% of the money with no data.</p></div>
-      <div class="card"><div class="k">3 · Recount stock the morning of</div><p>After any restock. Ring up the blowout as its own item.</p></div>
-      <div class="card"><div class="k">4 · Better age tags</div><p>Elementary / Middle / High school / Adult, on every sale.</p></div>
-      <p style="font-size:18px;color:var(--ink-3)">No guarantee we repeat Ram-a-thon. Repeating what worked before isn't automatic (see copters). Compare with your board.</p>
+  <div class="body" style="grid-template-columns:640px 1fr">
+    <div style="min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px">
+      <div class="k">Print priority · enough of everything that nothing sells out</div>
+      <table class="t2" id="printTable"><thead><tr><th>Design</th><th style="text-align:right">Had</th><th style="text-align:right">Sold</th><th style="text-align:right">At least</th><th>Priority</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card nx"><div class="k">1 · Print top sellers first</div><p>Then refill the rest. Parts run about $0.45 a clicker (more for the big designs) against a $3.53 average price, and leftovers carry to other events, so err high.</p></div>
+      <div class="card nx"><div class="k">2 · Refresh the lineup</div><p>Bring back the hits, drop the weak ones like S'mores, add a few new designs.</p></div>
+      <div class="card nx"><div class="k">3 · Better signs, ads and display</div><p>On a crowded table some designs may never have been noticed.</p></div>
+      <div class="card nx"><div class="k">4 · Communicate better</div><p>A quick huddle before doors open: who's on which booth, prices, and the Plinko ticket bucket.</p></div>
+      <div class="card nx"><div class="k">5 · Cleaner counts</div><p>Recount stock that morning, ring up the blowout as its own item, tag ages Elementary / Middle / High / Adult.</p></div>
     </div>
   </div>
-  <div class="ft"><span>Source: findings v1.1.21 · next time = this year's rate x 3.3 selling hours + 20% buffer</span><span class="pg"></span></div>
-  <aside class="notes">Where does the data agree with the board? Where does it disagree?</aside>
+  <div class="ft"><span>Source: findings v1.1.21 · "at least" = this year's sales rate x 3.3 hours + 20%, likely low for designs that were hard to see · parts: switch $0.18, key ring $0.08, ~15 g filament at $11 to $16/kg (Chocolate bar takes 3 switches and much more filament)</span><span class="pg"></span></div>
+  <aside class="notes">Compare with the Keep / Add / Remove board. Where does it agree? There's no guarantee we repeat Ram-a-thon, so treat this as a starting point.</aside>
+</section>
+
+<!-- 15 christmas orders -->
+<section class="slide" id="xmasSlide" data-title="Christmas orders">
+  <div class="hd" style="gap:8px"><div class="chip">4 · Next · Christmas · quick mention</div>
+    <div class="copyrow"><h2 class="t">Christmas orders: stocking stuffers or ornaments?</h2><span class="status" id="xmasStatus">Connecting…</span></div></div>
+  <div class="body" style="grid-template-columns:1fr 1fr 420px;grid-template-rows:auto auto;align-content:start">
+    <div class="card"><div class="k">Stocking-stuffer clickers</div><h3>Our best sellers, bundled</h3><p>Dumpling, Salmon nigiri, Creeper and Avocado led Ram-a-thon. Same print queue as the last slide, so extra stock isn't wasted.</p></div>
+    <div class="card"><div class="k">Lithophane ornaments</div><h3>Custom photo ornaments</h3><p>Families send a photo and we print it as a lithophane ornament. We set up lithophane order forms last fall.</p></div>
+    <div class="poll" style="gap:10px;grid-row:span 2"><div class="k">What do we offer?</div><div id="poll-xmas" style="display:flex;flex-direction:column;gap:10px"></div><button class="undo" data-undo="xmas" type="button">Undo last vote</button></div>
+    <div class="card"><div class="k">Draft timeline</div><p>Orders close Tue Nov 24, before Thanksgiving break. Print Nov 30 to Dec 11. Hand out by Mon Dec 14, before HS finals (Dec 15 to 17). Winter break starts Dec 18.</p></div>
+    <div class="card"><div class="k">Decide</div><p>Price for each, how people order (a form, or at the club carnival), and who runs the printers.</p></div>
+  </div>
+  <div class="ft"><span>Dates from the CCA calendar · timeline is a draft</span><span class="pg"></span></div>
+  <aside class="notes">Two minutes, then move on: Trunk or Treat gets the time. Mention both options and the timeline; take a quick vote if the room is ready, and settle prices and owners at a later meeting.</aside>
 </section>
 
 <!-- 15 trunk or treat -->
@@ -524,7 +573,7 @@ table.t2 td.n{text-align:right}
     <table class="t2" style="font-size:22px;align-self:start">
       <thead><tr><th>Goal</th><th style="text-align:right">Target</th><th>How we know</th></tr></thead>
       <tbody>
-        <tr><td>Kids reached</td><td class="n">200</td><td>Tally counter at the trunk</td></tr>
+        <tr><td>Kids reached</td><td class="n">~500</td><td>Count at the trunk (ask CCS for last year's youth tickets)</td></tr>
         <tr><td>Copter kits handed out</td><td class="n">up to 88</td><td>Count the bags left at the end</td></tr>
         <tr><td>Parents signed up for camp or STEM news</td><td class="n">25</td><td>QR code to an interest form</td></tr>
         <tr><td>Photos we can use for grants and Instagram</td><td class="n">15</td><td>Shared album by Sunday</td></tr>
@@ -534,24 +583,41 @@ table.t2 td.n{text-align:right}
     </table>
     <div style="display:flex;flex-direction:column;gap:16px">
       <div class="card"><div class="k">The one that matters</div><p>Parent sign-ups. It's the only number that turns into camp enrollment and grant evidence.</p></div>
-      <div class="card"><div class="k">Edit tonight</div><p>Every number here is a starting point for leadership to change.</p></div>
+      <div class="card"><div class="k">For the Impact Award</div><p>Saturday's counts, sign-ups and photos go into our Impact Award presentation. Decide tonight who collects each one.</p></div>
     </div>
   </div>
   <div class="ft"><span>Draft by Claude from the team mission (Educate, Serve, Inspire)</span><span class="pg"></span></div>
-  <aside class="notes">Leadership: change the numbers before Monday. Does the interest form exist yet? If not, who makes it?</aside>
+  <aside class="notes">Leadership: every number here is a starting point, so change them before Monday. Does the interest form exist yet? If not, who makes it? Who owns the counts and the photos?</aside>
 </section>
 
-<!-- 17 votes -->
-<section class="slide" data-title="Vote: theme and candy">
+<!-- 17 theme brainstorm + votes -->
+<section class="slide" id="themeSlide" data-title="Theme: brainstorm, then vote">
   <div class="hd" style="gap:8px"><div class="chip">4 · Next · Trunk or Treat</div>
-    <div class="copyrow"><h2 class="t" style="font-size:46px">Vote: theme and candy</h2><span class="status" id="voteStatus">Connecting…</span></div></div>
-  <div class="body polls">
-    <div class="poll"><div class="k">Theme · one tap per raised hand</div><div id="poll-theme" style="display:flex;flex-direction:column;gap:12px"></div><button class="undo" data-undo="theme" type="button">Undo last theme vote</button></div>
-    <div class="poll"><div class="k">Candy</div><div id="poll-candy" style="display:flex;flex-direction:column;gap:12px"></div><button class="undo" data-undo="candy" type="button">Undo last candy vote</button>
-      <p style="font-size:18px;color:var(--ink-3)">Tallies count the meeting picked in the bottom bar.</p></div>
+    <div class="copyrow"><h2 class="t" style="font-size:46px">Theme: brainstorm, then vote</h2><span class="status" id="voteStatus">Connecting…</span></div></div>
+  <div class="body" style="grid-template-columns:1fr 400px">
+    <div class="brain">
+      <div class="copyrow" style="align-items:flex-start">
+        <p class="hmw">How might we make our trunk the one kids talk about on the way home?</p>
+        <span class="seg" role="group" aria-label="Step"><button type="button" data-phase="ideas" aria-pressed="true">1 · Ideas</button><button type="button" data-phase="vote" aria-pressed="false">2 · Vote</button></span>
+      </div>
+      <form class="add" id="ideaForm" style="padding:0;border:0"><input id="ideaIn" maxlength="80" placeholder="Type a theme idea and press Enter" aria-label="Theme idea" autocomplete="off"><button type="submit">Add</button></form>
+      <ul class="ideas" id="ideas"></ul>
+      <button class="undo" data-undo="theme" type="button" hidden>Undo last theme vote</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card" style="gap:10px;padding:20px 22px"><div class="k">Brainwrite, then dot vote</div>
+        <ol class="howto">
+          <li><b>3 minutes, silent.</b> Everyone writes 3 theme ideas on paper.</li>
+          <li><b>Go around.</b> One idea per person per turn. Type it in. No judging yet.</li>
+          <li><b>Merge.</b> Combine duplicates and build on each other's ideas.</li>
+          <li><b>Dot vote.</b> Everyone gets 3 votes. Tap once per raised hand.</li>
+        </ol>
+        <p style="font-size:16px;color:var(--ink-3)">Keep in mind: uses robots or copters · works after dark · family-friendly · about $25 of decorations</p></div>
+      <div class="poll" style="gap:10px"><div class="k">Candy</div><div id="poll-candy" style="display:flex;flex-direction:column;gap:10px"></div><button class="undo" data-undo="candy" type="button">Undo last candy vote</button></div>
+    </div>
   </div>
-  <div class="ft"><span>Theme ideas: Claude's drafts · write-ins go on the whiteboard</span><span class="pg"></span></div>
-  <aside class="notes">Count hands and tap once per hand. Undo removes the last tap.</aside>
+  <div class="ft"><span>Votes count the meeting picked in the bottom bar · ideas carry over from tonight to Monday</span><span class="pg"></span></div>
+  <aside class="notes">Brainwriting first so quieter people get ideas in before anyone reacts. Then switch to "2 · Vote". Each person gets 3 votes; tap once per raised hand. Write-ins can also go on the whiteboard.</aside>
 </section>
 
 <!-- 18 budget -->
@@ -559,18 +625,18 @@ table.t2 td.n{text-align:right}
   <div class="hd"><div class="chip">4 · Next · Trunk or Treat</div><h2 class="t">What does Saturday cost us in new money?</h2></div>
   <div class="body bud">
     <div class="ctrl">
-      <label for="kids">Kids we expect <span id="kidsV">200</span></label>
-      <input type="range" id="kids" min="50" max="400" step="10" value="200">
+      <label for="kids">Kids we expect <span id="kidsV">500</span></label>
+      <input type="range" id="kids" min="50" max="800" step="10" value="500">
       <div class="row"><span style="flex:1">Candy pieces per kid</span><span class="seg" role="group" aria-label="Candy pieces per kid"><button type="button" data-cpk="0" aria-pressed="false">0</button><button type="button" data-cpk="1" aria-pressed="true">1</button><button type="button" data-cpk="2" aria-pressed="false">2</button></span></div>
       <div class="row"><label for="price" style="flex:1;font-weight:600">Price per piece <small>(a guess, change it)</small></label>$<input type="number" id="price" min="0.02" max="1" step="0.01" value="0.10"></div>
       <div class="row"><label for="decor" style="flex:1;font-weight:600">Decorations and lights</label>$<input type="number" id="decor" min="0" max="300" step="5" value="25"></div>
-      <p style="font-size:17px;color:var(--ink-3)">Ask CCS how many kids came last year. Copter parts, cards and prizes are already paid for, so they cost no new money.</p>
+      <p style="font-size:17px;color:var(--ink-3)">Past Trunk or Treats drew over 1,000 people. If half to two-thirds were kids, that's 500 to 650. Ask CCS for last year's youth ticket count. Copter parts, cards and prizes are already paid for.</p>
     </div>
     <div class="out">
       <div><div class="k">New money</div><div class="big" id="budTotal" style="font-size:96px">$45</div><div class="verdict" id="budVerdict">Under the $75 cap</div></div>
       <div style="padding-top:40px"><div class="mtrack" id="mtrack"><div class="mfill" id="mfill"><i id="mCandy" style="background:var(--b-plk)"></i><i id="mDecor" style="background:var(--b-bat)"></i></div></div></div>
       <div class="legend"><span><i class="sw" style="background:var(--b-plk)"></i>Candy <b class="num" id="budCandy">$20</b></span><span><i class="sw" style="background:var(--b-bat)"></i>Decorations <b class="num" id="budDecor">$25</b></span></div>
-      <div style="display:flex;flex-direction:column;gap:10px"><div class="k">Who gets a copter kit · one square per 10 kids</div><div class="kits" id="kits"></div><p style="font-size:19px;color:var(--ink-2)" id="kitsText"></p></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div class="k">Who gets a copter kit · one square per 20 kids</div><div class="kits" id="kits"></div><p style="font-size:19px;color:var(--ink-2)" id="kitsText"></p></div>
     </div>
   </div>
   <div class="ft"><span>Cap: $75 to $100 of new money (Sam, Oct 18) · candy price is a guess</span><span class="pg"></span></div>
@@ -578,35 +644,22 @@ table.t2 td.n{text-align:right}
 </section>
 
 <!-- 19 backward plan -->
-<section class="slide" data-title="Backward plan">
-  <div class="hd"><div class="chip">4 · Next · Trunk or Treat</div><h2 class="t">Work backward from Saturday 2:45 PM. Names go on the whiteboard.</h2></div>
+<section class="slide" id="planSlide" data-title="Backward plan">
+  <div class="hd" style="gap:8px"><div class="chip">4 · Next · Trunk or Treat</div>
+    <div class="copyrow"><h2 class="t">Work backward from Saturday 2:45 PM</h2><span class="status" id="planStatus">Connecting…</span></div></div>
   <div class="body plan">
-    <div class="card" style="gap:12px"><div class="k">Must be true by Sat 2:45 PM</div>
-      <ul class="must">
-        <li>A car, and who drives it</li>
-        <li>A guardian plan for youth helpers at the gate</li>
-        <li>4 free youth tickets in hand</li>
-        <li>Copter kits put together and bagged</li>
-        <li>Theme decorations built</li>
-        <li>Lights, and the power station charged</li>
-        <li>Canopy, table, tablecloth, chairs</li>
-        <li>Plinko board and prizes</li>
-        <li>QR sign and interest form</li>
-        <li>Candy, if we voted yes</li>
-        <li>Someone owns photos</li>
-      </ul></div>
-    <div class="days">
-      <div class="day"><h4>Sun<small>10/18 · tonight</small></h4><p>Leadership edits goals and drafts owners.</p><div class="who">Who:</div></div>
-      <div class="day"><h4>Mon<small>10/19</small></h4><p>Team debrief and votes. Trunk lead sends CCS the questions.</p><div class="who">Who:</div></div>
-      <div class="day"><h4>Tue<small>10/20</small></h4><p>Bag copter kits. Start decorations.</p><div class="who">Who:</div></div>
-      <div class="day"><h4>Wed<small>10/21 · last school day</small></h4><p>Decorations done. Gear staged to load.</p><div class="who">Who:</div></div>
-      <div class="day off"><h4>Thu<small>10/22 · no school</small></h4><p>Buy candy if voted.</p><div class="who">Who:</div></div>
-      <div class="day off"><h4>Fri<small>10/23 · no school</small></h4><p>Charge the power station. Pack the car.</p><div class="who">Who:</div></div>
-      <div class="day ev"><h4>Sat<small>10/24 · event</small></h4><p>Arrive ~2:45. Doors 4:00. Done 7:00. Packed by ~7:45.</p><div class="who">Who:</div></div>
+    <div class="card" style="gap:10px;min-height:0;padding:20px 22px">
+      <div class="k">Must be true by Sat 2:45 PM</div>
+      <ul class="chk" id="chk"></ul>
+      <form class="add" id="chkForm" style="padding:0;border:0"><input id="chkIn" maxlength="80" placeholder="Add something we need…" aria-label="Add a checklist item" autocomplete="off"><button type="submit">Add</button></form>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+      <div class="k">Day by day · click any line to edit</div>
+      <div class="days2" id="days"></div>
     </div>
   </div>
-  <div class="ft"><span>Draft. Arrival time depends on CCS's trunk setup time.</span><span class="pg"></span></div>
-  <aside class="notes">Hand off to the whiteboard. Every box gets a name before the meeting ends.</aside>
+  <div class="ft"><span>Edits save for everyone who opens this deck · arrival time depends on CCS's trunk setup time</span><span class="pg"></span></div>
+  <aside class="notes">Type owners in as the room decides. Every line gets a name before the meeting ends.</aside>
 </section>
 
       <div class="tip" id="tip" hidden></div>
@@ -620,6 +673,7 @@ table.t2 td.n{text-align:right}
     <button class="bbtn nav" id="next" type="button" aria-label="Next slide">›</button>
     <span class="btitle" id="btitle"></span>
     <span class="seg" role="group" aria-label="Meeting"><button type="button" data-meet="sun" aria-pressed="true">Sun<span class="hide-sm"> · Leadership</span></button><button type="button" data-meet="mon" aria-pressed="false">Mon<span class="hide-sm"> · Team</span></button></span>
+    <button class="bbtn hide-sm" id="themeBtn" type="button">Light screen</button>
     <button class="bbtn hide-sm" id="notesBtn" type="button" aria-pressed="false">Notes</button>
     <button class="bbtn hide-sm" id="fsBtn" type="button">Full screen</button>
     <div class="panel" id="notesPanel" hidden></div>
@@ -689,7 +743,7 @@ function go(i){
   btitle.textContent = s.dataset.title || '';
   const n = $('.notes', s); notesPanel.textContent = n ? n.textContent : '';
   $$('button', jumpList).forEach((b, k) => b.classList.toggle('cur', k === cur));
-  if (s.dataset.iframe) { const f = $('iframe', s); if (f && !f.getAttribute('src')) { f.addEventListener('load', () => { const ph = $('.ph', s); if (ph) ph.remove(); }, {once:true}); f.setAttribute('src', f.dataset.src); } }
+  if (s.dataset.iframe) { const f = $('iframe', s); if (f && !f.getAttribute('src')) { f.addEventListener('load', () => { const ph = $('.ph', s); if (ph) ph.remove(); syncFrameTheme(); }, {once:true}); f.setAttribute('src', f.dataset.src); } }
   try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e) {}
 }
 $('#prev').addEventListener('click', () => go(cur - 1));
@@ -716,11 +770,12 @@ document.addEventListener('keydown', e => {
   else if (k === 'n' || k === 'N') { toggleNotes(); }
   else if (k === 'g' || k === 'G') { toggleJump(); }
   else if (k === 'f' || k === 'F') { $('#fsBtn').click(); }
+  else if (k === 't' || k === 'T') { $('#themeBtn').click(); }
   else if (k === 'Escape') { toggleJump(false); toggleNotes(false); }
 });
 let tx = null, ty = null;
 viewport.addEventListener('touchstart', e => {
-  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.polls')) { tx = null; return; }
+  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.brain,.poll,.plan')) { tx = null; return; }
   tx = e.touches[0].clientX; ty = e.touches[0].clientY;
 }, {passive:true});
 viewport.addEventListener('touchend', e => {
@@ -753,9 +808,9 @@ const DESIGNS = [
   {n:'LEGO brick', p:'lego', th:'Workshop', rate:0.6, sold:2, stock:4, st:50, out:null, left:2, ideal:3}
 ];
 const PACE = [
-  {t:'10:00', l:'open to 10:30', v:98}, {t:'10:30', l:'10:30 to 11:00', v:158}, {t:'11:00', l:'11:00 to 11:30', v:218},
+  {t:'10:00', l:'10:02 to 10:30, before the 10:30 start', v:98}, {t:'10:30', l:'10:30 to 11:00', v:158}, {t:'11:00', l:'11:00 to 11:30', v:218, note:'21 sales and 109 tickets, a sale every 1.4 minutes'},
   {t:'11:30', l:'11:30 to noon', v:176}, {t:'12:00', l:'noon to 12:30', v:74}, {t:'12:30', l:'12:30 to 1:00', v:192, alt:138},
-  {t:'1:00', l:'1:00 to the last sale (1:21)', v:78}
+  {t:'1:00', l:'1:00 to the last sale (1:21), after the 1:00 close', v:78}
 ];
 const THEMES = [
   {n:'Asian food', d:'Salmon nigiri, Dumpling, Spam musubi, Egg tart', u:64, st:'100%'},
@@ -771,8 +826,9 @@ const GROUPS = [
   {n:'Average of the other 19', v:325, avg:true}
 ];
 const PRINT = [
-  ['Dumpling',24,29],['Salmon nigiri',23,28],['Creeper',10,23],['Avocado',12,18],['Egg tart','11+',14],['Chocolate bar',15,14],
-  ['Hot dog bun',22,12],['WD-40',15,10],['Creeper infinity cube',9,10],['Spam musubi',6,8],["S'mores",9,4],['LEGO brick',4,3]
+  ['Creeper',10,10,23,1],['Dumpling',24,24,29,1],['Salmon nigiri',23,23,28,1],['Avocado',12,12,18,1],['Spam musubi',6,6,8,1],
+  ['Egg tart','11+',11,14,2],['Creeper infinity cube',9,8,10,2],
+  ['Chocolate bar',15,11,14,3],['Hot dog bun',22,10,12,3],['WD-40',15,8,10,3],['LEGO brick',4,2,3,3],["S'mores",9,3,null,0]
 ];
 
 /* ---------- svg helpers ---------- */
@@ -906,13 +962,15 @@ function drawPace(){
   const max = 250, Y = v => top + ph - v / max * ph, avg = 146;
   const bw = pw / PACE.length;
   let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="Gross dollars per hour by half hour">';
+  s += '<rect x="' + (left + bw) + '" y="' + (top - 6) + '" width="' + (bw * 5) + '" height="' + (ph + 6) + '" style="fill:var(--soft)"></rect>';
+  s += '<text x="' + (left + bw + 8) + '" y="' + (top + 14) + '" style="fill:var(--ink-3);font-size:15px">Event hours 10:30 to 1:00</text>';
   for (let v = 0; v <= max; v += 50) { s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(v) + 5) + '" text-anchor="end">$' + v + '</text>'; }
   PACE.forEach((p, i) => {
     const v = paceAlt && p.alt ? p.alt : p.v;
     const x = left + i * bw + bw * .18, cw = bw * .64, y = Y(v);
     const r = 4;
     const d = 'M' + x + ',' + Y(0) + 'V' + (y + r) + 'Q' + x + ',' + y + ' ' + (x + r) + ',' + y + 'H' + (x + cw - r) + 'Q' + (x + cw) + ',' + y + ' ' + (x + cw) + ',' + (y + r) + 'V' + Y(0) + 'Z';
-    const hint = '<b>' + p.l + '</b><br>$' + v + ' an hour, gross' + (p.alt ? (paceAlt ? '<br><span class="m">without the 27-ticket Dumpling sale ($' + p.v + ' with it)</span>' : '<br><span class="m">$' + p.alt + ' without the 27-ticket Dumpling sale</span>') : '');
+    const hint = '<b>' + p.l + '</b><br>$' + v + ' an hour, gross' + (p.note ? '<br><span class="m">' + p.note + '</span>' : '') + (p.alt ? (paceAlt ? '<br><span class="m">without the 27-ticket Dumpling sale ($' + p.v + ' with it)</span>' : '<br><span class="m">$' + p.alt + ' without the 27-ticket Dumpling sale</span>') : '');
     s += '<g data-tip="' + esc(hint) + '"><rect x="' + (left + i * bw) + '" y="' + top + '" width="' + bw + '" height="' + ph + '" style="fill:transparent"></rect><path d="' + d + '" style="fill:var(--red)"></path>';
     s += '<text x="' + (x + cw / 2) + '" y="' + (y - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:20px;font-weight:700">$' + v + '</text>';
     s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (h - bottom + 28) + '" text-anchor="middle" style="font-size:18px">' + p.t + '</text></g>';
@@ -920,8 +978,9 @@ function drawPace(){
   s += '<line x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(avg) + '" y2="' + Y(avg) + '" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:8 6"></line>';
   s += '<text x="' + (w - right) + '" y="' + (Y(avg) - 10) + '" text-anchor="end" style="fill:var(--ink);font-size:17px">day average $146/hr</text>';
   s += '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line>';
-  s += '<text x="' + (left + 2 * bw + bw / 2) + '" y="' + (top - 22) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">RUSH</text>';
-  s += '<text x="' + (left + 4 * bw + bw / 2) + '" y="' + (Y(74) - 40) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">LULL</text>';
+  s += '<text x="' + (left + 2 * bw) + '" y="' + (top - 22) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">RUSH</text>';
+  s += '<text x="' + (left + 4 * bw + bw / 2) + '" y="' + (Y(74) - 40) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">LUNCH</text>';
+  s += '<text x="' + (left + 6 * bw + bw / 2) + '" y="' + (Y(78) - 40) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">AFTER CLOSE</text>';
   s += '</svg>';
   el.innerHTML = s;
   bindTips(el);
@@ -951,12 +1010,9 @@ drawPace();
   bindTips($('#groupBars'));
 })();
 
-/* ---------- slide 14: print table ---------- */
-$('#printTable tbody').innerHTML = PRINT.map(r => {
-  const had = typeof r[1] === 'number' ? r[1] : parseInt(r[1], 10), d = r[2] - had;
-  const ch = typeof r[1] !== 'number' ? '<span style="color:var(--ink-3)">≈</span>' : (d > 0 ? '<span class="up">+' + d + '</span>' : d < 0 ? '<span class="dn">' + d + '</span>' : '0');
-  return '<tr><td>' + esc(r[0]) + '</td><td class="n">' + r[1] + '</td><td class="n"><b>' + r[2] + '</b></td><td class="n">' + ch + '</td></tr>';
-}).join('');
+/* ---------- slide 14: print priority ---------- */
+const TIER = {1:'<span class="tag so">1 · Sold out</span>', 2:'<span class="tag">2 · Sold most</span>', 3:'<span class="tag">3 · Had extra</span>', 0:'<span class="tag">Drop?</span>'};
+$('#printTable tbody').innerHTML = PRINT.map(r => '<tr><td>' + esc(r[0]) + '</td><td class="n">' + r[1] + '</td><td class="n">' + r[2] + '</td><td class="n"><b>' + (r[3] == null ? '–' : r[3]) + '</b></td><td>' + TIER[r[4]] + '</td></tr>').join('');
 
 /* ---------- slide 18: budget ---------- */
 let cpk = 1;
@@ -980,9 +1036,9 @@ function drawBudget(){
   const tr = $('#mtrack');
   $$('.cap,.caplab', tr).forEach(n => n.remove());
   [75, 100].forEach(c => { const l = c / scaleMax * 100; tr.insertAdjacentHTML('beforeend', '<div class="cap" style="left:' + l + '%"></div><div class="caplab" style="left:' + l + '%">$' + c + '</div>'); });
-  const cells = Math.ceil(kids / 10);
+  const cells = Math.ceil(kids / 20);
   let html = '';
-  for (let i = 0; i < 40; i++) html += '<i class="' + (i < cells ? (i * 10 < 88 ? 'k1' : 'k2') : '') + '"></i>';
+  for (let i = 0; i < 40; i++) html += '<i class="' + (i < cells ? (i * 20 < 88 ? 'k1' : 'k2') : '') + '"></i>';
   $('#kits').innerHTML = html;
   const got = Math.min(kids, 88), rest = kids - got;
   $('#kitsText').textContent = rest > 0 ? got + ' kids get a copter kit. The other ' + rest + ' get cards, prizes or candy.' : 'Every kid can get a copter kit, with ' + (88 - kids) + ' kits to spare.';
@@ -1000,32 +1056,44 @@ function setMeeting(m){
   meeting = m;
   $$('[data-meet]').forEach(b => b.setAttribute('aria-pressed', b.dataset.meet === m));
   try { localStorage.setItem(LKEY + '-meet', m); } catch(e) {}
-  renderVotes();
+  render();
 }
 $$('[data-meet]').forEach(b => b.addEventListener('click', () => setMeeting(b.dataset.meet)));
 
+/* ---------- light / dark screen ---------- */
+const rootEl = document.documentElement;
+function currentScheme(){ const t = rootEl.getAttribute('data-theme'); if (t === 'light' || t === 'dark') return t; return (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+function syncThemeBtn(){ $('#themeBtn').textContent = currentScheme() === 'dark' ? 'Light screen' : 'Dark screen'; }
+function syncFrameTheme(){ try { const f = $('iframe[data-src]'), d = f && f.contentDocument; if (d && d.documentElement) d.documentElement.setAttribute('data-theme', currentScheme()); } catch(e) {} }
+function applyTheme(t){ rootEl.setAttribute('data-theme', t); syncThemeBtn(); syncFrameTheme(); }
+$('#themeBtn').addEventListener('click', () => { const t = currentScheme() === 'dark' ? 'light' : 'dark'; try { localStorage.setItem(LKEY + '-theme', t); } catch(e) {} applyTheme(t); });
+try { const t = localStorage.getItem(LKEY + '-theme'); if (t === 'light' || t === 'dark') rootEl.setAttribute('data-theme', t); } catch(e) {}
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { syncThemeBtn(); syncFrameTheme(); }); } catch(e) {}
+syncThemeBtn();
+
 /* ---------- shared store: board + votes ---------- */
 const POLLS = {
-  theme: [
-    {k:'lab', n:'Mad Scientist Robot Lab', d:'"It\'s ALIVE!" A robot on the operating table, green light, safety glasses. Plinko is the experiment.'},
-    {k:'grave', n:'Robot Graveyard', d:'"Rest in Pieces." Cardboard tombstones for retired robots and past games.'},
-    {k:'factory', n:'Robo Ram\'s Candy Factory', d:'A red and yellow assembly line where prizes come off the line.'}
+  xmas: [
+    {k:'clickers', n:'Stocking-stuffer clickers', d:'Bundles of best sellers'},
+    {k:'ornaments', n:'Lithophane ornaments', d:'Custom photo orders'},
+    {k:'both', n:'Both', d:'Two kinds of orders to run'}
   ],
   candy: [
-    {k:'yes', n:'Backup candy', d:'Candy for when prizes run low, or for kids who just want candy.'},
-    {k:'no', n:'Prizes only', d:'Same as last year: copters, cards and prizes.'}
+    {k:'yes', n:'Backup candy', d:'For when prizes run low'},
+    {k:'no', n:'Prizes only', d:'Copters, cards and prizes'}
   ]
 };
-const S = {mode:'pending', db:null, board:[], votes:[], readOnly:false, mine:{theme:[], candy:[]}};
-function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; } catch(e) { S.board = []; S.votes = []; } }
-function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes})); } catch(e) {} }
+const S = {mode:'pending', db:null, board:[], votes:[], themes:[], check:[], days:{}, readOnly:false, mine:{theme:[], candy:[], xmas:[]}};
+let phase = 'ideas';
+function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; S.themes = o.themes || []; S.check = o.check || []; S.days = o.days || {}; } catch(e) { S.board = []; S.votes = []; S.themes = []; S.check = []; S.days = {}; } }
+function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes, themes:S.themes, check:S.check, days:S.days})); } catch(e) {} }
 const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 function statusText(){
   if (S.mode === 'pending') return 'Connecting…';
   if (S.mode === 'db') return S.readOnly ? 'View only: you can read, not add' : 'Saved for everyone who opens this deck';
   return 'Saving on this device only';
 }
-function setStatus(){ $('#boardStatus').textContent = statusText(); $('#voteStatus').textContent = statusText(); }
+function setStatus(){ ['#boardStatus', '#voteStatus', '#planStatus', '#xmasStatus'].forEach(id => $(id).textContent = statusText()); }
 function onWriteError(e){
   const code = e && e.code;
   if (code === 'invalid_argument' || code === 'not_granted') { S.readOnly = true; render(); }
@@ -1040,6 +1108,32 @@ async function addItem(col, text){
 async function removeItem(id){
   if (S.mode === 'db') { try { await S.db.doc('board/' + id).delete(); } catch(e) { onWriteError(e); } }
   else { S.board = S.board.filter(x => x.id !== id); localSave(); render(); }
+}
+async function addIdea(name){
+  const item = {name, meeting, at:new Date().toISOString()};
+  if (S.mode === 'db') { try { await S.db.collection('themes').add(item); } catch(e) { onWriteError(e); } }
+  else { S.themes.push(Object.assign({id:rid()}, item)); localSave(); render(); }
+}
+async function removeIdea(id){
+  if (S.mode === 'db') { try { await S.db.doc('themes/' + id).delete(); } catch(e) { onWriteError(e); } }
+  else { S.themes = S.themes.filter(x => x.id !== id); localSave(); render(); }
+}
+function themeCounts(){ const c = {}; S.votes.forEach(v => { if (v.poll === 'theme' && v.meeting === meeting) c[v.option] = (c[v.option] || 0) + 1; }); return c; }
+function renderIdeas(){
+  const can = S.mode !== 'pending' && !S.readOnly;
+  const counts = themeCounts();
+  const ideas = S.themes.slice().sort((a, b) => String(a.at).localeCompare(String(b.at)));
+  const top = ideas.reduce((m, i) => Math.max(m, counts[i.id] || 0), 0), max = Math.max(1, top);
+  const ul = $('#ideas');
+  if (!ideas.length) ul.innerHTML = '<li class="empty">' + (S.mode === 'pending' ? 'Loading…' : 'No ideas yet. Start with 3 minutes of silent writing, then go around the room.') + '</li>';
+  else ul.innerHTML = ideas.map(i => {
+    const c = counts[i.id] || 0, id = esc(i.id);
+    if (phase === 'ideas') return '<li class="idea"><span class="tx">' + esc(i.name) + '</span><span class="mt">' + (MEET[i.meeting] || '') + '</span>' + (can ? '<button class="x" type="button" data-delidea="' + id + '" aria-label="Remove ' + esc(i.name) + '">×</button>' : '') + '</li>';
+    return '<li class="idea"><span class="ofill" style="width:' + (c / max * 100) + '%"></span><span class="tx">' + esc(i.name) + (top > 0 && c === top ? ' <span class="tag so">Top</span>' : '') + '</span><span class="c">' + c + '</span><button class="plus" type="button" data-vote="theme:' + id + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(i.name) + '">+1</button></li>';
+  }).join('');
+  const f = $('#ideaForm'); f.hidden = phase !== 'ideas'; $$('input,button', f).forEach(n => n.disabled = !can);
+  const u = $('[data-undo="theme"]'); u.hidden = phase !== 'vote'; u.disabled = !can || !S.mine.theme.length;
+  $$('[data-phase]').forEach(b => b.setAttribute('aria-pressed', b.dataset.phase === phase));
 }
 async function vote(poll, option){
   const v = {poll, option, meeting, at:new Date().toISOString()};
@@ -1069,11 +1163,108 @@ function renderVotes(){
     const counts = {}; POLLS[p].forEach(o => counts[o.k] = 0);
     S.votes.forEach(v => { if (v.poll === p && v.meeting === meeting && counts[v.option] != null) counts[v.option]++; });
     const max = Math.max(1, Math.max.apply(null, Object.values(counts)));
-    $('#poll-' + p).innerHTML = POLLS[p].map(o => '<div class="opt"><span class="ofill" style="width:' + (counts[o.k] / max * 100) + '%"></span><div><h4>' + esc(o.n) + '</h4><p>' + esc(o.d) + '</p></div><div class="c">' + counts[o.k] + '</div><button type="button" data-vote="' + p + ':' + o.k + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(o.n) + '">+1</button></div>').join('');
+    $('#poll-' + p).innerHTML = POLLS[p].map(o => '<div class="opt sm"><span class="ofill" style="width:' + (counts[o.k] / max * 100) + '%"></span><div><h4>' + esc(o.n) + '</h4><p>' + esc(o.d) + '</p></div><div class="c">' + counts[o.k] + '</div><button type="button" data-vote="' + p + ':' + o.k + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(o.n) + '">+1</button></div>').join('');
   });
-  $$('[data-undo]').forEach(b => b.disabled = !can || !S.mine[b.dataset.undo].length);
+  Object.keys(POLLS).forEach(p => { const u = $('[data-undo="' + p + '"]'); if (u) u.disabled = !can || !S.mine[p].length; });
 }
-function render(){ setStatus(); renderBoard(); renderVotes(); }
+const DAYS = [
+  {k:'sun', d:'Sun', s:'10/18 · tonight'}, {k:'mon', d:'Mon', s:'10/19'}, {k:'tue', d:'Tue', s:'10/20'},
+  {k:'wed', d:'Wed', s:'10/21 · last school day'}, {k:'thu', d:'Thu', s:'10/22 · no school', off:true},
+  {k:'fri', d:'Fri', s:'10/23 · no school', off:true}, {k:'sat', d:'Sat', s:'10/24 · event', ev:true}
+];
+$('#days').innerHTML = DAYS.map(d => '<div class="drow' + (d.off ? ' off' : '') + (d.ev ? ' ev' : '') + '" data-day="' + d.k + '"><h4>' + d.d + '<small>' + d.s + '</small></h4><input class="fld" id="day-' + d.k + '-tasks" data-f="tasks" maxlength="140" placeholder="What happens this day" aria-label="' + d.d + ' tasks"><input class="fld who" id="day-' + d.k + '-who" data-f="who" maxlength="40" placeholder="Who" aria-label="' + d.d + ' owner"></div>').join('');
+const pend = {};
+function docData(path){
+  const [c, id] = path.split('/');
+  const src = c === 'plancheck' ? S.check.find(x => x.id === id) : S.days[id];
+  const o = Object.assign({}, src || {}); delete o.id; return o;
+}
+function applyLocal(path, data){
+  const [c, id] = path.split('/');
+  if (c === 'plancheck') { const it = S.check.find(x => x.id === id); if (it) Object.assign(it, data); }
+  else S.days[id] = Object.assign({}, S.days[id] || {}, data);
+}
+function saveDoc(path, patch, wait){
+  const p = pend[path] || (pend[path] = {data:{}, timer:null, busy:false});
+  Object.assign(p.data, patch);
+  clearTimeout(p.timer);
+  p.timer = setTimeout(() => flush(path), wait == null ? 600 : wait);
+}
+async function flush(path){
+  const p = pend[path]; if (!p || p.busy) return;
+  const data = p.data; p.data = {};
+  if (!Object.keys(data).length) return;
+  p.busy = true;
+  try {
+    if (S.mode === 'db') await S.db.doc(path).set(Object.assign(docData(path), data));
+    else { applyLocal(path, data); localSave(); renderPlan(); }
+  } catch(e) { onWriteError(e); }
+  p.busy = false;
+  if (pend[path] && Object.keys(pend[path].data).length) flush(path);
+}
+async function addCheck(text){
+  const item = {text, owner:'', done:false, at:new Date().toISOString()};
+  if (S.mode === 'db') { try { await S.db.collection('plancheck').add(item); } catch(e) { onWriteError(e); } }
+  else { S.check.push(Object.assign({id:rid()}, item)); localSave(); renderPlan(); }
+}
+async function removeCheck(id){
+  const path = 'plancheck/' + id;
+  if (pend[path]) { clearTimeout(pend[path].timer); delete pend[path]; }
+  if (S.mode === 'db') { try { await S.db.doc(path).delete(); } catch(e) { onWriteError(e); } }
+  else { S.check = S.check.filter(x => x.id !== id); localSave(); renderPlan(); }
+}
+function setVal(el, v){ if (document.activeElement !== el && el.value !== v) el.value = v; }
+function renderPlan(){
+  const can = S.mode !== 'pending' && !S.readOnly;
+  const ul = $('#chk');
+  const items = S.check.slice().sort((a, b) => String(a.at).localeCompare(String(b.at)));
+  if (!items.length) ul.innerHTML = '<li class="empty">' + (S.mode === 'pending' ? 'Loading…' : 'Nothing yet. Add what has to be ready by Saturday.') + '</li>';
+  else {
+    const e0 = $('.empty', ul); if (e0) e0.remove();
+    const keep = new Set();
+    items.forEach((it, idx) => {
+      keep.add(it.id);
+      let li = Array.from(ul.children).find(n => n.dataset.id === it.id);
+      if (!li) {
+        li = document.createElement('li'); li.dataset.id = it.id;
+        const k = it.id.replace(/[^A-Za-z0-9_-]/g, '');
+        li.innerHTML = '<input type="checkbox" id="chk-' + k + '-done" aria-label="Done"><input class="fld tx" id="chk-' + k + '-tx" maxlength="80" aria-label="Checklist item"><input class="fld who" id="chk-' + k + '-who" maxlength="40" placeholder="Who" aria-label="Who"><button class="x" type="button" aria-label="Remove">×</button>';
+      }
+      if (ul.children[idx] !== li) ul.insertBefore(li, ul.children[idx] || null);
+      const [cb, tx, who, x] = li.children;
+      cb.checked = !!it.done; cb.disabled = !can;
+      setVal(tx, it.text || ''); setVal(who, it.owner || '');
+      tx.disabled = who.disabled = !can; x.hidden = !can;
+      li.classList.toggle('done', !!it.done);
+    });
+    Array.from(ul.children).forEach(n => { if (n.dataset.id && !keep.has(n.dataset.id)) n.remove(); });
+  }
+  DAYS.forEach(d => {
+    const row = $('[data-day="' + d.k + '"]', $('#days')), v = S.days[d.k] || {};
+    $$('input', row).forEach(inp => { setVal(inp, v[inp.dataset.f] || ''); inp.disabled = !can; });
+  });
+  $$('input,button', $('#chkForm')).forEach(n => n.disabled = !can);
+}
+$('#chk').addEventListener('input', e => {
+  const li = e.target.closest('li[data-id]'); if (!li || e.target.type === 'checkbox') return;
+  saveDoc('plancheck/' + li.dataset.id, e.target.classList.contains('who') ? {owner:e.target.value.slice(0, 40)} : {text:e.target.value.slice(0, 80)});
+});
+$('#chk').addEventListener('change', e => {
+  const li = e.target.closest('li[data-id]'); if (!li || e.target.type !== 'checkbox') return;
+  li.classList.toggle('done', e.target.checked);
+  saveDoc('plancheck/' + li.dataset.id, {done:e.target.checked}, 0);
+});
+$('#chk').addEventListener('click', e => { const x = e.target.closest('.x'); if (x) removeCheck(x.closest('li[data-id]').dataset.id); });
+$('#days').addEventListener('input', e => {
+  const row = e.target.closest('[data-day]'); if (!row) return;
+  const f = e.target.dataset.f; saveDoc('planday/' + row.dataset.day, {[f]: e.target.value.slice(0, f === 'who' ? 40 : 140)});
+});
+$('#chkForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const inp = $('#chkIn'), t = inp.value.trim(); if (!t) return;
+  inp.value = ''; addCheck(t.slice(0, 80));
+});
+function render(){ setStatus(); renderBoard(); renderVotes(); renderIdeas(); renderPlan(); }
 $('#board').addEventListener('submit', e => {
   e.preventDefault();
   const f = e.target.closest('[data-add]'); if (!f) return;
@@ -1083,21 +1274,39 @@ $('#board').addEventListener('submit', e => {
   addItem(f.dataset.add, text.slice(0, 160));
 });
 $('#board').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) removeItem(b.dataset.del); });
-$('.polls').addEventListener('click', e => {
+stage.addEventListener('click', e => {
   const b = e.target.closest('[data-vote]');
   if (b) { const [p, o] = b.dataset.vote.split(':'); vote(p, o); return; }
-  const u = e.target.closest('[data-undo]'); if (u) undo(u.dataset.undo);
+  const u = e.target.closest('[data-undo]'); if (u) { undo(u.dataset.undo); return; }
+  const d = e.target.closest('[data-delidea]'); if (d) { removeIdea(d.dataset.delidea); return; }
+  const ph = e.target.closest('[data-phase]'); if (ph) { phase = ph.dataset.phase; renderIdeas(); }
+});
+$('#ideaForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const inp = $('#ideaIn'), name = inp.value.trim();
+  if (!name) return;
+  inp.value = '';
+  addIdea(name.slice(0, 80));
 });
 $('#copyBoard').addEventListener('click', () => {
-  const lines = ['Ram-a-thon debrief: Keep / Add / Remove'];
+  const lines = ['Ram-a-thon debrief: Keep / Add / Remove, theme ideas, votes'];
   [['keep', 'KEEP'], ['add', 'ADD'], ['remove', 'REMOVE']].forEach(([c, h]) => {
     lines.push('', h);
     const items = S.board.filter(x => x.col === c).sort((a, b) => String(a.at).localeCompare(String(b.at)));
     if (!items.length) lines.push('- (none)');
     items.forEach(x => lines.push('- ' + x.text + ' [' + (MEET[x.meeting] || '') + ']'));
   });
+  const tc = themeCounts();
+  lines.push('', 'THEME IDEAS (votes, ' + MEET[meeting] + ')');
+  const ideas = S.themes.slice().sort((a, b) => (tc[b.id] || 0) - (tc[a.id] || 0));
+  if (!ideas.length) lines.push('- (none)');
+  ideas.forEach(i => lines.push('- ' + i.name + ': ' + (tc[i.id] || 0)));
   const counts = Object.keys(POLLS).map(p => p.toUpperCase() + ' (' + MEET[meeting] + '): ' + POLLS[p].map(o => o.n + ' ' + S.votes.filter(v => v.poll === p && v.option === o.k && v.meeting === meeting).length).join(', '));
   lines.push('', ...counts);
+  lines.push('', 'MUST BE TRUE BY SAT 2:45 PM');
+  S.check.slice().sort((a, b) => String(a.at).localeCompare(String(b.at))).forEach(c => lines.push('- [' + (c.done ? 'x' : ' ') + '] ' + c.text + (c.owner ? ' (' + c.owner + ')' : '')));
+  lines.push('', 'DAY BY DAY');
+  DAYS.forEach(d => { const v = S.days[d.k] || {}; lines.push('- ' + d.d + ' ' + d.s + ': ' + (v.tasks || '') + (v.who ? ' (' + v.who + ')' : '')); });
   const text = lines.join('\n'), btn = $('#copyBoard');
   const fallback = () => {
     let box = $('#copyBox');
@@ -1120,6 +1329,9 @@ async function initStore(){
   try {
     db.collection('board').onSnapshot(snap => { S.board = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('votes').onSnapshot(snap => { S.votes = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
+    db.collection('themes').onSnapshot(snap => { S.themes = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
+    db.collection('plancheck').onSnapshot(snap => { S.check = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
+    db.collection('planday').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => o[d.id] = d.data()); S.days = o; render(); }, fail);
   } catch(e) { fail(); }
 }
 
@@ -1144,4 +1356,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide.
 -->
