@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.14.md
-version: 1.1.14
+file: ramathon_2026_findings_v1.1.15.md
+version: 1.1.15
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-18
@@ -12,7 +12,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 > **Internal estimates only. Do not share or repost.** Other groups' numbers are eyeballed from photos.
 
-We grossed about **900 tickets** (830 counted, plus about 70 handed to helpers for food). That's about **$810 after CCA's 10%**, and about **81%** of our goal of 1,000 net tickets (1,112 gross). Clickers carried the sales table, Plinko quietly tripled its goal, and copters fell off a cliff.
+We grossed about **900 tickets** (830 counted, plus about 70 handed to helpers for food). That's about **$810 after CCA's 10%**, and about **81%** of our goal of 1,000 net tickets (1,112 gross). Clickers hit their goal, Plinko tripled its goal, and copters fell off a cliff.
 
 Only the sales laptop exported. Every number below is either **tracked** (from its 69 sales) or marked **~estimated** (from your end-of-day counts).
 
@@ -20,7 +20,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.2.4.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `ramathon_2026_infographic_v1.2.5.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
 | `ramathon_2026_clicker_sales_curve_v1.1.png` | Running total of each design through the day, with dotted "if we had enough stock" projections (drawn by `plot_clicker_sales_curve_v1.1.py`, rendered by `render_infographic_v1.1.cjs`) |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
@@ -226,3 +226,4 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - v1.1.12 (2026-10-18): The blowout (~60 tix at 1 to 2 each) was on top of tracked sales (Sam): clickers ~515 (103% of goal), Plinko ~300 (290 to 320, 3x goal) and no longer beats the average group, Plinko + Battle ~40%. Points to infographic v1.2.4.
 - v1.1.13 (2026-10-18): Added the clicker sales curve chart and the evidence that Creeper, Dumpling, and Avocado sold out at their peak (lost sales 16, up to ~22 at their late pace).
 - v1.1.14 (2026-10-18): Plinko fun fact now says it matched a typical group (median ~300). The food tickets taken from the Plinko bucket are already inside its ~300. Chart is v1.1 (angled lines).
+- v1.1.15 (2026-10-18): Headline: clickers hit their goal, Plinko tripled its goal. Points to infographic v1.2.5.
