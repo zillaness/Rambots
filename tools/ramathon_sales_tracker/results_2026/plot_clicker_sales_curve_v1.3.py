@@ -1,14 +1,14 @@
 """
-file: plot_clicker_sales_curve_v1.2.py
-version: 1.2
+file: plot_clicker_sales_curve_v1.3.py
+version: 1.3
 author: Sam Cao
 created: 2026-10-18
 last_updated: 2026-10-18
-description: Builds the interactive Ram-a-thon 2026 clicker sales chart (hover to highlight, click two lines to compare, dotted "if we had enough stock" projections).
+description: Builds the interactive Ram-a-thon 2026 clicker sales chart (hover to highlight, click two lines to compare, hover a dot for one sale, dotted "if we had enough stock" projections).
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
 Usage:
-    python3 plot_clicker_sales_curve_v1.2.py <sales.csv> <out.html>
+    python3 plot_clicker_sales_curve_v1.3.py <sales.csv> <out.html>
     node render_infographic_v1.1.cjs <out.html> <out.png> <height> 1400   (static PNG of the default view)
 
 The page is one self-contained HTML file. Photos load from infographic_photos/ next to it.
@@ -17,6 +17,9 @@ Projection: from each early sell-out to the last sale of the day (1:20 PM), at t
 design's own on-table rate (same math as the findings' lost-sales table). The shaded
 wedge runs up to the faster pace it sold at in the second half of its time on the table.
 A sale counts at most 3 of one design toward a rate, like the workbook.
+
+Each dot is one sale. The page shows its time, what was in it and its ticket total;
+age and gender stay out because the page is on a public URL.
 """
 
 import csv
@@ -52,36 +55,43 @@ def build_data(src):
     rows = [r for r in csv.DictReader(open(src)) if r["category"] != "Copters"]
     start = min(parse(r["opened_at"]) for r in rows)
     end = max(parse(r["closed_at"]) for r in rows)
+    sales, index = [], {}
+    for r in sorted(rows, key=lambda r: (parse(r["closed_at"]), int(r["record"][1:]))):
+        if r["record"] not in index:
+            index[r["record"]] = len(sales)
+            sales.append({"id": r["record"], "t": parse(r["closed_at"]).strftime("%H:%M:%S"),
+                          "tickets": int(r["record_total_tickets"]), "items": []})
+        sales[index[r["record"]]]["items"].append([r["item"], int(r["qty"])])
     events = {}
     for r in rows:
         if r["item"] in SKIP:
             continue
-        events.setdefault(r["item"], []).append((parse(r["closed_at"]), int(r["qty"])))
+        events.setdefault(r["item"], []).append((parse(r["closed_at"]), int(r["qty"]), index[r["record"]]))
     designs = []
     for name, ev in events.items():
         ev.sort()
-        total = sum(q for _, q in ev)
+        total = sum(q for _, q, _ in ev)
         stock = STOCK[name]
         sold_out = ev[-1][0] if (stock is not None and total >= stock) else None
         on_table = hours((sold_out or end) - start)
-        rate = sum(min(q, CAP_PER_SALE) for _, q in ev) / on_table
+        rate = sum(min(q, CAP_PER_SALE) for _, q, _ in ev) / on_table
         d = {
             "name": name, "theme": THEME[name], "photo": PHOTO[name], "stock": stock,
             "total": total, "rate": round(rate, 3),
             "soldOut": sold_out.strftime("%H:%M:%S") if sold_out else None,
-            "events": [[t.strftime("%H:%M:%S"), q] for t, q in ev],
+            "events": [[t.strftime("%H:%M:%S"), q, i] for t, q, i in ev],
             "early": name in EARLY,
         }
         if name in EARLY:
             mid = start + (sold_out - start) / 2
-            late = sum(min(q, CAP_PER_SALE) for t, q in ev if t > mid) / hours(sold_out - mid)
+            late = sum(min(q, CAP_PER_SALE) for t, q, _ in ev if t > mid) / hours(sold_out - mid)
             gone = hours(end - sold_out)
             d["proj"] = round(total + rate * gone, 2)
             d["projHi"] = round(total + late * gone, 2)
         designs.append(d)
     designs.sort(key=lambda d: -d["rate"])
     return {"start": start.strftime("%H:%M:%S"), "end": end.strftime("%H:%M:%S"),
-            "early": EARLY, "designs": designs}
+            "early": EARLY, "designs": designs, "sales": sales}
 
 
 PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
@@ -142,6 +152,8 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
   .tip b { display: block; margin-bottom: 4px; font-size: 13px; }
   .tip .r { display: flex; justify-content: space-between; gap: 14px; font-variant-numeric: tabular-nums; }
   .tip .sw { display: inline-block; width: 10px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .tip .me { font-weight: 700; }
+  .tip .tot { border-top: 1px solid var(--rule); margin-top: 5px; padding-top: 5px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px; }
   .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 14px 16px; display: flex; gap: 14px; min-width: 0; }
   .card img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--ring); flex: none; }
@@ -165,7 +177,7 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
   <header>
     <div>
       <h1>Clicker sales through the day</h1>
-      <p class="sub">Running total per design at Ram-a-thon 2026. Hover a line to highlight it. Click lines or the photos to pin up to two and compare them. Dotted lines show what the early sell-outs would have sold with enough stock.</p>
+      <p class="sub">Running total per design at Ram-a-thon 2026. Each dot is one sale: hover or tap it for the time, what was in the sale and its tickets. Hover a line to highlight it. Click lines or the photos to pin up to two and compare them. Dotted lines show what the early sell-outs would have sold with enough stock.</p>
     </div>
     <span class="tag">INTERNAL · DO NOT SHARE</span>
   </header>
@@ -191,6 +203,11 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
     <div class="tablewrap"><table id="table"></table></div>
   </details>
 
+  <details>
+    <summary>Every clicker sale</summary>
+    <div class="tablewrap"><table id="sales"></table></div>
+  </details>
+
   <footer>Ram-a-thon 2026, Rambots (Team 2204). Sales laptop export: 64 clicker sales, 10:01 AM to 1:20 PM. Rate = clickers sold per hour while the design was on the table; one sale counts at most 3 of a design. Oreo and Burger are left out. Internal estimates, do not share or repost.</footer>
 </div>
 
@@ -203,7 +220,8 @@ const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).
 const EARLY_VAR = { "Dumpling": "--c-dumpling", "Avocado": "--c-avocado", "Creeper": "--c-creeper" };
 const fmt = ms => { const d = new Date(ms); let h = d.getHours(); const m = String(d.getMinutes()).padStart(2, "0"); return (h > 12 ? h - 12 : h) + ":" + m; };
 const ampm = ms => fmt(ms) + (new Date(ms).getHours() >= 12 ? " PM" : " AM");
-const designs = DATA.designs.map(d => ({ ...d, ev: d.events.map(([s, q]) => [t(s), q]), so: d.soldOut ? t(d.soldOut) : null }));
+const ampmSec = ms => fmt(ms) + ":" + String(new Date(ms).getSeconds()).padStart(2, "0") + (new Date(ms).getHours() >= 12 ? " PM" : " AM");
+const designs = DATA.designs.map(d => ({ ...d, ev: d.events.map(([s, q, i]) => [t(s), q, i]), so: d.soldOut ? t(d.soldOut) : null }));
 const byName = Object.fromEntries(designs.map(d => [d.name, d]));
 const state = { pins: [], hover: null, proj: true };
 
@@ -288,6 +306,10 @@ function draw() {
     out.push(`<path d="${dd}" fill="none" class="main" stroke-linejoin="round"/>`);
     if (d.early) out.push(`<circle cx="${x(d.so)}" cy="${y(d.total)}" r="6" class="dot" stroke="var(--halo)" stroke-width="2.5"/>`);
     out.push(`<path d="${dd}" fill="none" stroke="transparent" stroke-width="16" class="hit" style="cursor:pointer"/>`);
+    const at = []; let run = 0;
+    for (const [tm, q] of d.ev) { run += q; at.push([x(tm).toFixed(1), y(run).toFixed(1)]); }
+    at.forEach(([cx, cy], k) => { if (!(d.early && k === at.length - 1)) out.push(`<circle cx="${cx}" cy="${cy}" r="3" class="sdot" stroke="var(--halo)" stroke-width="1.5" pointer-events="none"/>`); });
+    at.forEach(([cx, cy], k) => out.push(`<circle cx="${cx}" cy="${cy}" r="9" fill="transparent" class="shit" data-k="${k}" style="cursor:pointer"/>`));
     out.push(`</g>`);
   }
   // Right-side labels (wide screens)
@@ -309,9 +331,15 @@ function draw() {
   svg.innerHTML = out.join("");
   for (const g of svg.querySelectorAll(".ln")) {
     const n = g.dataset.name;
-    g.querySelector(".hit").addEventListener("pointerenter", () => { state.hover = n; paint(); });
-    g.querySelector(".hit").addEventListener("pointerleave", () => { state.hover = null; paint(); });
+    for (const h of g.querySelectorAll(".hit, .shit")) {
+      h.addEventListener("pointerenter", () => { state.hover = n; paint(); });
+      h.addEventListener("pointerleave", () => { state.hover = null; paint(); });
+    }
     g.querySelector(".hit").addEventListener("click", ev => { ev.stopPropagation(); togglePin(n); });
+    // A sale dot pins its line but never unpins it, so tapping along one line keeps it pinned
+    for (const s of g.querySelectorAll(".shit")) s.addEventListener("click", ev => {
+      ev.stopPropagation(); if (!state.pins.includes(n)) togglePin(n); showSaleTip(byName[n], +s.dataset.k, ev.clientX, ev.clientY);
+    });
   }
   paint(true);
 }
@@ -327,6 +355,7 @@ function paint(reorder) {
     for (const el of g.querySelectorAll(".proj")) el.setAttribute("stroke", col);
     for (const el of g.querySelectorAll(".wedge")) el.setAttribute("fill", col);
     for (const el of g.querySelectorAll(".dot")) el.setAttribute("fill", col);
+    for (const el of g.querySelectorAll(".sdot")) { el.setAttribute("fill", col); el.setAttribute("r", on ? 4 : 3); el.style.opacity = on || d.early ? 1 : 0; }
     if (reorder && state.pins.includes(d.name)) g.parentNode.appendChild(g); // pinned lines on top; never on hover, which would drop the hover
   }
   for (const l of svg.querySelectorAll(".lab")) {
@@ -362,6 +391,9 @@ function showTip(clientX, clientY) {
     return `<div class="r"><span><i class="sw" style="background:${colorOf(o.d) || "var(--other)"}"></i>${o.d.name}</span><span>${val}</span></div>`;
   }).join("");
   tip.innerHTML = `<b>${ampm(ms)}${act.size ? "" : " · top 5"}</b>${rows}`;
+  placeTip(clientX, clientY);
+}
+function placeTip(clientX, clientY) {
   tip.hidden = false;
   const br = box.getBoundingClientRect();
   let left = clientX - br.left + 14, top = clientY - br.top + 14;
@@ -369,8 +401,29 @@ function showTip(clientX, clientY) {
   if (top + tip.offsetHeight > br.height - 6) top = br.height - tip.offsetHeight - 6;
   tip.style.left = Math.max(6, left) + "px"; tip.style.top = Math.max(6, top) + "px";
 }
+function showSaleTip(d, k, clientX, clientY) {
+  if (!G) return;
+  const [tm, , i] = d.ev[k], s = DATA.sales[i];
+  let run = 0; for (let j = 0; j <= k; j++) run += d.ev[j][1];
+  const cross = svg.querySelector("#cross");
+  cross.setAttribute("x1", G.x(tm)); cross.setAttribute("x2", G.x(tm)); cross.setAttribute("visibility", "visible");
+  const items = s.items.map(([n, q]) => {
+    const me = n === d.name;
+    return `<div class="r${me ? " me" : ""}"><span><i class="sw" style="background:${me ? colorOf(d) : "transparent"}"></i>${n}</span><span>×${q}</span></div>`;
+  }).join("");
+  const units = s.items.reduce((a, [, q]) => a + q, 0);
+  const sofar = d.stock == null ? `${run}` : `${run} of ${d.stock}${run >= d.stock ? ", sold out" : ""}`;
+  tip.innerHTML = `<b>${ampmSec(tm)} · sale #${s.id.slice(1)}</b>${items}` +
+    `<div class="r tot"><span>Sale total</span><span>${s.tickets} tickets${units > 1 ? ` · ${units} clickers` : ""}</span></div>` +
+    `<div class="r"><span>${d.name} sold so far</span><span>${sofar}</span></div>`;
+  placeTip(clientX, clientY);
+}
 function hideTip() { tip.hidden = true; const c = svg.querySelector("#cross"); if (c) c.setAttribute("visibility", "hidden"); }
-svg.addEventListener("pointermove", e => showTip(e.clientX, e.clientY));
+svg.addEventListener("pointermove", e => {
+  const s = e.target.closest && e.target.closest(".shit");
+  if (s) showSaleTip(byName[s.parentNode.dataset.name], +s.dataset.k, e.clientX, e.clientY);
+  else showTip(e.clientX, e.clientY);
+});
 svg.addEventListener("pointerleave", hideTip);
 svg.addEventListener("click", e => showTip(e.clientX, e.clientY));
 
@@ -404,6 +457,10 @@ document.getElementById("table").innerHTML =
   designs.map(d => `<tr><td>${d.name}</td><td>${d.theme}</td><td>${d.rate.toFixed(1)}</td><td>${d.total}</td><td>${d.stock ?? "restocked"}</td>` +
     `<td>${d.so ? ampm(d.so) : "no"}</td><td>${d.proj != null ? "~" + Math.round(d.proj) + " (up to " + Math.round(d.projHi) + ")" : ""}</td></tr>`).join("") + `</tbody>`;
 
+document.getElementById("sales").innerHTML =
+  `<thead><tr><th>Sale</th><th>Time</th><th>What was in it</th><th>Tickets</th></tr></thead><tbody>` +
+  DATA.sales.map(s => `<tr><td>#${s.id.slice(1)}</td><td>${ampmSec(t(s.t))}</td><td>${s.items.map(([n, q]) => q > 1 ? `${n} ×${q}` : n).join(", ")}</td><td>${s.tickets}</td></tr>`).join("") + `</tbody>`;
+
 draw(); cards();
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { draw(); cards(); });
@@ -413,6 +470,7 @@ new MutationObserver(() => { draw(); cards(); }).observe(document.documentElemen
   v1.0 (2026-10-18): Initial release (static).
   v1.1 (2026-10-18): Angled lines between sales instead of steps (Sam).
   v1.2 (2026-10-18): Interactive: hover to highlight, click lines or photos to pin and compare two, projections toggle, cropped photos, data table (Sam).
+  v1.3 (2026-10-18): A dot per sale; hover or tap it for the time, what was in the sale and its tickets. Every-sale table (Sam).
 -->
 """
 
@@ -421,9 +479,9 @@ def main():
     src, out = sys.argv[1:3]
     data = build_data(src)
     body = PAGE.replace("__DATA__", json.dumps(data))
-    head = ("<!doctype html>\n<!--\n  file: ramathon_2026_clicker_sales_curve_v1.2.html\n  version: 1.2\n  author: Sam Cao\n"
+    head = ("<!doctype html>\n<!--\n  file: ramathon_2026_clicker_sales_curve_v1.3.html\n  version: 1.3\n  author: Sam Cao\n"
             "  created: 2026-10-18\n  last_updated: 2026-10-18\n"
-            "  description: Generated by plot_clicker_sales_curve_v1.2.py; edit the script, not this file.\n"
+            "  description: Generated by plot_clicker_sales_curve_v1.3.py; edit the script, not this file.\n"
             "  ai_update: Regenerate from the script; bump both versions together.\n-->\n"
             "<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n")
@@ -439,3 +497,4 @@ if __name__ == "__main__":
 # v1.0 (2026-10-18): Initial release.
 # v1.1 (2026-10-18): Angled lines between sales instead of steps (Sam).
 # v1.2 (2026-10-18): Interactive page: hover highlight, click to pin and compare two lines, projections toggle, cropped photos on chips and comparison cards, data table (Sam).
+# v1.3 (2026-10-18): A dot per sale on every line; hover or tap it for the sale's time, items and ticket total. Every-sale table under the chart (Sam).
