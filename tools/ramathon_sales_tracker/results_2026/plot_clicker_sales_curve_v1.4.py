@@ -1,14 +1,14 @@
 """
-file: plot_clicker_sales_curve_v1.3.py
-version: 1.3
+file: plot_clicker_sales_curve_v1.4.py
+version: 1.4
 author: Sam Cao
 created: 2026-10-18
 last_updated: 2026-10-18
-description: Builds the interactive Ram-a-thon 2026 clicker sales chart (hover to highlight, click two lines to compare, hover a dot for one sale, dotted "if we had enough stock" projections).
+description: Builds the interactive Ram-a-thon 2026 sales chart: per-design running totals (hover, compare two, per-sale dots, "enough stock" projections) plus combined total, tickets-per-hour and minutes-per-sale views.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
 Usage:
-    python3 plot_clicker_sales_curve_v1.3.py <sales.csv> <out.html>
+    python3 plot_clicker_sales_curve_v1.4.py <sales.csv> <out.html>
     node render_infographic_v1.1.cjs <out.html> <out.png> <height> 1400   (static PNG of the default view)
 
 The page is one self-contained HTML file. Photos load from infographic_photos/ next to it.
@@ -20,12 +20,21 @@ A sale counts at most 3 of one design toward a rate, like the workbook.
 
 Each dot is one sale. The page shows its time, what was in it and its ticket total;
 age and gender stay out because the page is on a public URL.
+
+Combined views (whole sales table or clickers only, $1 per ticket, net = 90% after
+CCA's cut):
+  - Day average = tickets / the 3.3 hours from the first sale opening to the last closing.
+  - Actual pace = a rolling ~30-minute window (triangular, same weight as a 30-minute
+    average, trimmed at the ends of the day) sampled every minute, so lines stay angled.
+  - Whole booth = BOOTH totals counted at the end of the day, spread evenly over the
+    same hours. Plinko, Balloon Battle and the blowout have no timestamps.
 """
 
 import csv
 import json
 import sys
-from datetime import datetime
+import statistics
+from datetime import datetime, timedelta
 
 CAP_PER_SALE = 3
 SKIP = {"Oreo", "Burger"}  # not ranked: never put out / not in the stock count
@@ -41,6 +50,8 @@ PHOTO = {"Dumpling": "dumpling", "Salmon nigiri": "salmon_nigiri", "Creeper": "c
          "Avocado": "avocado", "Egg tart": "egg_tart", "Chocolate bar": "chocolate_bar",
          "Hot dog bun": "hot_dog_bun", "WD-40": "wd40", "Creeper infinity cube": "creeper_cube",
          "Spam musubi": "spam_musubi", "S'mores": "smores", "LEGO brick": "lego"}
+BOOTH = {"counted": 830, "food": 70, "gross": 900, "net": 810}  # Sam's end-of-day count; ~70 food tickets to helpers; net after CCA's 10%
+SMOOTH_MIN = 30  # rolling pace window, minutes
 
 
 def parse(s):
@@ -51,17 +62,59 @@ def hours(td):
     return td.total_seconds() / 3600
 
 
+def window_area(a, b, h=SMOOTH_MIN):
+    """Area of the triangular window (half-width h, peak 1) between offsets a and b, in minutes."""
+    def g(u):
+        u = max(-h, min(h, u))
+        return (u + h) ** 2 / (2 * h) if u <= 0 else h / 2 + u - u * u / (2 * h)
+    return g(b) - g(a)
+
+
+def pace(points, start, end):
+    """Day averages, per-minute rolling pace and half-hour blocks for [(closed_at, tickets), ...]."""
+    span = (end - start).total_seconds() / 60
+    mins = [((t - start).total_seconds() / 60, q) for t, q in points]
+    tix = sum(q for _, q in points)
+    gaps = [b - a for (a, _), (b, _) in zip(mins, mins[1:])]
+    tix_hr, sales_hr = [], []
+    for t in [float(m) for m in range(int(span) + 1)] + [span]:
+        norm = window_area(-t, span - t)  # part of the window that falls inside the day
+        w = [max(0.0, 1 - abs(m - t) / SMOOTH_MIN) for m, _ in mins]
+        tix_hr.append(round(sum(wi * q for wi, (_, q) in zip(w, mins)) / norm * 60, 1))
+        sales_hr.append(round(sum(w) / norm * 60, 2))
+    first = start.replace(minute=start.minute // 30 * 30, second=0) + timedelta(minutes=30)
+    edges = [start]
+    while first < end:
+        edges.append(first)
+        first += timedelta(minutes=30)
+    edges.append(end)
+    blocks = []
+    for a, b in zip(edges, edges[1:]):
+        inside = [q for t, q in points if a <= t < b or (b == end and t == end)]
+        m = (b - a).total_seconds() / 60
+        blocks.append({"from": a.strftime("%H:%M:%S"), "to": b.strftime("%H:%M:%S"), "sales": len(inside),
+                       "tickets": sum(inside), "perHr": round(sum(inside) / m * 60, 1),
+                       "minPerSale": round(m / len(inside), 2) if inside else None})
+    return {"sales": len(points), "tickets": tix, "perHr": round(tix / span * 60, 1),
+            "salesPerHr": round(len(points) / span * 60, 2), "gapMean": round(statistics.mean(gaps), 2),
+            "gapMedian": round(statistics.median(gaps), 2), "gapMax": round(max(gaps), 1),
+            "tixHr": tix_hr, "salesHr": sales_hr, "blocks": blocks}
+
+
 def build_data(src):
-    rows = [r for r in csv.DictReader(open(src)) if r["category"] != "Copters"]
+    allrows = list(csv.DictReader(open(src)))
+    rows = [r for r in allrows if r["category"] != "Copters"]
     start = min(parse(r["opened_at"]) for r in rows)
     end = max(parse(r["closed_at"]) for r in rows)
-    sales, index = [], {}
-    for r in sorted(rows, key=lambda r: (parse(r["closed_at"]), int(r["record"][1:]))):
+    sales, index, when = [], {}, []
+    for r in sorted(allrows, key=lambda r: (parse(r["closed_at"]), int(r["record"][1:]))):
+        copter = r["category"] == "Copters"
         if r["record"] not in index:
             index[r["record"]] = len(sales)
-            sales.append({"id": r["record"], "t": parse(r["closed_at"]).strftime("%H:%M:%S"),
-                          "tickets": int(r["record_total_tickets"]), "items": []})
-        sales[index[r["record"]]]["items"].append([r["item"], int(r["qty"])])
+            when.append(parse(r["closed_at"]))
+            sales.append({"id": r["record"], "t": when[-1].strftime("%H:%M:%S"),
+                          "tickets": int(r["record_total_tickets"]), "copter": copter, "items": []})
+        sales[index[r["record"]]]["items"].append(["Copter: " + r["item"] if copter else r["item"], int(r["qty"])])
     events = {}
     for r in rows:
         if r["item"] in SKIP:
@@ -90,8 +143,14 @@ def build_data(src):
             d["projHi"] = round(total + late * gone, 2)
         designs.append(d)
     designs.sort(key=lambda d: -d["rate"])
-    return {"start": start.strftime("%H:%M:%S"), "end": end.strftime("%H:%M:%S"),
-            "early": EARLY, "designs": designs, "sales": sales}
+    scopes = {
+        "table": pace([(w, s["tickets"]) for w, s in zip(when, sales)], start, end),
+        "clickers": pace([(w, s["tickets"]) for w, s in zip(when, sales) if not s["copter"]], start, end),
+    }
+    span_hr = hours(end - start)
+    booth = dict(BOOTH, perHr=round(BOOTH["gross"] / span_hr, 1), netPerHr=round(BOOTH["net"] / span_hr, 1))
+    return {"start": start.strftime("%H:%M:%S"), "end": end.strftime("%H:%M:%S"), "smooth": SMOOTH_MIN,
+            "early": EARLY, "designs": designs, "sales": sales, "scopes": scopes, "booth": booth}
 
 
 PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
@@ -170,20 +229,50 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
   th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--rule); }
   th { color: var(--faint); font-weight: 600; }
   footer { color: var(--faint); font-size: 13px; }
+  .viewrow { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; justify-content: space-between; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button { font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--rule);
+                background: var(--surface); color: var(--fg); cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); font-weight: 700; }
+  .seg button:focus-visible { outline: 3px solid var(--pin-a); outline-offset: 2px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 12px 14px; min-width: 0; }
+  .stat .k { color: var(--faint); font-size: 13px; }
+  .stat .v { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.15; margin: 2px 0; }
+  .stat .s { color: var(--muted); font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--muted); padding: 0 8px 8px; }
+  .legend span { display: inline-flex; align-items: center; }
+  .swl { flex: none; margin-right: 6px; vertical-align: middle; overflow: visible; }
+  .wrap[data-view="design"] .only-combined, .wrap:not([data-view="design"]) .only-design { display: none; }
   @media (prefers-reduced-motion: no-preference) { .ln, .lab { transition: opacity .15s ease; } }
 </style>
 
-<div class="wrap">
+<div class="wrap" id="wrap" data-view="design">
   <header>
     <div>
-      <h1>Clicker sales through the day</h1>
-      <p class="sub">Running total per design at Ram-a-thon 2026. Each dot is one sale: hover or tap it for the time, what was in the sale and its tickets. Hover a line to highlight it. Click lines or the photos to pin up to two and compare them. Dotted lines show what the early sell-outs would have sold with enough stock.</p>
+      <h1 id="h1">Clicker sales through the day</h1>
+      <p class="sub" id="sub"></p>
     </div>
     <span class="tag">INTERNAL · DO NOT SHARE</span>
   </header>
 
-  <div class="controls" id="chips" role="group" aria-label="Designs"></div>
-  <div class="row2">
+  <div class="viewrow">
+    <div class="seg" id="views" role="group" aria-label="View">
+      <button type="button" data-view="design">Per design</button>
+      <button type="button" data-view="total">Combined total</button>
+      <button type="button" data-view="rate">Tickets per hour</button>
+      <button type="button" data-view="gap">Minutes per sale</button>
+    </div>
+    <div class="seg only-combined" id="scopes" role="group" aria-label="Which sales">
+      <button type="button" data-scope="table">Whole sales table</button>
+      <button type="button" data-scope="clickers">Clickers only</button>
+    </div>
+  </div>
+
+  <div class="stats only-combined" id="stats"></div>
+
+  <div class="controls only-design" id="chips" role="group" aria-label="Designs"></div>
+  <div class="row2 only-design">
     <span class="hint" id="pinhint">Pick up to two designs to compare.</span>
     <div class="controls">
       <label class="toggle"><input type="checkbox" id="proj" checked> Show "enough stock" projections</label>
@@ -193,10 +282,11 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
 
   <div class="chart" id="chartbox">
     <svg id="svg" role="img" aria-label="Running total of clickers sold by design, 10 AM to 1:20 PM"></svg>
+    <div class="legend only-combined" id="legend"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
 
-  <div class="cards" id="cards"></div>
+  <div class="cards only-design" id="cards"></div>
 
   <details>
     <summary>All designs as a table</summary>
@@ -204,11 +294,16 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
   </details>
 
   <details>
-    <summary>Every clicker sale</summary>
+    <summary id="blocksum">Pace by half hour</summary>
+    <div class="tablewrap"><table id="blocks"></table></div>
+  </details>
+
+  <details>
+    <summary>Every sale on the sales laptop</summary>
     <div class="tablewrap"><table id="sales"></table></div>
   </details>
 
-  <footer>Ram-a-thon 2026, Rambots (Team 2204). Sales laptop export: 64 clicker sales, 10:01 AM to 1:20 PM. Rate = clickers sold per hour while the design was on the table; one sale counts at most 3 of a design. Oreo and Burger are left out. Internal estimates, do not share or repost.</footer>
+  <footer>Ram-a-thon 2026, Rambots (Team 2204). Sales laptop export: 69 sales (64 clicker, 5 copter), 10:01 AM to 1:20 PM, $1 per ticket; net is after CCA's 10%. Per-design rate = clickers sold per hour while the design was on the table; one sale counts at most 3 of a design, and Oreo and Burger are left out. Pace lines use a rolling 30-minute window. The whole-booth total (830 counted plus about 70 tickets given to helpers for food) was counted at the end of the day; Plinko, Balloon Battle and the end-of-day clicker blowout have no timestamps, so their average assumes the same hours. Internal estimates, do not share or repost.</footer>
 </div>
 
 <script>
@@ -223,7 +318,7 @@ const ampm = ms => fmt(ms) + (new Date(ms).getHours() >= 12 ? " PM" : " AM");
 const ampmSec = ms => fmt(ms) + ":" + String(new Date(ms).getSeconds()).padStart(2, "0") + (new Date(ms).getHours() >= 12 ? " PM" : " AM");
 const designs = DATA.designs.map(d => ({ ...d, ev: d.events.map(([s, q, i]) => [t(s), q, i]), so: d.soldOut ? t(d.soldOut) : null }));
 const byName = Object.fromEntries(designs.map(d => [d.name, d]));
-const state = { pins: [], hover: null, proj: true };
+const state = { pins: [], hover: null, proj: true, view: "design", scope: "table" };
 
 function totalAt(d, ms) { let c = 0; for (const [tm, q] of d.ev) { if (tm <= ms) c += q; else break; } return c; }
 function projAt(d, ms) { return d.proj == null || ms <= d.so ? null : d.total + (d.proj - d.total) * (ms - d.so) / (END - d.so); }
@@ -263,19 +358,26 @@ const svg = document.getElementById("svg"), box = document.getElementById("chart
 let G = null; // geometry of the last draw
 
 function draw() {
+  hideTip();
+  if (state.view === "design") drawDesign(); else drawCombined();
+}
+
+// Grid, axes and the "last sale" marker shared by every view; sets G for this draw
+function frame(ymax, ystep, fy, title, endLow) {
   const W = Math.max(320, box.clientWidth - 12);
   const wide = W >= 760;
-  const M = { l: 44, r: wide ? 270 : 16, t: 16, b: 38 };
+  const M = { l: 44, r: wide ? 270 : 16, t: title ? 32 : 16, b: 38 };
   const H = wide ? 540 : Math.round(Math.min(520, Math.max(340, W * 0.95)));
   const pw = W - M.l - M.r, ph = H - M.t - M.b;
   const x = ms => M.l + (ms - X0) / (X1 - X0) * pw;
-  const y = v => M.t + ph - v / YMAX * ph;
+  const y = v => M.t + ph - Math.min(v, ymax) / ymax * ph;
   G = { W, H, M, x, y, wide, pw, ph };
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", W); svg.setAttribute("height", H);
   const out = [];
-  for (let v = 0; v <= YMAX; v += 4) {
+  if (title) out.push(`<text x="4" y="14" font-size="12.5" fill="var(--muted)">${title}</text>`);
+  for (let v = 0; v <= ymax; v += ystep) {
     out.push(`<line x1="${M.l}" x2="${M.l + pw}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/>`);
-    out.push(`<text x="${M.l - 8}" y="${y(v) + 4}" font-size="12" fill="var(--faint)" text-anchor="end">${v}</text>`);
+    out.push(`<text x="${M.l - 8}" y="${y(v) + 4}" font-size="12" fill="var(--faint)" text-anchor="end">${fy(v)}</text>`);
   }
   const step = wide ? 30 : 60;
   for (let m = 0; m <= 210; m += step) {
@@ -284,9 +386,14 @@ function draw() {
   }
   out.push(`<line x1="${M.l}" x2="${M.l + pw}" y1="${y(0)}" y2="${y(0)}" stroke="var(--faint)"/>`);
   out.push(`<line x1="${x(END)}" x2="${x(END)}" y1="${M.t}" y2="${y(0)}" stroke="var(--faint)" stroke-dasharray="4 4"/>`);
-  out.push(`<text x="${x(END) - 6}" y="${M.t + 14}" font-size="12" fill="var(--faint)" text-anchor="end">last sale 1:20</text>`);
+  out.push(`<text x="${x(END) - 6}" y="${endLow ? y(0) - 8 : M.t + 14}" font-size="12" fill="var(--faint)" text-anchor="end">last sale 1:20</text>`);
   out.push(`<line id="cross" x1="0" x2="0" y1="${M.t}" y2="${y(0)}" stroke="var(--faint)" visibility="hidden"/>`);
+  return out;
+}
 
+function drawDesign() {
+  const out = frame(YMAX, 4, v => v, "");
+  const { x, y, wide } = G;
   // Draw gray designs first, early sell-outs last (on top)
   const order = [...designs.filter(d => !d.early), ...DATA.early.map(n => byName[n])];
   for (const d of order) {
@@ -376,13 +483,21 @@ function paint(reorder) {
 }
 
 // ---------- crosshair tooltip ----------
-function showTip(clientX, clientY) {
-  if (!G) return;
+function msAt(clientX) {
+  if (!G) return null;
   const r = svg.getBoundingClientRect(), sx = (clientX - r.left) * (G.W / r.width);
   const ms = X0 + (sx - G.M.l) / G.pw * (X1 - X0);
-  if (ms < START || ms > END) { hideTip(); return; }
+  return ms < START || ms > END ? null : ms;
+}
+function setCross(ms) {
   const cross = svg.querySelector("#cross");
   cross.setAttribute("x1", G.x(ms)); cross.setAttribute("x2", G.x(ms)); cross.setAttribute("visibility", "visible");
+}
+function showTip(clientX, clientY) {
+  if (state.view !== "design") return showComboTip(clientX, clientY);
+  const ms = msAt(clientX);
+  if (ms == null) { hideTip(); return; }
+  setCross(ms);
   const act = active();
   let list = designs.map(d => ({ d, v: totalAt(d, ms), p: state.proj ? projAt(d, ms) : null }));
   list = act.size ? list.filter(o => act.has(o.d.name)) : list.sort((a, b) => b.v - a.v).slice(0, 5);
@@ -401,31 +516,204 @@ function placeTip(clientX, clientY) {
   if (top + tip.offsetHeight > br.height - 6) top = br.height - tip.offsetHeight - 6;
   tip.style.left = Math.max(6, left) + "px"; tip.style.top = Math.max(6, top) + "px";
 }
+// Time, items and ticket total of one sale; `me` (a design) is bolded with its color
+function saleHTML(s, me, meColor) {
+  const items = s.items.map(([n, q]) =>
+    `<div class="r${n === me ? " me" : ""}"><span><i class="sw" style="background:${n === me ? meColor : "transparent"}"></i>${n}</span><span>×${q}</span></div>`).join("");
+  const units = s.items.reduce((a, [, q]) => a + q, 0);
+  return `<b>${ampmSec(t(s.t))} · sale #${s.id.slice(1)}</b>${items}` +
+    `<div class="r tot"><span>Sale total</span><span>${s.tickets} tickets${!s.copter && units > 1 ? ` · ${units} clickers` : ""}</span></div>`;
+}
 function showSaleTip(d, k, clientX, clientY) {
   if (!G) return;
-  const [tm, , i] = d.ev[k], s = DATA.sales[i];
+  const [tm, , i] = d.ev[k];
   let run = 0; for (let j = 0; j <= k; j++) run += d.ev[j][1];
-  const cross = svg.querySelector("#cross");
-  cross.setAttribute("x1", G.x(tm)); cross.setAttribute("x2", G.x(tm)); cross.setAttribute("visibility", "visible");
-  const items = s.items.map(([n, q]) => {
-    const me = n === d.name;
-    return `<div class="r${me ? " me" : ""}"><span><i class="sw" style="background:${me ? colorOf(d) : "transparent"}"></i>${n}</span><span>×${q}</span></div>`;
-  }).join("");
-  const units = s.items.reduce((a, [, q]) => a + q, 0);
+  setCross(tm);
   const sofar = d.stock == null ? `${run}` : `${run} of ${d.stock}${run >= d.stock ? ", sold out" : ""}`;
-  tip.innerHTML = `<b>${ampmSec(tm)} · sale #${s.id.slice(1)}</b>${items}` +
-    `<div class="r tot"><span>Sale total</span><span>${s.tickets} tickets${units > 1 ? ` · ${units} clickers` : ""}</span></div>` +
-    `<div class="r"><span>${d.name} sold so far</span><span>${sofar}</span></div>`;
+  tip.innerHTML = saleHTML(DATA.sales[i], d.name, colorOf(d)) + `<div class="r"><span>${d.name} sold so far</span><span>${sofar}</span></div>`;
   placeTip(clientX, clientY);
 }
-function hideTip() { tip.hidden = true; const c = svg.querySelector("#cross"); if (c) c.setAttribute("visibility", "hidden"); }
-svg.addEventListener("pointermove", e => {
+function hideTip() {
+  tip.hidden = true;
+  for (const id of ["#cross", "#focus"]) { const c = svg.querySelector(id); if (c) c.setAttribute("visibility", "hidden"); }
+}
+function onPoint(e) {
   const s = e.target.closest && e.target.closest(".shit");
-  if (s) showSaleTip(byName[s.parentNode.dataset.name], +s.dataset.k, e.clientX, e.clientY);
+  if (s && s.dataset.j != null) showComboSaleTip(+s.dataset.j, e.clientX, e.clientY);
+  else if (s) showSaleTip(byName[s.parentNode.dataset.name], +s.dataset.k, e.clientX, e.clientY);
   else showTip(e.clientX, e.clientY);
-});
+}
+svg.addEventListener("pointermove", onPoint);
 svg.addEventListener("pointerleave", hideTip);
-svg.addEventListener("click", e => showTip(e.clientX, e.clientY));
+svg.addEventListener("click", onPoint);
+
+// ---------- combined views: total, tickets per hour, minutes per sale ----------
+const VIEWS = {
+  design: { h1: "Clicker sales through the day", aria: "Running total of clickers sold by design, 10 AM to 1:20 PM",
+    sub: "Running total per design at Ram-a-thon 2026. Each dot is one sale: hover or tap it for the time, what was in the sale and its tickets. Hover a line to highlight it. Click lines or the photos to pin up to two and compare them. Dotted lines show what the early sell-outs would have sold with enough stock." },
+  total: { h1: "Combined sales through the day", aria: "Running total of tickets taken on the sales laptop, 10 AM to 1:20 PM",
+    sub: "Running total of tickets taken on the sales laptop ($1 each). The dashed line is an even pace that ends at the same total, so the gap shows when we ran ahead of it or fell behind. Hover or tap a dot for that sale." },
+  rate: { h1: "Sales pace through the day", aria: "Tickets per hour through the day, with the day average and the whole booth average",
+    sub: "Gross dollars per hour ($1 a ticket). The solid line is how fast we actually sold over a rolling 30 minutes; the dashed line is the day average. The dotted line is the whole booth, Plinko and Battle included, if its ~900 tickets were spread evenly. Hover for net after CCA's 10%." },
+  gap: { h1: "Time between sales", aria: "Minutes between sales through the day",
+    sub: "Each dot is one sale, placed at how many minutes passed since the sale before it, so lower is busier. The solid line is the rolling 30-minute pace; the dashed line is the day average. Hover or tap a dot for that sale." },
+};
+const CFG = {
+  total: { ymax: 500, step: 100, fy: v => money(v), title: "Gross $ so far (1 ticket = $1)", endLow: true },
+  rate: { ymax: 300, step: 50, fy: v => money(v), title: "Gross $ per hour (1 ticket = $1)" },
+  gap: { ymax: 18, step: 3, fy: v => v, title: "Minutes since the sale before (lower = busier)" },
+};
+const money = v => "$" + Math.round(v).toLocaleString("en-US");
+const net = v => v * 0.9;
+const SPAN = (END - START) / 60000;
+const gridMin = k => Math.min(k, SPAN); // pace samples sit on each minute, the last one at the final sale
+function paceAt(arr, ms) {
+  const m = Math.max(0, Math.min(SPAN, (ms - START) / 60000));
+  const k = Math.min(Math.floor(m), arr.length - 2), a = gridMin(k), b = gridMin(k + 1);
+  return b > a ? arr[k] + (arr[k + 1] - arr[k]) * (m - a) / (b - a) : arr[k + 1];
+}
+function scopeSales() { return DATA.sales.map((s, i) => ({ ...s, i, ms: t(s.t) })).filter(s => state.scope === "table" || !s.copter); }
+const pathOf = pts => "M" + pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" L");
+const swatch = (stroke, dash, w) => `<svg class="swl" width="18" height="10" aria-hidden="true"><line x1="2" x2="16" y1="5" y2="5" stroke="${stroke}" stroke-width="${w}" stroke-dasharray="${dash}" stroke-linecap="round"/></svg>`;
+const SW = {
+  main: () => swatch("var(--brand)", "", 2.5),
+  avg: () => swatch("var(--muted)", "4 4", 2),
+  booth: () => swatch("var(--pin-a)", "0.5 4.5", 2.5),
+  dot: () => `<svg class="swl" width="18" height="10" aria-hidden="true"><circle cx="9" cy="5" r="4" fill="var(--brand)"/></svg>`,
+};
+const row = (sw, k, v) => `<div class="r"><span>${sw}${k}</span><span>${v}</span></div>`;
+
+function drawCombined() {
+  const c = CFG[state.view], sc = DATA.scopes[state.scope], ss = scopeSales();
+  const out = frame(c.ymax, c.step, c.fy, c.title, c.endLow);
+  const { x, y, wide } = G;
+  const flat = (v, stroke, dash, w) => `<line x1="${x(START)}" x2="${x(END)}" y1="${y(v)}" y2="${y(v)}" stroke="${stroke}" stroke-width="${w}" stroke-dasharray="${dash}" stroke-linecap="round"/>`;
+  const main = pts => `<path d="${pathOf(pts)}" fill="none" stroke="var(--halo)" stroke-width="6.5" stroke-linejoin="round"/>` +
+                      `<path d="${pathOf(pts)}" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  const labs = [], dots = [];
+  if (state.view === "total") {
+    let run = 0; const pts = [[x(START), y(0)]];
+    for (const s of ss) { run += s.tickets; pts.push([x(s.ms), y(run)]); dots.push({ s, cx: x(s.ms), cy: y(run), run }); }
+    out.push(`<line x1="${x(START)}" y1="${y(0)}" x2="${x(END)}" y2="${y(sc.tickets)}" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>`);
+    out.push(main(pts));
+    labs.push({ v: sc.tickets, sw: SW.main(), text: `${money(sc.tickets)} by the last sale (${money(net(sc.tickets))} net)` });
+  } else if (state.view === "rate") {
+    out.push(flat(DATA.booth.perHr, "var(--pin-a)", "0.5 5", 2.5), flat(sc.perHr, "var(--muted)", "4 4", 2));
+    out.push(main(sc.tixHr.map((v, k) => [x(START + gridMin(k) * 60000), y(v)])));
+    labs.push({ v: DATA.booth.perHr, sw: SW.booth(), text: `Whole booth ~${money(DATA.booth.perHr)}/hr (~${money(DATA.booth.netPerHr)} net)` },
+              { v: sc.perHr, sw: SW.avg(), text: `Day average ${money(sc.perHr)}/hr (${money(net(sc.perHr))} net)` },
+              { v: sc.tixHr[sc.tixHr.length - 1], sw: SW.main(), text: "Actual pace, rolling 30 min" });
+  } else {
+    for (let j = 1; j < ss.length; j++) {
+      const gap = (ss[j].ms - ss[j - 1].ms) / 60000;
+      dots.push({ s: ss[j], cx: x(ss[j].ms), cy: y(gap), gap });
+    }
+    out.push(...dots.map(D => `<circle cx="${D.cx.toFixed(1)}" cy="${D.cy.toFixed(1)}" r="4" fill="var(--brand)" fill-opacity="0.55" stroke="var(--halo)" stroke-width="1.5"/>`));
+    out.push(flat(sc.gapMean, "var(--muted)", "4 4", 2));
+    out.push(main(sc.salesHr.map((v, k) => [x(START + gridMin(k) * 60000), y(60 / v)])));
+    labs.push({ v: sc.gapMean, sw: SW.avg(), text: `Average ${sc.gapMean.toFixed(1)} min apart (median ${sc.gapMedian.toFixed(1)})` },
+              { v: 60 / sc.salesHr[sc.salesHr.length - 1], sw: SW.main(), text: "Rolling 30-min pace" });
+  }
+  if (state.view === "total") out.push(...dots.map(D => `<circle cx="${D.cx.toFixed(1)}" cy="${D.cy.toFixed(1)}" r="4" fill="var(--brand)" stroke="var(--halo)" stroke-width="2"/>`));
+  out.push(`<circle id="focus" r="6" fill="none" stroke="var(--fg)" stroke-width="2" visibility="hidden" pointer-events="none"/>`);
+  out.push(...dots.map((D, j) => `<circle cx="${D.cx.toFixed(1)}" cy="${D.cy.toFixed(1)}" r="9" fill="transparent" class="shit" data-j="${j}" style="cursor:pointer"/>`));
+  if (wide) { // labels in the right margin, text in ink with the line's swatch beside it
+    labs.sort((a, b) => b.v - a.v);
+    let last = -1e9;
+    for (const L of labs) {
+      let ly = y(L.v) + 4; if (ly < last + 18) ly = last + 18; last = ly;
+      out.push(`<line x1="${x(END) + 2}" y1="${y(L.v)}" x2="${x(END) + 10}" y2="${ly - 4}" stroke="var(--faint)" stroke-width="1"/>` +
+               `<g transform="translate(${x(END) + 12},${ly - 9})">${L.sw.replace('class="swl"', "")}</g>` +
+               `<text x="${x(END) + 34}" y="${ly}" font-size="12.5" fill="var(--fg)">${L.text}</text>`);
+    }
+  }
+  svg.innerHTML = out.join("");
+  G.dots = dots;
+}
+function setFocus(cx, cy) {
+  const f = svg.querySelector("#focus");
+  if (f) { f.setAttribute("cx", cx); f.setAttribute("cy", cy); f.setAttribute("visibility", "visible"); }
+}
+function showComboTip(clientX, clientY) {
+  const ms = msAt(clientX);
+  if (ms == null) { hideTip(); return; }
+  setCross(ms);
+  const sc = DATA.scopes[state.scope], b = DATA.booth;
+  let rows, fy;
+  if (state.view === "total") {
+    let run = 0; for (const s of scopeSales()) { if (s.ms <= ms) run += s.tickets; else break; }
+    const even = sc.tickets * (ms - START) / (END - START);
+    rows = [row(SW.main(), "Tracked so far", `${money(run)} · ${money(net(run))} net`), row(SW.avg(), "Even pace", money(even)),
+            row("", run >= even ? "Ahead of even pace" : "Behind even pace", money(Math.abs(run - even)))];
+    fy = run;
+  } else if (state.view === "rate") {
+    const p = paceAt(sc.tixHr, ms);
+    rows = [row(SW.main(), "Actual pace", `${money(p)}/hr · ${money(net(p))} net`),
+            row(SW.avg(), "Day average", `${money(sc.perHr)}/hr · ${money(net(sc.perHr))} net`),
+            row(SW.booth(), "Whole booth", `~${money(b.perHr)}/hr · ~${money(b.netPerHr)} net`)];
+    fy = p;
+  } else {
+    const sp = paceAt(sc.salesHr, ms);
+    rows = [row(SW.main(), "Rolling pace", `1 sale every ${(60 / sp).toFixed(1)} min`),
+            row(SW.avg(), "Day average", `every ${sc.gapMean.toFixed(1)} min`)];
+    fy = 60 / sp;
+  }
+  setFocus(G.x(ms), G.y(fy));
+  tip.innerHTML = `<b>${ampm(ms)}</b>${rows.join("")}`;
+  placeTip(clientX, clientY);
+}
+function showComboSaleTip(j, clientX, clientY) {
+  const D = G.dots[j];
+  setCross(D.s.ms); setFocus(D.cx, D.cy);
+  const extra = state.view === "total" ? row("", "Tracked so far", `${money(D.run)} · ${money(net(D.run))} net`)
+                                       : row("", "Since the sale before", `${D.gap.toFixed(1)} min`);
+  tip.innerHTML = saleHTML(D.s, null, "") + extra;
+  placeTip(clientX, clientY);
+}
+function stats() {
+  const sc = DATA.scopes[state.scope], b = DATA.booth;
+  const tile = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  document.getElementById("stats").innerHTML =
+    tile(state.scope === "table" ? "Sales table, tracked" : "Clickers, tracked", money(sc.tickets), `${sc.sales} sales · ${money(net(sc.tickets))} net after CCA's 10%`) +
+    tile("Day average pace", `${money(sc.perHr)}/hr`, `${money(net(sc.perHr))}/hr net · ${sc.salesPerHr.toFixed(1)} sales an hour`) +
+    tile("Time between sales", `${sc.gapMean.toFixed(1)} min`, `average · median ${sc.gapMedian.toFixed(1)} · longest ${sc.gapMax.toFixed(1)}`) +
+    tile("Whole booth, counted at close", `~${money(b.gross)}`, `${b.counted} counted + ~${b.food} food tickets for helpers · ~${money(b.net)} net · ~${money(b.perHr)}/hr`);
+}
+function legend() {
+  const L = state.view === "total" ? [[SW.main(), "Tracked running total"], [SW.avg(), "Even pace to the same total"], [SW.dot(), "One sale"]]
+          : state.view === "rate" ? [[SW.main(), "Actual pace (rolling 30 min)"], [SW.avg(), "Day average"], [SW.booth(), "Whole booth average, all games spread evenly"]]
+          : [[SW.dot(), "One sale: minutes since the one before"], [SW.main(), "Rolling 30-min pace"], [SW.avg(), "Day average"]];
+  document.getElementById("legend").innerHTML = L.map(([sw, k]) => `<span>${sw}${k}</span>`).join("");
+}
+function blocksTable() {
+  const sc = DATA.scopes[state.scope];
+  document.getElementById("blocksum").textContent = `Pace by half hour (${state.scope === "table" ? "whole sales table" : "clickers only"})`;
+  document.getElementById("blocks").innerHTML =
+    `<thead><tr><th>Time</th><th>Sales</th><th>Gross $</th><th>Gross per hour</th><th>Net per hour</th><th>Minutes per sale</th></tr></thead><tbody>` +
+    sc.blocks.map(b => `<tr><td>${fmt(t(b.from))} to ${fmt(t(b.to))}</td><td>${b.sales}</td><td>${money(b.tickets)}</td><td>${money(b.perHr)}</td>` +
+      `<td>${money(net(b.perHr))}</td><td>${b.minPerSale == null ? "" : b.minPerSale.toFixed(1)}</td></tr>`).join("") +
+    `<tr><th>Whole day</th><td>${sc.sales}</td><td>${money(sc.tickets)}</td><td>${money(sc.perHr)}</td><td>${money(net(sc.perHr))}</td><td>${sc.gapMean.toFixed(1)} (average gap)</td></tr></tbody>`;
+}
+
+// ---------- view + scope switches (kept in the URL hash, e.g. #rate or #gap-clickers) ----------
+const wrap = document.getElementById("wrap"), viewsEl = document.getElementById("views"), scopesEl = document.getElementById("scopes");
+function syncHash() {
+  const h = state.view === "design" ? "" : "#" + state.view + (state.scope === "clickers" ? "-clickers" : "");
+  try { history.replaceState(null, "", location.pathname + location.search + h); } catch (e) { /* file:// in some browsers */ }
+}
+function refresh() {
+  wrap.dataset.view = state.view;
+  const V = VIEWS[state.view];
+  document.getElementById("h1").textContent = V.h1; document.getElementById("sub").textContent = V.sub; svg.setAttribute("aria-label", V.aria);
+  for (const b of viewsEl.children) b.setAttribute("aria-pressed", b.dataset.view === state.view ? "true" : "false");
+  for (const b of scopesEl.children) b.setAttribute("aria-pressed", b.dataset.scope === state.scope ? "true" : "false");
+  if (state.view !== "design") { stats(); legend(); }
+  blocksTable(); draw();
+}
+for (const b of viewsEl.children) b.addEventListener("click", () => { state.view = b.dataset.view; state.hover = null; syncHash(); refresh(); });
+for (const b of scopesEl.children) b.addEventListener("click", () => { state.scope = b.dataset.scope; syncHash(); refresh(); });
+const hashView = /^#(total|rate|gap)(-clickers)?$/.exec(location.hash);
+if (hashView) { state.view = hashView[1]; state.scope = hashView[2] ? "clickers" : "table"; }
 
 // ---------- comparison cards ----------
 function card(d) {
@@ -461,7 +749,7 @@ document.getElementById("sales").innerHTML =
   `<thead><tr><th>Sale</th><th>Time</th><th>What was in it</th><th>Tickets</th></tr></thead><tbody>` +
   DATA.sales.map(s => `<tr><td>#${s.id.slice(1)}</td><td>${ampmSec(t(s.t))}</td><td>${s.items.map(([n, q]) => q > 1 ? `${n} ×${q}` : n).join(", ")}</td><td>${s.tickets}</td></tr>`).join("") + `</tbody>`;
 
-draw(); cards();
+refresh(); cards();
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { draw(); cards(); });
 new MutationObserver(() => { draw(); cards(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -471,6 +759,7 @@ new MutationObserver(() => { draw(); cards(); }).observe(document.documentElemen
   v1.1 (2026-10-18): Angled lines between sales instead of steps (Sam).
   v1.2 (2026-10-18): Interactive: hover to highlight, click lines or photos to pin and compare two, projections toggle, cropped photos, data table (Sam).
   v1.3 (2026-10-18): A dot per sale; hover or tap it for the time, what was in the sale and its tickets. Every-sale table (Sam).
+  v1.4 (2026-10-18): View switch: combined total, tickets per hour and minutes per sale (actual rolling pace vs day average, whole-booth average), whole sales table vs clickers only, gross with net in tooltips, stat tiles, pace-by-half-hour table, copter sales in the sale table (Sam).
 -->
 """
 
@@ -479,9 +768,9 @@ def main():
     src, out = sys.argv[1:3]
     data = build_data(src)
     body = PAGE.replace("__DATA__", json.dumps(data))
-    head = ("<!doctype html>\n<!--\n  file: ramathon_2026_clicker_sales_curve_v1.3.html\n  version: 1.3\n  author: Sam Cao\n"
+    head = ("<!doctype html>\n<!--\n  file: ramathon_2026_clicker_sales_curve_v1.4.html\n  version: 1.4\n  author: Sam Cao\n"
             "  created: 2026-10-18\n  last_updated: 2026-10-18\n"
-            "  description: Generated by plot_clicker_sales_curve_v1.3.py; edit the script, not this file.\n"
+            "  description: Generated by plot_clicker_sales_curve_v1.4.py; edit the script, not this file.\n"
             "  ai_update: Regenerate from the script; bump both versions together.\n-->\n"
             "<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n")
@@ -498,3 +787,4 @@ if __name__ == "__main__":
 # v1.1 (2026-10-18): Angled lines between sales instead of steps (Sam).
 # v1.2 (2026-10-18): Interactive page: hover highlight, click to pin and compare two lines, projections toggle, cropped photos on chips and comparison cards, data table (Sam).
 # v1.3 (2026-10-18): A dot per sale on every line; hover or tap it for the sale's time, items and ticket total. Every-sale table under the chart (Sam).
+# v1.4 (2026-10-18): Combined views (total, tickets per hour, minutes per sale) with a whole-table / clickers-only switch, rolling 30-minute pace vs day average, whole-booth average from the end-of-day count, stat tiles and a pace-by-half-hour table. Copter sales now in the data (Sam).
