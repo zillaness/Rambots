@@ -233,6 +233,10 @@ svg text{font-family:var(--font)}
 .pfin{display:inline-flex;align-items:center;gap:4px;font-weight:400}
 .pfin input{width:110px;font-size:20px;padding:6px 8px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink)}
 .pfin input:disabled{opacity:.45}
+table.st{font-size:18px}
+table.st td{padding:7px 6px;vertical-align:middle}
+table.st .pfin input{width:76px;font-size:17px;padding:4px 6px}
+table.st tr.tot td{border-bottom:none;font-weight:700;color:var(--ink)}
 .tbtn.armed{background:var(--red);color:var(--red-ink);border-color:var(--red)}
 .card.nx{padding:16px 20px;gap:6px}
 .card.nx p{font-size:19px}
@@ -314,9 +318,9 @@ table.t2 td.n{text-align:right}
   <div class="body" style="grid-template-rows:auto auto;align-content:start">
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>What did we expect?</h3><p>The goal and the booth targets. Slide 3.</p></div>
-      <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 12.</p></div>
-      <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 13 and 14.</p></div>
-      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, Christmas orders, then Trunk or Treat. Slides 15 to 21.</p></div>
+      <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 13.</p></div>
+      <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 14 and 15.</p></div>
+      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, Christmas orders, then Trunk or Treat. Slides 16 to 22.</p></div>
     </div>
     <div class="rules">
       <div class="card"><div class="k">Read the numbers right</div><p>Only the sales laptop exported. Clicker and copter numbers are tracked. Plinko and Balloon Battle are estimates, marked with ~ and striped bars.</p></div>
@@ -410,10 +414,45 @@ table.t2 td.n{text-align:right}
     <div style="display:flex;flex-direction:column;gap:12px">
       <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$497</div><p id="profitPerP">About <b id="profitPer" style="color:var(--ink)">57¢</b> of every ticket stayed with us.</p><p id="profitHrP" hidden>Each volunteer-hour made the team about <b id="profitHr" style="color:var(--ink)">$8.88</b>.</p></div>
       <div class="card nx"><div class="k">Top booth, but…</div><p>One of the most successful booths at the carnival, if not the most. Pay <span id="payVols">5 people</span> $20/hr and we'd basically break even: <b id="pay20" style="color:var(--ink)">$97</b> left, or <b id="pay20all" style="color:var(--ink)">$28</b> counting every copter we printed.</p></div>
+      <div class="card nx"><div class="k">A hunch about other booths</div><p>A lot of food booths sell what parents donated. If they bought their own supplies and paid for labor, many might lose money, and a direct donation could raise more.</p></div>
     </div>
   </div>
   <div class="ft"><span>Edits save for everyone who opens this deck · ticket counts: findings v1.1.21 · prices: Sam, Oct 18 · striped = estimate</span><span class="pg"></span></div>
   <aside class="notes">Rough math, not accounting. Type the real prize spend, and switch to "What we bought" with the real switch and key ring spend if you want cash out of pocket instead of cost of what we sold.</aside>
+</section>
+
+<!-- 7 solo -->
+<section class="slide" data-title="What if one person ran it?">
+  <div class="hd"><div class="chip">2 · What happened · what if</div><h2 class="t">What if one person ran it?</h2></div>
+  <div class="body" style="grid-template-rows:auto 1fr;gap:18px">
+    <div class="pf" style="justify-content:flex-start;gap:16px"><span style="flex:none">One worker for</span><span class="pfin"><input type="number" id="so-hrs" min="0" step="0.5" value="4" aria-label="Hours" style="width:72px"> hours, paid</span><span class="seg" role="group" aria-label="Wage"><button type="button" data-sowage="0" aria-pressed="false">Nothing</button><button type="button" data-sowage="16.9" aria-pressed="false">Min wage $16.90</button><button type="button" data-sowage="20" aria-pressed="true">$20/hr</button></span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 360px;gap:22px;min-height:0;align-items:start">
+      <div class="card" style="gap:8px"><div class="k">Plinko only</div><div class="big" id="so-pl-net" style="font-size:60px">$148</div><p>Each hour of work brought in <b id="so-pl-hr" style="color:var(--ink)">$57</b> before pay.</p><p style="font-size:17px;color:var(--ink-3)"><i>Full mask off, it's a Kid's-sino:</i> every $1 drop pays back about <b id="so-pl-back" style="color:var(--ink-2)">14¢</b> in prizes, and the house keeps <b id="so-pl-keep" style="color:var(--ink-2)">86¢</b>.</p>
+        <table class="t2 st">
+          <tr><td>Drops at 1 ticket <span class="pfin"><input type="number" id="so-drops" min="0" step="10" value="300" aria-label="Drops"></span></td><td class="n" id="so-pl-gross">$300</td></tr>
+          <tr><td>CCA's 10%</td><td class="n" id="so-pl-cut">−$30</td></tr>
+          <tr><td>Prize cards <span class="pfin"><input type="number" id="so-cpd" min="0" max="3" step="0.05" value="0.25" aria-label="Cards per drop"></span> per drop at $0.56</td><td class="n" id="so-pl-prize">−$42</td></tr>
+          <tr><td>Worker pay</td><td class="n" id="so-pl-pay">−$80</td></tr>
+          <tr class="tot"><td>Net</td><td class="n" id="so-pl-net2">$148</td></tr>
+        </table></div>
+      <div class="card" style="gap:8px"><div class="k">Clickers only</div><div class="big" id="so-ck-net" style="font-size:60px">$274</div><p>Each hour of work brought in <b id="so-ck-hr" style="color:var(--ink)">$89</b> before pay.</p>
+        <table class="t2 st">
+          <tr><td>Tickets <span class="pfin"><input type="number" id="so-tix" min="0" step="5" value="515" aria-label="Clicker tickets"></span></td><td class="n" id="so-ck-gross">$515</td></tr>
+          <tr><td>CCA's 10%</td><td class="n" id="so-ck-cut">−$52</td></tr>
+          <tr><td>Parts <span class="pfin"><input type="number" id="so-clk" min="0" step="5" value="165" aria-label="Clickers"></span> at $<span class="pfin"><input type="number" id="so-ppc" min="0" step="0.05" value="0.58" aria-label="Parts per clicker"></span></td><td class="n" id="so-ck-parts">−$96</td></tr>
+          <tr><td>Free card per 10 tickets (24 at $0.56)</td><td class="n" id="so-ck-free">−$13</td></tr>
+          <tr><td>Worker pay</td><td class="n" id="so-ck-pay">−$80</td></tr>
+          <tr class="tot"><td>Net</td><td class="n" id="so-ck-net2">$274</td></tr>
+        </table></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card nx"><div class="k">This year, everyone working</div><p><span id="so-ty-vols">5 people</span>, <b id="so-ty-before" style="color:var(--ink)">$497</b> before pay. Paying everyone the same wage leaves <b id="so-ty-after" style="color:var(--ink)">$97</b>.</p></div>
+        <div class="card nx"><div class="k">Can one person keep up?</div><p>Median checkout was 5 seconds. The busiest stretch was a sale every 1.4 minutes.</p></div>
+        <div class="card nx"><div class="k">The catch</div><p>This assumes the same sales as this year. The booths fed each other: every 10 tickets earned a free card that sent kids to Plinko.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="ft"><span>Hypothetical · this year's tickets from findings v1.1.21 · card cost ~$0.56 (9-card prize ≈ $5) · Plinko payout ~1 card per 4 drops (board design)</span><span class="pg"></span></div>
+  <aside class="notes">Just for fun, but it makes a point: one person running clickers could keep more after pay than all of us did. Ask the room what that means for how we staff the next event.</aside>
 </section>
 
 <!-- 6 leaderboard -->
@@ -599,7 +638,7 @@ table.t2 td.n{text-align:right}
     <div class="card"><div class="k">Giveaways (already paid for)</div><p style="color:var(--ink)"><b class="num">88</b> copter launchers, <b class="num">155</b> propellers, <b class="num">42</b> toroidal propellers, <b class="num">100</b> ripcords.</p><p>Plus leftover Pokémon cards and prize-table items. Launchers cap us at 88 full kits.</p></div>
     <div class="card"><div class="k">The calendar</div><p>Thu and Fri (Oct 22 and 23) are conference days, no school. That leaves Mon to Wed to prep at school.</p><p>Sunset is about 6:15 PM. The last 45 minutes are dark: lights and a charged power station.</p></div>
     <div class="card"><div class="k">Last year (Oct 25, 2025)</div><p>Arrived 1.5 hours early for the canopy and table. Ran three one-hour shifts. Spin-the-wheel and Plinko for prizes.</p></div>
-    <div class="card"><div class="k">A free test</div><p>New families and a flying demo. If copters go fast here, guess 2 from slide 13 looks right.</p></div>
+    <div class="card"><div class="k">A free test</div><p>New families and a flying demo. If copters go fast here, guess 2 from slide 14 looks right.</p></div>
     <div class="card"><div class="k">Why it's worth a Saturday</div><p>It's in our outreach story for grants, and it's how CCS families find our summer camp.</p></div>
   </div>
   <div class="ft"><span>Source: CCS volunteer emails, Eventbrite, Coda "Trunk or Treat 2025", CCA calendar</span><span class="pg"></span></div>
@@ -815,7 +854,7 @@ document.addEventListener('keydown', e => {
 });
 let tx = null, ty = null;
 viewport.addEventListener('touchstart', e => {
-  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.brain,.poll,.plan,#profitChart')) { tx = null; return; }
+  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.brain,.poll,.plan,#profitChart,table.st')) { tx = null; return; }
   tx = e.touches[0].clientX; ty = e.touches[0].clientY;
 }, {passive:true});
 viewport.addEventListener('touchend', e => {
@@ -1360,6 +1399,7 @@ function drawProfit(){
   });
   s += '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line></svg>';
   $('#profitHrP').hidden = !rate; $('#profitPerP').hidden = !!rate; if (vh > 0) $('#profitHr').textContent = '$' + (c5 / vh).toFixed(2);
+  PFLAST.c5 = c5; PFLAST.vols = v.vols; PFLAST.vh = vh; drawSolo();
   $('#payVols').textContent = v.vols + (v.vols === 1 ? ' person' : ' people'); $('#pay20').textContent = dl(c5 - vh * 20); $('#pay20all').textContent = dl(c5 - vh * 20 - (v.cop === 'sold' ? 69 : 0));
   const el = $('#profitChart'); el.innerHTML = s; bindTips(el);
   $('#profitNet').textContent = dl(net);
@@ -1381,6 +1421,20 @@ function renderProfit(){
   $$('[data-hw],[data-fil],[data-cop],[data-pay]').forEach(b => b.disabled = !can);
   drawProfit();
 }
+const PFLAST = {c5:497, vols:5, vh:20};
+const SO = {hrs:4, wage:20, drops:300, cpd:0.25, tix:515, clk:165, ppc:0.58}, CARD = 0.56;
+function drawSolo(){
+  const pay = SO.hrs * SO.wage, t = (id, x) => { $(id).textContent = x; };
+  const pl = {gross:SO.drops, cut:SO.drops * .1, prize:SO.drops * SO.cpd * CARD}; pl.pre = pl.gross - pl.cut - pl.prize; pl.net = pl.pre - pay;
+  const ck = {gross:SO.tix, cut:SO.tix * .1, parts:SO.clk * SO.ppc, free:24 * CARD}; ck.pre = ck.gross - ck.cut - ck.parts - ck.free; ck.net = ck.pre - pay;
+  t('#so-pl-gross', dl(pl.gross)); t('#so-pl-cut', '−' + dl(pl.cut)); t('#so-pl-prize', '−' + dl(pl.prize)); t('#so-pl-pay', '−' + dl(pay)); t('#so-pl-net', dl(pl.net)); t('#so-pl-net2', dl(pl.net));
+  t('#so-ck-gross', dl(ck.gross)); t('#so-ck-cut', '−' + dl(ck.cut)); t('#so-ck-parts', '−' + dl(ck.parts)); t('#so-ck-free', '−' + dl(ck.free)); t('#so-ck-pay', '−' + dl(pay)); t('#so-ck-net', dl(ck.net)); t('#so-ck-net2', dl(ck.net));
+  t('#so-pl-back', Math.round(SO.cpd * CARD * 100) + '¢'); t('#so-pl-keep', Math.max(0, Math.round((1 - SO.cpd * CARD) * 100)) + '¢');
+  t('#so-pl-hr', SO.hrs > 0 ? dl(pl.pre / SO.hrs) : '–'); t('#so-ck-hr', SO.hrs > 0 ? dl(ck.pre / SO.hrs) : '–');
+  t('#so-ty-vols', PFLAST.vols + (PFLAST.vols === 1 ? ' person' : ' people')); t('#so-ty-before', dl(PFLAST.c5)); t('#so-ty-after', dl(PFLAST.c5 - PFLAST.vh * SO.wage));
+}
+[['#so-hrs', 'hrs'], ['#so-drops', 'drops'], ['#so-cpd', 'cpd'], ['#so-tix', 'tix'], ['#so-clk', 'clk'], ['#so-ppc', 'ppc']].forEach(([id, k]) => $(id).addEventListener('input', e => { SO[k] = Math.max(0, +e.target.value || 0); drawSolo(); }));
+$$('[data-sowage]').forEach(b => b.addEventListener('click', () => { SO.wage = +b.dataset.sowage; $$('[data-sowage]').forEach(x => x.setAttribute('aria-pressed', x === b)); drawSolo(); }));
 function setProfit(patch){ S.profit = Object.assign({}, S.profit || {}, patch); saveDoc('profit/inputs', patch); }
 const PF_DEFAULT = {food:45, prizes:150, cop:'sold', hw:'used', hwBought:'', fil:'typ', other:0, pay:'off', vols:5, hrs:4};
 let pfArm;
@@ -1507,5 +1561,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
-  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Just-for-fun volunteer pay: Off, Hayward minimum wage ($16.90) or $20/hr, with volunteers and hours as editable inputs (default 5 people for the whole 4 hours, Sam) and shows earnings per volunteer-hour; the chart extends below $0 when needed. Helper food bar is striped as an estimate and editable (default 45, the middle of Sam's 20 to 70 range); tickets earned = 830 counted + helper food. How-the-cut-worked card removed; a "Top booth, but…" card shows what we'd keep after paying the volunteers $20/hr, with and without every copter printed. Reset numbers button (two clicks) restores the defaults. Used-or-bought card removed. Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Just-for-fun volunteer pay: Off, Hayward minimum wage ($16.90) or $20/hr, with volunteers and hours as editable inputs (default 5 people for the whole 4 hours, Sam) and shows earnings per volunteer-hour; the chart extends below $0 when needed. Helper food bar is striped as an estimate and editable (default 45, the middle of Sam's 20 to 70 range); tickets earned = 830 counted + helper food. How-the-cut-worked card removed; a "Top booth, but…" card shows what we'd keep after paying the volunteers $20/hr, with and without every copter printed. Reset numbers button (two clicks) restores the defaults. Used-or-bought card removed. "A hunch about other booths" card on the profit slide. New slide 7, "What if one person ran it?": Plinko-only and clickers-only plans with one paid worker, editable, compared with this year's whole crew, plus a Kid's-sino line (payback per $1 drop). Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
 -->
