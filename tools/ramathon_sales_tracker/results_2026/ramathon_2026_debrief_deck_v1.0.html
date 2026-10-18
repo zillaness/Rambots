@@ -1,0 +1,1147 @@
+<title>Ram-a-thon Debrief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!--
+  file: ramathon_2026_debrief_deck_v1.0.html
+  version: 1.0
+  author: Sam Cao
+  created: 2026-10-18
+  last_updated: 2026-10-18
+  description: Interactive slide deck for the Ram-a-thon 2026 debrief (leadership Sun 10/18, team Mon 10/19), ending with the Trunk or Treat look-ahead.
+  ai_update: Update last_updated and version. Rename file to match. Append changelog comment at bottom. Numbers come from ramathon_2026_findings_v1.1.21.md; change them there first.
+-->
+<style>
+/* Layout: a 1600x900 slide canvas scaled to fit above a slim control bar; one slide visible at a time, AAR stage chip on every slide. */
+:root{
+  --outer:#E7E3DD; --slide:#FBFAF8; --surface:#FFFFFF; --ink:#1C1A19; --ink-2:#4A4744; --ink-3:#74706A;
+  --rule:#E2DED8; --grid:#ECE9E4; --red:#A31F36; --red-ink:#FFFFFF; --yellow:#F4A81C; --yellow-ink:#1C1A19;
+  --cover:#A31F36; --cover-ink:#FFFFFF; --soft:#F3EFEA; --focus:#2A6FD1;
+  --b-clk:#A31F36; --b-plk:#C27A00; --b-bat:#2A6FD1; --b-cop:#14876F; --other:#8E8A84;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --outer:#0F0E0E; --slide:#1B1A19; --surface:#242321; --ink:#F1EFEC; --ink-2:#C8C4BD; --ink-3:#938F88;
+  --rule:#35332F; --grid:#2B2A28; --red:#E4627A; --red-ink:#1B1A19; --yellow:#F4A81C; --yellow-ink:#1B1A19;
+  --cover:#8E1A2F; --cover-ink:#FFFFFF; --soft:#262422; --focus:#4C8EEA;
+  --b-clk:#E4627A; --b-plk:#C98500; --b-bat:#4C8EEA; --b-cop:#22A88A; --other:#77736D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --outer:#0F0E0E; --slide:#1B1A19; --surface:#242321; --ink:#F1EFEC; --ink-2:#C8C4BD; --ink-3:#938F88;
+  --rule:#35332F; --grid:#2B2A28; --red:#E4627A; --red-ink:#1B1A19; --yellow:#F4A81C; --yellow-ink:#1B1A19;
+  --cover:#8E1A2F; --cover-ink:#FFFFFF; --soft:#262422; --focus:#4C8EEA;
+  --b-clk:#E4627A; --b-plk:#C98500; --b-bat:#4C8EEA; --b-cop:#22A88A; --other:#77736D; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--outer);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.35;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;overflow:hidden}
+.app{height:100%;display:flex;flex-direction:column}
+.viewport{flex:1;min-height:0;position:relative}
+.stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;transform:translate(-50%,-50%) scale(.5);
+  background:var(--slide);box-shadow:0 2px 24px rgba(0,0,0,.12);border-radius:6px;overflow:hidden}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* control bar */
+.bar{flex:none;display:flex;align-items:center;gap:8px;padding-block:8px calc(8px + env(safe-area-inset-bottom,0px));position:relative}
+.bar .prog{position:absolute;left:0;right:0;top:0;height:3px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar .prog i{display:block;height:100%;width:0;background:var(--red);transition:width .25s}
+.bbtn{border:1px solid var(--rule);background:var(--surface);border-radius:8px;padding:8px 12px;font-size:14px;line-height:1;min-height:36px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.bbtn:hover{border-color:var(--ink-3)}
+.bbtn[aria-pressed="true"]{background:var(--ink);color:var(--slide);border-color:var(--ink)}
+.bbtn.nav{font-size:18px;padding:8px 16px}
+.counter{font-variant-numeric:tabular-nums}
+.btitle{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2);font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:8px 10px;font-size:13px;min-height:34px;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--red);color:var(--red-ink)}
+@media (max-width:760px){.btitle,.hide-sm{display:none}}
+.panel{position:absolute;left:0;right:0;bottom:calc(100% + 6px);background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;font-size:15px;color:var(--ink-2);box-shadow:0 6px 24px rgba(0,0,0,.12);max-height:40vh;overflow:auto;z-index:20}
+.jump{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px}
+.jump button{text-align:left;border:0;background:none;padding:6px 8px;border-radius:6px;font-size:14px;display:flex;gap:8px}
+.jump button:hover,.jump button.cur{background:var(--soft)}
+.jump b{font-variant-numeric:tabular-nums;color:var(--ink-3);min-width:22px}
+
+/* slides */
+.slide{position:absolute;inset:0;padding:60px 88px 70px;display:flex;flex-direction:column;gap:26px;background:var(--slide);
+  opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .25s ease}
+@media (prefers-reduced-motion:reduce){.slide,.slide.on{transition:none}.lb-row,.bar .prog i{transition:none!important}}
+.notes{display:none}
+.hd{display:flex;flex-direction:column;gap:12px}
+.chip{font-weight:700;font-size:16px;line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.t{font-weight:800;font-size:54px;line-height:1.06;letter-spacing:-.012em;margin:0;text-wrap:balance;max-width:1380px}
+.lede{font-size:26px;line-height:1.35;color:var(--ink-2);margin:0;max-width:62ch}
+.body{flex:1;min-height:0;display:grid;gap:36px}
+.ft{position:absolute;left:88px;right:88px;bottom:26px;display:flex;justify-content:space-between;gap:24px;font-size:15px;color:var(--ink-3)}
+.ft .pg{font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums}
+p{margin:0}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h3{margin:0;font-size:28px;line-height:1.15;font-weight:700}
+.card p{font-size:21px;color:var(--ink-2);line-height:1.35}
+.k{font-size:15px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink-3)}
+.big{font-weight:800;font-size:64px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tbtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tbtn{border:1px solid var(--rule);background:var(--surface);border-radius:999px;padding:10px 18px;font-size:18px;line-height:1}
+.tbtn[aria-pressed="true"]{background:var(--ink);color:var(--slide);border-color:var(--ink)}
+.legend{display:flex;gap:22px;align-items:center;font-size:17px;color:var(--ink-2);flex-wrap:wrap}
+.sw{display:inline-block;width:22px;height:14px;border-radius:3px;vertical-align:-1px;margin-right:8px;background:var(--ink-3)}
+.hatch{background-image:repeating-linear-gradient(45deg,transparent 0 4px,var(--slide) 4px 7px)}
+.tip{position:absolute;z-index:30;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;font-size:18px;line-height:1.35;box-shadow:0 8px 26px rgba(0,0,0,.16);max-width:420px}
+.tip b{font-weight:700}
+.tip .m{color:var(--ink-2)}
+svg text{font-family:var(--font)}
+.ax{fill:var(--ink-3);font-size:16px}
+.gl{stroke:var(--grid);stroke-width:1}
+.base{stroke:var(--ink-3);stroke-width:1.5}
+
+/* cover */
+.s-cover{background:var(--cover);color:var(--cover-ink);justify-content:space-between;padding:84px 100px 80px}
+.s-cover .chip{color:var(--yellow)}
+.s-cover h1{margin:0;font-weight:800;font-size:132px;line-height:.95;letter-spacing:-.03em}
+.s-cover h1 span{color:var(--yellow)}
+.s-cover .sub{font-size:32px;line-height:1.3;max-width:34ch;opacity:.95}
+.s-cover .meta{display:flex;gap:40px;flex-wrap:wrap;font-size:22px;align-items:flex-end;justify-content:space-between}
+.s-cover .warn{border:2px solid var(--yellow);color:var(--yellow);font-weight:700;font-size:18px;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-radius:8px}
+.s-cover .ft{color:rgba(255,255,255,.75)}
+
+/* agenda */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.step{border-top:6px solid var(--red);background:var(--surface);border-radius:0 0 12px 12px;padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.step .n{font-weight:800;font-size:56px;line-height:1;color:var(--red)}
+.step h3{margin:0;font-size:30px;line-height:1.15}
+.step p{font-size:20px;color:var(--ink-2)}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+/* hero ticket */
+.hero{display:grid;grid-template-columns:600px 1fr;gap:48px;align-items:center}
+.ticket{position:relative;background:var(--yellow);color:var(--yellow-ink);border-radius:16px;padding:40px 44px 40px 56px;display:flex;flex-direction:column;gap:8px;
+  -webkit-mask:radial-gradient(circle 22px at 0 50%,transparent 21px,#000 22px) left/51% 100% no-repeat,radial-gradient(circle 22px at 100% 50%,transparent 21px,#000 22px) right/51% 100% no-repeat;
+  mask:radial-gradient(circle 22px at 0 50%,transparent 21px,#000 22px) left/51% 100% no-repeat,radial-gradient(circle 22px at 100% 50%,transparent 21px,#000 22px) right/51% 100% no-repeat}
+.ticket::after{content:"";position:absolute;top:24px;bottom:24px;right:120px;border-right:3px dashed rgba(28,26,25,.35)}
+.ticket .k{color:rgba(28,26,25,.7)}
+.ticket .tn{font-weight:800;font-size:150px;line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.ticket .tl{font-size:28px;font-weight:700}
+.ticket .ts{font-size:20px;max-width:330px}
+.ticket .stub{position:absolute;right:28px;top:50%;transform:translate(0,-50%) rotate(90deg);transform-origin:center;font-weight:800;font-size:18px;letter-spacing:.2em;white-space:nowrap;width:40px;text-align:center}
+.goalbar{display:flex;flex-direction:column;gap:12px}
+.gtrack{position:relative;height:44px;background:var(--soft);border-radius:8px;border:1px solid var(--rule)}
+.gfill{position:absolute;left:0;top:0;bottom:0;background:var(--red);border-radius:8px 0 0 8px}
+.gmark{position:absolute;top:-10px;bottom:-10px;width:3px;background:var(--ink)}
+.glabels{position:relative;height:24px;font-size:18px;color:var(--ink-2)}
+.glabels span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.pills{display:flex;gap:12px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:10px;font-size:21px;padding:10px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--rule)}
+.dot{width:14px;height:14px;border-radius:50%;flex:none}
+
+/* leaderboard */
+.lb{position:relative}
+.lb-row{position:absolute;left:0;right:0;height:42px;display:grid;grid-template-columns:34px 40px 230px 1fr 210px;align-items:center;gap:12px;transition:top .45s ease}
+.lb-row .r{font-size:18px;color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums}
+.lb-row img{width:38px;height:38px;border-radius:8px;object-fit:cover;background:var(--soft)}
+.lb-row .nm{font-size:21px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-row .trk{position:relative;height:26px}
+.lb-row .fill{position:absolute;left:0;top:0;bottom:0;background:var(--red);border-radius:0 4px 4px 0;transition:width .45s ease}
+.lb-row .val{position:absolute;top:50%;transform:translateY(-50%);font-size:18px;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;padding-left:8px;transition:left .45s ease}
+.lb-row .st{font-size:16px;color:var(--ink-2);white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tag{display:inline-block;font-size:14px;font-weight:700;letter-spacing:.04em;padding:4px 8px;border-radius:6px;border:1.5px solid var(--ink-3);color:var(--ink-2);white-space:nowrap}
+.tag.so{border-color:var(--red);color:var(--red)}
+.lb-hit{position:absolute;inset:0;cursor:default}
+
+/* iframe */
+.frame{flex:1;min-height:0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--surface);position:relative}
+.frame iframe{width:100%;height:100%;border:0;display:block}
+.frame .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;color:var(--ink-3)}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fact{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+.fact .big{font-size:60px;color:var(--red)}
+.fact p{font-size:21px;color:var(--ink-2);line-height:1.35}
+
+/* hbar (html) */
+.hb{display:flex;flex-direction:column;gap:14px}
+.hb-row{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:center}
+.hb-row .nm{font-size:21px;font-weight:600}
+.hb-row .nm small{display:block;font-size:16px;font-weight:400;color:var(--ink-3)}
+.hb-row .trk{display:flex;align-items:center;gap:12px;height:34px}
+.hb-row .seg1{height:100%;border-radius:0 4px 4px 0}
+.hb-row .v{font-size:19px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;min-height:0}
+.col{background:var(--surface);border:1px solid var(--rule);border-radius:12px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.col-h{padding:16px 20px 12px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:4px}
+.col-h h3{margin:0;font-size:30px;display:flex;align-items:center;gap:10px}
+.col-h p{font-size:17px;color:var(--ink-3)}
+.col-h .cnt{font-size:18px;color:var(--ink-3);font-weight:400;font-variant-numeric:tabular-nums}
+.items{flex:1;min-height:0;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;list-style:none;margin:0}
+.items li{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border-radius:8px;padding:10px 12px;font-size:20px;line-height:1.3}
+.items li span.tx{flex:1;min-width:0;overflow-wrap:anywhere}
+.items li .mt{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase;padding-top:4px;white-space:nowrap}
+.items li button{border:0;background:none;font-size:20px;line-height:1;color:var(--ink-3);padding:2px 4px;border-radius:4px}
+.items li button:hover{color:var(--red)}
+.items .empty{background:none;color:var(--ink-3);font-size:18px;font-style:italic}
+.add{display:flex;gap:8px;padding:12px;border-top:1px solid var(--rule)}
+.add input{flex:1;min-width:0;font-size:20px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--slide)}
+.add button{font-size:18px;padding:10px 16px;border-radius:8px;border:0;background:var(--red);color:var(--red-ink);font-weight:700}
+.add button:disabled,.add input:disabled{opacity:.5;cursor:not-allowed}
+.status{font-size:16px;color:var(--ink-3)}
+.copyrow{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.copybox{position:absolute;inset:120px 160px;z-index:40;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.copybox textarea{flex:1;font-size:18px;font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--rule);border-radius:8px;padding:12px;background:var(--slide);color:var(--ink)}
+
+/* votes */
+.polls{display:grid;grid-template-columns:1.25fr 1fr;gap:24px}
+.poll{display:flex;flex-direction:column;gap:12px}
+.opt{display:grid;grid-template-columns:1fr 80px 92px;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.opt .ofill{position:absolute;left:0;top:0;bottom:0;background:var(--soft);transition:width .3s ease;z-index:0}
+.opt > *:not(.ofill){position:relative;z-index:1}
+.opt h4{margin:0;font-size:24px}
+.opt p{font-size:17px;color:var(--ink-2)}
+.opt .c{font-size:40px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.opt button{font-size:20px;font-weight:700;padding:12px 0;border-radius:10px;border:2px solid var(--red);background:var(--surface);color:var(--red)}
+.opt button:hover{background:var(--red);color:var(--red-ink)}
+.opt button:disabled{opacity:.45;cursor:not-allowed}
+.undo{align-self:flex-start;border:1px solid var(--rule);background:var(--surface);border-radius:8px;padding:8px 14px;font-size:16px}
+
+/* budget */
+.bud{display:grid;grid-template-columns:560px 1fr;gap:40px;align-items:start}
+.ctrl{display:flex;flex-direction:column;gap:22px}
+.ctrl label{font-size:20px;font-weight:600;display:flex;justify-content:space-between;gap:12px}
+.ctrl label span{font-weight:400;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ctrl input[type=range]{width:100%;accent-color:var(--red);height:28px}
+.ctrl input[type=number]{width:120px;font-size:20px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+.ctrl .row{display:flex;align-items:center;gap:12px;font-size:20px}
+.ctrl small{font-size:16px;color:var(--ink-3);font-weight:400}
+.out{display:flex;flex-direction:column;gap:22px}
+.mtrack{position:relative;height:56px;background:var(--soft);border:1px solid var(--rule);border-radius:10px}
+.mfill{position:absolute;left:0;top:0;bottom:0;border-radius:10px 0 0 10px;display:flex}
+.mfill i{display:block;height:100%}
+.cap{position:absolute;top:-12px;bottom:-12px;width:3px;background:var(--ink)}
+.caplab{position:absolute;top:-40px;transform:translateX(-50%);font-size:16px;color:var(--ink-2);white-space:nowrap}
+.verdict{font-size:30px;font-weight:700}
+.kits{display:grid;grid-template-columns:repeat(40,1fr);gap:3px}
+.kits i{height:22px;border-radius:3px;background:var(--rule)}
+.kits i.k1{background:var(--b-cop)}
+.kits i.k2{background:var(--other)}
+
+/* plan grid */
+.plan{display:grid;grid-template-columns:430px 1fr;gap:28px;min-height:0}
+.must{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.must li{font-size:19px;display:flex;gap:10px;align-items:flex-start;line-height:1.3}
+.must li::before{content:"";flex:none;width:18px;height:18px;border:2px solid var(--ink-3);border-radius:4px;margin-top:2px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;min-height:0}
+.day{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.day h4{margin:0;font-size:19px}
+.day h4 small{display:block;font-size:14px;font-weight:400;color:var(--ink-3)}
+.day.off{background:var(--soft)}
+.day.ev{border:2px solid var(--red)}
+.day p{font-size:16px;color:var(--ink-2);line-height:1.3}
+.day .who{margin-top:auto;border-top:1.5px dashed var(--rule);padding-top:8px;font-size:14px;color:var(--ink-3)}
+table.t2{border-collapse:collapse;font-size:19px;width:100%}
+table.t2 th{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:700;padding:6px 10px;border-bottom:1.5px solid var(--rule)}
+table.t2 td{padding:6px 10px;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+table.t2 td.n{text-align:right}
+.up{color:var(--b-cop);font-weight:700}
+.dn{color:var(--red);font-weight:700}
+</style>
+
+<div class="app">
+  <div class="viewport" id="viewport">
+    <div class="stage" id="stage">
+
+<!-- 1 cover -->
+<section class="slide s-cover" data-title="Ram-a-thon 2026 debrief">
+  <div class="chip">Rambots 2204 · Debrief</div>
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <h1>Ram-a-thon<br><span>2026</span></h1>
+    <p class="sub">What we expected, what happened, why, and what we do next. Then Trunk or Treat.</p>
+  </div>
+  <div class="meta">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div>Sat Oct 17 · CCA Hayward · 1 ticket = $1</div>
+      <div style="opacity:.8">Leadership Sun 10/18 · Team Mon 10/19</div>
+    </div>
+    <div class="warn">Internal only · do not share or repost</div>
+  </div>
+  <aside class="notes">Welcome. This runs as an After Action Review: four questions, in order. Numbers with a ~ are estimates. Use the arrows at the bottom or the arrow keys.</aside>
+</section>
+
+<!-- 2 agenda -->
+<section class="slide" data-title="How we run this">
+  <div class="hd"><div class="chip">How we run this</div><h2 class="t">Four questions, in order</h2></div>
+  <div class="body" style="grid-template-rows:auto auto;align-content:start">
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>What did we expect?</h3><p>The goal and the booth targets. Slide 3.</p></div>
+      <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 11.</p></div>
+      <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 12 and 13.</p></div>
+      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, then planning Trunk or Treat. Slides 14 to 19.</p></div>
+    </div>
+    <div class="rules">
+      <div class="card"><div class="k">Read the numbers right</div><p>Only the sales laptop exported. Clicker and copter numbers are tracked. Plinko and Balloon Battle are estimates, marked with ~ and striped bars.</p></div>
+      <div class="card"><div class="k">Talk about the setup</div><p>We're judging the plan, the stock and the booth layout. Nobody gets blamed for a slow hour.</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: ramathon_2026_findings v1.1.21</span><span class="pg"></span></div>
+  <aside class="notes">Set the ground rules before the data. Estimates are honest guesses, not counts.</aside>
+</section>
+
+<!-- 3 expected vs happened -->
+<section class="slide" data-title="Expected vs happened">
+  <div class="hd"><div class="chip">1 · Expected &nbsp;→&nbsp; 2 · Happened</div><h2 class="t">We aimed for 1,112 tickets and earned about 900</h2></div>
+  <div class="body hero">
+    <div class="ticket" role="img" aria-label="About 900 tickets earned">
+      <div class="k">Tickets earned</div>
+      <div class="tn">~900</div>
+      <div class="tl">about $810 after CCA's 10%</div>
+      <div class="ts">830 counted in the box, plus about 70 handed to helpers for food.</div>
+      <div class="stub">ADMIT ONE</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:34px">
+      <div class="goalbar">
+        <div class="k">Goal: 1,000 net tickets = 1,112 gross</div>
+        <div class="gtrack"><div class="gfill" style="width:80.9%"></div><div class="gmark" style="left:100%;transform:translateX(-3px)"></div></div>
+        <div class="glabels"><span style="left:0;transform:none">0</span><span style="left:80.9%">~900 (81%)</span><span style="left:100%;transform:translateX(-100%)">1,112</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="k">Booth by booth</div>
+        <div class="pills">
+          <span class="pill"><span class="dot" style="background:var(--b-clk)"></span>Clickers hit their goal</span>
+          <span class="pill"><span class="dot" style="background:var(--b-plk)"></span>Plinko tripled its goal</span>
+          <span class="pill"><span class="dot" style="background:var(--b-bat)"></span>Balloon Battle reached 28%</span>
+          <span class="pill"><span class="dot" style="background:var(--b-cop)"></span>Copters fell to 5%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21 · ~ = estimate</span><span class="pg"></span></div>
+  <aside class="notes">81% of goal. Ask the room first: what's your guess for which booth carried us? Then go to the next slide.</aside>
+</section>
+
+<!-- 4 booth vs goal -->
+<section class="slide" data-title="Booth vs goal">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Plinko tripled its goal; copters stalled</h2></div>
+  <div class="body" style="grid-template-rows:auto 1fr auto">
+    <div class="tbtns" role="group" aria-label="Show as">
+      <button class="tbtn" id="bg-t" aria-pressed="true" type="button">Tickets</button>
+      <button class="tbtn" id="bg-p" aria-pressed="false" type="button">% of goal</button>
+    </div>
+    <div id="boothChart" style="min-height:0"></div>
+    <div class="legend"><span><i class="sw" style="background:var(--ink-3)"></i>Tracked</span><span><i class="sw hatch" style="background-color:var(--ink-3)"></i>Estimated</span><span><i class="sw" style="width:4px;height:22px;background:var(--ink)"></i>Goal</span><span style="color:var(--ink-3)">Booth goals were the tracker's planning targets (they add to 1,300).</span></div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, Event totals · hover a bar for how each number was made</span><span class="pg"></span></div>
+  <aside class="notes">Flip to "% of goal" to show Plinko at 300%. Then back to Tickets: clickers are still the biggest booth by far.</aside>
+</section>
+
+<!-- 5 money split -->
+<section class="slide" data-title="Where the money came from">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Clickers made more than half the money. Plinko made a third, and we have no data on it.</h2></div>
+  <div class="body" style="grid-template-rows:auto auto;align-content:start;gap:40px">
+    <div id="moneyChart"></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
+      <div class="card"><div class="k"><span class="dot" style="display:inline-block;background:var(--b-clk);margin-right:8px;vertical-align:-1px"></span>Clickers</div><div class="big">$137<span style="font-size:28px">/hr</span></div><p>plus about $18 an hour from the blowout</p></div>
+      <div class="card"><div class="k"><span class="dot" style="display:inline-block;background:var(--b-plk);margin-right:8px;vertical-align:-1px"></span>Plinko</div><div class="big">~$91<span style="font-size:28px">/hr</span></div><p>about 300 drops at 1 ticket each</p></div>
+      <div class="card"><div class="k"><span class="dot" style="display:inline-block;background:var(--b-bat);margin-right:8px;vertical-align:-1px"></span>Balloon Battle</div><div class="big">~$17<span style="font-size:28px">/hr</span></div><p>about 10 to 12 player-matches</p></div>
+      <div class="card"><div class="k"><span class="dot" style="display:inline-block;background:var(--b-cop);margin-right:8px;vertical-align:-1px"></span>Copters</div><div class="big">$8<span style="font-size:28px">/hr</span></div><p>5 kits all day</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, How fast we sold · rates spread over 10:02 AM to 1:21 PM, gross</span><span class="pg"></span></div>
+  <aside class="notes">The whole booth averaged about $272 an hour gross, about $245 net. Plinko and Battle together were about 40% of the money with no tracking at all. Next year: every booth on the tracker.</aside>
+</section>
+
+<!-- 6 leaderboard -->
+<section class="slide" data-title="Clicker leaderboard">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Dumpling and Salmon nigiri sold fastest</h2></div>
+  <div class="body" style="grid-template-columns:1fr 330px">
+    <div style="display:flex;flex-direction:column;gap:16px;min-height:0">
+      <div class="tbtns" role="group" aria-label="Rank by">
+        <button class="tbtn" data-lb="rate" aria-pressed="true" type="button">Sales rate</button>
+        <button class="tbtn" data-lb="sold" aria-pressed="false" type="button">Units sold</button>
+        <button class="tbtn" data-lb="st" aria-pressed="false" type="button">Sell-through</button>
+      </div>
+      <div class="lb" id="lb" style="flex:1;min-height:0"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="k">Creeper is the story</div><p>Third-fastest seller with less than half the stock of the top two, so it was gone by 11:48 AM.</p></div>
+      <div class="card"><div class="k">How rate works</div><p>Units sold per hour while the design was on the table. One sale counts at most 3 of a design, so the parent who bought 8 Dumplings doesn't skew it.</p></div>
+      <div class="card"><div class="k">Raw units mislead</div><p>We printed different amounts of each design. Units sold mostly measures what we printed.</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, Clicker leaderboard · leftovers went to the blowout</span><span class="pg"></span></div>
+  <aside class="notes">Switch between Sales rate and Units sold to show why raw units mislead. Hover a row for stock and next year's print count.</aside>
+</section>
+
+<!-- 7 sales chart -->
+<section class="slide" data-title="Sold out while still selling fast" data-iframe="1">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t" style="font-size:44px">Creeper, Dumpling and Avocado were speeding up when they ran out</h2>
+    <p class="lede" style="font-size:22px;max-width:none">About 16 clickers lost (~56 tickets) at their own pace, up to ~22 (~78 tickets) at their late pace. Click a line or a photo to compare two.</p></div>
+  <div class="frame"><div class="ph">Loading the sales chart…</div><iframe data-src="ramathon_2026_clicker_sales_curve_v1.5.html" title="Interactive clicker sales chart"></iframe></div>
+  <div class="ft"><span>Chart v1.5 · full screen: <a href="https://zillaness.github.io/Rambots/ramathon-2026-results/sales-chart.html" target="_blank" rel="noopener" style="color:inherit">zillaness.github.io/Rambots/ramathon-2026-results/sales-chart.html</a></span><span class="pg"></span></div>
+  <aside class="notes">Arrow keys go to the chart once you click inside it. Use the arrows in the bottom bar to move on. Good views: per design with projections on, then "tickets per hour".</aside>
+</section>
+
+<!-- 8 pace -->
+<section class="slide" data-title="Pace through the day">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Rush at 11:00, lull at noon</h2></div>
+  <div class="body" style="grid-template-columns:1fr 340px">
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <div class="tbtns"><button class="tbtn" id="paceToggle" aria-pressed="false" type="button">Take out the one 27-ticket sale</button></div>
+      <div id="paceChart" style="flex:1;min-height:0"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="k">Busiest half hour</div><div class="big" style="font-size:52px">11:00</div><p>21 sales and 109 tickets, a sale every 1.4 minutes</p></div>
+      <div class="card"><div class="k">Median checkout</div><div class="big" style="font-size:52px">5 sec</div><p>The fastest sale took 1 second</p></div>
+      <div class="card"><div class="k">Longest gap</div><div class="big" style="font-size:52px">14.5 min</div><p>between two sales</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, How fast we sold · sales laptop only, gross dollars per hour</span><span class="pg"></span></div>
+  <aside class="notes">Ask: what happened at noon? Lunch, stockouts starting, or staffing? The 12:30 bump is mostly the one 27-ticket Dumpling sale. Toggle it off.</aside>
+</section>
+
+<!-- 9 who bought what -->
+<section class="slide" data-title="Who bought what">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Half of all clickers sold were Asian food designs</h2></div>
+  <div class="body" style="grid-template-columns:1fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="k">Units sold by theme · sell-through where we knew the count</div>
+      <div class="hb" id="themeBars"></div>
+      <p style="font-size:19px;color:var(--ink-2)">Avocado carried Snacks &amp; treats. Without it, that theme sold about half its stock.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card"><div class="k">Kids</div><p>32 of the 45 age-tagged sales. Top picks: Dumpling, then Creeper, Hot dog bun and Salmon nigiri.</p></div>
+      <div class="card"><div class="k">Teens</div><p>6 of 9 teen sales included a Salmon nigiri.</p></div>
+      <div class="card"><div class="k">Boys and girls</div><p>Creeper and WD-40 went to boys (7 of 8 tagged units each). Egg tart went to girls (7 of 8).</p></div>
+      <p style="font-size:17px;color:var(--ink-3)">About a third of sales had no tag. Groups under about 5 sales are hints, not findings. Next time: Elementary / Middle / High school / Adult.</p>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, Themes and Who bought what</span><span class="pg"></span></div>
+  <aside class="notes">Variety beat sets: of 35 sales with 2 or more clickers, 30 mixed designs.</aside>
+</section>
+
+<!-- 10 fun facts -->
+<section class="slide" data-title="Fun facts">
+  <div class="hd"><div class="chip">2 · What happened</div><h2 class="t">Six things the data caught</h2></div>
+  <div class="body facts" style="align-content:start">
+    <div class="fact"><div class="big">27</div><p>tickets in one sale: a parent cleared out all 8 remaining Dumplings at 12:42 PM. Biggest sale of the day.</p></div>
+    <div class="fact"><div class="big">11:48</div><p>Creeper sold out first, about 90 minutes before the last sale.</p></div>
+    <div class="fact"><div class="big">5 sec</div><p>median checkout. The fastest sale took 1.</p></div>
+    <div class="fact"><div class="big">20</div><p>sales were exactly the 3-for-10 deal. More kids stopped at 3 clickers than at 2 (12 sales).</p></div>
+    <div class="fact"><div class="big">12 sec</div><p>between the last two sales, which took the final 4 Salmon nigiri and the last 2 Spam musubi.</p></div>
+    <div class="fact"><div class="big">4</div><p>sales paired Avocado and Dumpling, the top combo. Both have cutesy faces.</p></div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, Fun data points</span><span class="pg"></span></div>
+  <aside class="notes">Quick round. Ask who saw the 8-Dumpling parent.</aside>
+</section>
+
+<!-- 11 vs other groups -->
+<section class="slide" data-title="How we stacked up">
+  <div class="hd"><div class="chip">2 · What happened · internal</div><h2 class="t">About 12% of every ticket at the event landed in our box</h2></div>
+  <div class="body" style="grid-template-columns:1fr 380px">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="hb" id="groupBars"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--red)"></i>Rambots, counted</span><span><i class="sw hatch" style="background-color:var(--other)"></i>Photo estimate (±30%)</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="big">~2.5x</div><p>the average group. The event sold 7,000 tickets across 20 groups.</p></div>
+      <div class="card"><div class="k">#1 in direct sales?</div><p>Unclear. Group A's ~675 is one jar in one photo, and it may have had more.</p></div>
+      <div class="card"><div class="k">Overall</div><p>One group also kept the event's 10% cut (~700), so it out-earned us overall.</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21 and event_ticket_estimates v1.3.1 · other groups anonymized</span><span class="pg"></span></div>
+  <aside class="notes">Other groups are eyeballed from container photos, so treat them as rough. Keep this slide inside the team.</aside>
+</section>
+
+<!-- 12 copters -->
+<section class="slide" data-title="Copters fell 95%">
+  <div class="hd"><div class="chip">3 · Why</div><h2 class="t">Copters fell about 95% from last year</h2></div>
+  <div class="body" style="grid-template-columns:400px 1fr;align-content:start">
+    <div class="card" style="gap:14px"><div class="big" style="font-size:110px;color:var(--red)">−95%</div><p>5 kits for 27 tickets (about 24 net). Last year: about 450 net at the same prices. 2 of the 5 were toroidal.</p></div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="k">Guess 1 · Clickers pulled the same kids</div><p>Clickers took 94% of the sales table's tickets.</p><p><b style="color:var(--ink)">Test:</b> give copters their own table, or run a flying demo.</p></div>
+      <div class="card"><div class="k">Guess 2 · Families already own one (most likely)</div><p>After two strong years, many returning families have a copter at home.</p><p><b style="color:var(--ink)">Test:</b> ask at the table, or sell replacement props and ripcords instead of full kits.</p></div>
+      <div class="card" style="background:var(--soft)"><div class="k">Still in the bin</div><p style="color:var(--ink);font-size:24px"><b class="num">88</b> launchers · <b class="num">155</b> propellers · <b class="num">42</b> toroidal propellers · <b class="num">100</b> ripcords</p><p>These become Trunk or Treat giveaways. Don't buy parts.</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21, Copters</span><span class="pg"></span></div>
+  <aside class="notes">Trunk or Treat is a free test of guess 2: new families at another school, plus a flying demo.</aside>
+</section>
+
+<!-- 13 board -->
+<section class="slide" data-title="Keep, add, remove">
+  <div class="hd" style="gap:8px"><div class="chip">3 · Why &nbsp;→&nbsp; 4 · Next</div>
+    <div class="copyrow"><h2 class="t" style="font-size:46px">Keep, add, remove</h2>
+      <div style="display:flex;gap:12px;align-items:center"><span class="status" id="boardStatus">Connecting…</span><button class="tbtn" id="copyBoard" type="button">Copy list</button></div></div></div>
+  <div class="body board" id="board">
+    <div class="col" data-col="keep"><div class="col-h"><h3>Keep <span class="cnt" data-cnt="keep"></span></h3><p>What worked that we do again, starting Saturday?</p></div><ul class="items" data-items="keep"></ul>
+      <form class="add" data-add="keep"><input id="add-keep" maxlength="160" placeholder="Add a keep…" aria-label="Add something to keep" autocomplete="off"><button type="submit">Add</button></form></div>
+    <div class="col" data-col="add"><div class="col-h"><h3>Add <span class="cnt" data-cnt="add"></span></h3><p>What was missing?</p></div><ul class="items" data-items="add"></ul>
+      <form class="add" data-add="add"><input id="add-add" maxlength="160" placeholder="Add an idea…" aria-label="Add something new" autocomplete="off"><button type="submit">Add</button></form></div>
+    <div class="col" data-col="remove"><div class="col-h"><h3>Remove <span class="cnt" data-cnt="remove"></span></h3><p>What do we stop doing?</p></div><ul class="items" data-items="remove"></ul>
+      <form class="add" data-add="remove"><input id="add-remove" maxlength="160" placeholder="Add a remove…" aria-label="Add something to remove" autocomplete="off"><button type="submit">Add</button></form></div>
+  </div>
+  <div class="ft"><span>Each item is tagged with the meeting it came from (switch in the bottom bar)</span><span class="pg"></span></div>
+  <aside class="notes">Students first, before the next slide's recommendations. Type as people talk. Arrow keys don't move slides while you're typing.</aside>
+</section>
+
+<!-- 14 next year -->
+<section class="slide" data-title="If we run it again">
+  <div class="hd"><div class="chip">4 · Next</div><h2 class="t">If we run it again</h2></div>
+  <div class="body" style="grid-template-columns:600px 1fr">
+    <div style="min-height:0;overflow:auto"><table class="t2" id="printTable"><thead><tr><th>Design</th><th style="text-align:right">Had</th><th style="text-align:right">Next time</th><th style="text-align:right">Change</th></tr></thead><tbody></tbody></table></div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="k">1 · Rebalance the print queue</div><p>Same print time, aimed at what sold. About twice the Creepers, more Dumpling, Salmon nigiri and Avocado, fewer Hot dog buns and S'mores. 173 total vs about 160.</p></div>
+      <div class="card"><div class="k">2 · Every booth on the tracker</div><p>Plinko and Battle were about 40% of the money with no data.</p></div>
+      <div class="card"><div class="k">3 · Recount stock the morning of</div><p>After any restock. Ring up the blowout as its own item.</p></div>
+      <div class="card"><div class="k">4 · Better age tags</div><p>Elementary / Middle / High school / Adult, on every sale.</p></div>
+      <p style="font-size:18px;color:var(--ink-3)">No guarantee we repeat Ram-a-thon. Repeating what worked before isn't automatic (see copters). Compare with your board.</p>
+    </div>
+  </div>
+  <div class="ft"><span>Source: findings v1.1.21 · next time = this year's rate x 3.3 selling hours + 20% buffer</span><span class="pg"></span></div>
+  <aside class="notes">Where does the data agree with the board? Where does it disagree?</aside>
+</section>
+
+<!-- 15 trunk or treat -->
+<section class="slide" data-title="Next up: Trunk or Treat">
+  <div class="hd"><div class="chip">4 · Next · Trunk or Treat</div><h2 class="t">Saturday Oct 24, 4:00 to 7:00 PM, at Coastline Christian</h2>
+    <p class="lede">1801 North Loop Rd, Alameda. A robotics trunk at CCS's Trunk or Treat Family Fest.</p></div>
+  <div class="body" style="grid-template-columns:repeat(3,1fr);align-content:start">
+    <div class="card"><div class="k">Getting in</div><p>Every volunteer needs a ticket at the gate. CCS is sending 4 free youth tickets for our helpers; anyone else buys one.</p><p><b style="color:var(--ink)">Youth volunteers walk in with a guardian</b> or have one come get them at the gate.</p></div>
+    <div class="card"><div class="k">Giveaways (already paid for)</div><p style="color:var(--ink)"><b class="num">88</b> copter launchers, <b class="num">155</b> propellers, <b class="num">42</b> toroidal propellers, <b class="num">100</b> ripcords.</p><p>Plus leftover Pokémon cards and prize-table items. Launchers cap us at 88 full kits.</p></div>
+    <div class="card"><div class="k">The calendar</div><p>Thu and Fri (Oct 22 and 23) are conference days, no school. That leaves Mon to Wed to prep at school.</p><p>Sunset is about 6:15 PM. The last 45 minutes are dark: lights and a charged power station.</p></div>
+    <div class="card"><div class="k">Last year (Oct 25, 2025)</div><p>Arrived 1.5 hours early for the canopy and table. Ran three one-hour shifts. Spin-the-wheel and Plinko for prizes.</p></div>
+    <div class="card"><div class="k">A free test</div><p>New families and a flying demo. If copters go fast here, guess 2 from slide 12 looks right.</p></div>
+    <div class="card"><div class="k">Why it's worth a Saturday</div><p>It's in our outreach story for grants, and it's how CCS families find our summer camp.</p></div>
+  </div>
+  <div class="ft"><span>Source: CCS volunteer emails, Eventbrite, Coda "Trunk or Treat 2025", CCA calendar</span><span class="pg"></span></div>
+  <aside class="notes">Logistics first. Questions for CCS go to our trunk lead: what time trunks set up, whether there's power, and whether trunks are expected to hand out candy.</aside>
+</section>
+
+<!-- 16 mission and goals -->
+<section class="slide" data-title="Trunk or Treat mission and goals">
+  <div class="hd"><div class="chip">4 · Next · Trunk or Treat · draft</div><h2 class="t" style="font-size:44px;max-width:1300px">Give every kid who stops by a hands-on taste of engineering, and give every parent a way to find us again.</h2></div>
+  <div class="body" style="grid-template-columns:1fr 360px">
+    <table class="t2" style="font-size:22px;align-self:start">
+      <thead><tr><th>Goal</th><th style="text-align:right">Target</th><th>How we know</th></tr></thead>
+      <tbody>
+        <tr><td>Kids reached</td><td class="n">200</td><td>Tally counter at the trunk</td></tr>
+        <tr><td>Copter kits handed out</td><td class="n">up to 88</td><td>Count the bags left at the end</td></tr>
+        <tr><td>Parents signed up for camp or STEM news</td><td class="n">25</td><td>QR code to an interest form</td></tr>
+        <tr><td>Photos we can use for grants and Instagram</td><td class="n">15</td><td>Shared album by Sunday</td></tr>
+        <tr><td>New money spent</td><td class="n">$75 to $100</td><td>Receipts</td></tr>
+        <tr><td>Student-run</td><td class="n">yes</td><td>Trunk lead runs it, mentors back up</td></tr>
+      </tbody>
+    </table>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="k">The one that matters</div><p>Parent sign-ups. It's the only number that turns into camp enrollment and grant evidence.</p></div>
+      <div class="card"><div class="k">Edit tonight</div><p>Every number here is a starting point for leadership to change.</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Draft by Claude from the team mission (Educate, Serve, Inspire)</span><span class="pg"></span></div>
+  <aside class="notes">Leadership: change the numbers before Monday. Does the interest form exist yet? If not, who makes it?</aside>
+</section>
+
+<!-- 17 votes -->
+<section class="slide" data-title="Vote: theme and candy">
+  <div class="hd" style="gap:8px"><div class="chip">4 · Next · Trunk or Treat</div>
+    <div class="copyrow"><h2 class="t" style="font-size:46px">Vote: theme and candy</h2><span class="status" id="voteStatus">Connecting…</span></div></div>
+  <div class="body polls">
+    <div class="poll"><div class="k">Theme · one tap per raised hand</div><div id="poll-theme" style="display:flex;flex-direction:column;gap:12px"></div><button class="undo" data-undo="theme" type="button">Undo last theme vote</button></div>
+    <div class="poll"><div class="k">Candy</div><div id="poll-candy" style="display:flex;flex-direction:column;gap:12px"></div><button class="undo" data-undo="candy" type="button">Undo last candy vote</button>
+      <p style="font-size:18px;color:var(--ink-3)">Tallies count the meeting picked in the bottom bar.</p></div>
+  </div>
+  <div class="ft"><span>Theme ideas: Claude's drafts · write-ins go on the whiteboard</span><span class="pg"></span></div>
+  <aside class="notes">Count hands and tap once per hand. Undo removes the last tap.</aside>
+</section>
+
+<!-- 18 budget -->
+<section class="slide" data-title="Trunk or Treat budget">
+  <div class="hd"><div class="chip">4 · Next · Trunk or Treat</div><h2 class="t">What does Saturday cost us in new money?</h2></div>
+  <div class="body bud">
+    <div class="ctrl">
+      <label for="kids">Kids we expect <span id="kidsV">200</span></label>
+      <input type="range" id="kids" min="50" max="400" step="10" value="200">
+      <div class="row"><span style="flex:1">Candy pieces per kid</span><span class="seg" role="group" aria-label="Candy pieces per kid"><button type="button" data-cpk="0" aria-pressed="false">0</button><button type="button" data-cpk="1" aria-pressed="true">1</button><button type="button" data-cpk="2" aria-pressed="false">2</button></span></div>
+      <div class="row"><label for="price" style="flex:1;font-weight:600">Price per piece <small>(a guess, change it)</small></label>$<input type="number" id="price" min="0.02" max="1" step="0.01" value="0.10"></div>
+      <div class="row"><label for="decor" style="flex:1;font-weight:600">Decorations and lights</label>$<input type="number" id="decor" min="0" max="300" step="5" value="25"></div>
+      <p style="font-size:17px;color:var(--ink-3)">Ask CCS how many kids came last year. Copter parts, cards and prizes are already paid for, so they cost no new money.</p>
+    </div>
+    <div class="out">
+      <div><div class="k">New money</div><div class="big" id="budTotal" style="font-size:96px">$45</div><div class="verdict" id="budVerdict">Under the $75 cap</div></div>
+      <div style="padding-top:40px"><div class="mtrack" id="mtrack"><div class="mfill" id="mfill"><i id="mCandy" style="background:var(--b-plk)"></i><i id="mDecor" style="background:var(--b-bat)"></i></div></div></div>
+      <div class="legend"><span><i class="sw" style="background:var(--b-plk)"></i>Candy <b class="num" id="budCandy">$20</b></span><span><i class="sw" style="background:var(--b-bat)"></i>Decorations <b class="num" id="budDecor">$25</b></span></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div class="k">Who gets a copter kit · one square per 10 kids</div><div class="kits" id="kits"></div><p style="font-size:19px;color:var(--ink-2)" id="kitsText"></p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Cap: $75 to $100 of new money (Sam, Oct 18) · candy price is a guess</span><span class="pg"></span></div>
+  <aside class="notes">Slide the kid count. Candy is the only cost that grows with the crowd.</aside>
+</section>
+
+<!-- 19 backward plan -->
+<section class="slide" data-title="Backward plan">
+  <div class="hd"><div class="chip">4 · Next · Trunk or Treat</div><h2 class="t">Work backward from Saturday 2:45 PM. Names go on the whiteboard.</h2></div>
+  <div class="body plan">
+    <div class="card" style="gap:12px"><div class="k">Must be true by Sat 2:45 PM</div>
+      <ul class="must">
+        <li>A car, and who drives it</li>
+        <li>A guardian plan for youth helpers at the gate</li>
+        <li>4 free youth tickets in hand</li>
+        <li>Copter kits put together and bagged</li>
+        <li>Theme decorations built</li>
+        <li>Lights, and the power station charged</li>
+        <li>Canopy, table, tablecloth, chairs</li>
+        <li>Plinko board and prizes</li>
+        <li>QR sign and interest form</li>
+        <li>Candy, if we voted yes</li>
+        <li>Someone owns photos</li>
+      </ul></div>
+    <div class="days">
+      <div class="day"><h4>Sun<small>10/18 · tonight</small></h4><p>Leadership edits goals and drafts owners.</p><div class="who">Who:</div></div>
+      <div class="day"><h4>Mon<small>10/19</small></h4><p>Team debrief and votes. Trunk lead sends CCS the questions.</p><div class="who">Who:</div></div>
+      <div class="day"><h4>Tue<small>10/20</small></h4><p>Bag copter kits. Start decorations.</p><div class="who">Who:</div></div>
+      <div class="day"><h4>Wed<small>10/21 · last school day</small></h4><p>Decorations done. Gear staged to load.</p><div class="who">Who:</div></div>
+      <div class="day off"><h4>Thu<small>10/22 · no school</small></h4><p>Buy candy if voted.</p><div class="who">Who:</div></div>
+      <div class="day off"><h4>Fri<small>10/23 · no school</small></h4><p>Charge the power station. Pack the car.</p><div class="who">Who:</div></div>
+      <div class="day ev"><h4>Sat<small>10/24 · event</small></h4><p>Arrive ~2:45. Doors 4:00. Done 7:00. Packed by ~7:45.</p><div class="who">Who:</div></div>
+    </div>
+  </div>
+  <div class="ft"><span>Draft. Arrival time depends on CCS's trunk setup time.</span><span class="pg"></span></div>
+  <aside class="notes">Hand off to the whiteboard. Every box gets a name before the meeting ends.</aside>
+</section>
+
+      <div class="tip" id="tip" hidden></div>
+    </div>
+  </div>
+
+  <nav class="bar" aria-label="Slide controls">
+    <div class="prog"><i id="prog"></i></div>
+    <button class="bbtn nav" id="prev" type="button" aria-label="Previous slide">‹</button>
+    <button class="bbtn counter" id="counter" type="button" aria-label="Jump to a slide" aria-expanded="false">1 / 19</button>
+    <button class="bbtn nav" id="next" type="button" aria-label="Next slide">›</button>
+    <span class="btitle" id="btitle"></span>
+    <span class="seg" role="group" aria-label="Meeting"><button type="button" data-meet="sun" aria-pressed="true">Sun<span class="hide-sm"> · Leadership</span></button><button type="button" data-meet="mon" aria-pressed="false">Mon<span class="hide-sm"> · Team</span></button></span>
+    <button class="bbtn hide-sm" id="notesBtn" type="button" aria-pressed="false">Notes</button>
+    <button class="bbtn hide-sm" id="fsBtn" type="button">Full screen</button>
+    <div class="panel" id="notesPanel" hidden></div>
+    <div class="panel" id="jumpPanel" hidden><div class="jump" id="jumpList"></div></div>
+  </nav>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => n.toLocaleString('en-US');
+const W = 1600, H = 900;
+
+const stage = $('#stage'), viewport = $('#viewport');
+const slides = $$('.slide', stage);
+const N = slides.length;
+let cur = 0, scale = .5;
+
+/* ---------- layout ---------- */
+function fit(){
+  const r = viewport.getBoundingClientRect();
+  scale = Math.max(.1, Math.min(r.width / W, r.height / H));
+  stage.style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
+}
+window.addEventListener('resize', fit);
+fit();
+
+/* ---------- tooltip ---------- */
+const tip = $('#tip');
+function showTip(html, ev){
+  tip.innerHTML = html; tip.hidden = false;
+  const sr = stage.getBoundingClientRect();
+  let x = (ev.clientX - sr.left) / scale + 18, y = (ev.clientY - sr.top) / scale + 18;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  if (x + tw > W - 12) x = x - tw - 36;
+  if (y + th > H - 12) y = y - th - 36;
+  tip.style.left = Math.max(12, x) + 'px'; tip.style.top = Math.max(12, y) + 'px';
+}
+function hideTip(){ tip.hidden = true; }
+function bindTips(root){
+  $$('[data-tip]', root).forEach(el => {
+    el.addEventListener('pointermove', e => showTip(el.getAttribute('data-tip'), e));
+    el.addEventListener('pointerleave', hideTip);
+  });
+}
+
+/* ---------- navigation ---------- */
+const prog = $('#prog'), counter = $('#counter'), btitle = $('#btitle');
+const notesPanel = $('#notesPanel'), notesBtn = $('#notesBtn');
+const jumpPanel = $('#jumpPanel'), jumpList = $('#jumpList');
+slides.forEach((s, i) => { const pg = $('.pg', s); if (pg) pg.textContent = (i + 1) + ' / ' + N; });
+jumpList.innerHTML = slides.map((s, i) => '<button type="button" data-go="' + i + '"><b>' + (i + 1) + '</b>' + esc(s.dataset.title || '') + '</button>').join('');
+jumpList.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { go(+b.dataset.go); toggleJump(false); } });
+
+function go(i){
+  i = Math.max(0, Math.min(N - 1, i));
+  slides[cur].classList.remove('on');
+  cur = i;
+  const s = slides[cur];
+  s.classList.add('on');
+  hideTip();
+  prog.style.width = ((cur + 1) / N * 100) + '%';
+  counter.textContent = (cur + 1) + ' / ' + N;
+  btitle.textContent = s.dataset.title || '';
+  const n = $('.notes', s); notesPanel.textContent = n ? n.textContent : '';
+  $$('button', jumpList).forEach((b, k) => b.classList.toggle('cur', k === cur));
+  if (s.dataset.iframe) { const f = $('iframe', s); if (f && !f.getAttribute('src')) { f.addEventListener('load', () => { const ph = $('.ph', s); if (ph) ph.remove(); }, {once:true}); f.setAttribute('src', f.dataset.src); } }
+  try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e) {}
+}
+$('#prev').addEventListener('click', () => go(cur - 1));
+$('#next').addEventListener('click', () => go(cur + 1));
+function toggleNotes(on){ on = on === undefined ? notesPanel.hidden : on; notesPanel.hidden = !on; notesBtn.setAttribute('aria-pressed', on); if (on) toggleJump(false); }
+function toggleJump(on){ on = on === undefined ? jumpPanel.hidden : on; jumpPanel.hidden = !on; counter.setAttribute('aria-expanded', on); if (on) { notesPanel.hidden = true; notesBtn.setAttribute('aria-pressed', false); } }
+notesBtn.addEventListener('click', () => toggleNotes());
+counter.addEventListener('click', () => toggleJump());
+$('#fsBtn').addEventListener('click', () => {
+  try {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+  } catch(e) {}
+});
+document.addEventListener('keydown', e => {
+  const t = e.target;
+  if (t && (t.closest('input,textarea,select,[contenteditable="true"]'))) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !(t && t.closest('button')))) { e.preventDefault(); go(cur + 1); }
+  else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); go(cur - 1); }
+  else if (k === 'Home') { go(0); }
+  else if (k === 'End') { go(N - 1); }
+  else if (k === 'n' || k === 'N') { toggleNotes(); }
+  else if (k === 'g' || k === 'G') { toggleJump(); }
+  else if (k === 'f' || k === 'F') { $('#fsBtn').click(); }
+  else if (k === 'Escape') { toggleJump(false); toggleNotes(false); }
+});
+let tx = null, ty = null;
+viewport.addEventListener('touchstart', e => {
+  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.polls')) { tx = null; return; }
+  tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+}, {passive:true});
+viewport.addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+  tx = null;
+}, {passive:true});
+
+/* ---------- data (findings v1.1.21) ---------- */
+const BOOTHS = [
+  {k:'clk', name:'Clickers', tracked:455, est:60, lo:505, hi:525, goal:500, how:'455 tracked + about 60 from the blowout (50 to 70)'},
+  {k:'plk', name:'Plinko', tracked:0, est:300, lo:290, hi:320, goal:100, how:'Inferred: about 900 minus every other booth. About 300 drops at 1 ticket.'},
+  {k:'bat', name:'Balloon Battle', tracked:0, est:55, lo:50, hi:60, goal:200, how:'Estimate: about 10 to 12 player-matches'},
+  {k:'cop', name:'Copters', tracked:27, est:0, lo:27, hi:27, goal:500, how:'All tracked: 5 kits'}
+];
+BOOTHS.forEach(b => b.total = b.tracked + b.est);
+const DESIGNS = [
+  {n:'Dumpling', p:'dumpling', th:'Asian food', rate:7.1, sold:24, stock:24, st:100, out:'12:42 PM', left:0, ideal:29},
+  {n:'Salmon nigiri', p:'salmon_nigiri', th:'Asian food', rate:6.9, sold:23, stock:23, st:100, out:'1:20 PM', left:0, ideal:28},
+  {n:'Creeper', p:'creeper', th:'Minecraft', rate:5.6, sold:10, stock:10, st:100, out:'11:48 AM', left:0, ideal:23},
+  {n:'Avocado', p:'avocado', th:'Snacks & treats', rate:4.4, sold:12, stock:12, st:100, out:'12:43 PM', left:0, ideal:18},
+  {n:'Egg tart', p:'egg_tart', th:'Asian food', rate:3.3, sold:11, stock:null, st:null, out:null, left:null, ideal:14},
+  {n:'Chocolate bar', p:'chocolate_bar', th:'Snacks & treats', rate:3.3, sold:11, stock:15, st:73, out:null, left:4, ideal:14},
+  {n:'Hot dog bun', p:'hot_dog_bun', th:'Snacks & treats', rate:3.0, sold:10, stock:22, st:45, out:null, left:12, ideal:12},
+  {n:'WD-40', p:'wd40', th:'Workshop', rate:2.4, sold:8, stock:15, st:53, out:null, left:7, ideal:10},
+  {n:'Creeper infinity cube', p:'creeper_cube', th:'Minecraft', rate:2.4, sold:8, stock:9, st:89, out:null, left:1, ideal:10},
+  {n:'Spam musubi', p:'spam_musubi', th:'Asian food', rate:1.8, sold:6, stock:6, st:100, out:'1:20 PM', left:0, ideal:8},
+  {n:"S'mores", p:'smores', th:'Snacks & treats', rate:0.9, sold:3, stock:9, st:33, out:null, left:6, ideal:4},
+  {n:'LEGO brick', p:'lego', th:'Workshop', rate:0.6, sold:2, stock:4, st:50, out:null, left:2, ideal:3}
+];
+const PACE = [
+  {t:'10:00', l:'open to 10:30', v:98}, {t:'10:30', l:'10:30 to 11:00', v:158}, {t:'11:00', l:'11:00 to 11:30', v:218},
+  {t:'11:30', l:'11:30 to noon', v:176}, {t:'12:00', l:'noon to 12:30', v:74}, {t:'12:30', l:'12:30 to 1:00', v:192, alt:138},
+  {t:'1:00', l:'1:00 to the last sale (1:21)', v:78}
+];
+const THEMES = [
+  {n:'Asian food', d:'Salmon nigiri, Dumpling, Spam musubi, Egg tart', u:64, st:'100%'},
+  {n:'Snacks & treats', d:'Avocado, Chocolate bar, Hot dog bun, S\'mores, Burger', u:37, st:'62%'},
+  {n:'Minecraft', d:'Creeper, Creeper infinity cube', u:18, st:'95%'},
+  {n:'Workshop', d:'WD-40, LEGO brick', u:10, st:'53%'}
+];
+const GROUPS = [
+  {n:'Rambots', d:'830 counted + ~70 fed to helpers', v:900, solid:830, us:true},
+  {n:'Group A', d:'one jar seen; may have had more', v:675, q:true},
+  {n:'Group B', d:'stuffed bag; could be 500 to 850', v:675},
+  {n:'Group C', v:350}, {n:'Group D', v:350}, {n:'Group E', v:350},
+  {n:'Average of the other 19', v:325, avg:true}
+];
+const PRINT = [
+  ['Dumpling',24,29],['Salmon nigiri',23,28],['Creeper',10,23],['Avocado',12,18],['Egg tart','11+',14],['Chocolate bar',15,14],
+  ['Hot dog bun',22,12],['WD-40',15,10],['Creeper infinity cube',9,10],['Spam musubi',6,8],["S'mores",9,4],['LEGO brick',4,3]
+];
+
+/* ---------- svg helpers ---------- */
+function rbar(x, y, w, h, r){ // rounded on the right end only, anchored at x
+  if (w <= 0) return '';
+  r = Math.min(r, w, h / 2);
+  return 'M' + x + ',' + y + 'H' + (x + w - r) + 'Q' + (x + w) + ',' + y + ' ' + (x + w) + ',' + (y + r) + 'V' + (y + h - r) + 'Q' + (x + w) + ',' + (y + h) + ' ' + (x + w - r) + ',' + (y + h) + 'H' + x + 'Z';
+}
+function hatchDefs(pre, keys){
+  return '<defs>' + keys.map(k => '<pattern id="' + pre + k + '" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--b-' + k + ')"></rect><rect x="5" width="3" height="8" style="fill:var(--slide)"></rect></pattern>').join('') + '</defs>';
+}
+
+/* ---------- slide 4: booth vs goal ---------- */
+let boothMode = 't';
+function drawBooths(){
+  const el = $('#boothChart');
+  const w = 1424, rowH = 100, top = 34, left = 210, right = 230, pw = w - left - right;
+  const h = top + rowH * BOOTHS.length + 40;
+  const pct = boothMode === 'p';
+  const max = pct ? 320 : 600, step = pct ? 50 : 100;
+  const X = v => left + v / max * pw;
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="Tickets by booth compared with each goal">' + hatchDefs('hb-', ['clk','plk','bat','cop']);
+  for (let v = 0; v <= max; v += step) {
+    s += '<line class="gl" x1="' + X(v) + '" x2="' + X(v) + '" y1="' + (top - 10) + '" y2="' + (h - 34) + '"></line>';
+    s += '<text class="ax" x="' + X(v) + '" y="' + (h - 10) + '" text-anchor="middle">' + v + (pct ? '%' : '') + '</text>';
+  }
+  if (pct) s += '<line x1="' + X(100) + '" x2="' + X(100) + '" y1="' + (top - 18) + '" y2="' + (h - 34) + '" style="stroke:var(--ink);stroke-width:3"></line><text x="' + X(100) + '" y="' + (top - 22) + '" text-anchor="middle" style="fill:var(--ink);font-size:16px;font-weight:700">100% = goal</text>';
+  BOOTHS.forEach((b, i) => {
+    const cy = top + i * rowH + rowH / 2, bh = 44, y = cy - bh / 2;
+    const f = pct ? 100 / b.goal : 1;
+    const tw = b.tracked * f / max * pw, ew = b.est * f / max * pw;
+    const hint = '<b>' + b.name + '</b><br>~' + fmt(b.total) + ' tickets · goal ' + fmt(b.goal) + ' · ' + Math.round(b.total / b.goal * 100) + '%<br><span class="m">' + esc(b.how) + '</span>';
+    s += '<g data-tip="' + esc(hint) + '">';
+    s += '<rect x="0" y="' + (cy - rowH / 2) + '" width="' + w + '" height="' + rowH + '" style="fill:transparent"></rect>';
+    s += '<text x="' + (left - 20) + '" y="' + (cy + 8) + '" text-anchor="end" style="fill:var(--ink);font-size:24px;font-weight:700">' + b.name + '</text>';
+    if (b.tracked > 0) s += '<path d="' + rbar(left, y, Math.max(0, tw - (b.est > 0 ? 1 : 0)), bh, b.est > 0 ? 0 : 4) + '" style="fill:var(--b-' + b.k + ')"></path>';
+    if (b.est > 0) s += '<path d="' + rbar(left + tw + (b.tracked > 0 ? 1 : 0), y, Math.max(0, ew - (b.tracked > 0 ? 1 : 0)), bh, 4) + '" style="fill:url(#hb-' + b.k + ')"></path>';
+    if (b.hi > b.lo) {
+      const x1 = left + b.lo * f / max * pw, x2 = left + b.hi * f / max * pw;
+      s += '<line x1="' + x1 + '" x2="' + x2 + '" y1="' + cy + '" y2="' + cy + '" style="stroke:var(--ink);stroke-width:2"></line><line x1="' + x1 + '" x2="' + x1 + '" y1="' + (cy - 9) + '" y2="' + (cy + 9) + '" style="stroke:var(--ink);stroke-width:2"></line><line x1="' + x2 + '" x2="' + x2 + '" y1="' + (cy - 9) + '" y2="' + (cy + 9) + '" style="stroke:var(--ink);stroke-width:2"></line>';
+    }
+    if (!pct) { const gx = X(b.goal); s += '<line x1="' + gx + '" x2="' + gx + '" y1="' + (y - 12) + '" y2="' + (y + bh + 12) + '" style="stroke:var(--ink);stroke-width:4"></line><text x="' + gx + '" y="' + (y - 18) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:16px">goal ' + b.goal + '</text>'; }
+    const endX = left + Math.max(tw + ew, (b.hi * f) / max * pw);
+    const p = Math.round(b.total / b.goal * 100), tl = (b.est > 0 ? '~' : '') + fmt(b.total);
+    const label = pct ? (p + '% · ' + tl + ' tix') : (tl + ' · ' + p + '%');
+    const lx = Math.max(endX, pct ? 0 : X(b.goal)) + 16;
+    s += '<text x="' + lx + '" y="' + (cy + 8) + '" style="fill:var(--ink);font-size:24px;font-variant-numeric:tabular-nums">' + label + '</text>';
+    s += '</g>';
+  });
+  s += '<line class="base" x1="' + left + '" x2="' + left + '" y1="' + (top - 10) + '" y2="' + (h - 34) + '"></line></svg>';
+  el.innerHTML = s;
+  bindTips(el);
+}
+function setBoothMode(m){ boothMode = m; $('#bg-t').setAttribute('aria-pressed', m === 't'); $('#bg-p').setAttribute('aria-pressed', m === 'p'); drawBooths(); }
+$('#bg-t').addEventListener('click', () => setBoothMode('t'));
+$('#bg-p').addEventListener('click', () => setBoothMode('p'));
+drawBooths();
+
+/* ---------- slide 5: money split ---------- */
+(function drawMoney(){
+  const el = $('#moneyChart');
+  const w = 1424, h = 268, bh = 96, y = 20, total = BOOTHS.reduce((a, b) => a + b.total, 0);
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="Share of tickets by booth">' + hatchDefs('hm-', ['clk','plk','bat','cop']);
+  s += '<defs><clipPath id="mclip"><rect x="0" y="' + y + '" width="' + w + '" height="' + bh + '" rx="8"></rect></clipPath></defs><g clip-path="url(#mclip)">';
+  let x = 0;
+  const segs = BOOTHS.map(b => { const sw = b.total / total * w; const seg = {b, x, w:sw}; x += sw; return seg; });
+  segs.forEach((g, i) => {
+    const b = g.b, gap = i < segs.length - 1 ? 2 : 0;
+    const fill = b.tracked >= b.total ? 'var(--b-' + b.k + ')' : (b.tracked === 0 ? 'url(#hm-' + b.k + ')' : 'var(--b-' + b.k + ')');
+    const hint = '<b>' + b.name + '</b><br>~' + fmt(b.total) + ' of ~900 tickets · ' + Math.round(b.total / 900 * 100) + '%<br><span class="m">' + esc(b.how) + '</span>';
+    s += '<g data-tip="' + esc(hint) + '">';
+    if (b.tracked > 0 && b.est > 0) {
+      const tw = b.tracked / total * w;
+      s += '<rect x="' + g.x + '" y="' + y + '" width="' + tw + '" height="' + bh + '" style="fill:var(--b-' + b.k + ')"></rect>';
+      s += '<rect x="' + (g.x + tw) + '" y="' + y + '" width="' + Math.max(0, g.w - tw - gap) + '" height="' + bh + '" style="fill:url(#hm-' + b.k + ')"></rect>';
+    } else s += '<rect x="' + g.x + '" y="' + y + '" width="' + Math.max(0, g.w - gap) + '" height="' + bh + '" style="fill:' + fill + '"></rect>';
+    s += '</g>';
+  });
+  s += '</g>';
+  segs.forEach((g, i) => {
+    const b = g.b, p = Math.round(b.total / 900 * 100);
+    const narrow = g.w < 160, row = narrow ? (i === segs.length - 1 ? 1 : 0) : 0;
+    const lx = narrow ? w : g.x + 6, anchor = narrow ? 'end' : 'start';
+    const ly = y + bh + 34 + row * 62;
+    s += '<text x="' + lx + '" y="' + ly + '" text-anchor="' + anchor + '" style="fill:var(--ink);font-size:22px;font-weight:700">' + b.name + ' ' + p + '%</text>';
+    s += '<text x="' + lx + '" y="' + (ly + 26) + '" text-anchor="' + anchor + '" style="fill:var(--ink-2);font-size:18px">' + (b.est > 0 ? '~' : '') + fmt(b.total) + ' tix</text>';
+  });
+  s += '</svg>';
+  el.innerHTML = s;
+  bindTips(el);
+})();
+
+/* ---------- slide 6: leaderboard ---------- */
+const lb = $('#lb'), ROWH = 46;
+lb.style.height = (DESIGNS.length * ROWH) + 'px';
+DESIGNS.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'lb-row';
+  const status = d.out ? '<span class="tag so">Sold out ' + d.out + '</span>' : (d.left == null ? '<span class="tag">Restocked</span>' : '<span class="tag">' + d.left + ' left</span>');
+  row.innerHTML = '<span class="r"></span><img src="infographic_photos/' + d.p + '.jpg" alt=""><span class="nm">' + esc(d.n) + '</span><span class="trk"><span class="fill"></span><span class="val"></span></span><span class="st">' + status + '</span>';
+  const hint = '<b>' + esc(d.n) + '</b> · ' + esc(d.th) + '<br>' + d.rate + ' an hour · ' + d.sold + ' sold' + (d.stock != null ? ' of ' + d.stock : ' (restocked, start count unknown)') +
+    '<br><span class="m">' + (d.out ? 'Sold out at ' + d.out : (d.left != null ? d.left + ' went to the blowout' : 'Left over unknown')) + ' · next time print ' + d.ideal + '</span>';
+  row.setAttribute('data-tip', hint);
+  d.el = row;
+  lb.appendChild(row);
+});
+bindTips(lb);
+function drawLB(metric){
+  $$('[data-lb]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lb === metric));
+  const val = d => metric === 'rate' ? d.rate : metric === 'sold' ? d.sold : (d.st == null ? -1 : d.st);
+  const sorted = DESIGNS.slice().sort((a, b) => val(b) - val(a) || b.rate - a.rate);
+  const max = Math.max.apply(null, DESIGNS.map(val));
+  sorted.forEach((d, i) => {
+    const v = val(d), pctw = v < 0 ? 0 : v / max * 78;
+    d.el.style.top = (i * ROWH) + 'px';
+    $('.r', d.el).textContent = i + 1;
+    $('.fill', d.el).style.width = pctw + '%';
+    const vEl = $('.val', d.el);
+    vEl.style.left = pctw + '%';
+    vEl.textContent = metric === 'rate' ? d.rate.toFixed(1) + ' / hr' : metric === 'sold' ? d.sold + ' sold' : (d.st == null ? 'unknown' : d.st + '%');
+  });
+}
+$$('[data-lb]').forEach(b => b.addEventListener('click', () => drawLB(b.dataset.lb)));
+drawLB('rate');
+
+/* ---------- slide 8: pace ---------- */
+let paceAlt = false;
+function drawPace(){
+  const el = $('#paceChart');
+  const w = 1080, h = 560, left = 70, right = 20, top = 50, bottom = 56, pw = w - left - right, ph = h - top - bottom;
+  const max = 250, Y = v => top + ph - v / max * ph, avg = 146;
+  const bw = pw / PACE.length;
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="Gross dollars per hour by half hour">';
+  for (let v = 0; v <= max; v += 50) { s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(v) + 5) + '" text-anchor="end">$' + v + '</text>'; }
+  PACE.forEach((p, i) => {
+    const v = paceAlt && p.alt ? p.alt : p.v;
+    const x = left + i * bw + bw * .18, cw = bw * .64, y = Y(v);
+    const r = 4;
+    const d = 'M' + x + ',' + Y(0) + 'V' + (y + r) + 'Q' + x + ',' + y + ' ' + (x + r) + ',' + y + 'H' + (x + cw - r) + 'Q' + (x + cw) + ',' + y + ' ' + (x + cw) + ',' + (y + r) + 'V' + Y(0) + 'Z';
+    const hint = '<b>' + p.l + '</b><br>$' + v + ' an hour, gross' + (p.alt ? (paceAlt ? '<br><span class="m">without the 27-ticket Dumpling sale ($' + p.v + ' with it)</span>' : '<br><span class="m">$' + p.alt + ' without the 27-ticket Dumpling sale</span>') : '');
+    s += '<g data-tip="' + esc(hint) + '"><rect x="' + (left + i * bw) + '" y="' + top + '" width="' + bw + '" height="' + ph + '" style="fill:transparent"></rect><path d="' + d + '" style="fill:var(--red)"></path>';
+    s += '<text x="' + (x + cw / 2) + '" y="' + (y - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:20px;font-weight:700">$' + v + '</text>';
+    s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (h - bottom + 28) + '" text-anchor="middle" style="font-size:18px">' + p.t + '</text></g>';
+  });
+  s += '<line x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(avg) + '" y2="' + Y(avg) + '" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:8 6"></line>';
+  s += '<text x="' + (w - right) + '" y="' + (Y(avg) - 10) + '" text-anchor="end" style="fill:var(--ink);font-size:17px">day average $146/hr</text>';
+  s += '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line>';
+  s += '<text x="' + (left + 2 * bw + bw / 2) + '" y="' + (top - 22) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">RUSH</text>';
+  s += '<text x="' + (left + 4 * bw + bw / 2) + '" y="' + (Y(74) - 40) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">LULL</text>';
+  s += '</svg>';
+  el.innerHTML = s;
+  bindTips(el);
+}
+$('#paceToggle').addEventListener('click', e => { paceAlt = !paceAlt; e.currentTarget.setAttribute('aria-pressed', paceAlt); drawPace(); });
+drawPace();
+
+/* ---------- slide 9: themes ---------- */
+(function(){
+  const max = 64;
+  $('#themeBars').innerHTML = THEMES.map(t => '<div class="hb-row" data-tip="' + esc('<b>' + t.n + '</b><br>' + t.u + ' units · sell-through ' + t.st + '<br><span class="m">' + esc(t.d) + '</span>') + '"><span class="nm">' + t.n + '</span><span class="trk"><span class="seg1" style="width:' + (t.u / max * 70) + '%;background:var(--red)"></span><span class="v">' + t.u + ' · ' + t.st + '</span></span></div>').join('');
+  bindTips($('#themeBars'));
+})();
+
+/* ---------- slide 11: groups ---------- */
+(function(){
+  const max = 900;
+  $('#groupBars').innerHTML = GROUPS.map(g => {
+    const wv = g.v / max * 72;
+    let bar;
+    if (g.us) bar = '<span style="display:flex;gap:2px;height:100%;width:' + wv + '%"><span class="seg1" style="flex:' + g.solid + ';background:var(--red);border-radius:0"></span><span class="seg1 hatch" style="flex:' + (g.v - g.solid) + ';background-color:var(--red)"></span></span>';
+    else bar = '<span class="seg1 hatch" style="width:' + wv + '%;background-color:var(--other)"></span>';
+    const lab = (g.us ? '~900' : '~' + g.v) + (g.q ? '?' : '');
+    const hint = '<b>' + g.n + '</b><br>' + lab + ' tickets' + (g.d ? '<br><span class="m">' + esc(g.d) + '</span>' : '') + (g.us ? '' : '<br><span class="m">Estimated from a container photo, ±30%</span>');
+    return '<div class="hb-row" data-tip="' + esc(hint) + '"><span class="nm"' + (g.avg ? ' style="color:var(--ink-2)"' : '') + '>' + g.n + '</span><span class="trk">' + bar + '<span class="v"' + (g.us ? ' style="font-weight:700"' : '') + '>' + lab + '</span></span></div>';
+  }).join('');
+  bindTips($('#groupBars'));
+})();
+
+/* ---------- slide 14: print table ---------- */
+$('#printTable tbody').innerHTML = PRINT.map(r => {
+  const had = typeof r[1] === 'number' ? r[1] : parseInt(r[1], 10), d = r[2] - had;
+  const ch = typeof r[1] !== 'number' ? '<span style="color:var(--ink-3)">≈</span>' : (d > 0 ? '<span class="up">+' + d + '</span>' : d < 0 ? '<span class="dn">' + d + '</span>' : '0');
+  return '<tr><td>' + esc(r[0]) + '</td><td class="n">' + r[1] + '</td><td class="n"><b>' + r[2] + '</b></td><td class="n">' + ch + '</td></tr>';
+}).join('');
+
+/* ---------- slide 18: budget ---------- */
+let cpk = 1;
+function money(v){ const r = Math.round(v * 100) / 100; return '$' + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(2)); }
+function drawBudget(){
+  const kids = +$('#kids').value;
+  const price = Math.max(0, parseFloat($('#price').value) || 0);
+  const decor = Math.max(0, parseFloat($('#decor').value) || 0);
+  const candy = kids * cpk * price, total = candy + decor;
+  $('#kidsV').textContent = kids;
+  $('#budTotal').textContent = money(total);
+  $('#budCandy').textContent = money(candy);
+  $('#budDecor').textContent = money(decor);
+  const v = $('#budVerdict');
+  v.textContent = total <= 75 ? 'Under the $75 cap' : total <= 100 ? 'Between $75 and $100' : 'Over $100: cut candy or decorations';
+  v.style.color = total <= 100 ? 'var(--ink)' : 'var(--red)';
+  const scaleMax = Math.max(150, Math.ceil(total / 50) * 50);
+  $('#mfill').style.width = Math.min(100, total / scaleMax * 100) + '%';
+  $('#mCandy').style.width = total ? (candy / total * 100) + '%' : '0';
+  $('#mDecor').style.width = total ? (decor / total * 100) + '%' : '0';
+  const tr = $('#mtrack');
+  $$('.cap,.caplab', tr).forEach(n => n.remove());
+  [75, 100].forEach(c => { const l = c / scaleMax * 100; tr.insertAdjacentHTML('beforeend', '<div class="cap" style="left:' + l + '%"></div><div class="caplab" style="left:' + l + '%">$' + c + '</div>'); });
+  const cells = Math.ceil(kids / 10);
+  let html = '';
+  for (let i = 0; i < 40; i++) html += '<i class="' + (i < cells ? (i * 10 < 88 ? 'k1' : 'k2') : '') + '"></i>';
+  $('#kits').innerHTML = html;
+  const got = Math.min(kids, 88), rest = kids - got;
+  $('#kitsText').textContent = rest > 0 ? got + ' kids get a copter kit. The other ' + rest + ' get cards, prizes or candy.' : 'Every kid can get a copter kit, with ' + (88 - kids) + ' kits to spare.';
+}
+['kids', 'price', 'decor'].forEach(id => $('#' + id).addEventListener('input', drawBudget));
+$$('[data-cpk]').forEach(b => b.addEventListener('click', () => { cpk = +b.dataset.cpk; $$('[data-cpk]').forEach(x => x.setAttribute('aria-pressed', x === b)); drawBudget(); }));
+drawBudget();
+
+/* ---------- meeting switch ---------- */
+const LKEY = 'rambots-debrief-v10';
+let meeting = (new Date() >= new Date(2026, 9, 19)) ? 'mon' : 'sun';
+try { const m = localStorage.getItem(LKEY + '-meet'); if (m === 'sun' || m === 'mon') meeting = m; } catch(e) {}
+const MEET = {sun:'Sun', mon:'Mon'};
+function setMeeting(m){
+  meeting = m;
+  $$('[data-meet]').forEach(b => b.setAttribute('aria-pressed', b.dataset.meet === m));
+  try { localStorage.setItem(LKEY + '-meet', m); } catch(e) {}
+  renderVotes();
+}
+$$('[data-meet]').forEach(b => b.addEventListener('click', () => setMeeting(b.dataset.meet)));
+
+/* ---------- shared store: board + votes ---------- */
+const POLLS = {
+  theme: [
+    {k:'lab', n:'Mad Scientist Robot Lab', d:'"It\'s ALIVE!" A robot on the operating table, green light, safety glasses. Plinko is the experiment.'},
+    {k:'grave', n:'Robot Graveyard', d:'"Rest in Pieces." Cardboard tombstones for retired robots and past games.'},
+    {k:'factory', n:'Robo Ram\'s Candy Factory', d:'A red and yellow assembly line where prizes come off the line.'}
+  ],
+  candy: [
+    {k:'yes', n:'Backup candy', d:'Candy for when prizes run low, or for kids who just want candy.'},
+    {k:'no', n:'Prizes only', d:'Same as last year: copters, cards and prizes.'}
+  ]
+};
+const S = {mode:'pending', db:null, board:[], votes:[], readOnly:false, mine:{theme:[], candy:[]}};
+function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; } catch(e) { S.board = []; S.votes = []; } }
+function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes})); } catch(e) {} }
+const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+function statusText(){
+  if (S.mode === 'pending') return 'Connecting…';
+  if (S.mode === 'db') return S.readOnly ? 'View only: you can read, not add' : 'Saved for everyone who opens this deck';
+  return 'Saving on this device only';
+}
+function setStatus(){ $('#boardStatus').textContent = statusText(); $('#voteStatus').textContent = statusText(); }
+function onWriteError(e){
+  const code = e && e.code;
+  if (code === 'invalid_argument' || code === 'not_granted') { S.readOnly = true; render(); }
+  else if (code === 'quota_exceeded') { $('#boardStatus').textContent = 'The board is full. Delete a few items first.'; }
+  else { $('#boardStatus').textContent = 'That didn\'t save. Try again.'; }
+}
+async function addItem(col, text){
+  const item = {col, text, meeting, at:new Date().toISOString()};
+  if (S.mode === 'db') { try { await S.db.collection('board').add(item); } catch(e) { onWriteError(e); } }
+  else { S.board.push(Object.assign({id:rid()}, item)); localSave(); render(); }
+}
+async function removeItem(id){
+  if (S.mode === 'db') { try { await S.db.doc('board/' + id).delete(); } catch(e) { onWriteError(e); } }
+  else { S.board = S.board.filter(x => x.id !== id); localSave(); render(); }
+}
+async function vote(poll, option){
+  const v = {poll, option, meeting, at:new Date().toISOString()};
+  if (S.mode === 'db') { try { const ref = await S.db.collection('votes').add(v); S.mine[poll].push(ref.id); } catch(e) { onWriteError(e); } }
+  else { const id = rid(); S.votes.push(Object.assign({id}, v)); S.mine[poll].push(id); localSave(); render(); }
+}
+async function undo(poll){
+  const id = S.mine[poll].pop();
+  if (!id) return;
+  if (S.mode === 'db') { try { await S.db.doc('votes/' + id).delete(); } catch(e) { onWriteError(e); } }
+  else { S.votes = S.votes.filter(x => x.id !== id); localSave(); render(); }
+}
+function renderBoard(){
+  const can = S.mode !== 'pending' && !S.readOnly;
+  ['keep', 'add', 'remove'].forEach(col => {
+    const items = S.board.filter(x => x.col === col).sort((a, b) => String(a.at).localeCompare(String(b.at)));
+    const ul = $('[data-items="' + col + '"]');
+    ul.innerHTML = items.length ? items.map(x => '<li><span class="tx">' + esc(x.text) + '</span><span class="mt">' + (MEET[x.meeting] || '') + '</span>' + (can ? '<button type="button" data-del="' + esc(x.id) + '" aria-label="Delete">×</button>' : '') + '</li>').join('') : '<li class="empty">' + (S.mode === 'pending' ? 'Loading…' : 'Nothing yet. Type below and press Enter.') + '</li>';
+    $('[data-cnt="' + col + '"]').textContent = items.length ? '(' + items.length + ')' : '';
+    const f = $('[data-add="' + col + '"]');
+    $$('input,button', f).forEach(n => n.disabled = !can);
+  });
+}
+function renderVotes(){
+  const can = S.mode !== 'pending' && !S.readOnly;
+  Object.keys(POLLS).forEach(p => {
+    const counts = {}; POLLS[p].forEach(o => counts[o.k] = 0);
+    S.votes.forEach(v => { if (v.poll === p && v.meeting === meeting && counts[v.option] != null) counts[v.option]++; });
+    const max = Math.max(1, Math.max.apply(null, Object.values(counts)));
+    $('#poll-' + p).innerHTML = POLLS[p].map(o => '<div class="opt"><span class="ofill" style="width:' + (counts[o.k] / max * 100) + '%"></span><div><h4>' + esc(o.n) + '</h4><p>' + esc(o.d) + '</p></div><div class="c">' + counts[o.k] + '</div><button type="button" data-vote="' + p + ':' + o.k + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(o.n) + '">+1</button></div>').join('');
+  });
+  $$('[data-undo]').forEach(b => b.disabled = !can || !S.mine[b.dataset.undo].length);
+}
+function render(){ setStatus(); renderBoard(); renderVotes(); }
+$('#board').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target.closest('[data-add]'); if (!f) return;
+  const inp = $('input', f), text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  addItem(f.dataset.add, text.slice(0, 160));
+});
+$('#board').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) removeItem(b.dataset.del); });
+$('.polls').addEventListener('click', e => {
+  const b = e.target.closest('[data-vote]');
+  if (b) { const [p, o] = b.dataset.vote.split(':'); vote(p, o); return; }
+  const u = e.target.closest('[data-undo]'); if (u) undo(u.dataset.undo);
+});
+$('#copyBoard').addEventListener('click', () => {
+  const lines = ['Ram-a-thon debrief: Keep / Add / Remove'];
+  [['keep', 'KEEP'], ['add', 'ADD'], ['remove', 'REMOVE']].forEach(([c, h]) => {
+    lines.push('', h);
+    const items = S.board.filter(x => x.col === c).sort((a, b) => String(a.at).localeCompare(String(b.at)));
+    if (!items.length) lines.push('- (none)');
+    items.forEach(x => lines.push('- ' + x.text + ' [' + (MEET[x.meeting] || '') + ']'));
+  });
+  const counts = Object.keys(POLLS).map(p => p.toUpperCase() + ' (' + MEET[meeting] + '): ' + POLLS[p].map(o => o.n + ' ' + S.votes.filter(v => v.poll === p && v.option === o.k && v.meeting === meeting).length).join(', '));
+  lines.push('', ...counts);
+  const text = lines.join('\n'), btn = $('#copyBoard');
+  const fallback = () => {
+    let box = $('#copyBox');
+    if (!box) { stage.insertAdjacentHTML('beforeend', '<div class="copybox" id="copyBox"><div class="copyrow"><b style="font-size:22px">Select all and copy</b><button class="tbtn" type="button" id="copyClose">Close</button></div><textarea id="copyText" aria-label="Board as text"></textarea></div>'); box = $('#copyBox'); $('#copyClose').addEventListener('click', () => box.remove()); }
+    const ta = $('#copyText'); ta.value = text; ta.focus(); ta.select();
+  };
+  try {
+    navigator.clipboard.writeText(text).then(() => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy list', 1600); }, fallback);
+  } catch(e) { fallback(); }
+});
+
+async function initStore(){
+  let db = null;
+  try { db = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('db') : null; } catch(e) { db = null; }
+  if (!db) { S.mode = 'local'; localLoad(); render(); return; }
+  S.db = db; S.mode = 'db';
+  try { const user = await window.claude.use('user'); if (user) { const w = await user.can('data.write'); if (w === false) S.readOnly = true; } } catch(e) {}
+  render();
+  const fail = () => { S.mode = 'local'; S.db = null; localLoad(); render(); };
+  try {
+    db.collection('board').onSnapshot(snap => { S.board = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
+    db.collection('votes').onSnapshot(snap => { S.votes = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
+  } catch(e) { fail(); }
+}
+
+/* ---------- boot ---------- */
+function start(data){
+  setMeeting(meeting);
+  render();
+  let first = 0;
+  const m = /^#s(\d+)$/.exec(location.hash || '');
+  if (m) first = parseInt(m[1], 10) - 1;
+  if (data && typeof data.slide === 'number') first = data.slide;
+  slides.forEach(s => s.classList.remove('on'));
+  cur = Math.max(0, Math.min(N - 1, first));
+  slides[cur].classList.add('on');
+  go(cur);
+  initStore();
+}
+try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({slide:cur})); } catch(e) {}
+if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start);
+else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
+})();
+</script>
+<!-- CHANGELOG
+  v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
+-->
