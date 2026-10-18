@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.13.md
-version: 1.1.13
+file: ramathon_2026_findings_v1.1.14.md
+version: 1.1.14
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-18
@@ -21,7 +21,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
 | `ramathon_2026_infographic_v1.2.4.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
-| `ramathon_2026_clicker_sales_curve_v1.0.png` | Running total of each design through the day, with dotted "if we had enough stock" projections (drawn by `plot_clicker_sales_curve_v1.0.py`, rendered by `render_infographic_v1.1.cjs`) |
+| `ramathon_2026_clicker_sales_curve_v1.1.png` | Running total of each design through the day, with dotted "if we had enough stock" projections (drawn by `plot_clicker_sales_curve_v1.1.py`, rendered by `render_infographic_v1.1.cjs`) |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -42,7 +42,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 12. **24 free Pokémon cards** went out with purchases, across 23 sales.
 13. **20 sales were exactly the 3-for-10 deal.** More kids stopped at 3 clickers (20 sales) than at 2 (12).
 14. **88 copter launchers** are still in the bin.
-15. **Plinko alone (~300 tickets) came close to the average group** at the event (~325).
+15. **Plinko alone (~300 tickets) matched a typical group** at the event (median ~300; the average, ~325, is pulled up by the two big government containers).
 16. **The Prize Table ran out** of cheese squishes and dino plushes.
 
 ## Clicker leaderboard
@@ -83,7 +83,7 @@ If Egg tart only reached the table around 11:00 AM (its first sale was 11:07, ab
 
 Lost units = each design's own sales rate x hours it was gone before the last sale (1:20 PM). At 3.53 tickets per clicker, that's about 56 tickets with unlimited stock.
 
-Treat that as a floor. All three were selling faster when they ran out, not tapering off: in the second half of their time on the table Creeper went from 3.4 to 7.9 an hour, Dumpling from 4.5 to 9.7, and Avocado from 2.2 to 6.7, and each took a bigger share of what the table sold. At that late pace the shortfall is up to about 22 clickers (~78 tickets). See `ramathon_2026_clicker_sales_curve_v1.0.png`. Once all three were gone, clicker pace fell from 43 units an hour to 19. The crowd was also thinning toward the 1:00 PM close, so we can't say how much of that slump was stock.
+Treat that as a floor. All three were selling faster when they ran out, not tapering off: in the second half of their time on the table Creeper went from 3.4 to 7.9 an hour, Dumpling from 4.5 to 9.7, and Avocado from 2.2 to 6.7, and each took a bigger share of what the table sold. At that late pace the shortfall is up to about 22 clickers (~78 tickets). See `ramathon_2026_clicker_sales_curve_v1.1.png`. Once all three were gone, clicker pace fell from 43 units an hour to 19. The crowd was also thinning toward the 1:00 PM close, so we can't say how much of that slump was stock.
 
 The other side of the ledger: **36 clickers went to the blowout** (Hot dog bun 12, WD-40 7, S'mores 6, Chocolate bar 4, Oreo 4, LEGO brick 2, Creeper cube 1), mostly at 2 tickets and some at 1, for about 60 tickets on top of the tracked sales. That's about half the 3.53 they averaged at full price. We printed about the right total in the wrong mix.
 
@@ -225,3 +225,4 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - v1.1.11 (2026-10-18): Top combo fact notes both designs have cutesy faces. Points to infographic v1.2.3.
 - v1.1.12 (2026-10-18): The blowout (~60 tix at 1 to 2 each) was on top of tracked sales (Sam): clickers ~515 (103% of goal), Plinko ~300 (290 to 320, 3x goal) and no longer beats the average group, Plinko + Battle ~40%. Points to infographic v1.2.4.
 - v1.1.13 (2026-10-18): Added the clicker sales curve chart and the evidence that Creeper, Dumpling, and Avocado sold out at their peak (lost sales 16, up to ~22 at their late pace).
+- v1.1.14 (2026-10-18): Plinko fun fact now says it matched a typical group (median ~300). The food tickets taken from the Plinko bucket are already inside its ~300. Chart is v1.1 (angled lines).
