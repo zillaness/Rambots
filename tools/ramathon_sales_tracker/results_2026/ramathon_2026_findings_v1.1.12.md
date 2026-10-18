@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.11.md
-version: 1.1.11
+file: ramathon_2026_findings_v1.1.12.md
+version: 1.1.12
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-18
@@ -20,7 +20,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 |---|---|
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
-| `ramathon_2026_infographic_v1.2.3.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
+| `ramathon_2026_infographic_v1.2.4.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -29,7 +29,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 
 1. **One parent cleared us out of Dumplings:** all 8 we had left at the time, in one sale at 12:42 PM (27 tickets). It was the biggest sale of the day.
 2. **Creeper sold out first.** All 10 were gone by 11:48 AM, about 90 minutes before the last sale.
-3. **Plinko took about 330 drops** (inferred), about 3.3x its 100-ticket goal. It was our second-biggest booth, and we have zero data on it.
+3. **Plinko took about 300 drops** (inferred), about 3x its 100-ticket goal. It was our second-biggest booth, and we have zero data on it.
 4. **The last two sales, 12 seconds apart,** took the final 4 Salmon nigiri and the last 2 Spam musubi.
 5. **Median checkout: 5 seconds.** The fastest sale took 1.
 6. **Rush hour: 11:00 to 11:30 AM**, with 21 sales and 109 tickets.
@@ -41,7 +41,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 12. **24 free Pokémon cards** went out with purchases, across 23 sales.
 13. **20 sales were exactly the 3-for-10 deal.** More kids stopped at 3 clickers (20 sales) than at 2 (12).
 14. **88 copter launchers** are still in the bin.
-15. **Plinko alone (~330 tickets) out-earned the average group** at the event (~325).
+15. **Plinko alone (~300 tickets) came close to the average group** at the event (~325).
 16. **The Prize Table ran out** of cheese squishes and dino plushes.
 
 ## Clicker leaderboard
@@ -84,7 +84,7 @@ Lost units = each design's own sales rate x hours it was gone before the last sa
 
 Treat that as a floor. Once all three were gone, clicker pace fell from 43 units an hour to 19. The crowd was also thinning toward the 1:00 PM close, so we can't say how much of that slump was stock.
 
-The other side of the ledger: **36 clickers went to the blowout** (Hot dog bun 12, WD-40 7, S'mores 6, Chocolate bar 4, Oreo 4, LEGO brick 2, Creeper cube 1). We printed about the right total in the wrong mix.
+The other side of the ledger: **36 clickers went to the blowout** (Hot dog bun 12, WD-40 7, S'mores 6, Chocolate bar 4, Oreo 4, LEGO brick 2, Creeper cube 1), mostly at 2 tickets and some at 1, for about 60 tickets on top of the tracked sales. That's about half the 3.53 they averaged at full price. We printed about the right total in the wrong mix.
 
 **Print counts if we do this again next year** (this year's rate x 3.3 selling hours + 20% buffer):
 
@@ -144,13 +144,13 @@ Every gender-tagged copter buyer was a boy. Groups under about 5 sales are hints
 
 | Booth | Tickets | Goal | % of goal | Source |
 |---|---|---|---|---|
-| Clickers | ~488 | 500 | 98% | 455 tracked + the untracked blowout |
-| Plinko | ~330 (310 to 350) | 100 | 330% | Inferred: ~900 minus everything else |
+| Clickers | ~515 | 500 | 103% | 455 tracked + ~60 blowout (50 to 70) on top |
+| Plinko | ~300 (290 to 320) | 100 | 300% | Inferred: ~900 minus everything else |
 | Balloon Battle | ~55 (50 to 60) | 200 | 28% | Estimate; about 10 to 12 player-matches |
 | Copters | 27 | 500 | 5% | Tracked |
 | **Total** | **~900** | **1,112** | **81%** | 830 counted + ~70 helper food tickets. Team goal: 1,000 net = 1,112 gross. The booth goals above are the tracker's planning targets and sum to 1,300. |
 
-Plinko math: 900 gross, minus 500 to 530 for clickers and copters, minus 50 to 60 for Battle, leaves 310 to 350. At 1 ticket per drop, that's about 330 drops.
+Plinko math: 900 gross, minus 482 tracked at the sales table, minus 50 to 70 for the blowout, minus 50 to 60 for Battle, leaves about 290 to 320. At 1 ticket per drop, that's about 300 drops.
 
 ## How we stacked up against other groups
 
@@ -194,7 +194,7 @@ Why it dropped is a guess until we test it:
 There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn't automatic (copters prove it). If we do:
 
 1. Rebalance the print queue with the table above: about 2x the Creepers, more Dumpling, Salmon nigiri, and Avocado, and fewer Hot dog buns and S'mores.
-2. Put every booth on the tracker. Plinko and Battle together were about 43% of the money, and we have no data on either.
+2. Put every booth on the tracker. Plinko and Battle together were about 40% of the money, and we have no data on either.
 3. Recount stock the morning of, after any restock. Ring the blowout up as its own item so it shows up in the data.
 4. Change the age tags to Elementary / Middle / High school / Adult, and tag every sale.
 
@@ -204,7 +204,7 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - **Sales rate:** units / hours on the table. A design is on the table from the window start until its last unit sells, or until the window ends if it never sold out. A sale counts at most 3 of one design.
 - **Lost units:** rate x (window end - sell-out time). This ignores substitution, since some kids bought another design instead.
 - **Ideal stock:** rate x 3.31 hours x 1.2, rounded up.
-- **Assumptions from Sam (Oct 17):** 830 counted plus ~5 tickets per helper for food (~900 gross); clickers + copters 500 to 530 including the blowout; Battle 50 to 60; Plinko 1 ticket per drop; Oreo probably not put out; Egg tart restocked after the Oct 16 count; copters ~450 net last year at the same prices.
+- **Assumptions from Sam (Oct 17):** 830 counted plus ~5 tickets per helper for food (~900 gross); sales-table tracked sales of 482 plus a blowout of ~36 leftovers at mostly 2 tickets, some 1 (~60, on top); Battle 50 to 60; Plinko 1 ticket per drop; Oreo probably not put out; Egg tart restocked after the Oct 16 count; copters ~450 net last year at the same prices.
 - **Starting stock:** Sam's Oct 16 counts built into the tracker.
 
 ## CHANGELOG
@@ -222,3 +222,4 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - v1.1.9 (2026-10-17): Overall goal is 1,000 net = 1,112 gross; ~900 gross is about 19% short (was 69% of the tracker's 1,300 booth-goal sum). Points to infographic v1.2.1.
 - v1.1.10 (2026-10-18): Goal framed as 81% of the 1,112 gross goal instead of 19% short. Points to infographic v1.2.2.
 - v1.1.11 (2026-10-18): Top combo fact notes both designs have cutesy faces. Points to infographic v1.2.3.
+- v1.1.12 (2026-10-18): The blowout (~60 tix at 1 to 2 each) was on top of tracked sales (Sam): clickers ~515 (103% of goal), Plinko ~300 (290 to 320, 3x goal) and no longer beats the average group, Plinko + Battle ~40%. Points to infographic v1.2.4.
