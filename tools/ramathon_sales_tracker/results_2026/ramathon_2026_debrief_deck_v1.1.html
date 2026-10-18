@@ -399,13 +399,13 @@ table.t2 td.n{text-align:right}
         <label class="pf" for="pf-prizes"><span>Prizes spent</span><span class="pfin">$<input type="number" id="pf-prizes" min="0" step="1" value="150"></span></label>
         <label class="pf" for="pf-other"><span>Other costs <small>balloons, bags</small></span><span class="pfin">$<input type="number" id="pf-other" min="0" step="1" value="0"></span></label>
         <div class="pf wide"><span>Switches &amp; key rings</span><span class="seg" role="group" aria-label="Switches and key rings"><button type="button" data-hw="used" aria-pressed="true">What we used, $48</button><button type="button" data-hw="bought" aria-pressed="false">What we bought</button></span><span class="pfin">$<input type="number" id="pf-hwBought" min="0" step="1" placeholder="spent" aria-label="Spent on switches and key rings" disabled></span></div>
-        <div class="pf"><span>Filament</span><span class="seg" role="group" aria-label="Filament estimate"><button type="button" data-fil="real" aria-pressed="false">15 g, $11/kg</button><button type="button" data-fil="safe" aria-pressed="true">30 g, $16/kg + fails</button></span></div>
+        <div class="pf"><span>Filament</span><span class="seg" role="group" aria-label="Filament estimate"><button type="button" data-fil="real" aria-pressed="false" title="15 g each at $11/kg">Light $27</button><button type="button" data-fil="typ" aria-pressed="true" title="About 20 g each (15 g single-color, up to 30 g multi-color) at $13/kg, plus 10% failed prints">Typical $47</button><button type="button" data-fil="safe" aria-pressed="false" title="30 g each at $16/kg, plus 20% failed prints">Safe $95</button></span></div>
         <label class="pf" for="pf-copters"><span>Copters <small>5 kits, ~250 g</small></span><span class="pfin">$<input type="number" id="pf-copters" min="0" step="1" value="5"></span></label>
       </div>
       <div id="profitChart" style="flex:1;min-height:0"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$449</div><p>About <b id="profitPer" style="color:var(--ink)">50¢</b> of every ticket stayed with us.</p></div>
+      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$497</div><p>About <b id="profitPer" style="color:var(--ink)">55¢</b> of every ticket stayed with us.</p></div>
       <div class="card nx"><div class="k">Used or bought?</div><p>We bought extra switches and rings for faster shipping, and we'll use them up. "Used" counts only what went into these 165 clickers.</p></div>
       <div class="card nx"><div class="k">How the cut worked</div><p>Helper food tickets were spent before the count, so CCA's 10% came out of the 830 in the box.</p></div>
       <div class="card nx"><div class="k">Copters</div><p>Printed new this year. Only the 5 kits sold count; leftovers become Trunk or Treat giveaways.</p></div>
@@ -558,14 +558,14 @@ table.t2 td.n{text-align:right}
       <table class="t2" id="printTable"><thead><tr><th>Design</th><th style="text-align:right">Had</th><th style="text-align:right">Sold</th><th style="text-align:right">At least</th><th>Priority</th></tr></thead><tbody></tbody></table>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="card nx"><div class="k">1 · Print top sellers first</div><p>Then refill the rest. Plan on about $1 a clicker in parts, against a $3.53 average price, and leftovers carry to other events, so err high.</p></div>
+      <div class="card nx"><div class="k">1 · Print top sellers first</div><p>Then refill the rest. Parts averaged about $0.60 a clicker (plan on $1 to be safe) against a $3.53 average price, so err high.</p></div>
       <div class="card nx"><div class="k">2 · Refresh the lineup</div><p>Bring back the hits, drop the weak ones like S'mores, add a few new designs.</p></div>
       <div class="card nx"><div class="k">3 · Better signs, ads and display</div><p>On a crowded table some designs may never have been noticed.</p></div>
       <div class="card nx"><div class="k">4 · Communicate better</div><p>A quick huddle before doors open: who's on which booth, prices, and the Plinko ticket bucket.</p></div>
       <div class="card nx"><div class="k">5 · Cleaner counts</div><p>Recount stock that morning, ring up the blowout as its own item, tag ages Elementary / Middle / High / Adult.</p></div>
     </div>
   </div>
-  <div class="ft"><span>Source: findings v1.1.21 · "at least" = sales rate x 3.3 hr + 20%, low for hard-to-see designs · parts: switch $0.18 + ring $0.08 + up to 30 g filament at $16/kg, rounded up to $1 for failed prints</span><span class="pg"></span></div>
+  <div class="ft"><span>Source: findings v1.1.21 · "at least" = sales rate x 3.3 hr + 20%, low for hard-to-see designs · parts: switch $0.18 + ring $0.08 + 15 to 30 g filament; $1 is the safe planning number</span><span class="pg"></span></div>
   <aside class="notes">Compare with the Keep / Add / Remove board. Where does it agree? There's no guarantee we repeat Ram-a-thon, so treat this as a starting point.</aside>
 </section>
 
@@ -1321,10 +1321,10 @@ $('#chkForm').addEventListener('submit', e => {
   inp.value = ''; addCheck(t.slice(0, 80));
 });
 /* ---------- profit: editable, shared ---------- */
-const PF = {cash:747, hwUsed:48, fil:{real:27, safe:95}};
+const PF = {cash:747, hwUsed:48, fil:{real:27, typ:47, safe:95}};
 function pfv(){
   const p = S.profit || {}, num = (x, d) => (x === '' || x == null || isNaN(+x)) ? d : Math.max(0, +x);
-  return {prizes:num(p.prizes, 150), other:num(p.other, 0), copters:num(p.copters, 5), hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:p.fil === 'real' ? 'real' : 'safe'};
+  return {prizes:num(p.prizes, 150), other:num(p.other, 0), copters:num(p.copters, 5), hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:['real', 'typ', 'safe'].indexOf(p.fil) >= 0 ? p.fil : 'typ'};
 }
 const dl = x => '$' + Math.round(x).toLocaleString('en-US');
 function drawProfit(){
@@ -1337,7 +1337,7 @@ function drawProfit(){
     {l:['Cash in', 'the box'], k:'total', a:0, b:747, v:'$747', tip:'<b>Cash in the box</b><br>830 tickets minus the 10% cut'},
     {l:['Prizes', ''], k:'down', a:PF.cash, b:c1, v:'−' + dl(v.prizes), tip:'<b>Prizes</b><br>' + dl(v.prizes) + ' (edit above)'},
     {l:['Switches &', 'key rings'], k:'down', a:c1, b:c2, v:'−' + dl(hw), tip:'<b>Switches and key rings</b><br>' + (v.hw === 'bought' && v.hwBought != null ? 'What we bought: ' + dl(hw) : 'What we used: 195 switches ($35) + 165 key rings ($13)')},
-    {l:['Filament', '(estimate)'], k:'est', a:c2, b:c3, v:'−' + dl(fil), tip:'<b>Filament</b><br>' + (v.fil === 'safe' ? '165 clickers x 30 g at $16/kg ($79) + 20% for failed prints' : '165 clickers x 15 g at $11/kg')}
+    {l:['Filament', '(estimate)'], k:'est', a:c2, b:c3, v:'−' + dl(fil), tip:'<b>Filament, ' + {real:'light', typ:'typical', safe:'safe'}[v.fil] + '</b><br>' + {real:'165 clickers x 15 g at $11/kg', typ:'165 clickers x about 20 g (15 g single-color, up to 30 g multi-color with prime tower) at $13/kg, plus 10% failed prints', safe:'165 clickers x 30 g at $16/kg, plus 20% failed prints'}[v.fil]}
   ];
   steps.push({l:['Copters', '(estimate)'], k:'est', a:c3, b:c4, v:'−' + dl(v.copters), tip:'<b>Copters</b><br>' + dl(v.copters) + ' (edit above). Default: 3 standard kits at 46 g + 2 toroidal kits at up to 56 g, about 250 g at $16/kg plus failed prints. The rest of the printed parts become Trunk or Treat giveaways.'});
   if (v.other > 0) steps.push({l:['Other', 'costs'], k:'down', a:c4, b:net, v:'−' + dl(v.other), tip:'<b>Other costs</b><br>' + dl(v.other) + ' (edit above)'});
@@ -1488,5 +1488,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
-  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition).
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
 -->
