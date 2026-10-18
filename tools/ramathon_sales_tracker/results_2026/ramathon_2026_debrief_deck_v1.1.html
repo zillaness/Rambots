@@ -401,11 +401,12 @@ table.t2 td.n{text-align:right}
         <div class="pf wide"><span>Switches &amp; key rings</span><span class="seg" role="group" aria-label="Switches and key rings"><button type="button" data-hw="used" aria-pressed="true">What we used, $48</button><button type="button" data-hw="bought" aria-pressed="false">What we bought</button></span><span class="pfin">$<input type="number" id="pf-hwBought" min="0" step="1" placeholder="spent" aria-label="Spent on switches and key rings" disabled></span></div>
         <div class="pf"><span>Filament</span><span class="seg" role="group" aria-label="Filament estimate"><button type="button" data-fil="real" aria-pressed="false" title="15 g each at $11/kg">Light $27</button><button type="button" data-fil="typ" aria-pressed="true" title="About 20 g each (15 g single-color, up to 30 g multi-color) at $13/kg, plus 10% failed prints">Typical $47</button><button type="button" data-fil="safe" aria-pressed="false" title="30 g each at $16/kg, plus 20% failed prints">Safe $95</button></span></div>
         <label class="pf" for="pf-other"><span>Other</span><span class="pfin">$<input type="number" id="pf-other" min="0" step="1" value="0"></span></label>
+        <div class="pf wide"><span>Just for fun: pay volunteers</span><span class="pfin" id="payIn"><input type="number" id="pf-vols" min="0" step="1" value="14" aria-label="Number of volunteers" style="width:72px"> volunteers ×<input type="number" id="pf-hrs" min="0" step="0.5" value="4" aria-label="Hours each" style="width:72px"> hr</span><span class="seg" role="group" aria-label="Volunteer pay rate"><button type="button" data-pay="off" aria-pressed="true">Off</button><button type="button" data-pay="min" aria-pressed="false" title="Hayward and California minimum wage for small employers, 2026 (large employers in Hayward: $17.79)">Min wage $16.90</button><button type="button" data-pay="20" aria-pressed="false">$20/hr</button></span></div>
       </div>
       <div id="profitChart" style="flex:1;min-height:0"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$497</div><p>About <b id="profitPer" style="color:var(--ink)">55¢</b> of every ticket stayed with us.</p></div>
+      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$497</div><p id="profitPerP">About <b id="profitPer" style="color:var(--ink)">55¢</b> of every ticket stayed with us.</p><p id="profitHrP" hidden>Each volunteer-hour made the team about <b id="profitHr" style="color:var(--ink)">$8.88</b>.</p></div>
       <div class="card nx"><div class="k">Used or bought?</div><p>We bought extra switches and rings for faster shipping, and we'll use them up. "Used" counts only what went into these 165 clickers.</p></div>
       <div class="card nx"><div class="k">How the cut worked</div><p>Helper food tickets were spent before the count, so CCA's 10% came out of the 830 in the box.</p></div>
       <div class="card nx"><div class="k">Copters</div><p>Printed new this year. Only the 5 kits sold count; leftovers become Trunk or Treat giveaways.</p></div>
@@ -1324,15 +1325,15 @@ $('#chkForm').addEventListener('submit', e => {
 const PF = {cash:747, hwUsed:48, fil:{real:27, typ:47, safe:95}};
 function pfv(){
   const p = S.profit || {}, num = (x, d) => (x === '' || x == null || isNaN(+x)) ? d : Math.max(0, +x);
-  return {prizes:num(p.prizes, 150), other:num(p.other, 0), cop:p.cop === 'printed' ? 'printed' : 'sold', copters:p.cop === 'printed' ? 74 : 5, hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:['real', 'typ', 'safe'].indexOf(p.fil) >= 0 ? p.fil : 'typ'};
+  return {prizes:num(p.prizes, 150), other:num(p.other, 0), pay:p.pay === 'min' ? 'min' : (p.pay === '20' || p.pay === 'on') ? '20' : 'off', vols:num(p.vols, 14), hrs:num(p.hrs, 4), cop:p.cop === 'printed' ? 'printed' : 'sold', copters:p.cop === 'printed' ? 74 : 5, hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:['real', 'typ', 'safe'].indexOf(p.fil) >= 0 ? p.fil : 'typ'};
 }
-const dl = x => '$' + Math.round(x).toLocaleString('en-US');
+const dl = x => (Math.round(x) < 0 ? '−$' : '$') + Math.abs(Math.round(x)).toLocaleString('en-US');
 function drawProfit(){
   const v = pfv(), hw = v.hw === 'bought' && v.hwBought != null ? v.hwBought : PF.hwUsed, fil = PF.fil[v.fil];
-  const c1 = PF.cash - v.prizes, c2 = c1 - hw, c3 = c2 - fil, c4 = c3 - v.copters, net = c4 - v.other;
+  const c1 = PF.cash - v.prizes, c2 = c1 - hw, c3 = c2 - fil, c4 = c3 - v.copters, c5 = c4 - v.other, vh = v.vols * v.hrs, rate = v.pay === 'min' ? 16.90 : v.pay === '20' ? 20 : 0, wages = vh * rate, net = c5 - wages;
   const steps = [
     {l:['Tickets', 'earned'], k:'total', a:0, b:900, v:'$900', tip:'<b>Tickets earned</b><br>About 900 tickets at $1: 830 counted in the box, plus about 70 spent on helper food'},
-    {l:['Helper', 'food'], k:'down', a:900, b:830, v:'−$70', tip:'<b>Helper food</b><br>About 70 tickets spent at food booths before the count'},
+    {l:['Helper', 'food'], k:'est', a:900, b:830, v:'−$70', tip:'<b>Helper food, estimate</b><br>About 70 tickets spent at food booths before the count (about 5 per helper)'},
     {l:["CCA's", '10%'], k:'down', a:830, b:747, v:'−$83', tip:"<b>CCA's 10% cut</b><br>10% of the 830 tickets in the box"},
     {l:['Cash in', 'the box'], k:'total', a:0, b:747, v:'$747', tip:'<b>Cash in the box</b><br>830 tickets minus the 10% cut'},
     {l:['Prizes', ''], k:'down', a:PF.cash, b:c1, v:'−' + dl(v.prizes), tip:'<b>Prizes</b><br>' + dl(v.prizes) + ' (edit above)'},
@@ -1340,23 +1341,25 @@ function drawProfit(){
     {l:['Filament', '(estimate)'], k:'est', a:c2, b:c3, v:'−' + dl(fil), tip:'<b>Filament, ' + {real:'light', typ:'typical', safe:'safe'}[v.fil] + '</b><br>' + {real:'165 clickers x 15 g at $11/kg', typ:'165 clickers x about 20 g (15 g single-color, up to 30 g multi-color with prime tower) at $13/kg, plus 10% failed prints', safe:'165 clickers x 30 g at $16/kg, plus 20% failed prints'}[v.fil]}
   ];
   steps.push({l:['Copters', '(estimate)'], k:'est', a:c3, b:c4, v:'−' + dl(v.copters), tip:'<b>Copters, ' + (v.cop === 'printed' ? 'all printed' : 'kits sold') + '</b><br>' + (v.cop === 'printed' ? '93 kits at 46 g, 44 toroidal props at 10 g, 65 spare props at about 5 g, 12 spare ripcords: about 5.2 kg at $13/kg plus 10% failed prints' : '3 standard kits at 46 g + 2 toroidal kits at up to 56 g, about 250 g. The rest of the printed parts become Trunk or Treat giveaways.')});
-  if (v.other > 0) steps.push({l:['Other', ''], k:'down', a:c4, b:net, v:'−' + dl(v.other), tip:'<b>Other</b><br>' + dl(v.other) + ' (edit above)'});
-  steps.push({l:['Net', 'profit'], k:'net', a:0, b:net, v:dl(net), tip:'<b>Net profit</b><br>$747 − ' + dl(v.prizes) + ' − ' + dl(hw) + ' − ' + dl(fil) + ' − ' + dl(v.copters) + (v.other > 0 ? ' − ' + dl(v.other) : '')});
+  if (v.other > 0) steps.push({l:['Other', ''], k:'down', a:c4, b:c5, v:'−' + dl(v.other), tip:'<b>Other</b><br>' + dl(v.other) + ' (edit above)'});
+  if (rate) steps.push({l:['Volunteer', 'pay'], k:'down', a:c5, b:net, v:'−' + dl(wages), tip:'<b>Volunteer pay, just for fun</b><br>' + v.vols + ' volunteers x ' + v.hrs + ' hours x $' + rate.toFixed(2) + (v.pay === 'min' ? ' (Hayward minimum wage, small employers, 2026)' : '')});
+  steps.push({l:['Net', 'profit'], k:'net', a:0, b:net, v:dl(net), tip:'<b>Net profit</b><br>$747 − ' + dl(v.prizes) + ' − ' + dl(hw) + ' − ' + dl(fil) + ' − ' + dl(v.copters) + (v.other > 0 ? ' − ' + dl(v.other) : '') + (rate ? ' − ' + dl(wages) + ' pay' : '')});
   const w = 1060, h = 440, left = 64, right = 10, top = 36, bottom = 70, pw = w - left - right, ph = h - top - bottom, max = 1000;
-  const Y = x => top + ph - Math.max(0, Math.min(max, x)) / max * ph, bw = pw / steps.length, cw = bw * .62;
+  const lo = Math.min(0, Math.floor(net / 250) * 250), Y = x => top + ph - (Math.max(lo, Math.min(max, x)) - lo) / (max - lo) * ph, bw = pw / steps.length, cw = bw * .62;
   let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="From tickets earned to net profit">';
   s += '<defs><pattern id="hp-est" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--other)"></rect><rect x="5" width="3" height="8" style="fill:var(--slide)"></rect></pattern></defs>';
-  for (let t = 0; t <= max; t += 250) s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(t) + 5) + '" text-anchor="end">$' + t + '</text>';
+  for (let t = lo; t <= max; t += 250) s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(t) + 5) + '" text-anchor="end">' + dl(t) + '</text>';
   steps.forEach((st, i) => {
     const x = left + i * bw + (bw - cw) / 2, y1 = Y(Math.max(st.a, st.b)), y2 = Y(Math.min(st.a, st.b));
     const fill = st.k === 'total' ? 'var(--red)' : st.k === 'net' ? 'var(--ink)' : st.k === 'est' ? 'url(#hp-est)' : 'var(--other)';
     s += '<g data-tip="' + esc(st.tip) + '"><rect x="' + (left + i * bw) + '" y="' + top + '" width="' + bw + '" height="' + ph + '" style="fill:transparent"></rect>';
     s += '<rect x="' + x + '" y="' + y1 + '" width="' + cw + '" height="' + Math.max(2, y2 - y1) + '" rx="4" style="fill:' + fill + '"></rect>';
-    s += '<text x="' + (x + cw / 2) + '" y="' + (y1 - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:21px;font-weight:700;font-variant-numeric:tabular-nums">' + st.v + '</text>';
-    s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (h - bottom + 26) + '" text-anchor="middle" style="font-size:16px"><tspan x="' + (x + cw / 2) + '">' + esc(st.l[0]) + '</tspan><tspan x="' + (x + cw / 2) + '" dy="19">' + esc(st.l[1]) + '</tspan></text></g>';
+    s += '<text x="' + (x + cw / 2) + '" y="' + (st.k === 'net' && st.b < 0 ? y2 + 26 : y1 - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:21px;font-weight:700;font-variant-numeric:tabular-nums">' + st.v + '</text>';
+    s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (Y(lo) + 26) + '" text-anchor="middle" style="font-size:16px"><tspan x="' + (x + cw / 2) + '">' + esc(st.l[0]) + '</tspan><tspan x="' + (x + cw / 2) + '" dy="19">' + esc(st.l[1]) + '</tspan></text></g>';
     if (i < steps.length - 1) { const nx = left + (i + 1) * bw + (bw - cw) / 2; s += '<line x1="' + (x + cw) + '" x2="' + nx + '" y1="' + Y(st.b) + '" y2="' + Y(st.b) + '" style="stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:4 4"></line>'; }
   });
   s += '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line></svg>';
+  $('#profitHrP').hidden = !rate; $('#profitPerP').hidden = !!rate; if (vh > 0) $('#profitHr').textContent = '$' + (c5 / vh).toFixed(2);
   const el = $('#profitChart'); el.innerHTML = s; bindTips(el);
   $('#profitNet').textContent = dl(net);
   $('#profitPer').textContent = Math.round(net / 900 * 100) + '¢';
@@ -1366,18 +1369,23 @@ function renderProfit(){
   setVal($('#pf-prizes'), p.prizes === '' ? '' : String(v.prizes));
   $$('[data-cop]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cop === v.cop));
   setVal($('#pf-other'), String(v.other));
+  $$('[data-pay]').forEach(b => b.setAttribute('aria-pressed', b.dataset.pay === v.pay));
+  setVal($('#pf-vols'), String(v.vols)); setVal($('#pf-hrs'), String(v.hrs));
   setVal($('#pf-hwBought'), v.hwBought == null ? '' : String(v.hwBought));
   $$('[data-hw]').forEach(b => b.setAttribute('aria-pressed', b.dataset.hw === v.hw));
   $$('[data-fil]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fil === v.fil));
-  $('#pf-prizes').disabled = $('#pf-other').disabled = !can;
+  $('#pf-prizes').disabled = $('#pf-other').disabled = $('#pf-vols').disabled = $('#pf-hrs').disabled = !can;
   $('#pf-hwBought').disabled = !can || v.hw !== 'bought';
-  $$('[data-hw],[data-fil],[data-cop]').forEach(b => b.disabled = !can);
+  $$('[data-hw],[data-fil],[data-cop],[data-pay]').forEach(b => b.disabled = !can);
   drawProfit();
 }
 function setProfit(patch){ S.profit = Object.assign({}, S.profit || {}, patch); saveDoc('profit/inputs', patch); }
 $('#pf-prizes').addEventListener('input', e => { setProfit({prizes:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
 $$('[data-cop]').forEach(b => b.addEventListener('click', () => { setProfit({cop:b.dataset.cop}); renderProfit(); }));
 $('#pf-other').addEventListener('input', e => { setProfit({other:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
+$$('[data-pay]').forEach(b => b.addEventListener('click', () => { setProfit({pay:b.dataset.pay}); renderProfit(); }));
+$('#pf-vols').addEventListener('input', e => { setProfit({vols:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
+$('#pf-hrs').addEventListener('input', e => { setProfit({hrs:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
 $('#pf-hwBought').addEventListener('input', e => { setProfit({hwBought:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
 $$('[data-hw]').forEach(b => b.addEventListener('click', () => { setProfit({hw:b.dataset.hw}); renderProfit(); if (b.dataset.hw === 'bought') $('#pf-hwBought').focus(); }));
 $$('[data-fil]').forEach(b => b.addEventListener('click', () => { setProfit({fil:b.dataset.fil}); renderProfit(); }));
@@ -1488,5 +1496,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
-  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Just-for-fun volunteer pay: Off, Hayward minimum wage ($16.90) or $20/hr, with volunteers and hours as editable inputs (default 14 x 4) and shows earnings per volunteer-hour; the chart extends below $0 when needed. Helper food bar is striped as an estimate. Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
 -->
