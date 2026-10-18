@@ -225,6 +225,14 @@ svg text{font-family:var(--font)}
 .opt.sm p{font-size:16px}
 .opt.sm .c{font-size:32px}
 .opt.sm button{font-size:18px;padding:10px 0}
+.pfgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px}
+.pf{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:600;min-width:0}
+.pf > span:first-child{flex:1;min-width:0}
+.pf.wide{grid-column:1 / -1}
+.pf small{font-weight:400;color:var(--ink-3);font-size:15px}
+.pfin{display:inline-flex;align-items:center;gap:4px;font-weight:400}
+.pfin input{width:110px;font-size:20px;padding:6px 8px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink)}
+.pfin input:disabled{opacity:.45}
 .card.nx{padding:16px 20px;gap:6px}
 .card.nx p{font-size:19px}
 .undo{align-self:flex-start;border:1px solid var(--rule);background:var(--surface);border-radius:8px;padding:8px 14px;font-size:16px}
@@ -305,9 +313,9 @@ table.t2 td.n{text-align:right}
   <div class="body" style="grid-template-rows:auto auto;align-content:start">
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>What did we expect?</h3><p>The goal and the booth targets. Slide 3.</p></div>
-      <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 11.</p></div>
-      <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 12 and 13.</p></div>
-      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, Christmas orders, then Trunk or Treat. Slides 14 to 20.</p></div>
+      <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 12.</p></div>
+      <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 13 and 14.</p></div>
+      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, Christmas orders, then Trunk or Treat. Slides 15 to 21.</p></div>
     </div>
     <div class="rules">
       <div class="card"><div class="k">Read the numbers right</div><p>Only the sales laptop exported. Clicker and copter numbers are tracked. Plinko and Balloon Battle are estimates, marked with ~ and striped bars.</p></div>
@@ -379,6 +387,31 @@ table.t2 td.n{text-align:right}
   </div>
   <div class="ft"><span>Source: findings v1.1.21, How fast we sold · rates spread over 10:02 AM to 1:21 PM, gross</span><span class="pg"></span></div>
   <aside class="notes">The whole booth averaged about $272 an hour gross, about $245 net. Plinko and Battle tickets went into the shared total, so their numbers are worked out from the end-of-day count. The plan was a separate Plinko bucket, but it was a busy day and there was no time Friday or that morning to train volunteers.</aside>
+</section>
+
+<!-- 6 profit -->
+<section class="slide" data-title="What we kept">
+  <div class="hd" style="gap:8px"><div class="chip">2 · What happened · rough math</div>
+    <div class="copyrow"><h2 class="t">What we kept after costs</h2><span class="status" id="profitStatus">Connecting…</span></div></div>
+  <div class="body" style="grid-template-columns:1fr 380px">
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <div class="pfgrid">
+        <label class="pf" for="pf-prizes"><span>Prizes spent</span><span class="pfin">$<input type="number" id="pf-prizes" min="0" step="1" value="150"></span></label>
+        <label class="pf" for="pf-other"><span>Other costs <small>balloons, stickers, bags</small></span><span class="pfin">$<input type="number" id="pf-other" min="0" step="1" value="0"></span></label>
+        <div class="pf wide"><span>Switches &amp; key rings</span><span class="seg" role="group" aria-label="Switches and key rings"><button type="button" data-hw="used" aria-pressed="true">What we used, $48</button><button type="button" data-hw="bought" aria-pressed="false">What we bought</button></span><span class="pfin">$<input type="number" id="pf-hwBought" min="0" step="1" placeholder="spent" aria-label="Spent on switches and key rings" disabled></span></div>
+        <div class="pf wide"><span>Filament</span><span class="seg" role="group" aria-label="Filament estimate"><button type="button" data-fil="real" aria-pressed="false">15 g at $11/kg, $27</button><button type="button" data-fil="safe" aria-pressed="true">30 g at $16/kg + failed prints, $95</button></span></div>
+      </div>
+      <div id="profitChart" style="flex:1;min-height:0"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$454</div><p>About <b id="profitPer" style="color:var(--ink)">50¢</b> of every ticket stayed with us.</p></div>
+      <div class="card nx"><div class="k">Used or bought?</div><p>We bought extra switches and rings for faster shipping, and we'll use them up. "Used" counts only what went into these 165 clickers.</p></div>
+      <div class="card nx"><div class="k">How the cut worked</div><p>Helper food tickets were spent before the count, so CCA's 10% came out of the 830 in the box.</p></div>
+      <div class="card nx"><div class="k">Copters</div><p>The 5 kits sold used last year's parts.</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Edits save for everyone who opens this deck · ticket counts: findings v1.1.21 · prices: Sam, Oct 18 · striped = estimate</span><span class="pg"></span></div>
+  <aside class="notes">Rough math, not accounting. Type the real prize spend, and switch to "What we bought" with the real switch and key ring spend if you want cash out of pocket instead of cost of what we sold.</aside>
 </section>
 
 <!-- 6 leaderboard -->
@@ -559,7 +592,7 @@ table.t2 td.n{text-align:right}
     <div class="card"><div class="k">Giveaways (already paid for)</div><p style="color:var(--ink)"><b class="num">88</b> copter launchers, <b class="num">155</b> propellers, <b class="num">42</b> toroidal propellers, <b class="num">100</b> ripcords.</p><p>Plus leftover Pokémon cards and prize-table items. Launchers cap us at 88 full kits.</p></div>
     <div class="card"><div class="k">The calendar</div><p>Thu and Fri (Oct 22 and 23) are conference days, no school. That leaves Mon to Wed to prep at school.</p><p>Sunset is about 6:15 PM. The last 45 minutes are dark: lights and a charged power station.</p></div>
     <div class="card"><div class="k">Last year (Oct 25, 2025)</div><p>Arrived 1.5 hours early for the canopy and table. Ran three one-hour shifts. Spin-the-wheel and Plinko for prizes.</p></div>
-    <div class="card"><div class="k">A free test</div><p>New families and a flying demo. If copters go fast here, guess 2 from slide 12 looks right.</p></div>
+    <div class="card"><div class="k">A free test</div><p>New families and a flying demo. If copters go fast here, guess 2 from slide 13 looks right.</p></div>
     <div class="card"><div class="k">Why it's worth a Saturday</div><p>It's in our outreach story for grants, and it's how CCS families find our summer camp.</p></div>
   </div>
   <div class="ft"><span>Source: CCS volunteer emails, Eventbrite, Coda "Trunk or Treat 2025", CCA calendar</span><span class="pg"></span></div>
@@ -775,7 +808,7 @@ document.addEventListener('keydown', e => {
 });
 let tx = null, ty = null;
 viewport.addEventListener('touchstart', e => {
-  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.brain,.poll,.plan')) { tx = null; return; }
+  if (e.target.closest('input,textarea,button,iframe,.lb,.ctrl,.board,.brain,.poll,.plan,#profitChart')) { tx = null; return; }
   tx = e.touches[0].clientX; ty = e.touches[0].clientY;
 }, {passive:true});
 viewport.addEventListener('touchend', e => {
@@ -1083,17 +1116,17 @@ const POLLS = {
     {k:'no', n:'Prizes only', d:'Copters, cards and prizes'}
   ]
 };
-const S = {mode:'pending', db:null, board:[], votes:[], themes:[], check:[], days:{}, readOnly:false, mine:{theme:[], candy:[], xmas:[]}};
+const S = {mode:'pending', db:null, board:[], votes:[], themes:[], check:[], days:{}, profit:{}, readOnly:false, mine:{theme:[], candy:[], xmas:[]}};
 let phase = 'ideas';
-function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; S.themes = o.themes || []; S.check = o.check || []; S.days = o.days || {}; } catch(e) { S.board = []; S.votes = []; S.themes = []; S.check = []; S.days = {}; } }
-function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes, themes:S.themes, check:S.check, days:S.days})); } catch(e) {} }
+function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; S.themes = o.themes || []; S.check = o.check || []; S.days = o.days || {}; S.profit = o.profit || {}; } catch(e) { S.board = []; S.votes = []; S.themes = []; S.check = []; S.days = {}; S.profit = {}; } }
+function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes, themes:S.themes, check:S.check, days:S.days, profit:S.profit})); } catch(e) {} }
 const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 function statusText(){
   if (S.mode === 'pending') return 'Connecting…';
   if (S.mode === 'db') return S.readOnly ? 'View only: you can read, not add' : 'Saved for everyone who opens this deck';
   return 'Saving on this device only';
 }
-function setStatus(){ ['#boardStatus', '#voteStatus', '#planStatus', '#xmasStatus'].forEach(id => $(id).textContent = statusText()); }
+function setStatus(){ ['#boardStatus', '#voteStatus', '#planStatus', '#xmasStatus', '#profitStatus'].forEach(id => $(id).textContent = statusText()); }
 function onWriteError(e){
   const code = e && e.code;
   if (code === 'invalid_argument' || code === 'not_granted') { S.readOnly = true; render(); }
@@ -1176,12 +1209,13 @@ $('#days').innerHTML = DAYS.map(d => '<div class="drow' + (d.off ? ' off' : '') 
 const pend = {};
 function docData(path){
   const [c, id] = path.split('/');
-  const src = c === 'plancheck' ? S.check.find(x => x.id === id) : S.days[id];
+  const src = c === 'plancheck' ? S.check.find(x => x.id === id) : c === 'profit' ? S.profit : S.days[id];
   const o = Object.assign({}, src || {}); delete o.id; return o;
 }
 function applyLocal(path, data){
   const [c, id] = path.split('/');
   if (c === 'plancheck') { const it = S.check.find(x => x.id === id); if (it) Object.assign(it, data); }
+  else if (c === 'profit') S.profit = Object.assign({}, S.profit || {}, data);
   else S.days[id] = Object.assign({}, S.days[id] || {}, data);
 }
 function saveDoc(path, patch, wait){
@@ -1197,7 +1231,7 @@ async function flush(path){
   p.busy = true;
   try {
     if (S.mode === 'db') await S.db.doc(path).set(Object.assign(docData(path), data));
-    else { applyLocal(path, data); localSave(); renderPlan(); }
+    else { applyLocal(path, data); localSave(); render(); }
   } catch(e) { onWriteError(e); }
   p.busy = false;
   if (pend[path] && Object.keys(pend[path].data).length) flush(path);
@@ -1264,7 +1298,65 @@ $('#chkForm').addEventListener('submit', e => {
   const inp = $('#chkIn'), t = inp.value.trim(); if (!t) return;
   inp.value = ''; addCheck(t.slice(0, 80));
 });
-function render(){ setStatus(); renderBoard(); renderVotes(); renderIdeas(); renderPlan(); }
+/* ---------- profit: editable, shared ---------- */
+const PF = {cash:747, hwUsed:48, fil:{real:27, safe:95}};
+function pfv(){
+  const p = S.profit || {}, num = (x, d) => (x === '' || x == null || isNaN(+x)) ? d : Math.max(0, +x);
+  return {prizes:num(p.prizes, 150), other:num(p.other, 0), hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:p.fil === 'real' ? 'real' : 'safe'};
+}
+const dl = x => '$' + Math.round(x).toLocaleString('en-US');
+function drawProfit(){
+  const v = pfv(), hw = v.hw === 'bought' && v.hwBought != null ? v.hwBought : PF.hwUsed, fil = PF.fil[v.fil];
+  const c1 = PF.cash - v.prizes, c2 = c1 - hw, c3 = c2 - fil, net = c3 - v.other;
+  const steps = [
+    {l:['Tickets', 'earned'], k:'total', a:0, b:900, v:'$900', tip:'<b>Tickets earned</b><br>About 900 tickets at $1: 830 counted in the box, plus about 70 spent on helper food'},
+    {l:['Helper', 'food'], k:'down', a:900, b:830, v:'−$70', tip:'<b>Helper food</b><br>About 70 tickets spent at food booths before the count'},
+    {l:["CCA's", '10%'], k:'down', a:830, b:747, v:'−$83', tip:"<b>CCA's 10% cut</b><br>10% of the 830 tickets in the box"},
+    {l:['Cash in', 'the box'], k:'total', a:0, b:747, v:'$747', tip:'<b>Cash in the box</b><br>830 tickets minus the 10% cut'},
+    {l:['Prizes', ''], k:'down', a:PF.cash, b:c1, v:'−' + dl(v.prizes), tip:'<b>Prizes</b><br>' + dl(v.prizes) + ' (edit above)'},
+    {l:['Switches &', 'key rings'], k:'down', a:c1, b:c2, v:'−' + dl(hw), tip:'<b>Switches and key rings</b><br>' + (v.hw === 'bought' && v.hwBought != null ? 'What we bought: ' + dl(hw) : 'What we used: 195 switches ($35) + 165 key rings ($13)')},
+    {l:['Filament', '(estimate)'], k:'est', a:c2, b:c3, v:'−' + dl(fil), tip:'<b>Filament</b><br>' + (v.fil === 'safe' ? '165 clickers x 30 g at $16/kg ($79) + 20% for failed prints' : '165 clickers x 15 g at $11/kg')}
+  ];
+  if (v.other > 0) steps.push({l:['Other', 'costs'], k:'down', a:c3, b:net, v:'−' + dl(v.other), tip:'<b>Other costs</b><br>' + dl(v.other) + ' (edit above)'});
+  steps.push({l:['Net', 'profit'], k:'net', a:0, b:net, v:dl(net), tip:'<b>Net profit</b><br>$747 − ' + dl(v.prizes) + ' − ' + dl(hw) + ' − ' + dl(fil) + (v.other > 0 ? ' − ' + dl(v.other) : '')});
+  const w = 1060, h = 440, left = 64, right = 10, top = 36, bottom = 70, pw = w - left - right, ph = h - top - bottom, max = 1000;
+  const Y = x => top + ph - Math.max(0, Math.min(max, x)) / max * ph, bw = pw / steps.length, cw = bw * .62;
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="From tickets earned to net profit">';
+  s += '<defs><pattern id="hp-est" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--other)"></rect><rect x="5" width="3" height="8" style="fill:var(--slide)"></rect></pattern></defs>';
+  for (let t = 0; t <= max; t += 250) s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(t) + 5) + '" text-anchor="end">$' + t + '</text>';
+  steps.forEach((st, i) => {
+    const x = left + i * bw + (bw - cw) / 2, y1 = Y(Math.max(st.a, st.b)), y2 = Y(Math.min(st.a, st.b));
+    const fill = st.k === 'total' ? 'var(--red)' : st.k === 'net' ? 'var(--ink)' : st.k === 'est' ? 'url(#hp-est)' : 'var(--other)';
+    s += '<g data-tip="' + esc(st.tip) + '"><rect x="' + (left + i * bw) + '" y="' + top + '" width="' + bw + '" height="' + ph + '" style="fill:transparent"></rect>';
+    s += '<rect x="' + x + '" y="' + y1 + '" width="' + cw + '" height="' + Math.max(2, y2 - y1) + '" rx="4" style="fill:' + fill + '"></rect>';
+    s += '<text x="' + (x + cw / 2) + '" y="' + (y1 - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:21px;font-weight:700;font-variant-numeric:tabular-nums">' + st.v + '</text>';
+    s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (h - bottom + 26) + '" text-anchor="middle" style="font-size:16px"><tspan x="' + (x + cw / 2) + '">' + esc(st.l[0]) + '</tspan><tspan x="' + (x + cw / 2) + '" dy="19">' + esc(st.l[1]) + '</tspan></text></g>';
+    if (i < steps.length - 1) { const nx = left + (i + 1) * bw + (bw - cw) / 2; s += '<line x1="' + (x + cw) + '" x2="' + nx + '" y1="' + Y(st.b) + '" y2="' + Y(st.b) + '" style="stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:4 4"></line>'; }
+  });
+  s += '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line></svg>';
+  const el = $('#profitChart'); el.innerHTML = s; bindTips(el);
+  $('#profitNet').textContent = dl(net);
+  $('#profitPer').textContent = Math.round(net / 900 * 100) + '¢';
+}
+function renderProfit(){
+  const v = pfv(), can = S.mode !== 'pending' ? !S.readOnly : true, p = S.profit || {};
+  setVal($('#pf-prizes'), p.prizes === '' ? '' : String(v.prizes));
+  setVal($('#pf-other'), String(v.other));
+  setVal($('#pf-hwBought'), v.hwBought == null ? '' : String(v.hwBought));
+  $$('[data-hw]').forEach(b => b.setAttribute('aria-pressed', b.dataset.hw === v.hw));
+  $$('[data-fil]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fil === v.fil));
+  $('#pf-prizes').disabled = $('#pf-other').disabled = !can;
+  $('#pf-hwBought').disabled = !can || v.hw !== 'bought';
+  $$('[data-hw],[data-fil]').forEach(b => b.disabled = !can);
+  drawProfit();
+}
+function setProfit(patch){ S.profit = Object.assign({}, S.profit || {}, patch); saveDoc('profit/inputs', patch); }
+$('#pf-prizes').addEventListener('input', e => { setProfit({prizes:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
+$('#pf-other').addEventListener('input', e => { setProfit({other:+e.target.value || 0}); drawProfit(); });
+$('#pf-hwBought').addEventListener('input', e => { setProfit({hwBought:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
+$$('[data-hw]').forEach(b => b.addEventListener('click', () => { setProfit({hw:b.dataset.hw}); renderProfit(); if (b.dataset.hw === 'bought') $('#pf-hwBought').focus(); }));
+$$('[data-fil]').forEach(b => b.addEventListener('click', () => { setProfit({fil:b.dataset.fil}); renderProfit(); }));
+function render(){ setStatus(); renderBoard(); renderVotes(); renderIdeas(); renderPlan(); renderProfit(); }
 $('#board').addEventListener('submit', e => {
   e.preventDefault();
   const f = e.target.closest('[data-add]'); if (!f) return;
@@ -1332,6 +1424,7 @@ async function initStore(){
     db.collection('themes').onSnapshot(snap => { S.themes = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('plancheck').onSnapshot(snap => { S.check = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('planday').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => o[d.id] = d.data()); S.days = o; render(); }, fail);
+    db.doc('profit/inputs').onSnapshot(d => { S.profit = d.exists ? Object.assign({}, d.data()) : {}; render(); }, fail);
   } catch(e) { fail(); }
 }
 
@@ -1356,5 +1449,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
-  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide.
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs.
 -->
