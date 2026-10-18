@@ -397,17 +397,18 @@ table.t2 td.n{text-align:right}
     <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
       <div class="pfgrid">
         <label class="pf" for="pf-prizes"><span>Prizes spent</span><span class="pfin">$<input type="number" id="pf-prizes" min="0" step="1" value="150"></span></label>
-        <label class="pf" for="pf-other"><span>Other costs <small>balloons, stickers, bags</small></span><span class="pfin">$<input type="number" id="pf-other" min="0" step="1" value="0"></span></label>
+        <label class="pf" for="pf-other"><span>Other costs <small>balloons, bags</small></span><span class="pfin">$<input type="number" id="pf-other" min="0" step="1" value="0"></span></label>
         <div class="pf wide"><span>Switches &amp; key rings</span><span class="seg" role="group" aria-label="Switches and key rings"><button type="button" data-hw="used" aria-pressed="true">What we used, $48</button><button type="button" data-hw="bought" aria-pressed="false">What we bought</button></span><span class="pfin">$<input type="number" id="pf-hwBought" min="0" step="1" placeholder="spent" aria-label="Spent on switches and key rings" disabled></span></div>
-        <div class="pf wide"><span>Filament</span><span class="seg" role="group" aria-label="Filament estimate"><button type="button" data-fil="real" aria-pressed="false">15 g at $11/kg, $27</button><button type="button" data-fil="safe" aria-pressed="true">30 g at $16/kg + failed prints, $95</button></span></div>
+        <div class="pf"><span>Filament</span><span class="seg" role="group" aria-label="Filament estimate"><button type="button" data-fil="real" aria-pressed="false">15 g, $11/kg</button><button type="button" data-fil="safe" aria-pressed="true">30 g, $16/kg + fails</button></span></div>
+        <label class="pf" for="pf-copters"><span>Copters <small>5 kits, ~250 g</small></span><span class="pfin">$<input type="number" id="pf-copters" min="0" step="1" value="5"></span></label>
       </div>
       <div id="profitChart" style="flex:1;min-height:0"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$454</div><p>About <b id="profitPer" style="color:var(--ink)">50¢</b> of every ticket stayed with us.</p></div>
+      <div class="card" style="gap:6px"><div class="k">Net profit</div><div class="big" id="profitNet" style="font-size:76px">$449</div><p>About <b id="profitPer" style="color:var(--ink)">50¢</b> of every ticket stayed with us.</p></div>
       <div class="card nx"><div class="k">Used or bought?</div><p>We bought extra switches and rings for faster shipping, and we'll use them up. "Used" counts only what went into these 165 clickers.</p></div>
       <div class="card nx"><div class="k">How the cut worked</div><p>Helper food tickets were spent before the count, so CCA's 10% came out of the 830 in the box.</p></div>
-      <div class="card nx"><div class="k">Copters</div><p>The 5 kits sold used last year's parts.</p></div>
+      <div class="card nx"><div class="k">Copters</div><p>Printed new this year. Only the 5 kits sold count; leftovers become Trunk or Treat giveaways.</p></div>
     </div>
   </div>
   <div class="ft"><span>Edits save for everyone who opens this deck · ticket counts: findings v1.1.21 · prices: Sam, Oct 18 · striped = estimate</span><span class="pg"></span></div>
@@ -568,19 +569,24 @@ table.t2 td.n{text-align:right}
   <aside class="notes">Compare with the Keep / Add / Remove board. Where does it agree? There's no guarantee we repeat Ram-a-thon, so treat this as a starting point.</aside>
 </section>
 
-<!-- 15 christmas orders -->
-<section class="slide" id="xmasSlide" data-title="Christmas orders">
+<!-- 15 christmas -->
+<section class="slide" id="xmasSlide" data-title="Christmas">
   <div class="hd" style="gap:8px"><div class="chip">4 · Next · Christmas · quick mention</div>
-    <div class="copyrow"><h2 class="t">Christmas orders: stocking stuffers or ornaments?</h2><span class="status" id="xmasStatus">Connecting…</span></div></div>
-  <div class="body" style="grid-template-columns:1fr 1fr 420px;grid-template-rows:auto auto;align-content:start">
-    <div class="card"><div class="k">Stocking-stuffer clickers</div><h3>Our best sellers, bundled</h3><p>Dumpling, Salmon nigiri, Creeper and Avocado led Ram-a-thon. Same print queue as the last slide, so extra stock isn't wasted.</p></div>
-    <div class="card"><div class="k">Lithophane ornaments</div><h3>Custom photo ornaments</h3><p>Families send a photo and we print it as a lithophane ornament. We set up lithophane order forms last fall.</p></div>
-    <div class="poll" style="gap:10px;grid-row:span 2"><div class="k">What do we offer?</div><div id="poll-xmas" style="display:flex;flex-direction:column;gap:10px"></div><button class="undo" data-undo="xmas" type="button">Undo last vote</button></div>
-    <div class="card"><div class="k">Draft timeline</div><p>Orders close Tue Nov 24, before Thanksgiving break. Print Nov 30 to Dec 11. Hand out by Mon Dec 14, before HS finals (Dec 15 to 17). Winter break starts Dec 18.</p></div>
-    <div class="card"><div class="k">Decide</div><p>Price for each, how people order (a form, or at the club carnival), and who runs the printers.</p></div>
+    <div class="copyrow"><h2 class="t" style="font-size:46px">Christmas: the catalog again, in more classrooms</h2><span class="status" id="xmasStatus">Connecting…</span></div></div>
+  <div class="body" style="grid-template-columns:1fr 1fr 440px;grid-template-rows:auto auto;align-content:start">
+    <div class="card"><div class="k">The 2025 catalog</div><h3>Doing it again</h3><p>Brain games like Gravity Maze, Rush Hour and Kanoodle, LEGO flowers and advent calendars, a water rocket kit, puzzle and activity books.</p></div>
+    <div class="card"><div class="k">The goal this year</div><h3>Get it into more classrooms</h3><p>Who asks which teachers? Paper copies, a QR code, or both? When does it go out?</p></div>
+    <div class="poll" style="gap:10px;grid-row:span 2;min-height:0">
+      <div class="k">Other Christmas ideas · add one, then +1 per raised hand</div>
+      <form class="add" id="xIdeaForm" style="padding:0;border:0"><input id="xIdeaIn" maxlength="80" placeholder="Add an idea and press Enter" aria-label="Christmas idea" autocomplete="off"><button type="submit">Add</button></form>
+      <ul class="ideas" id="xIdeas" style="grid-template-columns:1fr"></ul>
+      <button class="undo" data-undo="xmas" type="button">Undo last vote</button>
+    </div>
+    <div class="card"><div class="k">Draft timeline</div><p>Catalog out by early November. Orders close Tue Nov 24, before Thanksgiving break. Hand out by Mon Dec 14, before HS finals (Dec 15 to 17).</p></div>
+    <div class="card"><div class="k">Decide</div><p>Who owns the catalog this year, which items come back, and whether our own clickers or ornaments go in it.</p></div>
   </div>
-  <div class="ft"><span>Dates from the CCA calendar · timeline is a draft</span><span class="pg"></span></div>
-  <aside class="notes">Two minutes, then move on: Trunk or Treat gets the time. Mention both options and the timeline; take a quick vote if the room is ready, and settle prices and owners at a later meeting.</aside>
+  <div class="ft"><span>Catalog: Coda "2025 Christmas catalog" · dates from the CCA calendar · timeline is a draft</span><span class="pg"></span></div>
+  <aside class="notes">Two minutes, then move on: Trunk or Treat gets the time. Name the catalog owner and the classroom plan; add other ideas to the board and come back to them later.</aside>
 </section>
 
 <!-- 15 trunk or treat -->
@@ -1106,20 +1112,15 @@ syncThemeBtn();
 
 /* ---------- shared store: board + votes ---------- */
 const POLLS = {
-  xmas: [
-    {k:'clickers', n:'Stocking-stuffer clickers', d:'Bundles of best sellers'},
-    {k:'ornaments', n:'Lithophane ornaments', d:'Custom photo orders'},
-    {k:'both', n:'Both', d:'Two kinds of orders to run'}
-  ],
   candy: [
     {k:'yes', n:'Backup candy', d:'For when prizes run low'},
     {k:'no', n:'Prizes only', d:'Copters, cards and prizes'}
   ]
 };
-const S = {mode:'pending', db:null, board:[], votes:[], themes:[], check:[], days:{}, profit:{}, readOnly:false, mine:{theme:[], candy:[], xmas:[]}};
+const S = {mode:'pending', db:null, board:[], votes:[], themes:[], xideas:[], check:[], days:{}, profit:{}, readOnly:false, mine:{theme:[], candy:[], xmas:[]}};
 let phase = 'ideas';
-function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; S.themes = o.themes || []; S.check = o.check || []; S.days = o.days || {}; S.profit = o.profit || {}; } catch(e) { S.board = []; S.votes = []; S.themes = []; S.check = []; S.days = {}; S.profit = {}; } }
-function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes, themes:S.themes, check:S.check, days:S.days, profit:S.profit})); } catch(e) {} }
+function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; S.themes = o.themes || []; S.xideas = o.xideas || []; S.check = o.check || []; S.days = o.days || {}; S.profit = o.profit || {}; } catch(e) { S.board = []; S.votes = []; S.themes = []; S.xideas = []; S.check = []; S.days = {}; S.profit = {}; } }
+function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes, themes:S.themes, xideas:S.xideas, check:S.check, days:S.days, profit:S.profit})); } catch(e) {} }
 const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 function statusText(){
   if (S.mode === 'pending') return 'Connecting…';
@@ -1150,6 +1151,27 @@ async function addIdea(name){
 async function removeIdea(id){
   if (S.mode === 'db') { try { await S.db.doc('themes/' + id).delete(); } catch(e) { onWriteError(e); } }
   else { S.themes = S.themes.filter(x => x.id !== id); localSave(); render(); }
+}
+async function addXIdea(name){
+  const item = {name, meeting, at:new Date().toISOString()};
+  if (S.mode === 'db') { try { await S.db.collection('xmasideas').add(item); } catch(e) { onWriteError(e); } }
+  else { S.xideas.push(Object.assign({id:rid()}, item)); localSave(); render(); }
+}
+async function removeXIdea(id){
+  if (S.mode === 'db') { try { await S.db.doc('xmasideas/' + id).delete(); } catch(e) { onWriteError(e); } }
+  else { S.xideas = S.xideas.filter(x => x.id !== id); localSave(); render(); }
+}
+function xCounts(){ const c = {}; S.votes.forEach(v => { if (v.poll === 'xmas' && v.meeting === meeting) c[v.option] = (c[v.option] || 0) + 1; }); return c; }
+function renderXIdeas(){
+  const can = S.mode !== 'pending' && !S.readOnly, counts = xCounts();
+  const ideas = S.xideas.slice().sort((a, b) => String(a.at).localeCompare(String(b.at)));
+  const top = ideas.reduce((m, i) => Math.max(m, counts[i.id] || 0), 0), max = Math.max(1, top);
+  $('#xIdeas').innerHTML = ideas.length ? ideas.map(i => {
+    const c = counts[i.id] || 0, id = esc(i.id);
+    return '<li class="idea"><span class="ofill" style="width:' + (c / max * 100) + '%"></span><span class="tx">' + esc(i.name) + (top > 0 && c === top ? ' <span class="tag so">Top</span>' : '') + '</span><span class="c">' + c + '</span><button class="plus" type="button" data-vote="xmas:' + id + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(i.name) + '">+1</button>' + (can ? '<button class="x" type="button" data-delx="' + id + '" aria-label="Remove ' + esc(i.name) + '">×</button>' : '') + '</li>';
+  }).join('') : '<li class="empty">' + (S.mode === 'pending' ? 'Loading…' : 'No ideas yet. Add one above.') + '</li>';
+  $$('input,button', $('#xIdeaForm')).forEach(n => n.disabled = !can);
+  const u = $('[data-undo="xmas"]'); u.disabled = !can || !S.mine.xmas.length;
 }
 function themeCounts(){ const c = {}; S.votes.forEach(v => { if (v.poll === 'theme' && v.meeting === meeting) c[v.option] = (c[v.option] || 0) + 1; }); return c; }
 function renderIdeas(){
@@ -1302,12 +1324,12 @@ $('#chkForm').addEventListener('submit', e => {
 const PF = {cash:747, hwUsed:48, fil:{real:27, safe:95}};
 function pfv(){
   const p = S.profit || {}, num = (x, d) => (x === '' || x == null || isNaN(+x)) ? d : Math.max(0, +x);
-  return {prizes:num(p.prizes, 150), other:num(p.other, 0), hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:p.fil === 'real' ? 'real' : 'safe'};
+  return {prizes:num(p.prizes, 150), other:num(p.other, 0), copters:num(p.copters, 5), hw:p.hw === 'bought' ? 'bought' : 'used', hwBought:num(p.hwBought, null), fil:p.fil === 'real' ? 'real' : 'safe'};
 }
 const dl = x => '$' + Math.round(x).toLocaleString('en-US');
 function drawProfit(){
   const v = pfv(), hw = v.hw === 'bought' && v.hwBought != null ? v.hwBought : PF.hwUsed, fil = PF.fil[v.fil];
-  const c1 = PF.cash - v.prizes, c2 = c1 - hw, c3 = c2 - fil, net = c3 - v.other;
+  const c1 = PF.cash - v.prizes, c2 = c1 - hw, c3 = c2 - fil, c4 = c3 - v.copters, net = c4 - v.other;
   const steps = [
     {l:['Tickets', 'earned'], k:'total', a:0, b:900, v:'$900', tip:'<b>Tickets earned</b><br>About 900 tickets at $1: 830 counted in the box, plus about 70 spent on helper food'},
     {l:['Helper', 'food'], k:'down', a:900, b:830, v:'−$70', tip:'<b>Helper food</b><br>About 70 tickets spent at food booths before the count'},
@@ -1317,8 +1339,9 @@ function drawProfit(){
     {l:['Switches &', 'key rings'], k:'down', a:c1, b:c2, v:'−' + dl(hw), tip:'<b>Switches and key rings</b><br>' + (v.hw === 'bought' && v.hwBought != null ? 'What we bought: ' + dl(hw) : 'What we used: 195 switches ($35) + 165 key rings ($13)')},
     {l:['Filament', '(estimate)'], k:'est', a:c2, b:c3, v:'−' + dl(fil), tip:'<b>Filament</b><br>' + (v.fil === 'safe' ? '165 clickers x 30 g at $16/kg ($79) + 20% for failed prints' : '165 clickers x 15 g at $11/kg')}
   ];
-  if (v.other > 0) steps.push({l:['Other', 'costs'], k:'down', a:c3, b:net, v:'−' + dl(v.other), tip:'<b>Other costs</b><br>' + dl(v.other) + ' (edit above)'});
-  steps.push({l:['Net', 'profit'], k:'net', a:0, b:net, v:dl(net), tip:'<b>Net profit</b><br>$747 − ' + dl(v.prizes) + ' − ' + dl(hw) + ' − ' + dl(fil) + (v.other > 0 ? ' − ' + dl(v.other) : '')});
+  steps.push({l:['Copters', '(estimate)'], k:'est', a:c3, b:c4, v:'−' + dl(v.copters), tip:'<b>Copters</b><br>' + dl(v.copters) + ' (edit above). Default: 3 standard kits at 46 g + 2 toroidal kits at up to 56 g, about 250 g at $16/kg plus failed prints. The rest of the printed parts become Trunk or Treat giveaways.'});
+  if (v.other > 0) steps.push({l:['Other', 'costs'], k:'down', a:c4, b:net, v:'−' + dl(v.other), tip:'<b>Other costs</b><br>' + dl(v.other) + ' (edit above)'});
+  steps.push({l:['Net', 'profit'], k:'net', a:0, b:net, v:dl(net), tip:'<b>Net profit</b><br>$747 − ' + dl(v.prizes) + ' − ' + dl(hw) + ' − ' + dl(fil) + ' − ' + dl(v.copters) + (v.other > 0 ? ' − ' + dl(v.other) : '')});
   const w = 1060, h = 440, left = 64, right = 10, top = 36, bottom = 70, pw = w - left - right, ph = h - top - bottom, max = 1000;
   const Y = x => top + ph - Math.max(0, Math.min(max, x)) / max * ph, bw = pw / steps.length, cw = bw * .62;
   let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="From tickets earned to net profit">';
@@ -1342,10 +1365,11 @@ function renderProfit(){
   const v = pfv(), can = S.mode !== 'pending' ? !S.readOnly : true, p = S.profit || {};
   setVal($('#pf-prizes'), p.prizes === '' ? '' : String(v.prizes));
   setVal($('#pf-other'), String(v.other));
+  setVal($('#pf-copters'), String(v.copters));
   setVal($('#pf-hwBought'), v.hwBought == null ? '' : String(v.hwBought));
   $$('[data-hw]').forEach(b => b.setAttribute('aria-pressed', b.dataset.hw === v.hw));
   $$('[data-fil]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fil === v.fil));
-  $('#pf-prizes').disabled = $('#pf-other').disabled = !can;
+  $('#pf-prizes').disabled = $('#pf-other').disabled = $('#pf-copters').disabled = !can;
   $('#pf-hwBought').disabled = !can || v.hw !== 'bought';
   $$('[data-hw],[data-fil]').forEach(b => b.disabled = !can);
   drawProfit();
@@ -1353,10 +1377,11 @@ function renderProfit(){
 function setProfit(patch){ S.profit = Object.assign({}, S.profit || {}, patch); saveDoc('profit/inputs', patch); }
 $('#pf-prizes').addEventListener('input', e => { setProfit({prizes:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
 $('#pf-other').addEventListener('input', e => { setProfit({other:+e.target.value || 0}); drawProfit(); });
+$('#pf-copters').addEventListener('input', e => { setProfit({copters:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
 $('#pf-hwBought').addEventListener('input', e => { setProfit({hwBought:e.target.value === '' ? '' : +e.target.value}); drawProfit(); });
 $$('[data-hw]').forEach(b => b.addEventListener('click', () => { setProfit({hw:b.dataset.hw}); renderProfit(); if (b.dataset.hw === 'bought') $('#pf-hwBought').focus(); }));
 $$('[data-fil]').forEach(b => b.addEventListener('click', () => { setProfit({fil:b.dataset.fil}); renderProfit(); }));
-function render(){ setStatus(); renderBoard(); renderVotes(); renderIdeas(); renderPlan(); renderProfit(); }
+function render(){ setStatus(); renderBoard(); renderVotes(); renderIdeas(); renderXIdeas(); renderPlan(); renderProfit(); }
 $('#board').addEventListener('submit', e => {
   e.preventDefault();
   const f = e.target.closest('[data-add]'); if (!f) return;
@@ -1371,7 +1396,15 @@ stage.addEventListener('click', e => {
   if (b) { const [p, o] = b.dataset.vote.split(':'); vote(p, o); return; }
   const u = e.target.closest('[data-undo]'); if (u) { undo(u.dataset.undo); return; }
   const d = e.target.closest('[data-delidea]'); if (d) { removeIdea(d.dataset.delidea); return; }
+  const dx = e.target.closest('[data-delx]'); if (dx) { removeXIdea(dx.dataset.delx); return; }
   const ph = e.target.closest('[data-phase]'); if (ph) { phase = ph.dataset.phase; renderIdeas(); }
+});
+$('#xIdeaForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const inp = $('#xIdeaIn'), name = inp.value.trim();
+  if (!name) return;
+  inp.value = '';
+  addXIdea(name.slice(0, 80));
 });
 $('#ideaForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -1393,6 +1426,11 @@ $('#copyBoard').addEventListener('click', () => {
   const ideas = S.themes.slice().sort((a, b) => (tc[b.id] || 0) - (tc[a.id] || 0));
   if (!ideas.length) lines.push('- (none)');
   ideas.forEach(i => lines.push('- ' + i.name + ': ' + (tc[i.id] || 0)));
+  const xc = xCounts();
+  lines.push('', 'CHRISTMAS IDEAS (votes, ' + MEET[meeting] + ')');
+  const xi = S.xideas.slice().sort((a, b) => (xc[b.id] || 0) - (xc[a.id] || 0));
+  if (!xi.length) lines.push('- (none)');
+  xi.forEach(i => lines.push('- ' + i.name + ': ' + (xc[i.id] || 0)));
   const counts = Object.keys(POLLS).map(p => p.toUpperCase() + ' (' + MEET[meeting] + '): ' + POLLS[p].map(o => o.n + ' ' + S.votes.filter(v => v.poll === p && v.option === o.k && v.meeting === meeting).length).join(', '));
   lines.push('', ...counts);
   lines.push('', 'MUST BE TRUE BY SAT 2:45 PM');
@@ -1422,6 +1460,7 @@ async function initStore(){
     db.collection('board').onSnapshot(snap => { S.board = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('votes').onSnapshot(snap => { S.votes = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('themes').onSnapshot(snap => { S.themes = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
+    db.collection('xmasideas').onSnapshot(snap => { S.xideas = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('plancheck').onSnapshot(snap => { S.check = snap.docs.map(d => Object.assign({id:d.id}, d.data())); render(); }, fail);
     db.collection('planday').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => o[d.id] = d.data()); S.days = o; render(); }, fail);
     db.doc('profit/inputs').onSnapshot(d => { S.profit = d.exists ? Object.assign({}, d.data()) : {}; render(); }, fail);
@@ -1449,5 +1488,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
-  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs.
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition).
 -->
