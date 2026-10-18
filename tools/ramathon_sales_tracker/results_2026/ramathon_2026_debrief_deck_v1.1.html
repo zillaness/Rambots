@@ -752,6 +752,7 @@ table.t2 td.n{text-align:right}
     <button class="bbtn nav" id="next" type="button" aria-label="Next slide">›</button>
     <span class="btitle" id="btitle"></span>
     <span class="seg" role="group" aria-label="Meeting"><button type="button" data-meet="sun" aria-pressed="true">Sun<span class="hide-sm"> · Leadership</span></button><button type="button" data-meet="mon" aria-pressed="false">Mon<span class="hide-sm"> · Team</span></button></span>
+    <button class="bbtn hide-sm" id="exportBtn" type="button">Export decisions</button>
     <button class="bbtn hide-sm" id="themeBtn" type="button">Light screen</button>
     <button class="bbtn hide-sm" id="notesBtn" type="button" aria-pressed="false">Notes</button>
     <button class="bbtn hide-sm" id="fsBtn" type="button">Full screen</button>
@@ -1511,14 +1512,80 @@ $('#copyBoard').addEventListener('click', () => {
   lines.push('', 'DAY BY DAY');
   DAYS.forEach(d => { const v = S.days[d.k] || {}; lines.push('- ' + d.d + ' ' + d.s + ': ' + (v.tasks || '') + (v.who ? ' (' + v.who + ')' : '')); });
   const text = lines.join('\n'), btn = $('#copyBoard');
-  const fallback = () => {
-    let box = $('#copyBox');
-    if (!box) { stage.insertAdjacentHTML('beforeend', '<div class="copybox" id="copyBox"><div class="copyrow"><b style="font-size:22px">Select all and copy</b><button class="tbtn" type="button" id="copyClose">Close</button></div><textarea id="copyText" aria-label="Board as text"></textarea></div>'); box = $('#copyBox'); $('#copyClose').addEventListener('click', () => box.remove()); }
-    const ta = $('#copyText'); ta.value = text; ta.focus(); ta.select();
-  };
+  const fallback = () => showCopyBox(text);
   try {
     navigator.clipboard.writeText(text).then(() => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy list', 1600); }, fallback);
   } catch(e) { fallback(); }
+});
+
+function showCopyBox(text, label){
+  let box = $('#copyBox');
+  if (!box) { stage.insertAdjacentHTML('beforeend', '<div class="copybox" id="copyBox"><div class="copyrow"><b style="font-size:22px" id="copyLabel"></b><button class="tbtn" type="button" id="copyClose">Close</button></div><textarea id="copyText" aria-label="Text to copy"></textarea></div>'); box = $('#copyBox'); $('#copyClose').addEventListener('click', () => box.remove()); }
+  $('#copyLabel').textContent = label || 'Select all and copy';
+  const ta = $('#copyText'); ta.value = text; ta.focus(); ta.select();
+}
+function buildDecisions(){
+  const now = new Date(), pad = n => String(n).padStart(2, '0');
+  const ymd = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+  const file = 'ramathon_debrief_decisions_' + ymd + '_v1.0.md';
+  const cell = t => String(t == null ? '' : t).replace(/\|/g, '\\|').trim().replace(/\s*\n\s*/g, '; ');
+  const byAt = (a, b) => String(a.at).localeCompare(String(b.at));
+  const count = (poll, opt, m) => S.votes.filter(v => v.poll === poll && v.option === opt && v.meeting === m).length;
+  const L = ['---', 'file: ' + file, 'version: 1.0', 'author: Sam Cao', 'created: ' + ymd, 'last_updated: ' + ymd,
+    'description: Decisions and inputs saved in the Ram-a-thon debrief deck, exported ' + now.toLocaleString('en-US') + '.',
+    'ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.', '---', '',
+    '# Ram-a-thon debrief: decisions', '', 'Exported ' + now.toLocaleString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'}) + ' from the Ram-a-thon Debrief deck. Sun = leadership meeting, Mon = team meeting.', ''];
+  L.push('## Keep / Add / Remove', '');
+  [['keep', 'Keep'], ['add', 'Add'], ['remove', 'Remove']].forEach(([c, h]) => {
+    L.push('### ' + h);
+    const items = S.board.filter(x => x.col === c).sort(byAt);
+    if (!items.length) L.push('- (none)');
+    items.forEach(x => L.push('- ' + cell(x.text) + ' (' + (MEET[x.meeting] || '') + ')'));
+    L.push('');
+  });
+  const ideaTable = (title, ideas, poll) => {
+    L.push('## ' + title, '');
+    if (!ideas.length) { L.push('(none)', ''); return; }
+    L.push('| Idea | Sun votes | Mon votes |', '|---|---:|---:|');
+    ideas.slice().sort((a, b) => (count(poll, b.id, 'sun') + count(poll, b.id, 'mon')) - (count(poll, a.id, 'sun') + count(poll, a.id, 'mon'))).forEach(i => L.push('| ' + cell(i.name) + ' | ' + count(poll, i.id, 'sun') + ' | ' + count(poll, i.id, 'mon') + ' |'));
+    L.push('');
+  };
+  ideaTable('Trunk or Treat theme ideas', S.themes, 'theme');
+  L.push('## Candy at Trunk or Treat', '', '| Option | Sun votes | Mon votes |', '|---|---:|---:|');
+  POLLS.candy.forEach(o => L.push('| ' + o.n + ' | ' + count('candy', o.k, 'sun') + ' | ' + count('candy', o.k, 'mon') + ' |'));
+  L.push('');
+  ideaTable('Christmas ideas', S.xideas, 'xmas');
+  L.push('## Backward plan: must be true by Sat 2:45 PM', '');
+  const chk = S.check.slice().sort(byAt);
+  if (!chk.length) L.push('(none)');
+  chk.forEach(c => L.push('- [' + (c.done ? 'x' : ' ') + '] ' + cell(c.text) + (c.owner ? ' (' + cell(c.owner) + ')' : ' (no owner yet)')));
+  L.push('', '## Day by day', '', '| Day | Tasks | Who |', '|---|---|---|');
+  DAYS.forEach(d => { const v = S.days[d.k] || {}; L.push('| ' + d.d + ' ' + d.s + ' | ' + cell(v.tasks) + ' | ' + cell(v.who) + ' |'); });
+  const v = pfv(), hw = v.hw === 'bought' && v.hwBought != null ? v.hwBought : PF.hwUsed, fil = PF.fil[v.fil];
+  const rate = v.pay === 'min' ? 16.90 : v.pay === '20' ? 20 : 0, wages = v.vols * v.hrs * rate;
+  const net = PF.cash - v.prizes - hw - fil - v.copters - v.other - wages;
+  L.push('', '## Profit (rough math)', '', '| Item | Value |', '|---|---:|',
+    '| Tickets earned | ' + dl(830 + v.food) + ' |', '| Helper food (estimate) | ' + v.food + ' tickets |', "| Cash in the box after CCA's 10% | " + dl(PF.cash) + ' |',
+    '| Prizes spent | ' + dl(v.prizes) + ' |', '| Switches & key rings | ' + (v.hw === 'bought' && v.hwBought != null ? 'What we bought, ' : 'What we used, ') + dl(hw) + ' |',
+    '| Filament | ' + {real:'Light', typ:'Typical', safe:'Safe'}[v.fil] + ', ' + dl(fil) + ' |', '| Copters | ' + (v.cop === 'printed' ? 'All printed, ' : 'Kits sold, ') + dl(v.copters) + ' |',
+    '| Other | ' + dl(v.other) + ' |', '| Volunteer pay | ' + (rate ? v.vols + ' x ' + v.hrs + ' hr at $' + rate.toFixed(2) + ' = ' + dl(wages) : 'Off') + ' |', '',
+    '**Net profit: ' + dl(net) + '**' + (rate ? ' after volunteer pay' : ', about ' + Math.round(net / (830 + v.food) * 100) + '¢ of every ticket'), '',
+    '## CHANGELOG', '', '- v1.0 (' + ymd + '): Exported from the Ram-a-thon Debrief deck.', '');
+  return {file, text: L.join('\n')};
+}
+$('#exportBtn').addEventListener('click', async () => {
+  const btn = $('#exportBtn'), out = buildDecisions();
+  let dls = null;
+  try { dls = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('downloads') : null; } catch(e) { dls = null; }
+  if (!dls) { showCopyBox(out.text, 'Select all and copy (' + out.file + ')'); return; }
+  try {
+    await dls.save({filename: out.file, data: out.text});
+    btn.textContent = 'Saved'; setTimeout(() => btn.textContent = 'Export decisions', 1800);
+  } catch(e) {
+    if (e && e.code === 'declined') return;
+    if (e && e.code === 'rate_limited') { btn.textContent = 'One moment…'; setTimeout(() => btn.textContent = 'Export decisions', 1800); return; }
+    showCopyBox(out.text, 'Select all and copy (' + out.file + ')');
+  }
 });
 
 async function initStore(){
@@ -1561,5 +1628,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 </script>
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
-  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Just-for-fun volunteer pay: Off, Hayward minimum wage ($16.90) or $20/hr, with volunteers and hours as editable inputs (default 5 people for the whole 4 hours, Sam) and shows earnings per volunteer-hour; the chart extends below $0 when needed. Helper food bar is striped as an estimate and editable (default 45, the middle of Sam's 20 to 70 range); tickets earned = 830 counted + helper food. How-the-cut-worked card removed; a "Top booth, but…" card shows what we'd keep after paying the volunteers $20/hr, with and without every copter printed. Reset numbers button (two clicks) restores the defaults. Used-or-bought card removed. "A hunch about other booths" card on the profit slide. New slide 7, "What if one person ran it?": Plinko-only and clickers-only plans with one paid worker, editable, compared with this year's whole crew, plus a Kid's-sino line (payback per $1 drop). Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
+  v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Just-for-fun volunteer pay: Off, Hayward minimum wage ($16.90) or $20/hr, with volunteers and hours as editable inputs (default 5 people for the whole 4 hours, Sam) and shows earnings per volunteer-hour; the chart extends below $0 when needed. Helper food bar is striped as an estimate and editable (default 45, the middle of Sam's 20 to 70 range); tickets earned = 830 counted + helper food. How-the-cut-worked card removed; a "Top booth, but…" card shows what we'd keep after paying the volunteers $20/hr, with and without every copter printed. Reset numbers button (two clicks) restores the defaults. Used-or-bought card removed. Export decisions button saves a Markdown decisions file (downloads capability) with a copy fallback. "A hunch about other booths" card on the profit slide. New slide 7, "What if one person ran it?": Plinko-only and clickers-only plans with one paid worker, editable, compared with this year's whole crew, plus a Kid's-sino line (payback per $1 drop). Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
 -->
