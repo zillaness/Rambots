@@ -1,6 +1,6 @@
 """
-file: plot_clicker_sales_curve_v1.4.py
-version: 1.4
+file: plot_clicker_sales_curve_v1.5.py
+version: 1.5
 author: Sam Cao
 created: 2026-10-18
 last_updated: 2026-10-18
@@ -8,7 +8,7 @@ description: Builds the interactive Ram-a-thon 2026 sales chart: per-design runn
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
 Usage:
-    python3 plot_clicker_sales_curve_v1.4.py <sales.csv> <out.html>
+    python3 plot_clicker_sales_curve_v1.5.py <sales.csv> <out.html>
     node render_infographic_v1.1.cjs <out.html> <out.png> <height> 1400   (static PNG of the default view)
 
 The page is one self-contained HTML file. Photos load from infographic_photos/ next to it.
@@ -28,6 +28,11 @@ CCA's cut):
     average, trimmed at the ends of the day) sampled every minute, so lines stay angled.
   - Whole booth = BOOTH totals counted at the end of the day, spread evenly over the
     same hours. Plinko, Balloon Battle and the blowout have no timestamps.
+  - "Add Plinko, Battle and blowout" (whole sales table only) stacks those estimates on
+    the tracked data as a hatched band: Plinko and Battle spread evenly across the day,
+    the blowout as one step after the last tracked sale. Plinko is what's left of the
+    ~900 after the tracked sales, the blowout and Battle (1 ticket per drop); each drop
+    and each battle match counts as a sale in the minutes-per-sale view.
 """
 
 import csv
@@ -52,6 +57,7 @@ PHOTO = {"Dumpling": "dumpling", "Salmon nigiri": "salmon_nigiri", "Creeper": "c
          "Spam musubi": "spam_musubi", "S'mores": "smores", "LEGO brick": "lego"}
 BOOTH = {"counted": 830, "food": 70, "gross": 900, "net": 810}  # Sam's end-of-day count; ~70 food tickets to helpers; net after CCA's 10%
 SMOOTH_MIN = 30  # rolling pace window, minutes
+EST = {"battle": 55, "battleMatches": 11, "blowout": 60}  # Sam's estimates: Battle 50 to 60 tickets in ~10 to 12 matches; blowout 50 to 70
 
 
 def parse(s):
@@ -149,8 +155,11 @@ def build_data(src):
     }
     span_hr = hours(end - start)
     booth = dict(BOOTH, perHr=round(BOOTH["gross"] / span_hr, 1), netPerHr=round(BOOTH["net"] / span_hr, 1))
+    plinko = BOOTH["gross"] - scopes["table"]["tickets"] - EST["blowout"] - EST["battle"]  # what's left of the ~900
+    est = dict(EST, plinko=plinko, perHr=round((plinko + EST["battle"]) / span_hr, 2),
+               salesPerHr=round((plinko + EST["battleMatches"]) / span_hr, 2))
     return {"start": start.strftime("%H:%M:%S"), "end": end.strftime("%H:%M:%S"), "smooth": SMOOTH_MIN,
-            "early": EARLY, "designs": designs, "sales": sales, "scopes": scopes, "booth": booth}
+            "early": EARLY, "designs": designs, "sales": sales, "scopes": scopes, "booth": booth, "est": est}
 
 
 PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
@@ -263,9 +272,12 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
       <button type="button" data-view="rate">Tickets per hour</button>
       <button type="button" data-view="gap">Minutes per sale</button>
     </div>
-    <div class="seg only-combined" id="scopes" role="group" aria-label="Which sales">
-      <button type="button" data-scope="table">Whole sales table</button>
-      <button type="button" data-scope="clickers">Clickers only</button>
+    <div class="controls only-combined">
+      <div class="seg" id="scopes" role="group" aria-label="Which sales">
+        <button type="button" data-scope="table">Whole sales table</button>
+        <button type="button" data-scope="clickers">Clickers only</button>
+      </div>
+      <label class="toggle" id="estwrap"><input type="checkbox" id="est"> Add Plinko, Battle and blowout (estimated)</label>
     </div>
   </div>
 
@@ -299,11 +311,16 @@ PAGE = r"""<title>Ram-a-thon Clicker Sales</title>
   </details>
 
   <details>
+    <summary>Average per hour by booth</summary>
+    <div class="tablewrap"><table id="booths"></table></div>
+  </details>
+
+  <details>
     <summary>Every sale on the sales laptop</summary>
     <div class="tablewrap"><table id="sales"></table></div>
   </details>
 
-  <footer>Ram-a-thon 2026, Rambots (Team 2204). Sales laptop export: 69 sales (64 clicker, 5 copter), 10:01 AM to 1:20 PM, $1 per ticket; net is after CCA's 10%. Per-design rate = clickers sold per hour while the design was on the table; one sale counts at most 3 of a design, and Oreo and Burger are left out. Pace lines use a rolling 30-minute window. The whole-booth total (830 counted plus about 70 tickets given to helpers for food) was counted at the end of the day; Plinko, Balloon Battle and the end-of-day clicker blowout have no timestamps, so their average assumes the same hours. Internal estimates, do not share or repost.</footer>
+  <footer>Ram-a-thon 2026, Rambots (Team 2204). Sales laptop export: 69 sales (64 clicker, 5 copter), 10:01 AM to 1:20 PM, $1 per ticket; net is after CCA's 10%. Per-design rate = clickers sold per hour while the design was on the table; one sale counts at most 3 of a design, and Oreo and Burger are left out. Pace lines use a rolling 30-minute window. The whole-booth total (830 counted plus about 70 tickets given to helpers for food) was counted at the end of the day; Plinko, Balloon Battle and the end-of-day clicker blowout have no timestamps, so their average assumes the same hours. The estimate toggle spreads Plinko (~300, what's left of ~900 at 1 ticket a drop) and Battle (~55, about 11 matches) evenly and adds the ~60 blowout after the last sale. Internal estimates, do not share or repost.</footer>
 </div>
 
 <script>
@@ -318,7 +335,7 @@ const ampm = ms => fmt(ms) + (new Date(ms).getHours() >= 12 ? " PM" : " AM");
 const ampmSec = ms => fmt(ms) + ":" + String(new Date(ms).getSeconds()).padStart(2, "0") + (new Date(ms).getHours() >= 12 ? " PM" : " AM");
 const designs = DATA.designs.map(d => ({ ...d, ev: d.events.map(([s, q, i]) => [t(s), q, i]), so: d.soldOut ? t(d.soldOut) : null }));
 const byName = Object.fromEntries(designs.map(d => [d.name, d]));
-const state = { pins: [], hover: null, proj: true, view: "design", scope: "table" };
+const state = { pins: [], hover: null, proj: true, view: "design", scope: "table", est: false };
 
 function totalAt(d, ms) { let c = 0; for (const [tm, q] of d.ev) { if (tm <= ms) c += q; else break; } return c; }
 function projAt(d, ms) { return d.proj == null || ms <= d.so ? null : d.total + (d.proj - d.total) * (ms - d.so) / (END - d.so); }
@@ -487,7 +504,7 @@ function msAt(clientX) {
   if (!G) return null;
   const r = svg.getBoundingClientRect(), sx = (clientX - r.left) * (G.W / r.width);
   const ms = X0 + (sx - G.M.l) / G.pw * (X1 - X0);
-  return ms < START || ms > END ? null : ms;
+  return ms < START || ms > X1 ? null : Math.min(ms, END); // past the last sale snaps to it, so the end of the day is easy to hover
 }
 function setCross(ms) {
   const cross = svg.querySelector("#cross");
@@ -582,46 +599,80 @@ const SW = {
   dot: () => `<svg class="swl" width="18" height="10" aria-hidden="true"><circle cx="9" cy="5" r="4" fill="var(--brand)"/></svg>`,
 };
 const row = (sw, k, v) => `<div class="r"><span>${sw}${k}</span><span>${v}</span></div>`;
+// Untimed booths (whole sales table only): Plinko and Battle spread evenly, blowout at the last sale
+const E = DATA.est, HRS = (END - START) / 3600000, PLINKO = Math.round(E.plinko / 10) * 10;
+const estOn = () => state.scope === "table" && state.est;
+const estTix = ms => (E.plinko + E.battle) * (ms - START) / (END - START);
+const approx = v => "~" + money(v);
+const mins = m => m < 1 ? `${Math.round(m * 60)} s` : `${m.toFixed(1)} min`;
+const HATCH = `<defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">` +
+  `<rect width="7" height="7" fill="var(--brand)" fill-opacity="0.08"/><line x1="0" y1="0" x2="0" y2="7" stroke="var(--brand)" stroke-width="2" stroke-opacity="0.3"/></pattern></defs>`;
+SW.est = () => `<svg class="swl" width="18" height="10" aria-hidden="true"><rect x="1" y="1" width="16" height="8" fill="url(#hatch)" stroke="var(--brand)" stroke-width="1" stroke-dasharray="3 2"/></svg>`;
+const EST_NOTE = {
+  total: " The hatched band adds Plinko (~$300) and Balloon Battle (~$55) spread evenly across the day, plus the ~$60 clicker blowout as one step at the end. None of those have timestamps, so the band is an estimate.",
+  rate: " The hatched band adds Plinko and Balloon Battle spread evenly (about $108 an hour). The blowout has no duration, so it only shows in the whole-booth average.",
+  gap: " The hatched band counts each Plinko drop (~300) and Battle match (~11) as a sale, spread evenly. The blowout has no timestamps, so it's left out here.",
+};
 
 function drawCombined() {
-  const c = CFG[state.view], sc = DATA.scopes[state.scope], ss = scopeSales();
+  const est = estOn(), c = { ...CFG[state.view] }, sc = DATA.scopes[state.scope], ss = scopeSales();
+  if (est && state.view === "total") Object.assign(c, { ymax: 1000, step: 200 });
+  if (est && state.view === "rate") Object.assign(c, { ymax: 350, step: 50 });
   const out = frame(c.ymax, c.step, c.fy, c.title, c.endLow);
   const { x, y, wide } = G;
+  out.push(HATCH);
+  const xk = k => x(START + gridMin(k) * 60000);
   const flat = (v, stroke, dash, w) => `<line x1="${x(START)}" x2="${x(END)}" y1="${y(v)}" y2="${y(v)}" stroke="${stroke}" stroke-width="${w}" stroke-dasharray="${dash}" stroke-linecap="round"/>`;
   const main = pts => `<path d="${pathOf(pts)}" fill="none" stroke="var(--halo)" stroke-width="6.5" stroke-linejoin="round"/>` +
                       `<path d="${pathOf(pts)}" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  // Hatched band between two lines: the estimated booths stacked on the tracked data
+  const band = (a, b) => `<path d="${pathOf(a)} L${pathOf(b.slice().reverse()).slice(1)} Z" fill="url(#hatch)" stroke="none"/>`;
+  const edge = pts => `<path d="${pathOf(pts)}" fill="none" stroke="var(--brand)" stroke-width="2" stroke-dasharray="6 4" stroke-linejoin="round"/>`;
   const labs = [], dots = [];
   if (state.view === "total") {
-    let run = 0; const pts = [[x(START), y(0)]];
-    for (const s of ss) { run += s.tickets; pts.push([x(s.ms), y(run)]); dots.push({ s, cx: x(s.ms), cy: y(run), run }); }
-    out.push(`<line x1="${x(START)}" y1="${y(0)}" x2="${x(END)}" y2="${y(sc.tickets)}" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>`);
+    let run = 0; const pts = [[x(START), y(0)]], upper = [[x(START), y(0)]];
+    for (const s of ss) {
+      run += s.tickets; pts.push([x(s.ms), y(run)]); upper.push([x(s.ms), y(run + estTix(s.ms))]);
+      dots.push({ s, cx: x(s.ms), cy: y(run), run });
+    }
+    const goal = est ? DATA.booth.gross : sc.tickets;
+    if (est) { upper.push([x(END), y(goal)]); out.push(band(upper, pts), edge(upper)); } // blowout: one step at the last sale
+    out.push(`<line x1="${x(START)}" y1="${y(0)}" x2="${x(END)}" y2="${y(goal)}" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>`);
     out.push(main(pts));
-    labs.push({ v: sc.tickets, sw: SW.main(), text: `${money(sc.tickets)} by the last sale (${money(net(sc.tickets))} net)` });
+    labs.push({ v: sc.tickets, sw: SW.main(), text: est ? `${money(sc.tickets)} tracked (${money(net(sc.tickets))} net)` : `${money(sc.tickets)} by the last sale (${money(net(sc.tickets))} net)` });
+    if (est) labs.push({ v: goal, sw: SW.est(), text: `${approx(goal)} all booths (${approx(net(goal))} net)` });
   } else if (state.view === "rate") {
-    out.push(flat(DATA.booth.perHr, "var(--pin-a)", "0.5 5", 2.5), flat(sc.perHr, "var(--muted)", "4 4", 2));
-    out.push(main(sc.tixHr.map((v, k) => [x(START + gridMin(k) * 60000), y(v)])));
-    labs.push({ v: DATA.booth.perHr, sw: SW.booth(), text: `Whole booth ~${money(DATA.booth.perHr)}/hr (~${money(DATA.booth.netPerHr)} net)` },
-              { v: sc.perHr, sw: SW.avg(), text: `Day average ${money(sc.perHr)}/hr (${money(net(sc.perHr))} net)` },
-              { v: sc.tixHr[sc.tixHr.length - 1], sw: SW.main(), text: "Actual pace, rolling 30 min" });
+    const pts = sc.tixHr.map((v, k) => [xk(k), y(v)]), avg = est ? sc.perHr + E.perHr : sc.perHr, last = sc.tixHr[sc.tixHr.length - 1];
+    if (est) { const upper = sc.tixHr.map((v, k) => [xk(k), y(v + E.perHr)]); out.push(band(upper, pts), edge(upper)); }
+    out.push(flat(DATA.booth.perHr, "var(--pin-a)", "0.5 5", 2.5), flat(avg, "var(--muted)", "4 4", 2));
+    out.push(main(pts));
+    labs.push({ v: DATA.booth.perHr, sw: SW.booth(), text: est ? `Whole booth with blowout ~${money(DATA.booth.perHr)}/hr` : `Whole booth ~${money(DATA.booth.perHr)}/hr (~${money(DATA.booth.netPerHr)} net)` },
+              { v: avg, sw: SW.avg(), text: est ? `Day average ~${money(avg)}/hr (~${money(net(avg))} net)` : `Day average ${money(sc.perHr)}/hr (${money(net(sc.perHr))} net)` },
+              { v: last, sw: SW.main(), text: est ? "Sales table, tracked" : "Actual pace, rolling 30 min" });
+    if (est) labs.push({ v: last + E.perHr, sw: SW.est(), text: "+ Plinko and Battle, estimated" });
   } else {
     for (let j = 1; j < ss.length; j++) {
       const gap = (ss[j].ms - ss[j - 1].ms) / 60000;
       dots.push({ s: ss[j], cx: x(ss[j].ms), cy: y(gap), gap });
     }
+    const trk = sc.salesHr.map((v, k) => [xk(k), y(60 / v)]), last = sc.salesHr[sc.salesHr.length - 1];
+    const avg = est ? 60 / (sc.salesPerHr + E.salesPerHr) : sc.gapMean;
+    if (est) { const lower = sc.salesHr.map((v, k) => [xk(k), y(60 / (v + E.salesPerHr))]); out.push(band(trk, lower), edge(lower)); }
     out.push(...dots.map(D => `<circle cx="${D.cx.toFixed(1)}" cy="${D.cy.toFixed(1)}" r="4" fill="var(--brand)" fill-opacity="0.55" stroke="var(--halo)" stroke-width="1.5"/>`));
-    out.push(flat(sc.gapMean, "var(--muted)", "4 4", 2));
-    out.push(main(sc.salesHr.map((v, k) => [x(START + gridMin(k) * 60000), y(60 / v)])));
-    labs.push({ v: sc.gapMean, sw: SW.avg(), text: `Average ${sc.gapMean.toFixed(1)} min apart (median ${sc.gapMedian.toFixed(1)})` },
-              { v: 60 / sc.salesHr[sc.salesHr.length - 1], sw: SW.main(), text: "Rolling 30-min pace" });
+    out.push(flat(avg, "var(--muted)", "4 4", 2));
+    out.push(main(trk));
+    labs.push({ v: avg, sw: SW.avg(), text: est ? `Average ~${mins(avg)} with drops + battles` : `Average ${sc.gapMean.toFixed(1)} min apart (median ${sc.gapMedian.toFixed(1)})` },
+              { v: 60 / last, sw: SW.main(), text: est ? "Sales table, tracked" : "Rolling 30-min pace" });
+    if (est) labs.push({ v: 60 / (last + E.salesPerHr), sw: SW.est(), text: "With Plinko drops and battles, est." });
   }
   if (state.view === "total") out.push(...dots.map(D => `<circle cx="${D.cx.toFixed(1)}" cy="${D.cy.toFixed(1)}" r="4" fill="var(--brand)" stroke="var(--halo)" stroke-width="2"/>`));
   out.push(`<circle id="focus" r="6" fill="none" stroke="var(--fg)" stroke-width="2" visibility="hidden" pointer-events="none"/>`);
   out.push(...dots.map((D, j) => `<circle cx="${D.cx.toFixed(1)}" cy="${D.cy.toFixed(1)}" r="9" fill="transparent" class="shit" data-j="${j}" style="cursor:pointer"/>`));
-  if (wide) { // labels in the right margin, text in ink with the line's swatch beside it
-    labs.sort((a, b) => b.v - a.v);
-    let last = -1e9;
+  if (wide) { // labels in the right margin, stacked bottom-up so none drop below the axis; ink text with the line's swatch
+    labs.sort((a, b) => a.v - b.v);
+    let prev = Infinity;
     for (const L of labs) {
-      let ly = y(L.v) + 4; if (ly < last + 18) ly = last + 18; last = ly;
+      const ly = Math.min(y(L.v) + 4, prev - 18, y(0) + 4); prev = ly;
       out.push(`<line x1="${x(END) + 2}" y1="${y(L.v)}" x2="${x(END) + 10}" y2="${ly - 4}" stroke="var(--faint)" stroke-width="1"/>` +
                `<g transform="translate(${x(END) + 12},${ly - 9})">${L.sw.replace('class="swl"', "")}</g>` +
                `<text x="${x(END) + 34}" y="${ly}" font-size="12.5" fill="var(--fg)">${L.text}</text>`);
@@ -638,25 +689,50 @@ function showComboTip(clientX, clientY) {
   const ms = msAt(clientX);
   if (ms == null) { hideTip(); return; }
   setCross(ms);
-  const sc = DATA.scopes[state.scope], b = DATA.booth;
+  const sc = DATA.scopes[state.scope], b = DATA.booth, est = estOn();
+  const tot = (k, v) => `<div class="r tot"><span>${k}</span><span>${v}</span></div>`;
   let rows, fy;
   if (state.view === "total") {
     let run = 0; for (const s of scopeSales()) { if (s.ms <= ms) run += s.tickets; else break; }
-    const even = sc.tickets * (ms - START) / (END - START);
-    rows = [row(SW.main(), "Tracked so far", `${money(run)} · ${money(net(run))} net`), row(SW.avg(), "Even pace", money(even)),
-            row("", run >= even ? "Ahead of even pace" : "Behind even pace", money(Math.abs(run - even)))];
-    fy = run;
+    if (est) {
+      const f = (ms - START) / (END - START), bl = ms >= END ? E.blowout : 0, all = run + estTix(ms) + bl, even = b.gross * f;
+      rows = [row(SW.main(), "Sales table, tracked", money(run)), row(SW.est(), "Plinko, est.", approx(PLINKO * f)),
+              row(SW.est(), "Battle, est.", approx(E.battle * f)), ...(bl ? [row(SW.est(), "Blowout, est.", approx(bl))] : []),
+              tot("All booths so far", `${approx(all)} · ${approx(net(all))} net`), row(SW.avg(), "Even pace", approx(even))];
+      fy = all;
+    } else {
+      const even = sc.tickets * (ms - START) / (END - START);
+      rows = [row(SW.main(), "Tracked so far", `${money(run)} · ${money(net(run))} net`), row(SW.avg(), "Even pace", money(even)),
+              row("", run >= even ? "Ahead of even pace" : "Behind even pace", money(Math.abs(run - even)))];
+      fy = run;
+    }
   } else if (state.view === "rate") {
     const p = paceAt(sc.tixHr, ms);
-    rows = [row(SW.main(), "Actual pace", `${money(p)}/hr · ${money(net(p))} net`),
-            row(SW.avg(), "Day average", `${money(sc.perHr)}/hr · ${money(net(sc.perHr))} net`),
-            row(SW.booth(), "Whole booth", `~${money(b.perHr)}/hr · ~${money(b.netPerHr)} net`)];
-    fy = p;
+    if (est) {
+      const avg = sc.perHr + E.perHr;
+      rows = [row(SW.main(), "Sales table, tracked", `${money(p)}/hr`), row(SW.est(), "Plinko, est.", `~${money(E.plinko / HRS)}/hr`),
+              row(SW.est(), "Battle, est.", `~${money(E.battle / HRS)}/hr`), tot("Together", `~${money(p + E.perHr)}/hr · ~${money(net(p + E.perHr))} net`),
+              row(SW.avg(), "Day average", `~${money(avg)}/hr · ~${money(net(avg))} net`),
+              row(SW.booth(), "Whole booth, with blowout", `~${money(b.perHr)}/hr · ~${money(b.netPerHr)} net`)];
+      fy = p + E.perHr;
+    } else {
+      rows = [row(SW.main(), "Actual pace", `${money(p)}/hr · ${money(net(p))} net`),
+              row(SW.avg(), "Day average", `${money(sc.perHr)}/hr · ${money(net(sc.perHr))} net`),
+              row(SW.booth(), "Whole booth", `~${money(b.perHr)}/hr · ~${money(b.netPerHr)} net`)];
+      fy = p;
+    }
   } else {
     const sp = paceAt(sc.salesHr, ms);
-    rows = [row(SW.main(), "Rolling pace", `1 sale every ${(60 / sp).toFixed(1)} min`),
-            row(SW.avg(), "Day average", `every ${sc.gapMean.toFixed(1)} min`)];
-    fy = 60 / sp;
+    if (est) {
+      const all = sp + E.salesPerHr;
+      rows = [row(SW.main(), "Sales table, tracked", `1 sale every ${mins(60 / sp)}`), row(SW.est(), "Plinko drops, est.", `~${Math.round(E.plinko / HRS)} an hour`),
+              row(SW.est(), "Battle matches, est.", `~${Math.round(E.battleMatches / HRS)} an hour`), tot("Together", `~1 every ${mins(60 / all)}`),
+              row(SW.avg(), "Day average", `~1 every ${mins(60 / (sc.salesPerHr + E.salesPerHr))}`)];
+      fy = 60 / all;
+    } else {
+      rows = [row(SW.main(), "Rolling pace", `1 sale every ${mins(60 / sp)}`), row(SW.avg(), "Day average", `every ${sc.gapMean.toFixed(1)} min`)];
+      fy = 60 / sp;
+    }
   }
   setFocus(G.x(ms), G.y(fy));
   tip.innerHTML = `<b>${ampm(ms)}</b>${rows.join("")}`;
@@ -673,6 +749,16 @@ function showComboSaleTip(j, clientX, clientY) {
 function stats() {
   const sc = DATA.scopes[state.scope], b = DATA.booth;
   const tile = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  const parts = `${money(DATA.scopes.table.tickets)} tracked + Plinko ~${money(PLINKO)} + Battle ~${money(E.battle)} + blowout ~${money(E.blowout)}`;
+  if (estOn()) {
+    const avg = sc.perHr + E.perHr;
+    document.getElementById("stats").innerHTML =
+      tile("Sales table, tracked", money(sc.tickets), `${sc.sales} sales · ${money(net(sc.tickets))} net after CCA's 10%`) +
+      tile("Day average, all booths", `~${money(avg)}/hr`, `sales table ${money(sc.perHr)} + Plinko ~${money(E.plinko / HRS)} + Battle ~${money(E.battle / HRS)} · ~${money(b.perHr)} with the blowout`) +
+      tile("Time between sales", `~${mins(60 / (sc.salesPerHr + E.salesPerHr))}`, `counting ~${PLINKO} Plinko drops and ~${E.battleMatches} battles · tracked alone ${sc.gapMean.toFixed(1)} min`) +
+      tile("Whole booth, counted at close", `~${money(b.gross)}`, `${parts} · ~${money(b.net)} net`);
+    return;
+  }
   document.getElementById("stats").innerHTML =
     tile(state.scope === "table" ? "Sales table, tracked" : "Clickers, tracked", money(sc.tickets), `${sc.sales} sales · ${money(net(sc.tickets))} net after CCA's 10%`) +
     tile("Day average pace", `${money(sc.perHr)}/hr`, `${money(net(sc.perHr))}/hr net · ${sc.salesPerHr.toFixed(1)} sales an hour`) +
@@ -680,40 +766,66 @@ function stats() {
     tile("Whole booth, counted at close", `~${money(b.gross)}`, `${b.counted} counted + ~${b.food} food tickets for helpers · ~${money(b.net)} net · ~${money(b.perHr)}/hr`);
 }
 function legend() {
-  const L = state.view === "total" ? [[SW.main(), "Tracked running total"], [SW.avg(), "Even pace to the same total"], [SW.dot(), "One sale"]]
-          : state.view === "rate" ? [[SW.main(), "Actual pace (rolling 30 min)"], [SW.avg(), "Day average"], [SW.booth(), "Whole booth average, all games spread evenly"]]
-          : [[SW.dot(), "One sale: minutes since the one before"], [SW.main(), "Rolling 30-min pace"], [SW.avg(), "Day average"]];
+  const est = estOn();
+  const L = state.view === "total" ? [[SW.main(), "Sales table, tracked"], ...(est ? [[SW.est(), "Plinko and Battle spread evenly, blowout at the end (estimated)"]] : []), [SW.avg(), "Even pace to the same total"], [SW.dot(), "One sale"]]
+          : state.view === "rate" ? [[SW.main(), est ? "Sales table, tracked (rolling 30 min)" : "Actual pace (rolling 30 min)"], ...(est ? [[SW.est(), "Plinko and Battle spread evenly (estimated)"]] : []), [SW.avg(), "Day average"], [SW.booth(), "Whole booth average, all games spread evenly"]]
+          : [[SW.dot(), "One sale: minutes since the one before"], [SW.main(), "Rolling 30-min pace, sales table"], ...(est ? [[SW.est(), "Counting each Plinko drop and battle as a sale (estimated)"]] : []), [SW.avg(), "Day average"]];
   document.getElementById("legend").innerHTML = L.map(([sw, k]) => `<span>${sw}${k}</span>`).join("");
 }
 function blocksTable() {
-  const sc = DATA.scopes[state.scope];
-  document.getElementById("blocksum").textContent = `Pace by half hour (${state.scope === "table" ? "whole sales table" : "clickers only"})`;
+  const sc = DATA.scopes[state.scope], est = estOn();
+  const blockMin = b => (t(b.to) - t(b.from)) / 60000;
+  const estCols = (perHr, sales, m) => est ? `<td>~${money(perHr + E.perHr)}</td><td>~${mins(m / (sales + E.salesPerHr * m / 60))}</td>` : "";
+  document.getElementById("blocksum").textContent = `Pace by half hour (${state.scope === "table" ? "whole sales table" : "clickers only"}${est ? ", with Plinko and Battle estimates" : ""})`;
   document.getElementById("blocks").innerHTML =
-    `<thead><tr><th>Time</th><th>Sales</th><th>Gross $</th><th>Gross per hour</th><th>Net per hour</th><th>Minutes per sale</th></tr></thead><tbody>` +
+    `<thead><tr><th>Time</th><th>Sales</th><th>Gross $</th><th>Gross per hour</th><th>Net per hour</th><th>Minutes per sale</th>` +
+    (est ? `<th>With Plinko + Battle, per hour (est.)</th><th>Minutes per sale, counting drops + battles (est.)</th>` : "") + `</tr></thead><tbody>` +
     sc.blocks.map(b => `<tr><td>${fmt(t(b.from))} to ${fmt(t(b.to))}</td><td>${b.sales}</td><td>${money(b.tickets)}</td><td>${money(b.perHr)}</td>` +
-      `<td>${money(net(b.perHr))}</td><td>${b.minPerSale == null ? "" : b.minPerSale.toFixed(1)}</td></tr>`).join("") +
-    `<tr><th>Whole day</th><td>${sc.sales}</td><td>${money(sc.tickets)}</td><td>${money(sc.perHr)}</td><td>${money(net(sc.perHr))}</td><td>${sc.gapMean.toFixed(1)} (average gap)</td></tr></tbody>`;
+      `<td>${money(net(b.perHr))}</td><td>${b.minPerSale == null ? "" : b.minPerSale.toFixed(1)}</td>${estCols(b.perHr, b.sales, blockMin(b))}</tr>`).join("") +
+    `<tr><th>Whole day</th><td>${sc.sales}</td><td>${money(sc.tickets)}</td><td>${money(sc.perHr)}</td><td>${money(net(sc.perHr))}</td><td>${sc.gapMean.toFixed(1)} (average gap)</td>` +
+    `${estCols(sc.perHr, sc.sales, SPAN)}</tr></tbody>`;
+}
+// Each booth's day average, so no booth's rate reads as a slice of another's
+function boothTable() {
+  const tb = DATA.scopes.table.tickets, ck = DATA.scopes.clickers.tickets, b = DATA.booth;
+  const rows = [["Clickers", "", ck, "Tracked"], ["Clicker blowout", "~", E.blowout, "Estimate; all at the end, so per hour is only for comparison"],
+                ["Copters", "", tb - ck, "Tracked"], ["Plinko", "~", PLINKO, "What's left of ~$900; 1 ticket per drop"],
+                ["Balloon Battle", "~", E.battle, `Estimate; about ${E.battleMatches} matches`]];
+  document.getElementById("booths").innerHTML =
+    `<thead><tr><th>Booth</th><th>Gross $</th><th>Share</th><th>Per hour, spread over the day</th><th>Net per hour</th><th>Source</th></tr></thead><tbody>` +
+    rows.map(([k, a, v, src]) => `<tr><td>${k}</td><td>${a}${money(v)}</td><td>${a}${Math.round(v / b.gross * 100)}%</td><td>${a}${money(v / HRS)}</td><td>${a}${money(net(v / HRS))}</td><td>${src}</td></tr>`).join("") +
+    `<tr><th>Whole booth</th><td>~${money(b.gross)}</td><td>100%</td><td>~${money(b.perHr)}</td><td>~${money(b.netPerHr)}</td><td>${b.counted} counted + ~${b.food} food tickets for helpers</td></tr></tbody>`;
 }
 
-// ---------- view + scope switches (kept in the URL hash, e.g. #rate or #gap-clickers) ----------
+// ---------- view + scope switches (kept in the URL hash, e.g. #rate, #gap-clickers or #total-booth) ----------
 const wrap = document.getElementById("wrap"), viewsEl = document.getElementById("views"), scopesEl = document.getElementById("scopes");
+const estBox = document.getElementById("est"), estWrap = document.getElementById("estwrap");
 function syncHash() {
-  const h = state.view === "design" ? "" : "#" + state.view + (state.scope === "clickers" ? "-clickers" : "");
+  const tail = state.scope === "clickers" ? "-clickers" : state.est ? "-booth" : "";
+  const h = state.view === "design" ? "" : "#" + state.view + tail;
   try { history.replaceState(null, "", location.pathname + location.search + h); } catch (e) { /* file:// in some browsers */ }
 }
 function refresh() {
   wrap.dataset.view = state.view;
   const V = VIEWS[state.view];
-  document.getElementById("h1").textContent = V.h1; document.getElementById("sub").textContent = V.sub; svg.setAttribute("aria-label", V.aria);
+  document.getElementById("h1").textContent = V.h1; svg.setAttribute("aria-label", V.aria);
+  document.getElementById("sub").textContent = V.sub + (estOn() && EST_NOTE[state.view] ? EST_NOTE[state.view] : "");
   for (const b of viewsEl.children) b.setAttribute("aria-pressed", b.dataset.view === state.view ? "true" : "false");
   for (const b of scopesEl.children) b.setAttribute("aria-pressed", b.dataset.scope === state.scope ? "true" : "false");
+  estWrap.style.display = state.scope === "table" ? "" : "none"; estBox.checked = state.est;
   if (state.view !== "design") { stats(); legend(); }
   blocksTable(); draw();
 }
 for (const b of viewsEl.children) b.addEventListener("click", () => { state.view = b.dataset.view; state.hover = null; syncHash(); refresh(); });
 for (const b of scopesEl.children) b.addEventListener("click", () => { state.scope = b.dataset.scope; syncHash(); refresh(); });
-const hashView = /^#(total|rate|gap)(-clickers)?$/.exec(location.hash);
-if (hashView) { state.view = hashView[1]; state.scope = hashView[2] ? "clickers" : "table"; }
+estBox.addEventListener("change", () => { state.est = estBox.checked; syncHash(); refresh(); });
+function readHash() {
+  const m = /^#(total|rate|gap)(-clickers|-booth)?$/.exec(location.hash);
+  if (m) { state.view = m[1]; state.scope = m[2] === "-clickers" ? "clickers" : "table"; state.est = m[2] === "-booth"; }
+  else if (!location.hash) state.view = "design";
+}
+readHash();
+addEventListener("hashchange", () => { readHash(); refresh(); });
 
 // ---------- comparison cards ----------
 function card(d) {
@@ -749,7 +861,7 @@ document.getElementById("sales").innerHTML =
   `<thead><tr><th>Sale</th><th>Time</th><th>What was in it</th><th>Tickets</th></tr></thead><tbody>` +
   DATA.sales.map(s => `<tr><td>#${s.id.slice(1)}</td><td>${ampmSec(t(s.t))}</td><td>${s.items.map(([n, q]) => q > 1 ? `${n} ×${q}` : n).join(", ")}</td><td>${s.tickets}</td></tr>`).join("") + `</tbody>`;
 
-refresh(); cards();
+boothTable(); refresh(); cards();
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { draw(); cards(); });
 new MutationObserver(() => { draw(); cards(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -760,6 +872,7 @@ new MutationObserver(() => { draw(); cards(); }).observe(document.documentElemen
   v1.2 (2026-10-18): Interactive: hover to highlight, click lines or photos to pin and compare two, projections toggle, cropped photos, data table (Sam).
   v1.3 (2026-10-18): A dot per sale; hover or tap it for the time, what was in the sale and its tickets. Every-sale table (Sam).
   v1.4 (2026-10-18): View switch: combined total, tickets per hour and minutes per sale (actual rolling pace vs day average, whole-booth average), whole sales table vs clickers only, gross with net in tooltips, stat tiles, pace-by-half-hour table, copter sales in the sale table (Sam).
+  v1.5 (2026-10-18): "Add Plinko, Battle and blowout" toggle for the whole sales table: hatched estimate band in all three combined views, per-booth tooltip rows, average-per-hour-by-booth table (Sam).
 -->
 """
 
@@ -768,9 +881,9 @@ def main():
     src, out = sys.argv[1:3]
     data = build_data(src)
     body = PAGE.replace("__DATA__", json.dumps(data))
-    head = ("<!doctype html>\n<!--\n  file: ramathon_2026_clicker_sales_curve_v1.4.html\n  version: 1.4\n  author: Sam Cao\n"
+    head = ("<!doctype html>\n<!--\n  file: ramathon_2026_clicker_sales_curve_v1.5.html\n  version: 1.5\n  author: Sam Cao\n"
             "  created: 2026-10-18\n  last_updated: 2026-10-18\n"
-            "  description: Generated by plot_clicker_sales_curve_v1.4.py; edit the script, not this file.\n"
+            "  description: Generated by plot_clicker_sales_curve_v1.5.py; edit the script, not this file.\n"
             "  ai_update: Regenerate from the script; bump both versions together.\n-->\n"
             "<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n")
@@ -788,3 +901,4 @@ if __name__ == "__main__":
 # v1.2 (2026-10-18): Interactive page: hover highlight, click to pin and compare two lines, projections toggle, cropped photos on chips and comparison cards, data table (Sam).
 # v1.3 (2026-10-18): A dot per sale on every line; hover or tap it for the sale's time, items and ticket total. Every-sale table under the chart (Sam).
 # v1.4 (2026-10-18): Combined views (total, tickets per hour, minutes per sale) with a whole-table / clickers-only switch, rolling 30-minute pace vs day average, whole-booth average from the end-of-day count, stat tiles and a pace-by-half-hour table. Copter sales now in the data (Sam).
+# v1.5 (2026-10-18): Estimate toggle (whole sales table): Plinko and Battle spread evenly plus the blowout at the end, as a hatched band in the total, per-hour and minutes-per-sale views; per-booth tooltip rows and an average-per-hour-by-booth table (Sam).

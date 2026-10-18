@@ -1,6 +1,6 @@
 ---
-file: ramathon_2026_findings_v1.1.20.md
-version: 1.1.20
+file: ramathon_2026_findings_v1.1.21.md
+version: 1.1.21
 author: Sam Cao
 created: 2026-10-17
 last_updated: 2026-10-18
@@ -21,7 +21,7 @@ Only the sales laptop exported. Every number below is either **tracked** (from i
 | [Google Sheet (snapshot v1.0.1)](https://docs.google.com/spreadsheets/d/1RJPla1v_S8OTfUqtEAHkUTp_OWdJUxhWsUgXi4Od20I/edit) | Values-only summary in Drive |
 | `ramathon_2026_results_v1.0.xlsx` | Full workbook, 13 tabs, live formulas. Drag it into Drive to get it as a Google Sheet |
 | `ramathon_2026_infographic_v1.2.6.png` | 1080x1920 recap image, watermarked internal / do not share (source: the `.html` next to it; photos in `infographic_photos/`, cropped by `crop_infographic_photos_v1.0.py`) |
-| `ramathon_2026_clicker_sales_curve_v1.4.html` | Interactive chart. Views: per design, combined total, tickets per hour and minutes per sale (whole sales table or clickers only; actual rolling pace vs day average, plus the whole-booth average). In the per-design view, each dot is one sale (hover or tap for its time, items and tickets). Hover to highlight a line, click lines or photos to compare two, toggle the dotted "if we had enough stock" projections. Live at https://zillaness.github.io/Rambots/ramathon-2026-results/sales-chart.html (unlisted, noindex, but anyone with the link can open it), or open the file in a browser (photos load from `infographic_photos/`). Built by `plot_clicker_sales_curve_v1.4.py`; `ramathon_2026_clicker_sales_curve_v1.4.png` is a still of the default view |
+| `ramathon_2026_clicker_sales_curve_v1.5.html` | Interactive chart. Views: per design, combined total, tickets per hour and minutes per sale (whole sales table or clickers only; actual rolling pace vs day average, plus the whole-booth average). For the whole table, a toggle stacks Plinko, Battle and the blowout on top as a hatched estimate band. In the per-design view, each dot is one sale (hover or tap for its time, items and tickets). Hover to highlight a line, click lines or photos to compare two, toggle the dotted "if we had enough stock" projections. Live at https://zillaness.github.io/Rambots/ramathon-2026-results/sales-chart.html (unlisted, noindex, but anyone with the link can open it), or open the file in a browser (photos load from `infographic_photos/`). Built by `plot_clicker_sales_curve_v1.5.py`; `ramathon_2026_clicker_sales_curve_v1.5.png` is a still of the default view |
 | `event_ticket_estimates_v1.3.1.md` | Photo-based ticket estimates for the other 19 groups |
 | `build_ramathon_2026_results_v1.0.py` | Rebuilds the workbook from the CSV export |
 | `ramathon_sales_laptop1_2026-10-17.csv` | The raw export |
@@ -83,7 +83,7 @@ If Egg tart only reached the table around 11:00 AM (its first sale was 11:07, ab
 
 Lost units = each design's own sales rate x hours it was gone before the last sale (1:20 PM). At 3.53 tickets per clicker, that's about 56 tickets with unlimited stock.
 
-Treat that as a floor. All three were selling faster when they ran out, not tapering off: in the second half of their time on the table Creeper went from 3.4 to 7.9 an hour, Dumpling from 4.5 to 9.7, and Avocado from 2.2 to 6.7, and each took a bigger share of what the table sold. At that late pace the shortfall is up to about 22 clickers (~78 tickets). See `ramathon_2026_clicker_sales_curve_v1.4.html`. Once all three were gone, clicker pace fell from 43 units an hour to 19. The crowd was also thinning toward the 1:00 PM close, so we can't say how much of that slump was stock.
+Treat that as a floor. All three were selling faster when they ran out, not tapering off: in the second half of their time on the table Creeper went from 3.4 to 7.9 an hour, Dumpling from 4.5 to 9.7, and Avocado from 2.2 to 6.7, and each took a bigger share of what the table sold. At that late pace the shortfall is up to about 22 clickers (~78 tickets). See `ramathon_2026_clicker_sales_curve_v1.5.html`. Once all three were gone, clicker pace fell from 43 units an hour to 19. The crowd was also thinning toward the 1:00 PM close, so we can't say how much of that slump was stock.
 
 The other side of the ledger: **36 clickers went to the blowout** (Hot dog bun 12, WD-40 7, S'mores 6, Chocolate bar 4, Oreo 4, LEGO brick 2, Creeper cube 1), mostly at 2 tickets and some at 1, for about 60 tickets on top of the tracked sales. That's about half the 3.53 they averaged at full price. We printed about the right total in the wrong mix.
 
@@ -166,6 +166,8 @@ Sales laptop only, 10:02 AM to 1:21 PM (3.31 hours), $1 per ticket, net after CC
 
 Through the day (whole table, gross per hour): $98 from open to 10:30, $158, **$218 at 11:00 to 11:30** (a sale every 1.4 minutes), $176, a **$74 lull at 12:00 to 12:30**, $192 at 12:30 to 1:00 (the 27-ticket Dumpling sale; $138 without it), then $78 to the last sale. The whole booth, spread evenly over the same hours, ran about $272 an hour gross (~$245 net), but Plinko, Battle and the blowout have no timestamps, so that's only an average.
 
+Per booth, spread over the same hours: clickers $137 an hour (plus ~$18 for the blowout), Plinko ~$91, Battle ~$17, copters $8. Those add up to the ~$272; Plinko's rate is separate from the clickers' $137, not part of it. Clickers led on both rate and total: about 57% of the money with the blowout, Plinko about 33%.
+
 ## How we stacked up against other groups
 
 The event sold 7,000 tickets across 20 groups. Ours is the only real count; every other group is eyeballed from container photos (±30%, see `event_ticket_estimates_v1.3.1.md`).
@@ -245,3 +247,4 @@ There's no guarantee we repeat Ram-a-thon, and repeating what worked before isn'
 - v1.1.18 (2026-10-18): Added the live GitHub Pages link for the interactive sales chart. Only the chart is published; the infographic and workbook stay internal.
 - v1.1.19 (2026-10-18): Points to sales chart v1.3, which adds a hoverable dot per sale and an every-sale table.
 - v1.1.20 (2026-10-18): Added "How fast we sold" (combined pace, dollars per hour, minutes between sales, by half hour). Points to sales chart v1.4, which adds those as views.
+- v1.1.21 (2026-10-18): Per-booth hourly rates under "How fast we sold" (clickers $137 vs Plinko ~$91, not nested). Points to sales chart v1.5 (Plinko, Battle and blowout estimate toggle).
