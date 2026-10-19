@@ -7,3 +7,6 @@ ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
 .design-sync/node_modules
+
+# Exported debrief decisions name students; keep them out of this public repo
+ramathon_debrief_decisions_*.md
