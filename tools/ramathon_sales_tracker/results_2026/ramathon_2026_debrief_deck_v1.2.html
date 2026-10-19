@@ -1,11 +1,11 @@
 <title>Ram-a-thon Debrief</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: ramathon_2026_debrief_deck_v1.1.html
-  version: 1.1
+  file: ramathon_2026_debrief_deck_v1.2.html
+  version: 1.2
   author: Sam Cao
   created: 2026-10-18
-  last_updated: 2026-10-18
+  last_updated: 2026-10-19
   description: Interactive slide deck for the Ram-a-thon 2026 debrief (leadership Sun 10/18, team Mon 10/19), ending with the Trunk or Treat look-ahead.
   ai_update: Update last_updated and version. Rename file to match. Append changelog comment at bottom. Numbers come from ramathon_2026_findings_v1.1.21.md; change them there first.
 -->
@@ -182,6 +182,8 @@ svg text{font-family:var(--font)}
 .items li button{border:0;background:none;font-size:20px;line-height:1;color:var(--ink-3);padding:2px 4px;border-radius:4px}
 .items li button:hover{color:var(--red)}
 .items .empty{background:none;color:var(--ink-3);font-size:18px;font-style:italic}
+.shouts{display:grid;grid-template-columns:1fr 1fr;align-content:start}
+.shouts li{font-size:22px}
 .add{display:flex;gap:8px;padding:12px;border-top:1px solid var(--rule)}
 .add input{flex:1;min-width:0;font-size:20px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--slide)}
 .add button{font-size:18px;padding:10px 16px;border-radius:8px;border:0;background:var(--red);color:var(--red-ink);font-weight:700}
@@ -320,7 +322,7 @@ table.t2 td.n{text-align:right}
       <div class="step"><div class="n">1</div><h3>What did we expect?</h3><p>The goal and the booth targets. Slide 3.</p></div>
       <div class="step"><div class="n">2</div><h3>What happened?</h3><p>The data from the sales laptop and our end-of-day counts. Slides 4 to 13.</p></div>
       <div class="step"><div class="n">3</div><h3>Why the difference?</h3><p>Copters, stockouts, and your Keep / Add / Remove list. Slides 14 and 15.</p></div>
-      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes, Christmas orders, then Trunk or Treat. Slides 16 to 22.</p></div>
+      <div class="step"><div class="n">4</div><h3>What do we do next?</h3><p>Next year's changes and shoutouts, then Christmas orders and Trunk or Treat. Slides 16 to 24.</p></div>
     </div>
     <div class="rules">
       <div class="card"><div class="k">Read the numbers right</div><p>Only the sales laptop exported. Clicker and copter numbers are tracked. Plinko and Balloon Battle are estimates, marked with ~ and striped bars.</p></div>
@@ -609,6 +611,25 @@ table.t2 td.n{text-align:right}
   <aside class="notes">Compare with the Keep / Add / Remove board. Where does it agree? There's no guarantee we repeat Ram-a-thon, so treat this as a starting point.</aside>
 </section>
 
+<!-- 15a shoutouts -->
+<section class="slide" id="shoutSlide" data-title="Shoutouts">
+  <div class="hd" style="gap:8px"><div class="chip">3 · Why &nbsp;→&nbsp; 4 · Next</div>
+    <div class="copyrow"><h2 class="t">Shoutouts: who made Saturday work?</h2><span class="status" id="shoutStatus">Connecting…</span></div></div>
+  <div class="body" style="grid-template-columns:1fr 400px">
+    <div class="col" id="shoutBoard">
+      <div class="col-h"><h3>From the room <span class="cnt" data-cnt="shout"></span></h3><p>A name and one specific thing they did.</p></div>
+      <ul class="items shouts" data-items="shout"></ul>
+      <form class="add" data-add="shout"><input id="add-shout" maxlength="160" placeholder="Name: what they did…" aria-label="Add a shoutout" autocomplete="off"><button type="submit">Add</button></form>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card"><div class="k">Anyone can call one out</div><p>Go around once. Pass if you want. Type them in as people talk.</p></div>
+      <div class="card"><div class="k">If the room goes quiet</div><p>Who came early or stayed late? Who kept Plinko running in the chaos? Who printed stock? Who sold at the table? Who helped someone new?</p></div>
+    </div>
+  </div>
+  <div class="ft"><span>Saved for everyone who opens this deck · goes into Export decisions</span><span class="pg"></span></div>
+  <aside class="notes">End the debrief here, before Christmas and Trunk or Treat. Mentors go last so students speak first.</aside>
+</section>
+
 <!-- 15 christmas -->
 <section class="slide" id="xmasSlide" data-title="Christmas">
   <div class="hd" style="gap:8px"><div class="chip">4 · Next · Christmas · quick mention</div>
@@ -634,26 +655,27 @@ table.t2 td.n{text-align:right}
   <div class="hd"><div class="chip">4 · Next · Trunk or Treat</div><h2 class="t">Saturday Oct 24, 4:00 to 7:00 PM, at Coastline Christian</h2>
     <p class="lede">1801 North Loop Rd, Alameda. A robotics trunk at CCS's Trunk or Treat Family Fest.</p></div>
   <div class="body" style="grid-template-columns:repeat(3,1fr);align-content:start">
-    <div class="card"><div class="k">Getting in</div><p>Every volunteer needs a ticket at the gate. CCS is sending 4 free youth tickets for our helpers; anyone else buys one.</p><p><b style="color:var(--ink)">Youth volunteers walk in with a guardian</b> or have one come get them at the gate.</p></div>
+    <div class="card"><div class="k">Getting in</div><p>Every volunteer needs a ticket at the gate. CCS is sending 4 free youth tickets. Six students are coming, so 2 buy one.</p><p><b style="color:var(--ink)">Youth volunteers walk in with a guardian</b> or have one come get them at the gate.</p></div>
     <div class="card"><div class="k">Giveaways (already paid for)</div><p style="color:var(--ink)"><b class="num">88</b> copter launchers, <b class="num">155</b> propellers, <b class="num">42</b> toroidal propellers, <b class="num">100</b> ripcords.</p><p>Plus leftover Pokémon cards and prize-table items. Launchers cap us at 88 full kits.</p></div>
     <div class="card"><div class="k">The calendar</div><p>Thu and Fri (Oct 22 and 23) are conference days, no school. That leaves Mon to Wed to prep at school.</p><p>Sunset is about 6:15 PM. The last 45 minutes are dark: lights and a charged power station.</p></div>
-    <div class="card"><div class="k">Last year (Oct 25, 2025)</div><p>Arrived 1.5 hours early for the canopy and table. Ran three one-hour shifts. Spin-the-wheel and Plinko for prizes.</p></div>
+    <div class="card"><div class="k">Last year (Oct 25, 2025)</div><p><b style="color:var(--ink)">We arrived late and couldn't get a car in.</b> This year the car goes in first: ask CCS when trunks have to be parked.</p><p>Prizes were spin-the-wheel and Plinko.</p></div>
     <div class="card"><div class="k">A free test</div><p>New families and a flying demo. If copters go fast here, guess 2 from slide 14 looks right.</p></div>
     <div class="card"><div class="k">Why it's worth a Saturday</div><p>It's in our outreach story for grants, and it's how CCS families find our summer camp.</p></div>
   </div>
-  <div class="ft"><span>Source: CCS volunteer emails, Eventbrite, Coda "Trunk or Treat 2025", CCA calendar</span><span class="pg"></span></div>
-  <aside class="notes">Logistics first. Questions for CCS go to our trunk lead: what time trunks set up, whether there's power, and whether trunks are expected to hand out candy.</aside>
+  <div class="ft"><span>Source: CCS volunteer emails, Eventbrite, Coda "Trunk or Treat 2025", CCA calendar · last year's arrival and crew size: Sam, Oct 19</span><span class="pg"></span></div>
+  <aside class="notes">Logistics first. Questions for CCS go to our trunk lead: when trunks have to be parked, whether there's power, and whether trunks are expected to hand out candy. Rides and the 2 extra tickets get sorted tonight.</aside>
 </section>
 
 <!-- 16 mission and goals -->
 <section class="slide" data-title="Trunk or Treat mission and goals">
-  <div class="hd"><div class="chip">4 · Next · Trunk or Treat · draft</div><h2 class="t" style="font-size:44px;max-width:1300px">Give every kid who stops by a hands-on taste of engineering, and give every parent a way to find us again.</h2></div>
+  <div class="hd"><div class="chip">4 · Next · Trunk or Treat · our purpose</div><h2 class="t" style="font-size:48px;max-width:1300px">Spark inspiration and recognition of science and technology in every kid who stops at our trunk.</h2></div>
   <div class="body" style="grid-template-columns:1fr 360px">
     <table class="t2" style="font-size:22px;align-self:start">
       <thead><tr><th>Goal</th><th style="text-align:right">Target</th><th>How we know</th></tr></thead>
       <tbody>
-        <tr><td>Kids reached</td><td class="n">~500</td><td>Count at the trunk (ask CCS for last year's youth tickets)</td></tr>
-        <tr><td>Copter kits handed out</td><td class="n">up to 88</td><td>Count the bags left at the end</td></tr>
+        <tr><td>Kids who stopped at our trunk</td><td class="n">~500</td><td>Tally counter, one click per kid</td></tr>
+        <tr><td>Kids who drove a robot</td><td class="n">~120</td><td>Second tally counter at the robots</td></tr>
+        <tr><td>Copter kits earned with a right answer</td><td class="n">up to 88</td><td>Count the bags left at the end</td></tr>
         <tr><td>Parents signed up for camp or STEM news</td><td class="n">25</td><td>QR code to an interest form</td></tr>
         <tr><td>Photos we can use for grants and Instagram</td><td class="n">15</td><td>Shared album by Sunday</td></tr>
         <tr><td>New money spent</td><td class="n">$75 to $100</td><td>Receipts</td></tr>
@@ -661,42 +683,53 @@ table.t2 td.n{text-align:right}
       </tbody>
     </table>
     <div style="display:flex;flex-direction:column;gap:16px">
-      <div class="card"><div class="k">The one that matters</div><p>Parent sign-ups. It's the only number that turns into camp enrollment and grant evidence.</p></div>
+      <div class="card"><div class="k">Two numbers matter</div><p>Kids who tried something: that's the inspiration, and the Impact Award number. Parent sign-ups: that's camp and grants.</p></div>
       <div class="card"><div class="k">For the Impact Award</div><p>Saturday's counts, sign-ups and photos go into our Impact Award presentation. Decide tonight who collects each one.</p></div>
     </div>
   </div>
-  <div class="ft"><span>Draft by Claude from the team mission (Educate, Serve, Inspire)</span><span class="pg"></span></div>
-  <aside class="notes">Leadership: every number here is a starting point, so change them before Monday. Does the interest form exist yet? If not, who makes it? Who owns the counts and the photos?</aside>
+  <div class="ft"><span>Purpose: leadership, Oct 18, a riff on FIRST (For Inspiration and Recognition of Science and Technology) · targets are starting points</span><span class="pg"></span></div>
+  <aside class="notes">Read the purpose out loud. Then: does the interest form exist yet? If not, who makes it? Who owns the two tally counters and the photos?</aside>
+</section>
+
+<!-- 16a activity -->
+<section class="slide" data-title="Our trunk: three ways to drive">
+  <div class="hd"><div class="chip">4 · Next · Trunk or Treat · the plan from Sunday</div><h2 class="t">Our trunk: three ways to drive</h2>
+    <p class="lede">Watch, drive, answer, win a copter. Sam's game on the TV if it works, and a lit-up canopy so we stand out after dark.</p></div>
+  <div class="body" style="grid-template-columns:repeat(3,1fr);grid-template-rows:auto 1fr;align-content:start">
+    <div class="step"><div class="n" style="font-size:40px">Tank</div><h3>VEX bot</h3><p>Left side and right side. Simple, strong, and it can't slide sideways.</p></div>
+    <div class="step"><div class="n" style="font-size:40px">Mecanum</div><h3>VEX bot</h3><p>Angled rollers let it slide sideways without turning. Do we have mecanum wheels?</p></div>
+    <div class="step"><div class="n" style="font-size:40px">Swerve</div><h3>FRC module</h3><p>Every wheel steers on its own. It's what our competition robot uses. Demo on the table.</p></div>
+    <div class="card"><div class="k">Not every kid can drive</div><p>About 500 kids in 3 hours is about 3 a minute. A turn driving takes a few minutes, so two robots handle about 40 drivers an hour.</p><p>Everyone else watches and answers a trivia question.</p></div>
+    <div class="card"><div class="k">Copters last all night</div><p>88 kits is about 30 an hour. Bag them by the hour. When an hour's bag is empty, it's a Pokémon card or candy until the next hour.</p></div>
+    <div class="card"><div class="k">Seven of us, six jobs</div><p>Greeter and tally counter · two drive coaches · trivia and copters · swerve demo and TV · photos and the QR sign. The seventh floats and covers breaks.</p></div>
+  </div>
+  <div class="ft"><span>Leadership meeting, Oct 18 · throughput is a rough guess: 2 robots x about 3 min a kid</span><span class="pg"></span></div>
+  <aside class="notes">Tank first, then mecanum, then swerve: each one fixes something the last one can't do. A good test question: "Which robot can slide to the cone without turning?"</aside>
 </section>
 
 <!-- 17 theme brainstorm + votes -->
-<section class="slide" id="themeSlide" data-title="Theme: brainstorm, then vote">
+<section class="slide" id="themeSlide" data-title="Trivia: brainstorm, then vote">
   <div class="hd" style="gap:8px"><div class="chip">4 · Next · Trunk or Treat</div>
-    <div class="copyrow"><h2 class="t" style="font-size:46px">Theme: brainstorm, then vote</h2><span class="status" id="voteStatus">Connecting…</span></div></div>
-  <div class="body" style="grid-template-columns:1fr 400px">
+    <div class="copyrow"><h2 class="t" style="font-size:46px">Trivia questions: brainstorm, then vote</h2><span class="status" id="voteStatus">Connecting…</span></div></div>
+  <div class="body" style="grid-template-columns:1fr 430px">
     <div class="brain">
       <div class="copyrow" style="align-items:flex-start">
-        <p class="hmw">How might we make our trunk the one kids talk about on the way home?</p>
+        <p class="hmw">What could a 6-year-old answer after 30 seconds at our trunk?</p>
         <span class="seg" role="group" aria-label="Step"><button type="button" data-phase="ideas" aria-pressed="true">1 · Ideas</button><button type="button" data-phase="vote" aria-pressed="false">2 · Vote</button></span>
       </div>
-      <form class="add" id="ideaForm" style="padding:0;border:0"><input id="ideaIn" maxlength="80" placeholder="Type a theme idea and press Enter" aria-label="Theme idea" autocomplete="off"><button type="submit">Add</button></form>
+      <form class="add" id="ideaForm" style="padding:0;border:0"><input id="ideaIn" maxlength="120" placeholder="Type a question and its answer, then press Enter" aria-label="Trivia question" autocomplete="off"><button type="submit">Add</button></form>
       <ul class="ideas" id="ideas"></ul>
-      <button class="undo" data-undo="theme" type="button" hidden>Undo last theme vote</button>
+      <button class="undo" data-undo="theme" type="button" hidden>Undo last question vote</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="card" style="gap:10px;padding:20px 22px"><div class="k">Brainwrite, then dot vote</div>
-        <ol class="howto">
-          <li><b>3 minutes, silent.</b> Everyone writes 3 theme ideas on paper.</li>
-          <li><b>Go around.</b> One idea per person per turn. Type it in. No judging yet.</li>
-          <li><b>Merge.</b> Combine duplicates and build on each other's ideas.</li>
-          <li><b>Dot vote.</b> Everyone gets 3 votes. Tap once per raised hand.</li>
-        </ol>
-        <p style="font-size:16px;color:var(--ink-3)">Keep in mind: uses robots or copters · works after dark · family-friendly · about $25 of decorations</p></div>
-      <div class="poll" style="gap:10px"><div class="k">Candy</div><div id="poll-candy" style="display:flex;flex-direction:column;gap:10px"></div><button class="undo" data-undo="candy" type="button">Undo last candy vote</button></div>
+      <div class="card" style="gap:8px;padding:16px 20px"><div class="k">Brainwrite, then dot vote</div>
+        <p style="font-size:18px"><b>3 min silent:</b> write 3 questions with answers. <b>Go around</b> and type them in. <b>Merge</b> duplicates. <b>Dot vote:</b> 3 votes each.</p></div>
+      <div class="poll" style="gap:8px"><div class="copyrow"><div class="k">Copter game</div><button class="undo" data-undo="game" type="button">Undo</button></div><div id="poll-game" style="display:flex;flex-direction:column;gap:8px"></div></div>
+      <div class="poll" style="gap:8px"><div class="copyrow"><div class="k">Candy</div><button class="undo" data-undo="candy" type="button">Undo</button></div><div id="poll-candy" style="display:flex;flex-direction:column;gap:8px"></div></div>
     </div>
   </div>
   <div class="ft"><span>Votes count the meeting picked in the bottom bar · ideas carry over from tonight to Monday</span><span class="pg"></span></div>
-  <aside class="notes">Brainwriting first so quieter people get ideas in before anyone reacts. Then switch to "2 · Vote". Each person gets 3 votes; tap once per raised hand. Write-ins can also go on the whiteboard.</aside>
+  <aside class="notes">Brainwriting first so quieter people get ideas in before anyone reacts. Then switch to "2 · Vote". Each person gets 3 votes; tap once per raised hand. Good questions have one right answer, work for ages 5 to 12, and are about what kids just saw. The top 10 go on cards for Saturday. Then vote the copter game and candy.</aside>
 </section>
 
 <!-- 18 budget -->
@@ -1153,12 +1186,17 @@ syncThemeBtn();
 
 /* ---------- shared store: board + votes ---------- */
 const POLLS = {
+  game: [
+    {k:'trivia', n:'Trivia', d:'A right answer wins a copter'},
+    {k:'plinko', n:'Plinko', d:'A drop wins a prize'},
+    {k:'both', n:'Both', d:'Trivia and Plinko'}
+  ],
   candy: [
     {k:'yes', n:'Backup candy', d:'For when prizes run low'},
     {k:'no', n:'Prizes only', d:'Copters, cards and prizes'}
   ]
 };
-const S = {mode:'pending', db:null, board:[], votes:[], themes:[], xideas:[], check:[], days:{}, profit:{}, readOnly:false, mine:{theme:[], candy:[], xmas:[]}};
+const S = {mode:'pending', db:null, board:[], votes:[], themes:[], xideas:[], check:[], days:{}, profit:{}, readOnly:false, mine:{theme:[], game:[], candy:[], xmas:[]}};
 let phase = 'ideas';
 function localLoad(){ try { const o = JSON.parse(localStorage.getItem(LKEY + '-local') || '{}'); S.board = o.board || []; S.votes = o.votes || []; S.themes = o.themes || []; S.xideas = o.xideas || []; S.check = o.check || []; S.days = o.days || {}; S.profit = o.profit || {}; } catch(e) { S.board = []; S.votes = []; S.themes = []; S.xideas = []; S.check = []; S.days = {}; S.profit = {}; } }
 function localSave(){ try { localStorage.setItem(LKEY + '-local', JSON.stringify({board:S.board, votes:S.votes, themes:S.themes, xideas:S.xideas, check:S.check, days:S.days, profit:S.profit})); } catch(e) {} }
@@ -1168,7 +1206,7 @@ function statusText(){
   if (S.mode === 'db') return S.readOnly ? 'View only: you can read, not add' : 'Saved for everyone who opens this deck';
   return 'Saving on this device only';
 }
-function setStatus(){ ['#boardStatus', '#voteStatus', '#planStatus', '#xmasStatus', '#profitStatus'].forEach(id => $(id).textContent = statusText()); }
+function setStatus(){ ['#boardStatus', '#shoutStatus', '#voteStatus', '#planStatus', '#xmasStatus', '#profitStatus'].forEach(id => $(id).textContent = statusText()); }
 function onWriteError(e){
   const code = e && e.code;
   if (code === 'invalid_argument' || code === 'not_granted') { S.readOnly = true; render(); }
@@ -1244,7 +1282,7 @@ async function undo(poll){
 }
 function renderBoard(){
   const can = S.mode !== 'pending' && !S.readOnly;
-  ['keep', 'add', 'remove'].forEach(col => {
+  ['keep', 'add', 'remove', 'shout'].forEach(col => {
     const items = S.board.filter(x => x.col === col).sort((a, b) => String(a.at).localeCompare(String(b.at)));
     const ul = $('[data-items="' + col + '"]');
     ul.innerHTML = items.length ? items.map(x => '<li><span class="tx">' + esc(x.text) + '</span><span class="mt">' + (MEET[x.meeting] || '') + '</span>' + (can ? '<button type="button" data-del="' + esc(x.id) + '" aria-label="Delete">×</button>' : '') + '</li>').join('') : '<li class="empty">' + (S.mode === 'pending' ? 'Loading…' : 'Nothing yet. Type below and press Enter.') + '</li>';
@@ -1456,15 +1494,15 @@ $('#pf-hwBought').addEventListener('input', e => { setProfit({hwBought:e.target.
 $$('[data-hw]').forEach(b => b.addEventListener('click', () => { setProfit({hw:b.dataset.hw}); renderProfit(); if (b.dataset.hw === 'bought') $('#pf-hwBought').focus(); }));
 $$('[data-fil]').forEach(b => b.addEventListener('click', () => { setProfit({fil:b.dataset.fil}); renderProfit(); }));
 function render(){ setStatus(); renderBoard(); renderVotes(); renderIdeas(); renderXIdeas(); renderPlan(); renderProfit(); }
-$('#board').addEventListener('submit', e => {
+['#board', '#shoutBoard'].forEach(sel => $(sel).addEventListener('submit', e => {
   e.preventDefault();
   const f = e.target.closest('[data-add]'); if (!f) return;
   const inp = $('input', f), text = inp.value.trim();
   if (!text) return;
   inp.value = '';
   addItem(f.dataset.add, text.slice(0, 160));
-});
-$('#board').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) removeItem(b.dataset.del); });
+}));
+['#board', '#shoutBoard'].forEach(sel => $(sel).addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) removeItem(b.dataset.del); }));
 stage.addEventListener('click', e => {
   const b = e.target.closest('[data-vote]');
   if (b) { const [p, o] = b.dataset.vote.split(':'); vote(p, o); return; }
@@ -1488,15 +1526,19 @@ $('#ideaForm').addEventListener('submit', e => {
   addIdea(name.slice(0, 80));
 });
 $('#copyBoard').addEventListener('click', () => {
-  const lines = ['Ram-a-thon debrief: Keep / Add / Remove, theme ideas, votes'];
+  const lines = ['Ram-a-thon debrief: Keep / Add / Remove, shoutouts, trivia questions, votes'];
   [['keep', 'KEEP'], ['add', 'ADD'], ['remove', 'REMOVE']].forEach(([c, h]) => {
     lines.push('', h);
     const items = S.board.filter(x => x.col === c).sort((a, b) => String(a.at).localeCompare(String(b.at)));
     if (!items.length) lines.push('- (none)');
     items.forEach(x => lines.push('- ' + x.text + ' [' + (MEET[x.meeting] || '') + ']'));
   });
+  lines.push('', 'SHOUTOUTS');
+  const sh = S.board.filter(x => x.col === 'shout').sort((a, b) => String(a.at).localeCompare(String(b.at)));
+  if (!sh.length) lines.push('- (none)');
+  sh.forEach(x => lines.push('- ' + x.text));
   const tc = themeCounts();
-  lines.push('', 'THEME IDEAS (votes, ' + MEET[meeting] + ')');
+  lines.push('', 'TRIVIA QUESTIONS (votes, ' + MEET[meeting] + ')');
   const ideas = S.themes.slice().sort((a, b) => (tc[b.id] || 0) - (tc[a.id] || 0));
   if (!ideas.length) lines.push('- (none)');
   ideas.forEach(i => lines.push('- ' + i.name + ': ' + (tc[i.id] || 0)));
@@ -1550,10 +1592,17 @@ function buildDecisions(){
     ideas.slice().sort((a, b) => (count(poll, b.id, 'sun') + count(poll, b.id, 'mon')) - (count(poll, a.id, 'sun') + count(poll, a.id, 'mon'))).forEach(i => L.push('| ' + cell(i.name) + ' | ' + count(poll, i.id, 'sun') + ' | ' + count(poll, i.id, 'mon') + ' |'));
     L.push('');
   };
-  ideaTable('Trunk or Treat theme ideas', S.themes, 'theme');
-  L.push('## Candy at Trunk or Treat', '', '| Option | Sun votes | Mon votes |', '|---|---:|---:|');
-  POLLS.candy.forEach(o => L.push('| ' + o.n + ' | ' + count('candy', o.k, 'sun') + ' | ' + count('candy', o.k, 'mon') + ' |'));
+  L.push('## Shoutouts', '');
+  const sh = S.board.filter(x => x.col === 'shout').sort(byAt);
+  if (!sh.length) L.push('- (none)');
+  sh.forEach(x => L.push('- ' + cell(x.text)));
   L.push('');
+  ideaTable('Trunk or Treat trivia questions', S.themes, 'theme');
+  [['game', 'Copter game at Trunk or Treat'], ['candy', 'Candy at Trunk or Treat']].forEach(([p, h]) => {
+    L.push('## ' + h, '', '| Option | Sun votes | Mon votes |', '|---|---:|---:|');
+    POLLS[p].forEach(o => L.push('| ' + o.n + ' | ' + count(p, o.k, 'sun') + ' | ' + count(p, o.k, 'mon') + ' |'));
+    L.push('');
+  });
   ideaTable('Christmas ideas', S.xideas, 'xmas');
   L.push('## Backward plan: must be true by Sat 2:45 PM', '');
   const chk = S.check.slice().sort(byAt);
@@ -1629,4 +1678,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || {})
 <!-- CHANGELOG
   v1.0 (2026-10-18): Initial release. 19-slide After Action Review deck: Ram-a-thon results with booth-vs-goal, money split, clicker leaderboard, the v1.5 sales chart, pace and theme charts, anonymized group comparison, copters; shared Keep / Add / Remove board and theme and candy votes; Trunk or Treat logistics, draft mission and goals, budget slider and backward plan.
   v1.1 (2026-10-18): Sam's feedback. Plinko framed as tickets counted in the shared total, with separate ticket buckets as the next-year ask. Pace slide matched to past years: event-hours band, lunch dip (we don't sell food), end-of-day blowouts at other booths. Stockout slide no longer claims sales were speeding up; lost sales are probably under the average-pace estimate because the sell-outs ran into lunch. The 10% cut card names student government. Theme slide is now a brainwrite-then-dot-vote board (ideas typed in, 3 votes each) instead of Claude's pre-written themes; candy vote sits beside it. Light screen / Dark screen button (key T), carried into the sales chart. Impact Award card on the goals slide. Kid estimate raised to ~500 (1,000+ past attendance, half to two-thirds kids); slider to 800. Backward plan is editable and shared: checklist with done boxes and owners, day-by-day tasks and owners. Next-year slide is a print priority (never sell out, leftovers carry to other events) plus lineup refresh, signs and display, communication and cleaner counts. New Christmas orders slide (stocking-stuffer clickers vs lithophane ornaments) with a vote and a draft timeline, marked a quick mention. Parts cost per clicker on the next-year slide. Slide 3 ticket reads $747 cash after CCA's 10% (food tickets were spent before the count). New "What we kept" slide: waterfall from $900 earned to net profit, with editable, shared inputs for prizes spent, switches and key rings (used or bought), filament estimate and other costs. Christmas slide built around the 2025 catalog (get it into more classrooms) with an open ideas board and +1 votes. Profit slide: copters were printed new this year, so an editable Copters line counts the 5 kits sold (default $5: 46 g per standard kit, +10 g toroidal prop, Sam); stickers left out of other costs (needed for competition). Other costs removed from the profit slide for now. Copters is a Kits sold ($5) / All printed ($74, about 5.2 kg) toggle. A plain Other input (default $0) is back. Just-for-fun volunteer pay: Off, Hayward minimum wage ($16.90) or $20/hr, with volunteers and hours as editable inputs (default 5 people for the whole 4 hours, Sam) and shows earnings per volunteer-hour; the chart extends below $0 when needed. Helper food bar is striped as an estimate and editable (default 45, the middle of Sam's 20 to 70 range); tickets earned = 830 counted + helper food. How-the-cut-worked card removed; a "Top booth, but…" card shows what we'd keep after paying the volunteers $20/hr, with and without every copter printed. Reset numbers button (two clicks) restores the defaults. Used-or-bought card removed. Export decisions button saves a Markdown decisions file (downloads capability) with a copy fallback. "A hunch about other booths" card on the profit slide. New slide 7, "What if one person ran it?": Plinko-only and clickers-only plans with one paid worker, editable, compared with this year's whole crew, plus a Kid's-sino line (payback per $1 drop). Filament on the profit slide defaults to a typical estimate (about 20 g at $13/kg + 10% fails, $47), net about $497; next-year slide says parts averaged about $0.60 and keeps $1 as the safe planning number.
+  v1.2 (2026-10-19): Sunday leadership notes. New Shoutouts slide (17): names typed in live, saved for everyone and included in Export decisions. Slide 18 corrected: we arrived late last year and couldn't get a car in (Sam), so the car goes in first; six students means 2 buy a gate ticket. Slide 19 headline is leadership's purpose, a riff on FIRST, with tally-counter goals for kids who stopped and kids who drove. New slide 21, "Our trunk: three ways to drive" (tank, mecanum, swerve), with the throughput math, copters paced by the hour and six jobs for seven people. The theme brainstorm is now a trivia-question brainstorm with a Copter game vote (Trivia / Plinko / Both) beside the candy vote. Agenda covers slides 16 to 24.
 -->
