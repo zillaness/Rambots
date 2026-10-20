@@ -1,0 +1,4 @@
+Progress by item,,
+Keyboard switches needed (all items),=SUM(Sheet1!D2:D),
+Sets ready = copies of the item's slowest part. B-stock only fills internal orders.,,
+"=QUERY(Components!A1:T,""select B, max(S), min(Q), max(T), min(R), sum(P) where A <> '' group by B label B 'Item', max(S) 'Customer needed', min(Q) 'Customer ready', max(T) 'Internal needed', min(R) 'Internal ready', sum(P) 'Pieces left'"",1)",,
