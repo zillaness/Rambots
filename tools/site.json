@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.4",
+    "version": "1.4.1",
     "author": "Sam Cao",
     "created": "2026-10-14",
     "last_updated": "2026-10-24",
@@ -11,7 +11,7 @@
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.4",
+  "version": "1.4.1",
   "updated": "2026-10-24",
   "topics": [
     "FRC Basics",
@@ -513,7 +513,7 @@
       "kind": "html",
       "type": "game",
       "label": "Pilot quiz",
-      "version": "0.2",
+      "version": "0.3",
       "gated": true,
       "description": "Pilot run of the group 1 shop safety quiz: Part 1 (PPE, conduct, hazards) or Part 2 (emergencies and first aid), with a score, missed questions, and a copy-results button.",
       "tags": [
@@ -561,6 +561,11 @@
       "version": "1.4",
       "date": "2026-10-24",
       "note": "Added the Shop Safety Quiz pilot (v0.2, from safety quiz bank v0.2) under Shop Practices, locked behind the Konami code. Answer key is hashed and missed questions don't reveal answers."
+    },
+    {
+      "version": "1.4.1",
+      "date": "2026-10-24",
+      "note": "Shop Safety Quiz pilot v0.3: removed the CA glue question; the two mentor-present questions now ask only about cutting tools."
     }
   ]
 }
