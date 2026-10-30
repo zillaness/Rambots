@@ -43,7 +43,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:22 ✅ proposed PRD v1.2 change list (28 items), committed e3b944c
 - 10:26 ✅ draft handoff written
 - 10:26 ⚑ SCOPE CHANGE: Sam set the goal "functional prototype without asking me". Building the app is now authorized (prototype v0.1, HTML route, per core design v1.1).
-- 10:26 ▶ NEXT: app/src/geom.js (segments, joining, nesting, units suggestions), then dxf_in.js, writers.js, svg_in.js, ui.js, build, fixture tests, browser smoke test
+- 10:37 ✅ prototype v0.1 working: app/laser_prep_v0.1.html; fixtures 33/33, outputs 33/33 valid, browser 17/17; committed 272d082
+- 10:37 ▶ NEXT: app README; fix test card issues from the independent review; final handoff
 
 ## Handoff
 
