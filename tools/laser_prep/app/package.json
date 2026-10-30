@@ -1,0 +1,6 @@
+{
+  "name": "laser-prep-app",
+  "private": true,
+  "type": "commonjs",
+  "description": "Laser prep app prototype. CommonJS so the test scripts can load src/ files with require; the repo root is an ES module package."
+}
