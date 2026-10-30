@@ -36,7 +36,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:14 ✅ ULS direct import research reviewed, committed dbf2a27
 - 10:15 ✅ DXF color-code probe (entity ACI, layer color, true color), committed 856bb04
 - 10:15 ✅ CAD DXF export research reviewed, committed c399bd2
-- 10:15 ▶ NEXT: test card README and HTML v1.1 with research findings; then core design v1.1
+- 10:17 ✅ print path research reviewed + test card v1.1 (README, HTML, zero-width option), committed 5094519
+- 10:17 ▶ NEXT: core design v1.1 with CAD and print findings; then fixture additions from the CAD research list
 
 ## Handoff
 
