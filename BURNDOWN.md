@@ -31,7 +31,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:06 ✅ research subagents dispatched (ULS import, CAD DXF export, print path)
 - 10:08 ✅ R12 and curves DXF probes for the test card, committed 5660df1
 - 10:10 ✅ core technical design draft, committed 98a09dd
-- 10:10 ▶ NEXT: DXF fixture library with expected results; README v1.1 when ULS import research lands
+- 10:12 ✅ DXF fixture library (19 fixtures, expected results, self-check), committed d2b59fe
+- 10:12 ▶ NEXT: review research reports as they land, commit each; then README v1.1 for the test card
 
 ## Handoff
 
