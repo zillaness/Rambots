@@ -1,0 +1,327 @@
+<!doctype html>
+<!--
+  file: laser_test_card_v1.0.html
+  version: 1.0
+  author: Samuel Cao
+  created: 2026-10-30
+  last_updated: 2026-10-30
+  description: Offline laser test card for the ULS laser: saves an exact-RGB PDF and an SVG for UCP import and Reader printing, and prints at true size from Chrome.
+  ai_update: Update last_updated and version. Append changelog comment at bottom.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laser Test Card</title>
+<style>
+  :root {
+    --ink: #1d1d1f;
+    --muted: #5f6368;
+    --line: #d0d4d9;
+    --panel: #f5f6f8;
+    --brand: #A31F36;
+    --warn-bg: #fff4e0;
+    --warn-ink: #7a4a00;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+  }
+  body { margin: 0; background: #ffffff; }
+  main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { border-top: 6px solid var(--brand); padding-top: 14px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 26px 0 8px; }
+  p, li { font-size: 14.5px; line-height: 1.5; }
+  .sub { color: var(--muted); margin: 0; }
+  code { font-family: Consolas, "Fira Code", monospace; font-size: 13px; background: var(--panel); padding: 1px 4px; border-radius: 3px; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end; margin: 18px 0 10px; padding: 14px; background: var(--panel); border-radius: 8px; }
+  .controls label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
+  .controls select, .controls input { font: inherit; font-size: 14px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  .controls input { width: 70px; }
+  #custom { display: none; gap: 8px; align-items: flex-end; }
+  #custom.on { display: flex; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+  button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--ink); color: #fff; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+
+  #readout { font-size: 13.5px; color: var(--muted); margin: 6px 0 12px; }
+  #error { display: none; background: var(--warn-bg); color: var(--warn-ink); padding: 8px 12px; border-radius: 6px; font-size: 14px; }
+  #error.on { display: block; }
+
+  #sheet-wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  #sheet { display: block; width: 100%; height: auto; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.08); }
+  /* On screen a 0.001 in line is far below one pixel, so draw strokes at a visible width. Print keeps the true width. */
+  @media screen {
+    #sheet .stroke { vector-effect: non-scaling-stroke; stroke-width: 1.5px; }
+  }
+
+  table { border-collapse: collapse; font-size: 14px; margin: 6px 0; }
+  th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin-right: 6px; }
+
+  @media print {
+    .screen-only { display: none !important; }
+    html, body { margin: 0; padding: 0; overflow: hidden; background: none; }
+    #sheet-wrap { margin: 0; padding: 0; max-width: none; }
+    /* No page-sized white fill: the driver could treat it as a raster job over the whole bed. */
+    #sheet { box-shadow: none; background: none; }
+  }
+</style>
+<style id="page-size"></style>
+</head>
+<body>
+<main class="screen-only">
+  <header>
+    <h1>Laser test card v1.0</h1>
+    <p class="sub">Step 0 and Step 1 of the laser prep PRD. Tests whether a saved file imports into the ULS Control Panel (UCP), and whether Adobe Reader or Chrome can print to the ULS driver without breaking lines, colors, or scale.</p>
+  </header>
+
+  <div class="controls">
+    <label>Bed size (match the ULS driver page size)
+      <select id="bed">
+        <option value="16x12">16 x 12 in</option>
+        <option value="18x12">18 x 12 in</option>
+        <option value="24x12" selected>24 x 12 in</option>
+        <option value="24x18">24 x 18 in</option>
+        <option value="32x18">32 x 18 in</option>
+        <option value="36x24">36 x 24 in</option>
+        <option value="custom">Custom</option>
+      </select>
+    </label>
+    <div id="custom">
+      <label>Width (in)<input id="cw" type="number" min="7" max="60" step="0.01" value="24"></label>
+      <label>Height (in)<input id="ch" type="number" min="4.5" max="60" step="0.01" value="12"></label>
+    </div>
+    <label>Line width
+      <select id="lw">
+        <option value="0.001" selected>0.001 in (PRD spec)</option>
+        <option value="0.0005">0.0005 in (thinner)</option>
+        <option value="0.003">0.003 in (thicker)</option>
+      </select>
+    </label>
+    <div class="buttons">
+      <button class="primary" id="save-pdf">Save PDF</button>
+      <button id="save-svg">Save SVG</button>
+      <button id="print">Print (Chrome test)</button>
+    </div>
+  </div>
+  <div id="error"></div>
+  <p id="readout"></p>
+</main>
+
+<div id="sheet-wrap"></div>
+
+<main class="screen-only">
+  <h2>What is on the card</h2>
+  <table>
+    <tr><th>Part</th><th>Size and position</th><th>Color</th><th>Expected on the laser</th></tr>
+    <tr><td>Cut square</td><td>4.000 x 4.000 in, top-left corner at 0.25, 0.25 in</td><td><span class="sw" style="background:#FF0000"></span>255,0,0 outline</td><td>Vector cut; piece drops out</td></tr>
+    <tr><td>Score line</td><td>2.000 in long</td><td><span class="sw" style="background:#0000FF"></span>0,0,255 outline</td><td>Vector score</td></tr>
+    <tr><td>Engrave square</td><td>0.500 x 0.500 in</td><td><span class="sw" style="background:#000000"></span>0,0,0 fill</td><td>Raster engrave</td></tr>
+    <tr><td>Plate with hole</td><td>1.000 in square, 0.500 in round hole</td><td><span class="sw" style="background:#000000"></span>0,0,0 fill, even-odd</td><td>Raster engrave; hole stays bare</td></tr>
+    <tr><td>Label</td><td>"TEST v1"</td><td><span class="sw" style="background:#000000"></span>0,0,0 fill</td><td>Raster engrave</td></tr>
+  </table>
+
+  <h2>Step 0: import into UCP (no printing)</h2>
+  <ol>
+    <li>Click <b>Save PDF</b>. In UCP, look for Import or Open and import the PDF.</li>
+    <li>Import <code>laser_test_card_colored_v1.0.dxf</code> (colors already set, inches).</li>
+    <li>Import <code>laser_test_card_raw_mm_v1.0.dxf</code>. It is built like a Fusion or Onshape export: millimeters, no colors, loose lines. Check whether UCP reads it at 4.000 in (not 101.6 in), and whether UCP lets you assign red, blue, and black to it.</li>
+    <li>For each file, note: does the cut square show as a red vector, the score line as blue, and the black shapes as raster? Is the size right?</li>
+  </ol>
+
+  <h2>Step 1: print to the ULS driver</h2>
+  <p><b>Adobe Reader</b> (only if it is installed): open the saved PDF, Print, pick the ULS printer. Page Sizing: <b>Actual size</b>. <b>Print in grayscale</b> must be off. Check the preview shows the art in the top-left corner.</p>
+  <p><b>Chrome or Edge</b>: click <b>Print (Chrome test)</b>. Destination: the ULS printer. Paper size: the bed size above. Margins: <b>None</b>. Scale: <b>Default</b> (100). Headers and footers: off.</p>
+  <p>If the ULS power and speed window can only be reached from the Windows print dialog, write that down. It changes the design.</p>
+
+  <h2>Measure</h2>
+  <p>Kerf makes the dropped-out piece small and the hole in the sheet big by the same amount, so average them. Measure X and Y with calipers.</p>
+  <p><code>size = (piece + hole) / 2</code> &nbsp; Pass if 4.000 &plusmn; 0.010 in on both axes. &nbsp; <code>kerf = (hole &minus; piece) / 2</code></p>
+</main>
+
+<script>
+// Geometry in inches from the top-left of the bed, y down.
+// Must match make_test_card_dxf_v1.0.py; change both together.
+const GEOMETRY = {
+  cut:      { x: 0.25, y: 0.25, w: 4.0, h: 4.0 },
+  score:    { x1: 4.75, y1: 0.50, x2: 6.75, y2: 0.50 },
+  engrave:  { x: 4.75, y: 1.00, w: 0.5, h: 0.5 },
+  plate:    { x: 5.75, y: 1.00, w: 1.0, h: 1.0 },
+  hole:     { cx: 6.25, cy: 1.50, r: 0.25 },
+  label:    { x: 4.75, y: 2.75, size: 0.30, text: 'TEST v1' },
+};
+const ART = { w: 7.0, h: 4.5 };   // smallest bed that fits the card with margin
+const VERSION = '1.0';
+const KAPPA = 0.5522847498;       // cubic Bezier circle constant
+
+const $ = id => document.getElementById(id);
+const num = v => String(Math.round(v * 10000) / 10000);
+
+function settings() {
+  const bedSel = $('bed').value;
+  let w, h;
+  if (bedSel === 'custom') {
+    w = parseFloat($('cw').value);
+    h = parseFloat($('ch').value);
+  } else {
+    [w, h] = bedSel.split('x').map(Number);
+  }
+  const lw = parseFloat($('lw').value);
+  const ok = w >= ART.w && h >= ART.h && w <= 60 && h <= 60;
+  return { w, h, lw, ok };
+}
+
+function lineTag(lw) {
+  return ({ '0.001': '1mil', '0.0005': '0p5mil', '0.003': '3mil' })[String(lw)];
+}
+
+function fileBase(s) {
+  return `laser_test_card_${num(s.w)}x${num(s.h)}_${lineTag(s.lw)}`.replace(/\./g, 'p');
+}
+
+// ---------- SVG ----------
+function buildSvg(s, forScreen) {
+  const g = GEOMETRY, lw = num(s.lw);
+  const stroke = forScreen ? ' class="stroke"' : '';
+  const holePath =
+    `M${num(g.hole.cx + g.hole.r)} ${num(g.hole.cy)}` +
+    `A${num(g.hole.r)} ${num(g.hole.r)} 0 1 0 ${num(g.hole.cx - g.hole.r)} ${num(g.hole.cy)}` +
+    `A${num(g.hole.r)} ${num(g.hole.r)} 0 1 0 ${num(g.hole.cx + g.hole.r)} ${num(g.hole.cy)}Z`;
+  const platePath = `M${g.plate.x} ${g.plate.y}h${g.plate.w}v${g.plate.h}h${-g.plate.w}Z`;
+  const meta = forScreen ? '' :
+`<!--
+  file: ${fileBase(s)}_v${VERSION}.svg
+  version: ${VERSION}
+  author: Samuel Cao
+  created: 2026-10-30
+  description: Laser test card, ${num(s.w)} x ${num(s.h)} in page, ${lw} in lines, exact RGB. Made by laser_test_card_v${VERSION}.html.
+-->
+`;
+  return `<svg xmlns="http://www.w3.org/2000/svg"${forScreen ? ' id="sheet"' : ''} width="${num(s.w)}in" height="${num(s.h)}in" viewBox="0 0 ${num(s.w)} ${num(s.h)}">
+${meta}${forScreen ? `<rect class="screen-only" x="0" y="0" width="${num(s.w)}" height="${num(s.h)}" fill="#ffffff"/>\n` : ''}<rect${stroke} x="${g.cut.x}" y="${g.cut.y}" width="${g.cut.w}" height="${g.cut.h}" fill="none" stroke="#FF0000" stroke-width="${lw}"/>
+<line${stroke} x1="${g.score.x1}" y1="${g.score.y1}" x2="${g.score.x2}" y2="${g.score.y2}" stroke="#0000FF" stroke-width="${lw}"/>
+<rect x="${g.engrave.x}" y="${g.engrave.y}" width="${g.engrave.w}" height="${g.engrave.h}" fill="#000000"/>
+<path d="${platePath}${holePath}" fill="#000000" fill-rule="evenodd"/>
+<text x="${g.label.x}" y="${g.label.y}" font-family="Helvetica, Arial, sans-serif" font-size="${g.label.size}" fill="#000000">${g.label.text}</text>
+</svg>`;
+}
+
+// ---------- PDF (written byte by byte so colors and widths are exact) ----------
+function buildPdf(s) {
+  const g = GEOMETRY;
+  const H = s.h * 72;
+  const X = x => num(x * 72);
+  const Y = y => num(H - y * 72);
+  const P = v => num(v * 72);
+
+  const rect = r => `${X(r.x)} ${Y(r.y + r.h)} ${P(r.w)} ${P(r.h)} re`;
+  const cx = g.hole.cx * 72, cy = H - g.hole.cy * 72, r = g.hole.r * 72, k = KAPPA * r;
+  const circle = [
+    `${num(cx + r)} ${num(cy)} m`,
+    `${num(cx + r)} ${num(cy + k)} ${num(cx + k)} ${num(cy + r)} ${num(cx)} ${num(cy + r)} c`,
+    `${num(cx - k)} ${num(cy + r)} ${num(cx - r)} ${num(cy + k)} ${num(cx - r)} ${num(cy)} c`,
+    `${num(cx - r)} ${num(cy - k)} ${num(cx - k)} ${num(cy - r)} ${num(cx)} ${num(cy - r)} c`,
+    `${num(cx + k)} ${num(cy - r)} ${num(cx + r)} ${num(cy - k)} ${num(cx + r)} ${num(cy)} c`,
+    'h',
+  ].join('\n');
+
+  const content = [
+    'q',
+    '0 J 0 j',
+    `${P(s.lw)} w`,
+    '1 0 0 RG',
+    `${rect(g.cut)} S`,
+    '0 0 1 RG',
+    `${X(g.score.x1)} ${Y(g.score.y1)} m ${X(g.score.x2)} ${Y(g.score.y2)} l S`,
+    '0 0 0 rg',
+    `${rect(g.engrave)} f`,
+    rect(g.plate),
+    circle,
+    'f*',
+    'BT',
+    `/F1 ${P(g.label.size)} Tf`,
+    `${X(g.label.x)} ${Y(g.label.y)} Td`,
+    `(${g.label.text}) Tj`,
+    'ET',
+    'Q',
+  ].join('\n');
+
+  const name = `${fileBase(s)}_v${VERSION}.pdf`;
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${P(s.w)} ${num(H)}] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>`,
+    `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+    `<< /Title (${name}) /Author (Samuel Cao) /Subject (Laser test card v${VERSION}: ${num(s.w)} x ${num(s.h)} in page, ${num(s.lw)} in lines, DeviceRGB) /Creator (laser_test_card_v${VERSION}.html) >>`,
+  ];
+
+  let out = '%PDF-1.4\n%âãÏÓ\n' +
+    `% file: ${name}\n% version: ${VERSION}\n% author: Samuel Cao\n% created: 2026-10-30\n` +
+    `% description: Laser test card. Colors are DeviceRGB with no ICC profile; line width ${num(s.lw)} in = ${P(s.lw)} pt.\n`;
+  const offsets = [];
+  objects.forEach((body, i) => {
+    offsets.push(out.length);
+    out += `${i + 1} 0 obj\n${body}\nendobj\n`;
+  });
+  const xref = out.length;
+  out += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  offsets.forEach(o => { out += `${String(o).padStart(10, '0')} 00000 n \n`; });
+  out += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R /Info 6 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+
+  // Every character is below 256, so one character is one byte and the offsets above are byte offsets.
+  const bytes = new Uint8Array(out.length);
+  for (let i = 0; i < out.length; i++) bytes[i] = out.charCodeAt(i);
+  return { bytes, name };
+}
+
+// ---------- page ----------
+function save(data, type, name) {
+  const url = URL.createObjectURL(new Blob([data], { type }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function render() {
+  const s = settings();
+  $('custom').classList.toggle('on', $('bed').value === 'custom');
+  ['save-pdf', 'save-svg', 'print'].forEach(id => { $(id).disabled = !s.ok; });
+  $('error').classList.toggle('on', !s.ok);
+  $('error').textContent = s.ok ? '' :
+    `The page must be at least ${ART.w} x ${ART.h} in and at most 60 x 60 in.`;
+  if (!s.ok) return;
+
+  $('sheet-wrap').innerHTML = buildSvg(s, true);
+  $('page-size').textContent =
+    `@page { size: ${num(s.w)}in ${num(s.h)}in; margin: 0; }\n` +
+    `@media print { html, body { width: ${num(s.w)}in; height: ${num(s.h)}in; } #sheet { width: ${num(s.w)}in; height: ${num(s.h)}in; } }`;
+  $('readout').textContent =
+    `Page ${num(s.w)} x ${num(s.h)} in, art at top-left. Lines ${num(s.lw)} in (${num(s.lw * 72)} pt). ` +
+    `Files save as ${fileBase(s)}_v${VERSION}.pdf / .svg`;
+}
+
+['bed', 'cw', 'ch', 'lw'].forEach(id => $(id).addEventListener('input', render));
+$('save-pdf').addEventListener('click', () => {
+  const { bytes, name } = buildPdf(settings());
+  save(bytes, 'application/pdf', name);
+});
+$('save-svg').addEventListener('click', () => {
+  const s = settings();
+  save(buildSvg(s, false), 'image/svg+xml', `${fileBase(s)}_v${VERSION}.svg`);
+});
+$('print').addEventListener('click', () => window.print());
+render();
+</script>
+</body>
+</html>
+<!-- CHANGELOG
+  v1.0 (2026-10-30): Initial release. Bed size and line width pickers, PDF writer with exact DeviceRGB and 0.072 pt lines, SVG save, true-size Chrome print, Step 0 and Step 1 instructions.
+-->
