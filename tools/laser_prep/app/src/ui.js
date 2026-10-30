@@ -1,6 +1,6 @@
 /**
  * @file ui.js
- * @version 0.1
+ * @version 0.2
  * @author Samuel Cao
  * @created 2026-10-30
  * @lastUpdated 2026-10-30
@@ -10,7 +10,7 @@
 (function (LP) {
   'use strict';
 
-  LP.VERSION = '0.1';
+  LP.VERSION = '0.2';
   const $ = id => document.getElementById(id);
   const fmt = (v, d) => Number(v).toFixed(d === undefined ? 2 : d);
   const HEX = { red: '#FF0000', blue: '#0000FF', black: '#000000' };
@@ -365,4 +365,5 @@
 
 /** CHANGELOG
  * v0.1 (2026-10-30): Initial prototype. Load DXF or SVG, confirm units, bed and tolerance settings, click-to-color preview with selection tools and shortcuts, checks list, PDF/DXF/SVG save and true-size print.
+ * v0.2 (2026-10-30): Version bump with the writer changes.
  */

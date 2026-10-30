@@ -1,6 +1,6 @@
 /**
  * @file writers.js
- * @version 0.1
+ * @version 0.2
  * @author Samuel Cao
  * @created 2026-10-30
  * @lastUpdated 2026-10-30
@@ -112,7 +112,8 @@
     const content = ops.join('\n');
     const title = String(opts.title || 'laser job').replace(/[()\\]/g, '_');
     const objects = [
-      '<< /Type /Catalog /Pages 2 0 R >>',
+      // PrintScaling None asks Reader and browser PDF viewers to default to actual size, not fit to page.
+      '<< /Type /Catalog /Pages 2 0 R /ViewerPreferences << /PrintScaling /None >> >>',
       '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
       `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${num(opts.bed.w * 72)} ${num(H * 72)}] /Resources << >> /Contents 4 0 R >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
@@ -162,7 +163,11 @@
     const P = p => [p[0] - b[0] + m, p[1] - b[1] + m];
     const pl = plan(job, assign), out = [];
     const g = (code, val) => out.push(String(code), String(val));
-    g(0, 'SECTION'); g(2, 'HEADER'); g(9, '$ACADVER'); g(1, 'AC1009'); g(9, '$INSUNITS'); g(70, 1); g(0, 'ENDSEC');
+    // Real extents and limits, so an importer that scales or centers from the header sees the true size.
+    const hi = P([b[2], b[3]]);
+    g(0, 'SECTION'); g(2, 'HEADER'); g(9, '$ACADVER'); g(1, 'AC1009'); g(9, '$INSUNITS'); g(70, 1);
+    g(9, '$EXTMIN'); g(10, num(m)); g(20, num(m)); g(30, 0); g(9, '$EXTMAX'); g(10, num(hi[0])); g(20, num(hi[1])); g(30, 0);
+    g(9, '$LIMMIN'); g(10, 0); g(20, 0); g(9, '$LIMMAX'); g(10, num(hi[0] + m)); g(20, num(hi[1] + m)); g(0, 'ENDSEC');
     g(0, 'SECTION'); g(2, 'TABLES');
     g(0, 'TABLE'); g(2, 'LTYPE'); g(70, 1);
     g(0, 'LTYPE'); g(2, 'CONTINUOUS'); g(70, 0); g(3, 'Solid line'); g(72, 65); g(73, 0); g(40, '0.0');
@@ -207,4 +212,5 @@
 
 /** CHANGELOG
  * v0.1 (2026-10-30): Initial prototype. Layout from the bed's top-left, arcs as cubic Beziers, PDF with even-odd fills and per-color strokes, SVG, and R12 DXF with CUT/SCORE/ENGRAVE layers.
+ * v0.2 (2026-10-30): PDF catalog sets /PrintScaling /None; DXF header carries real extents and limits.
  */

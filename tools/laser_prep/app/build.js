@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const VERSION = '0.1';
+const VERSION = '0.2';
 const SRC = path.join(__dirname, 'src');
 const ORDER = ['geom.js', 'dxf_in.js', 'svg_in.js', 'writers.js', 'ui.js'];
 const today = new Date().toISOString().slice(0, 10);
@@ -37,6 +37,7 @@ const meta = `<!--
 
 const changelog = `<!-- CHANGELOG
   v0.1 (2026-10-30): First prototype, built from core design v1.1. 33/33 fixtures pass; PDF, SVG, and DXF output validated.
+  v0.2 (2026-10-30): PDF asks viewers not to scale (/PrintScaling /None); DXF header has real extents and limits.
 -->`;
 
 let html = fs.readFileSync(path.join(SRC, 'page.html'), 'utf8');

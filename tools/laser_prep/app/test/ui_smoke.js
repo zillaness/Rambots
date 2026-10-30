@@ -14,7 +14,7 @@ const path = require('path');
 const fs = require('fs');
 const { chromium } = require('playwright');
 
-const APP = path.join(__dirname, '..', 'laser_prep_v0.1.html');
+const APP = path.join(__dirname, '..', 'laser_prep_v0.2.html');
 const FIX = path.join(__dirname, '..', '..', 'fixtures');
 const CARD = path.join(__dirname, '..', '..', 'test_card');
 const out = process.argv[2];
@@ -60,7 +60,7 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
   const pdfPath = path.join(out, dl.suggestedFilename());
   await dl.saveAs(pdfPath);
   const pdf = fs.readFileSync(pdfPath, 'latin1');
-  check('PDF has even-odd fills, red and blue strokes', /f\*/.test(pdf) && /1 0 0 RG/.test(pdf) && /0 0 1 RG/.test(pdf) && /0\.072 w/.test(pdf), dl.suggestedFilename());
+  check('PDF has even-odd fills, red and blue strokes, no-scaling preference', /f\*/.test(pdf) && /1 0 0 RG/.test(pdf) && /0 0 1 RG/.test(pdf) && /0\.072 w/.test(pdf) && /\/PrintScaling \/None/.test(pdf), dl.suggestedFilename());
   const [dd] = await Promise.all([page.waitForEvent('download'), page.click('#save-dxf')]);
   await dd.saveAs(path.join(out, dd.suggestedFilename()));
   check('DXF warns that fills are left out', /left out/.test(await page.textContent('#out-status')));
@@ -82,7 +82,7 @@ const check = (name, ok, detail) => { results.push({ name, ok, detail }); consol
   // 4. Bend lines hidden, test card raw mm file.
   await page.setInputFiles('#file', path.join(FIX, 'f27_flat_pattern_layers_v1.0.dxf'));
   check('bend layers hidden', /bend or reference layers/.test(await page.textContent('#warns')));
-  await page.setInputFiles('#file', path.join(CARD, 'laser_test_card_raw_mm_v1.0.dxf'));
+  await page.setInputFiles('#file', path.join(CARD, 'laser_test_card_raw_mm_v1.1.dxf'));
   await page.click('#confirm-units');
   check('raw mm test card reads 6.50 x 4.00 in', /6\.50 x 4\.00 in/.test(await page.textContent('#units-status')));
   await page.screenshot({ path: path.join(out, 'app_rawmm.png') });

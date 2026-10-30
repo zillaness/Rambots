@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 0.1
+version: 0.2
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
@@ -8,11 +8,11 @@ description: How to use, build, and test the laser prep app prototype, and what 
 ai_update: Update last_updated and version. Keep the filename README.md. Append changelog at bottom.
 ---
 
-# Laser Prep app (prototype v0.1)
+# Laser Prep app (prototype v0.2)
 
 Replaces the CorelDraw step: open a Fusion or Onshape DXF (or an SVG), set what gets cut, scored, and engraved, and save a laser-ready PDF. One HTML file, works offline, nothing is uploaded.
 
-**Open:** download `laser_prep_v0.1.html` and open it in Chrome or Edge. (GitHub's normal file view shows source code; use the download button.)
+**Open:** download `laser_prep_v0.2.html` and open it in Chrome or Edge. (GitHub's normal file view shows source code; use the download button.)
 
 ## Using it
 
@@ -35,7 +35,7 @@ Output stays locked until units are confirmed, the part fits the bed with a 0.25
 | `src/svg_in.js` | SVG reader: all path commands, rect, circle, ellipse, line, polyline, polygon, transforms, viewBox and units |
 | `src/writers.js` | Layout from the bed's top-left; PDF (byte by byte, DeviceRGB, `0.072 w`, even-odd fills), SVG, R12 DXF |
 | `src/ui.js`, `src/page.html` | The page |
-| `build.js` | Inlines `src/` into `laser_prep_v0.1.html` |
+| `build.js` | Inlines `src/` into `laser_prep_v0.2.html` |
 
 Design: `../laser_prep_core_design_v1.1.md`. The source modules keep fixed names because the build and tests load them by name; each carries its version in its header.
 
@@ -63,7 +63,7 @@ node test/ui_smoke.js /tmp/laser_ui
 
 `validate_outputs.py` needs pypdf, Pillow, ezdxf, and `pdftoppm` (Poppler). `ui_smoke.js` needs Playwright with Chromium. This folder is CommonJS (`package.json`) because the repo root is an ES module package.
 
-Results at v0.1: fixtures 33/33, written outputs 33/33 valid (strict PDF parse, only the four laser colors in a render, drawn size and position, DXF audit and size), browser checks 17/17.
+Results at v0.2: fixtures 33/33, written outputs 33/33 valid (strict PDF parse, only the four laser colors in a render, drawn size and position, DXF audit and size), browser checks 17/17.
 
 ## Not done or not known yet
 
@@ -78,3 +78,4 @@ Results at v0.1: fixtures 33/33, written outputs 33/33 valid (strict PDF parse, 
 ## CHANGELOG
 
 - v0.1 (2026-10-30): First prototype and README.
+- v0.2 (2026-10-30): PDF asks viewers not to scale; DXF header extents and limits; tests point at test card v1.2 files.
