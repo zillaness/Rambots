@@ -1,6 +1,6 @@
 ---
-file: prd_v1_2_proposed_changes_v1.0.md
-version: 1.0
+file: prd_v1_2_proposed_changes_v1.1.md
+version: 1.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
@@ -31,7 +31,7 @@ Sources: `research/uls_direct_import_research_v1.0.md` (ULS), `research/cad_dxf_
 | 6 | 4, req 2 | Join tolerance 0.001 in default, adjustable to 0.01 in, applied after units are confirmed. Report "joined N pairs, largest gap X". | CAD (no measured gap data; coarse auto-close mis-joins) |
 | 7 | 4, req 3 | The units header is a default, never a decision. Always show the overall size and require confirmation. Handle in, ft, mm, cm, m. Suggest factors (10, 25.4, 1000) when the part does not fit the bed as read. | CAD: Fusion File > Export writes cm; Onshape reportedly writes an inches header over mm coordinates and meters for drawings. |
 | 8 | 4, new must-have | Geometry on bend, extent, construction, or center layers defaults to none and is hidden behind a toggle. | CAD: flat patterns put bend lines on their own layers; cutting them slices the part along its folds. |
-| 9 | 4, should-have | Test card link becomes `laser_test_card_v1.1.html`. | The card moved to v1.1. |
+| 9 | 4, should-have | Test card link becomes `laser_test_card_v1.2.html`. | The card moved to v1.2 (research and independent review fixes). |
 
 ## Test plan (Section 6)
 
@@ -40,7 +40,7 @@ Sources: `research/uls_direct_import_research_v1.0.md` (ULS), `research/cad_dxf_
 | 10 | Step 0: check for the Direct Import Package first; screenshot every import dialog; recolor test on the raw DXF; do not judge "black = raster" on DXFs. | ULS |
 | 11 | Step 0: add the R12, curves, and color-code probes (already in the test card). | ULS: DXF color handling and entity support are undocumented. |
 | 12 | Step 1 order: Reader, then the saved PDF in the browser's viewer, then the Chrome page print. Record driver DPI on every run. | Print |
-| 13 | Test card spec: add the probes, the zero-width PDF line option, and the 4.000 in square already listed. | Test card v1.1 |
+| 13 | Test card spec: add the plain, R12, curves, and color-code probes, the zero-width PDF line option, the no-scaling PDF preference, and per-route measuring on fresh scrap. File list in Section 6 is out of date (it names v1.0 files). | Test card v1.2 |
 | 14 | Ask for real exports from team parts during the visit (Fusion sketch and flat pattern, Onshape sketch or face). | CAD: no real samples were found; they outrank every synthetic fixture. |
 
 ## Issues table (Section 7)
@@ -65,8 +65,11 @@ Sources: `research/uls_direct_import_research_v1.0.md` (ULS), `research/cad_dxf_
 |---|---|
 | 26 | Section 10: add a link to `laser_prep_core_design_v1.1.md` (effort 25 to 39 hours for the HTML routes) and `fixtures/` (33 fixtures with an oracle). |
 | 27 | Sources: add the three research reports. |
+| 29 | Status line and Section 10: a working prototype exists (`app/laser_prep_v0.2.html`, built from the core design, tested against all 33 fixtures and in a browser). It covers Options E1, E2, and A in one page (Save PDF, Print, Save DXF). The visit decides which button is the main path, not whether to build. |
+| 30 | Section 9: record that Sam set a goal on 2026-10-30 to build a functional prototype without waiting for approval, which superseded "approve the architecture, then build" for the prototype only. |
 | 28 | Network note: ulsinc.com and several vendor and docs sites are outside this session's allowlist. Allowing them would let the "Reported" and "Verified from excerpt" findings be checked against full pages. |
 
 ## CHANGELOG
 
 - v1.0 (2026-10-30): Initial list of 28 proposed changes from the research reports and test card v1.1.
+- v1.1 (2026-10-30): File names updated to test card v1.2; items 29 (prototype exists) and 30 (prototype goal) added.
