@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  file: laser_test_card_v1.0.html
-  version: 1.0
+  file: laser_test_card_v1.1.html
+  version: 1.1
   author: Samuel Cao
   created: 2026-10-30
   last_updated: 2026-10-30
@@ -74,7 +74,7 @@
 <body>
 <main class="screen-only">
   <header>
-    <h1>Laser test card v1.0</h1>
+    <h1>Laser test card v1.1</h1>
     <p class="sub">Step 0 and Step 1 of the laser prep PRD. Tests whether a saved file imports into the ULS Control Panel (UCP), and whether Adobe Reader or Chrome can print to the ULS driver without breaking lines, colors, or scale.</p>
   </header>
 
@@ -99,6 +99,7 @@
         <option value="0.001" selected>0.001 in (PRD spec)</option>
         <option value="0.0005">0.0005 in (thinner)</option>
         <option value="0.003">0.003 in (thicker)</option>
+        <option value="0">0 (PDF hairline only)</option>
       </select>
     </label>
     <div class="buttons">
@@ -125,16 +126,22 @@
   </table>
 
   <h2>Step 0: import into UCP (no printing)</h2>
+  <p>The README in this folder has the full checklist and the tables to fill in. Short version:</p>
   <ol>
-    <li>Click <b>Save PDF</b>. In UCP, look for Import or Open and import the PDF.</li>
-    <li>Import <code>laser_test_card_colored_v1.0.dxf</code> (colors already set, inches).</li>
-    <li>Import <code>laser_test_card_raw_mm_v1.0.dxf</code>. It is built like a Fusion or Onshape export: millimeters, no colors, loose lines. Check whether UCP reads it at 4.000 in (not 101.6 in), and whether UCP lets you assign red, blue, and black to it.</li>
-    <li>For each file, note: does the cut square show as a red vector, the score line as blue, and the black shapes as raster? Is the size right?</li>
+    <li>In UCP, open the <b>System</b> tab and look for <b>Direct Import Package</b>. Note whether it is there and on. Ask a mentor before turning on any trial.</li>
+    <li>Click <b>Save PDF</b> and import the PDF. Check red cuts, blue scores, black rasters, and the size.</li>
+    <li>Import the DXFs: <code>colored</code>, <code>colored_r12</code>, <code>raw_mm</code>, <code>curves</code>, <code>color_codes</code>. ULS says DXF import is vectors only, so black fills in a DXF are not expected to engrave. Judge raster on the PDF.</li>
+    <li>On the raw DXF: did UCP ask for units, and is the square 4.000 in? Can you change a line's color inside UCP?</li>
+    <li>Screenshot every import dialog.</li>
   </ol>
 
   <h2>Step 1: print to the ULS driver</h2>
-  <p><b>Adobe Reader</b> (only if it is installed): open the saved PDF, Print, pick the ULS printer. Page Sizing: <b>Actual size</b>. <b>Print in grayscale</b> must be off. Check the preview shows the art in the top-left corner.</p>
-  <p><b>Chrome or Edge</b>: click <b>Print (Chrome test)</b>. Destination: the ULS printer. Paper size: the bed size above. Margins: <b>None</b>. Scale: <b>Default</b> (100). Headers and footers: off.</p>
+  <p>Run these in order and write down the printer resolution (DPI) the ULS driver is set to each time. Lines thinner than one printer pixel print as one pixel.</p>
+  <ol>
+    <li><b>Adobe Reader</b> (if installed): open the saved PDF, Print, pick the ULS printer. Page Sizing: <b>Actual size</b>, checked every time, because Reader remembers the last setting. <b>Print in grayscale</b> off, <b>Print as image</b> off. The preview shows the art in the top-left corner.</li>
+    <li><b>Saved PDF in Chrome or Edge</b>: open the saved PDF in the browser and print it to the ULS printer. If a <b>Print as image</b> box shows, leave it off.</li>
+    <li><b>Chrome or Edge page print</b>: click <b>Print (Chrome test)</b>. Destination: the ULS printer. Paper size: the bed size above. Margins: <b>None</b>. Scale: <b>Default</b> (100). Headers and footers: off. Color, not black and white.</li>
+  </ol>
   <p>If the ULS power and speed window can only be reached from the Windows print dialog, write that down. It changes the design.</p>
 
   <h2>Measure</h2>
@@ -154,7 +161,7 @@ const GEOMETRY = {
   label:    { x: 4.75, y: 2.75, size: 0.30, text: 'TEST v1' },
 };
 const ART = { w: 7.0, h: 4.5 };   // smallest bed that fits the card with margin
-const VERSION = '1.0';
+const VERSION = '1.1';
 const KAPPA = 0.5522847498;       // cubic Bezier circle constant
 
 const $ = id => document.getElementById(id);
@@ -175,7 +182,7 @@ function settings() {
 }
 
 function lineTag(lw) {
-  return ({ '0.001': '1mil', '0.0005': '0p5mil', '0.003': '3mil' })[String(lw)];
+  return ({ '0.001': '1mil', '0.0005': '0p5mil', '0.003': '3mil', '0': 'zero' })[String(lw)];
 }
 
 function fileBase(s) {
@@ -184,7 +191,8 @@ function fileBase(s) {
 
 // ---------- SVG ----------
 function buildSvg(s, forScreen) {
-  const g = GEOMETRY, lw = num(s.lw);
+  // SVG treats a 0 width as no line at all, so the PDF-only zero option draws 0.001 in here.
+  const g = GEOMETRY, lw = num(s.lw > 0 ? s.lw : 0.001);
   const stroke = forScreen ? ' class="stroke"' : '';
   const holePath =
     `M${num(g.hole.cx + g.hole.r)} ${num(g.hole.cy)}` +
@@ -304,7 +312,8 @@ function render() {
     `@page { size: ${num(s.w)}in ${num(s.h)}in; margin: 0; }\n` +
     `@media print { html, body { width: ${num(s.w)}in; height: ${num(s.h)}in; } #sheet { width: ${num(s.w)}in; height: ${num(s.h)}in; } }`;
   $('readout').textContent =
-    `Page ${num(s.w)} x ${num(s.h)} in, art at top-left. Lines ${num(s.lw)} in (${num(s.lw * 72)} pt). ` +
+    `Page ${num(s.w)} x ${num(s.h)} in, art at top-left. ` +
+    (s.lw > 0 ? `Lines ${num(s.lw)} in (${num(s.lw * 72)} pt). ` : 'PDF lines 0 pt (thinnest the printer draws); screen, SVG, and Chrome print use 0.001 in. ') +
     `Files save as ${fileBase(s)}_v${VERSION}.pdf / .svg`;
 }
 
@@ -324,4 +333,5 @@ render();
 </html>
 <!-- CHANGELOG
   v1.0 (2026-10-30): Initial release. Bed size and line width pickers, PDF writer with exact DeviceRGB and 0.072 pt lines, SVG save, true-size Chrome print, Step 0 and Step 1 instructions.
+  v1.1 (2026-10-30): Step 0 instructions updated from the ULS import research: Direct Import Package check, DXF is vectors only, new probe files, recolor check, screenshots. Saved files now tagged v1.1. Step 1 reordered from the print path research (Reader, saved PDF in the browser viewer, then page print), driver DPI recorded, Reader traps listed, and a PDF-only zero-width line option.
 -->
