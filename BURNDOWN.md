@@ -32,7 +32,9 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:08 ✅ R12 and curves DXF probes for the test card, committed 5660df1
 - 10:10 ✅ core technical design draft, committed 98a09dd
 - 10:12 ✅ DXF fixture library (19 fixtures, expected results, self-check), committed d2b59fe
-- 10:12 ▶ NEXT: review research reports as they land, commit each; then README v1.1 for the test card
+- 10:14 ✅ fixture oracle (19/19 agree after fixing f18 expectation, v1.0.1), committed 3907e1c
+- 10:14 ✅ ULS direct import research reviewed, committed dbf2a27
+- 10:14 ▶ NEXT: color-code DXF probe (ACI 1/5/7, layer color, true color); test card README and HTML v1.1 with research findings
 
 ## Handoff
 
