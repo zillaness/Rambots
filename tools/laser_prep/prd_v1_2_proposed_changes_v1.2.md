@@ -1,6 +1,6 @@
 ---
-file: prd_v1_2_proposed_changes_v1.1.md
-version: 1.1
+file: prd_v1_2_proposed_changes_v1.2.md
+version: 1.2
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Proposed changes for PRD v1.2
 
-PRD v1.1 is not approved yet, so these are listed here instead of edited in. Approve v1.1 first, then accept, reject, or change each row below. Nothing here changes the architecture decision, which still waits on the laser PC visit.
+**Status: applied.** Sam approved PRD v1.1 and accepted all 30 changes on 2026-10-30; they are folded into `laser_prep_app_prd_v1.2.md`. This list is kept as the record of what changed and why.
 
 Sources: `research/uls_direct_import_research_v1.0.md` (ULS), `research/cad_dxf_export_research_v1.0.md` (CAD), `research/print_path_research_v1.0.md` (Print). Evidence labels in those reports matter: most findings come from search excerpts because several vendor sites are outside this session's network allowlist.
 
@@ -73,3 +73,4 @@ Sources: `research/uls_direct_import_research_v1.0.md` (ULS), `research/cad_dxf_
 
 - v1.0 (2026-10-30): Initial list of 28 proposed changes from the research reports and test card v1.1.
 - v1.1 (2026-10-30): File names updated to test card v1.2; items 29 (prototype exists) and 30 (prototype goal) added, in order after 28.
+- v1.2 (2026-10-30): Marked applied; all 30 changes are in PRD v1.2.

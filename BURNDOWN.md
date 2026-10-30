@@ -48,7 +48,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:40 ✅ test card v1.2 from the independent review (scaling guard, plain DXF, real extents, per-route measuring), committed 62a7e9a
 - 10:42 ✅ app v0.2 committed 39ee9fb; proposed PRD changes v1.1 committed 783f3c5
 - 10:42 ✅ handoff rewritten; goal met: functional prototype tested end to end
-- 10:42 ▶ NEXT: Sam: try the prototype on a real part; laser PC visit with test card v1.2
+- 11:07 ✅ PRD v1.2 drafted after Sam's interview: v1.1 approved, 30 changes applied, Phase 2 section (9 features) added; v1.0 and v1.1 retired
+- 11:07 ▶ NEXT: Sam reviews PRD v1.2 Section 11; laser PC visit with test card v1.2
 
 ## Handoff
 
@@ -72,7 +73,7 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 
 1. Try the prototype on a real team part: open `app/laser_prep_v0.2.html`, load a Fusion or Onshape DXF, color it, save the PDF.
 2. Laser PC visit with `test_card/README.md`; bring back the tables, screenshots, a photo of each route's cut piece, and real CAD exports. The visit decides which output button is the main path.
-3. Approve, edit, or reject PRD v1.1 (`laser_prep_app_prd_v1.1.md`; v1.0 is still beside it), then the 30 proposed v1.2 changes.
+3. Done 2026-10-30: v1.1 approved and the 30 changes applied in `laser_prep_app_prd_v1.2.md`, which also adds Phase 2 (Section 11). Review v1.2, especially Section 11.
 4. Optional: allow ulsinc.com and the other hosts named in the research reports in this environment's network settings, so excerpt-based findings can be checked against full pages.
 
 **Known gaps in the prototype:** never run against UCP or the ULS driver; no real CAD exports tested; changing units or join tolerance resets colors; text is skipped; overlap check skipped above 4000 lines. Full list in `app/README.md`.
