@@ -65,11 +65,11 @@ Sources: `research/uls_direct_import_research_v1.0.md` (ULS), `research/cad_dxf_
 |---|---|
 | 26 | Section 10: add a link to `laser_prep_core_design_v1.1.md` (effort 25 to 39 hours for the HTML routes) and `fixtures/` (33 fixtures with an oracle). |
 | 27 | Sources: add the three research reports. |
+| 28 | Network note: ulsinc.com and several vendor and docs sites are outside this session's allowlist. Allowing them would let the "Reported" and "Verified from excerpt" findings be checked against full pages. |
 | 29 | Status line and Section 10: a working prototype exists (`app/laser_prep_v0.2.html`, built from the core design, tested against all 33 fixtures and in a browser). It covers Options E1, E2, and A in one page (Save PDF, Print, Save DXF). The visit decides which button is the main path, not whether to build. |
 | 30 | Section 9: record that Sam set a goal on 2026-10-30 to build a functional prototype without waiting for approval, which superseded "approve the architecture, then build" for the prototype only. |
-| 28 | Network note: ulsinc.com and several vendor and docs sites are outside this session's allowlist. Allowing them would let the "Reported" and "Verified from excerpt" findings be checked against full pages. |
 
 ## CHANGELOG
 
 - v1.0 (2026-10-30): Initial list of 28 proposed changes from the research reports and test card v1.1.
-- v1.1 (2026-10-30): File names updated to test card v1.2; items 29 (prototype exists) and 30 (prototype goal) added.
+- v1.1 (2026-10-30): File names updated to test card v1.2; items 29 (prototype exists) and 30 (prototype goal) added, in order after 28.
