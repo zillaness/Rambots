@@ -1,0 +1,341 @@
+{
+  "_metadata": {
+    "file": "expected_results_v1.0.json",
+    "version": "1.0",
+    "author": "Samuel Cao",
+    "created": "2026-10-30",
+    "last_updated": "2026-10-30",
+    "description": "Hand-written expected results for each DXF fixture; sizes are overall width x height in inches.",
+    "ai_update": "Regenerate with make_fixtures; update last_updated and version. Append to _changelog array."
+  },
+  "_changelog": [
+    {
+      "version": "1.0",
+      "date": "2026-10-30",
+      "note": "Initial release, 19 fixtures."
+    }
+  ],
+  "defaults": {
+    "joinTolerance": 0.001,
+    "almostClosedMax": 0.01,
+    "omittedCountsMeanZero": [
+      "branchPoints",
+      "duplicatesRemoved",
+      "overlapsReported",
+      "almostClosed",
+      "textSkipped"
+    ]
+  },
+  "fixtures": [
+    {
+      "file": "f01_lines_square_exact_v1.0.dxf",
+      "description": "Four LINEs meeting exactly at the corners.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f02_lines_square_gap_tiny_v1.0.dxf",
+      "description": "Four LINEs with 1e-6 in gaps at every corner (floating point noise). Must join.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f03_lines_square_gap_near_v1.0.dxf",
+      "description": "Square with one 0.005 in gap: past the join tolerance, inside the almost-closed range.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 0,
+      "openChains": 1,
+      "almostClosed": 1,
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f04_open_contour_v1.0.dxf",
+      "description": "Three sides of a square. Open chain; a red cut here should warn.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 0,
+      "openChains": 1,
+      "almostClosed": 0,
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f05_branch_point_v1.0.dxf",
+      "description": "Square whose bottom side is split at its midpoint, with a stub line rising from that point. Degree-3 node.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 0,
+      "openChains": 2,
+      "branchPoints": 1,
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f06_duplicate_line_v1.0.dxf",
+      "description": "Closed LWPOLYLINE square plus a reversed LINE exactly on its top side.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "duplicatesRemoved": 1,
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f07_partial_overlap_v1.0.dxf",
+      "description": "Square plus a LINE lying on the bottom side from x=0.5 to 1.5. Reported, not fixed.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 1,
+      "overlapsReported": 1,
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f08_nested_plate_v1.0.dxf",
+      "description": "6 x 4 plate, two round holes, a pocket, and an island inside the pocket.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 5,
+      "openChains": 0,
+      "depths": [
+        0,
+        1,
+        1,
+        1,
+        2
+      ],
+      "size": [
+        6,
+        4
+      ]
+    },
+    {
+      "file": "f09_bulge_rounded_rect_v1.0.dxf",
+      "description": "LWPOLYLINE 3 x 2 rectangle with 0.5 in corners made from bulges.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        3,
+        2
+      ]
+    },
+    {
+      "file": "f10_slot_lines_arcs_v1.0.dxf",
+      "description": "2 x 0.5 slot from two LINEs and two ARCs. Joining must mix lines and arcs.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        0.5
+      ]
+    },
+    {
+      "file": "f11_mirrored_arc_v1.0.dxf",
+      "description": "Half-disk: an ARC with extrusion (0,0,-1) closed by a LINE in world coordinates. Ignoring the extrusion leaves it open.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        1
+      ]
+    },
+    {
+      "file": "f12_spline_closed_v1.0.dxf",
+      "description": "Cubic SPLINE (control points and knots) through five points, closed by a LINE.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.01,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        0.767
+      ]
+    },
+    {
+      "file": "f13_ellipse_v1.0.dxf",
+      "description": "Full ELLIPSE, 3 x 1.5, major axis rotated 0 degrees.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        3,
+        1.5
+      ]
+    },
+    {
+      "file": "f14_nested_blocks_v1.0.dxf",
+      "description": "Block PANEL holds a 1 in square and two copies of block HOLE (r 0.125). PANEL inserted plain and at 2x scale rotated 90.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 6,
+      "openChains": 0,
+      "depths": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "size": [
+        4,
+        2
+      ]
+    },
+    {
+      "file": "f15_mm_units_v1.0.dxf",
+      "description": "50 x 30 mm rectangle with $INSUNITS = 4. Size in inches is 1.9685 x 1.1811.",
+      "dxfVersion": "AC1015",
+      "units": "mm",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        1.9685,
+        1.1811
+      ]
+    },
+    {
+      "file": "f16_no_units_v1.0.dxf",
+      "description": "R12 file (no $INSUNITS). 4 x 3 rectangle. The app must ask; size shown is 4 x 3 if inches.",
+      "dxfVersion": "AC1009",
+      "units": null,
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "unitsMissing": true,
+      "size": [
+        4,
+        3
+      ]
+    },
+    {
+      "file": "f17_text_skipped_v1.0.dxf",
+      "description": "Rectangle plus one TEXT and one MTEXT. Text is skipped with a count of 2.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "textSkipped": 2,
+      "size": [
+        3,
+        1
+      ]
+    },
+    {
+      "file": "f18_r12_bulge_polyline_v1.0.dxf",
+      "description": "R12 POLYLINE with VERTEX bulges: 2 x 1 obround (full round ends).",
+      "dxfVersion": "AC1009",
+      "units": null,
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        1
+      ]
+    },
+    {
+      "file": "f19_minsert_array_v1.0.dxf",
+      "description": "MINSERT: one 0.5 in circle block in a 3 column x 2 row array at 1 in spacing.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 6,
+      "openChains": 0,
+      "depths": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        2.5,
+        1.5
+      ]
+    }
+  ]
+}
