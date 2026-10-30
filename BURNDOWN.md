@@ -44,7 +44,9 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:26 ✅ draft handoff written
 - 10:26 ⚑ SCOPE CHANGE: Sam set the goal "functional prototype without asking me". Building the app is now authorized (prototype v0.1, HTML route, per core design v1.1).
 - 10:37 ✅ prototype v0.1 working: app/laser_prep_v0.1.html; fixtures 33/33, outputs 33/33 valid, browser 17/17; committed 272d082
-- 10:37 ▶ NEXT: app README; fix test card issues from the independent review; final handoff
+- 10:40 ✅ app README committed 91f0e63
+- 10:40 ✅ test card v1.2 from the independent review (scaling guard, plain DXF, real extents, per-route measuring), committed 62a7e9a
+- 10:40 ▶ NEXT: app v0.2 (PrintScaling None and real DXF extents in app output, keep colors across bed changes already), then final handoff
 
 ## Handoff
 
