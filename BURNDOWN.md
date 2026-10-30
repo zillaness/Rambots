@@ -11,7 +11,7 @@ ai_update: Append ledger lines as units finish; keep the NEXT line current; fill
 # Burndown: 2026-10-30 (reset: not given; weekly usage 76% at start)
 
 Scope: laser prep project only (`tools/laser_prep/`). Two other burndown tasks run elsewhere, so this one stays on this branch.
-Not in scope tonight: building the app (PRD v1.1 is not approved; the route depends on the laser PC visit). Nothing outward-facing.
+Not in scope at start: building the app. Changed later in the night: Sam set a goal to build a functional prototype (see ledger). Nothing outward-facing.
 Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 
 ## Queue (ranked by value per token)
@@ -24,6 +24,7 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 6. Core technical design doc (shared by Options A, E1, E2)
 7. DXF fixture library for future app tests (synthetic CAD-like edge cases with expected results)
 8. Handoff
+9. Functional prototype (added by Sam's goal): app/src modules, build to one offline HTML, fixture test runner, browser smoke test
 
 ## Ledger
 
@@ -40,7 +41,9 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:18 ✅ core design v1.1 (research folded in), committed d1fe682
 - 10:21 ✅ fixture library v1.1 (33 fixtures, oracle 33/33), committed df2e7b6
 - 10:22 ✅ proposed PRD v1.2 change list (28 items), committed e3b944c
-- 10:22 ▶ NEXT: act on the independent test card review when it lands; then handoff
+- 10:26 ✅ draft handoff written
+- 10:26 ⚑ SCOPE CHANGE: Sam set the goal "functional prototype without asking me". Building the app is now authorized (prototype v0.1, HTML route, per core design v1.1).
+- 10:26 ▶ NEXT: app/src/geom.js (segments, joining, nesting, units suggestions), then dxf_in.js, writers.js, svg_in.js, ui.js, build, fixture tests, browser smoke test
 
 ## Handoff
 
