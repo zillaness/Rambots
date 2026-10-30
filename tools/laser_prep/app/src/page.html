@@ -1,0 +1,189 @@
+<!doctype html>
+<!--META-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laser Prep</title>
+<style>
+  :root {
+    --ink: #1d1d1f; --muted: #5f6368; --line: #d6d9de; --panel: #f6f7f9; --bg: #eceef1;
+    --brand: #A31F36; --accent: #F4A81C; --warn-bg: #fff4e0; --warn-ink: #7a4a00; --err-bg: #fde8ea; --err-ink: #8a1020;
+    --ok-bg: #e8f5ec; --ok-ink: #1d6b36;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--ink);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); }
+  header.top { display: flex; align-items: baseline; gap: 12px; padding: 10px 16px; background: #fff; border-top: 5px solid var(--brand); border-bottom: 1px solid var(--line); }
+  header.top h1 { font-size: 18px; margin: 0; }
+  header.top .sub { color: var(--muted); font-size: 13px; }
+  .app { display: grid; grid-template-columns: 360px 1fr; gap: 0; min-height: calc(100vh - 50px); }
+  aside { background: #fff; border-right: 1px solid var(--line); padding: 12px 14px 40px; overflow-y: auto; max-height: calc(100vh - 50px); }
+  section.stage { padding: 14px; overflow: auto; }
+  .step { border-bottom: 1px solid var(--line); padding: 10px 0 12px; }
+  .step:last-child { border-bottom: 0; }
+  .step h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+  .step.locked { opacity: .45; pointer-events: none; }
+  p, li { font-size: 13.5px; line-height: 1.45; }
+  .small { font-size: 12.5px; color: var(--muted); }
+  #drop { border: 2px dashed var(--line); border-radius: 8px; padding: 14px; text-align: center; cursor: pointer; background: var(--panel); }
+  #drop.over { border-color: var(--ink); }
+  #drop b { display: block; font-size: 14px; margin-bottom: 4px; }
+  label.row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; padding: 3px 0; }
+  select, input[type=number] { font: inherit; font-size: 13.5px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  input[type=number] { width: 80px; }
+  button { font: inherit; font-size: 13.5px; font-weight: 600; padding: 7px 11px; border-radius: 6px; border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--ink); color: #fff; }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  .btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .units { display: grid; gap: 2px; margin: 6px 0; }
+  .units label { display: flex; justify-content: space-between; gap: 8px; padding: 5px 8px; border-radius: 6px; font-size: 13.5px; cursor: pointer; }
+  .units label:hover { background: var(--panel); }
+  .units .fit { color: var(--ok-ink); font-size: 12px; }
+  .units .nofit { color: var(--err-ink); font-size: 12px; }
+  .palette { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .palette button { display: flex; align-items: center; gap: 8px; justify-content: flex-start; }
+  .sw { width: 14px; height: 14px; border-radius: 3px; display: inline-block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); }
+  .status { font-size: 13px; padding: 7px 9px; border-radius: 6px; margin-top: 6px; }
+  .status.ok { background: var(--ok-bg); color: var(--ok-ink); }
+  .status.warn { background: var(--warn-bg); color: var(--warn-ink); }
+  .status.err { background: var(--err-bg); color: var(--err-ink); }
+  ul.warns { list-style: none; padding: 0; margin: 0; display: grid; gap: 5px; }
+  ul.warns li { padding: 6px 8px; border-radius: 6px; font-size: 13px; }
+  ul.warns li.err { background: var(--err-bg); color: var(--err-ink); }
+  ul.warns li.warn { background: var(--warn-bg); color: var(--warn-ink); }
+  ul.warns li.info { background: var(--panel); color: var(--muted); }
+  ul.warns button { font-size: 12px; padding: 3px 7px; margin-left: 4px; }
+  .counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; margin: 6px 0; }
+  .counts div { background: var(--panel); border-radius: 6px; padding: 6px 2px; font-size: 11.5px; color: var(--muted); }
+  .counts b { display: block; font-size: 17px; color: var(--ink); }
+  #preview { width: 100%; height: auto; display: block; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.06); user-select: none; }
+  #preview .hit { cursor: pointer; }
+  #empty { color: var(--muted); padding: 60px 20px; text-align: center; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+  kbd { font-family: Consolas, monospace; font-size: 11.5px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; background: #fff; }
+  #print-sheet { display: none; }
+  @media (max-width: 860px) { .app { grid-template-columns: 1fr; } aside { max-height: none; border-right: 0; } }
+  @media print {
+    header.top, .app { display: none !important; }
+    html, body { margin: 0; padding: 0; background: none; overflow: hidden; }
+    #print-sheet { display: block; }
+    #print-sheet svg { display: block; }
+  }
+</style>
+<style id="page-size"></style>
+</head>
+<body>
+<header class="top">
+  <h1>Laser Prep</h1>
+  <span class="sub">Rambots · prototype v<span id="ver"></span> · DXF or SVG in, laser-ready PDF out</span>
+</header>
+<div class="app">
+  <aside>
+    <div class="step" id="step-file">
+      <h2>1 · File</h2>
+      <div id="drop" tabindex="0" role="button" aria-label="Choose a DXF or SVG file">
+        <b>Drop a DXF or SVG here</b>
+        <span class="small">or click to choose. Nothing leaves this computer.</span>
+      </div>
+      <input id="file" type="file" accept=".dxf,.svg" hidden>
+      <div id="file-status"></div>
+    </div>
+
+    <div class="step locked" id="step-units">
+      <h2>2 · Units (confirm every file)</h2>
+      <p class="small" id="units-note"></p>
+      <div class="units" id="units"></div>
+      <button class="primary" id="confirm-units">Confirm units</button>
+      <div id="units-status"></div>
+    </div>
+
+    <div class="step locked" id="step-setup">
+      <h2>3 · Bed and lines</h2>
+      <label class="row">Bed
+        <select id="bed">
+          <option value="16x12">16 x 12 in</option>
+          <option value="18x12">18 x 12 in</option>
+          <option value="24x12" selected>24 x 12 in</option>
+          <option value="24x18">24 x 18 in</option>
+          <option value="32x18">32 x 18 in</option>
+          <option value="36x24">36 x 24 in</option>
+          <option value="custom">Custom</option>
+        </select>
+        <span id="custom-bed" hidden><input id="bw" type="number" min="4" max="60" step="0.01" value="24"> x <input id="bh" type="number" min="4" max="60" step="0.01" value="12"></span>
+      </label>
+      <label class="row">Line width
+        <select id="lw">
+          <option value="0.001" selected>0.001 in (hairline)</option>
+          <option value="0.0005">0.0005 in</option>
+          <option value="0.003">0.003 in</option>
+          <option value="0">0 (PDF thinnest)</option>
+        </select>
+      </label>
+      <label class="row">Join gaps up to <input id="tol" type="number" min="0.0001" max="0.01" step="0.0005" value="0.001"> in</label>
+      <p class="small" id="join-note"></p>
+    </div>
+
+    <div class="step locked" id="step-colors">
+      <h2>4 · Colors</h2>
+      <p class="small">Click a line to pick its <b>outline</b>, or click inside a shape to pick its <b>inside</b>. <kbd>Shift</kbd>-click adds to the selection.</p>
+      <div class="palette">
+        <button data-color="red"><span class="sw" style="background:#FF0000"></span>Cut <kbd>R</kbd></button>
+        <button data-color="blue"><span class="sw" style="background:#0000FF"></span>Score <kbd>B</kbd></button>
+        <button data-color="black"><span class="sw" style="background:#000"></span>Engrave <kbd>K</kbd></button>
+        <button data-color="none"><span class="sw" style="background:#fff"></span>None <kbd>N</kbd></button>
+      </div>
+      <div class="btns">
+        <button id="sel-outlines">All outlines <kbd>A</kbd></button>
+        <button id="sel-parts">Insides of parts</button>
+        <select id="sel-color" aria-label="Select by color">
+          <option value="">Select by color…</option>
+          <option value="red">Cut lines</option>
+          <option value="blue">Score lines</option>
+          <option value="black">Engrave (lines and fills)</option>
+          <option value="none">Unassigned lines</option>
+        </select>
+        <button id="sel-clear">Clear <kbd>Esc</kbd></button>
+      </div>
+      <p class="small" id="sel-info">Nothing selected.</p>
+    </div>
+
+    <div class="step locked" id="step-output">
+      <h2>5 · Output</h2>
+      <div class="counts">
+        <div><b id="c-cut">0</b>cut</div><div><b id="c-score">0</b>score</div><div><b id="c-vec">0</b>vector engrave</div><div><b id="c-fill">0</b>raster fills</div>
+      </div>
+      <div class="btns">
+        <button class="primary" id="save-pdf">Save PDF</button>
+        <button id="print">Print</button>
+        <button id="save-dxf">Save DXF</button>
+        <button id="save-svg">Save SVG</button>
+      </div>
+      <p class="small">PDF is for UCP import or printing from Adobe Reader at Actual size. DXF is vectors only, so black insides are left out. Print uses this browser; set margins to None and scale to Default.</p>
+      <div id="out-status"></div>
+    </div>
+
+    <div class="step" id="step-warn">
+      <h2>Checks</h2>
+      <ul class="warns" id="warns"><li class="info">Load a file to start.</li></ul>
+      <label class="row small"><input type="checkbox" id="show-ref"> Show bend and reference layers (never output)</label>
+    </div>
+  </aside>
+
+  <section class="stage">
+    <div id="empty">The bed preview shows up here.</div>
+    <svg id="preview" hidden></svg>
+    <div class="legend" id="legend" hidden>
+      <span><span class="sw" style="background:#FF0000"></span> cut</span>
+      <span><span class="sw" style="background:#0000FF"></span> score</span>
+      <span><span class="sw" style="background:#000"></span> engrave</span>
+      <span><span class="sw" style="background:#fff;border:1px dashed #999"></span> none (not output)</span>
+      <span><span class="sw" style="background:#F4A81C"></span> selected</span>
+      <span><span class="sw" style="background:#ff7a00;border-radius:50%"></span> problem spot</span>
+    </div>
+  </section>
+</div>
+<div id="print-sheet"></div>
+<!--SCRIPTS-->
+</body>
+</html>
