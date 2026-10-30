@@ -1,7 +1,7 @@
 {
   "_metadata": {
-    "file": "expected_results_v1.0.json",
-    "version": "1.0",
+    "file": "expected_results_v1.0.1.json",
+    "version": "1.0.1",
     "author": "Samuel Cao",
     "created": "2026-10-30",
     "last_updated": "2026-10-30",
@@ -13,6 +13,11 @@
       "version": "1.0",
       "date": "2026-10-30",
       "note": "Initial release, 19 fixtures."
+    },
+    {
+      "version": "1.0.1",
+      "date": "2026-10-30",
+      "note": "f18 marked unitsMissing (R12 has no $INSUNITS); caught by reference_check."
     }
   ],
   "defaults": {
@@ -311,6 +316,7 @@
       "depths": [
         0
       ],
+      "unitsMissing": true,
       "size": [
         2,
         1

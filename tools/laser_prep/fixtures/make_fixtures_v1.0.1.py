@@ -1,13 +1,13 @@
 """
-file: make_fixtures_v1.0.py
-version: 1.0
+file: make_fixtures_v1.0.1.py
+version: 1.0.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
-description: Writes the DXF fixture library and expected_results_v1.0.json used to test the laser prep app's parser, joining, and nesting.
+description: Writes the DXF fixture library and expected_results_v1.0.1.json used to test the laser prep app's parser, joining, and nesting.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
-Usage: python3 make_fixtures_v1.0.py [output_dir]
+Usage: python3 make_fixtures_v1.0.1.py [output_dir]
 Needs ezdxf (pip install ezdxf).
 
 Expected counts are written by hand from how each fixture is built, so they
@@ -27,7 +27,8 @@ from pathlib import Path
 import ezdxf
 from ezdxf import bbox
 
-VERSION = "1.0"
+VERSION = "1.0"          # fixture DXF files
+RESULTS_VERSION = "1.0.1"  # expected results file
 RED = {"color": 1}
 FIXTURES = []
 
@@ -203,7 +204,7 @@ def _(doc):
 
 
 @fixture("f18_r12_bulge_polyline", "R12 POLYLINE with VERTEX bulges: 2 x 1 obround (full round ends).",
-         {"loops": 1, "openChains": 0, "depths": [0], "size": [2, 1]}, units=None)
+         {"loops": 1, "openChains": 0, "depths": [0], "unitsMissing": True, "size": [2, 1]}, units=None)
 def _(doc):
     pl = doc.modelspace().add_polyline2d([(0.5, 0), (1.5, 0), (1.5, 1), (0.5, 1)], close=True, dxfattribs=RED)
     for v, b in zip(pl.vertices, (0, 1, 0, 1)):
@@ -248,20 +249,21 @@ def main():
 
     payload = {
         "_metadata": {
-            "file": f"expected_results_v{VERSION}.json",
-            "version": VERSION,
+            "file": f"expected_results_v{RESULTS_VERSION}.json",
+            "version": RESULTS_VERSION,
             "author": "Samuel Cao",
             "created": "2026-10-30",
             "last_updated": "2026-10-30",
             "description": "Hand-written expected results for each DXF fixture; sizes are overall width x height in inches.",
             "ai_update": "Regenerate with make_fixtures; update last_updated and version. Append to _changelog array.",
         },
-        "_changelog": [{"version": "1.0", "date": "2026-10-30", "note": "Initial release, 19 fixtures."}],
+        "_changelog": [{"version": "1.0", "date": "2026-10-30", "note": "Initial release, 19 fixtures."},
+                       {"version": "1.0.1", "date": "2026-10-30", "note": "f18 marked unitsMissing (R12 has no $INSUNITS); caught by reference_check."}],
         "defaults": {"joinTolerance": 0.001, "almostClosedMax": 0.01,
                      "omittedCountsMeanZero": ["branchPoints", "duplicatesRemoved", "overlapsReported", "almostClosed", "textSkipped"]},
         "fixtures": results,
     }
-    (out / f"expected_results_v{VERSION}.json").write_text(json.dumps(payload, indent=2) + "\n")
+    (out / f"expected_results_v{RESULTS_VERSION}.json").write_text(json.dumps(payload, indent=2) + "\n")
 
     if problems:
         print("SELF-CHECK FAILED"); print("\n".join(problems)); sys.exit(1)
@@ -273,3 +275,4 @@ if __name__ == "__main__":
 
 # CHANGELOG
 # v1.0 (2026-10-30): Initial release. 19 fixtures covering joining, gaps, branches, duplicates, overlaps, nesting, bulges, mirrored arcs, splines, ellipses, nested blocks, MINSERT, units, R12, and text.
+# v1.0.1 (2026-10-30): f18 expected unitsMissing true; results file versioned separately from the unchanged DXFs.

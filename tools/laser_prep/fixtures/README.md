@@ -1,10 +1,10 @@
 ---
 file: README.md
-version: 1.0
+version: 1.0.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
-description: What the DXF fixture library is, how to regenerate it, and how an implementation should use expected_results_v1.0.json.
+description: What the DXF fixture library is, how to regenerate it, and how an implementation should use expected_results_v1.0.1.json.
 ai_update: Update last_updated and version. Keep the filename README.md. Append changelog at bottom.
 ---
 
@@ -12,7 +12,7 @@ ai_update: Update last_updated and version. Keep the filename README.md. Append 
 
 Small DXF files, each built to test one thing the app's core must handle (see `../laser_prep_core_design_v1.0.md`, sections 3 to 5). They are test data only; the app is not built yet.
 
-`expected_results_v1.0.json` holds the answer for each file: loop count, open chain count, nesting depths, warning counts, and overall size in inches. The counts are written by hand from how each fixture is built, so they test an implementation instead of copying one. The generator re-reads every file with ezdxf, audits it, and checks the measured size against the hand-written size before it finishes.
+`expected_results_v1.0.1.json` holds the answer for each file: loop count, open chain count, nesting depths, warning counts, and overall size in inches. The counts are written by hand from how each fixture is built, so they test an implementation instead of copying one. The generator re-reads every file with ezdxf, audits it, and checks the measured size against the hand-written size before it finishes.
 
 | Fixture | What it tests |
 |---|---|
@@ -43,7 +43,13 @@ pip install ezdxf
 ```
 
 ```bash
-python3 make_fixtures_v1.0.py
+python3 make_fixtures_v1.0.1.py
+```
+
+Check the expected results against the rules (a test oracle, not the app):
+
+```bash
+python3 reference_check_v1.0.py
 ```
 
 ## Using the expected results
@@ -53,3 +59,4 @@ For each entry in `fixtures`: parse the file, join, nest, and compare. Sizes mat
 ## CHANGELOG
 
 - v1.0 (2026-10-30): Initial release, 19 fixtures.
+- v1.0.1 (2026-10-30): Added reference_check_v1.0.py; f18 expected results fixed (units missing).
