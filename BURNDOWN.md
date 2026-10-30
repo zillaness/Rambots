@@ -30,7 +30,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:06 ✅ ledger started
 - 10:06 ✅ research subagents dispatched (ULS import, CAD DXF export, print path)
 - 10:08 ✅ R12 and curves DXF probes for the test card, committed 5660df1
-- 10:08 ▶ NEXT: core technical design doc; README v1.1 once the ULS import research lands
+- 10:10 ✅ core technical design draft, committed 98a09dd
+- 10:10 ▶ NEXT: DXF fixture library with expected results; README v1.1 when ULS import research lands
 
 ## Handoff
 
