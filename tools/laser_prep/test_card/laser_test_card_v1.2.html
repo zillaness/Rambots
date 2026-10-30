@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  file: laser_test_card_v1.1.html
-  version: 1.1
+  file: laser_test_card_v1.2.html
+  version: 1.2
   author: Samuel Cao
   created: 2026-10-30
   last_updated: 2026-10-30
@@ -74,7 +74,7 @@
 <body>
 <main class="screen-only">
   <header>
-    <h1>Laser test card v1.1</h1>
+    <h1>Laser test card v1.2</h1>
     <p class="sub">Step 0 and Step 1 of the laser prep PRD. Tests whether a saved file imports into the ULS Control Panel (UCP), and whether Adobe Reader or Chrome can print to the ULS driver without breaking lines, colors, or scale.</p>
   </header>
 
@@ -129,8 +129,8 @@
   <p>The README in this folder has the full checklist and the tables to fill in. Short version:</p>
   <ol>
     <li>In UCP, open the <b>System</b> tab and look for <b>Direct Import Package</b>. Note whether it is there and on. Ask a mentor before turning on any trial.</li>
-    <li>Click <b>Save PDF</b> and import the PDF. Check red cuts, blue scores, black rasters, and the size.</li>
-    <li>Import the DXFs: <code>colored</code>, <code>colored_r12</code>, <code>raw_mm</code>, <code>curves</code>, <code>color_codes</code>. ULS says DXF import is vectors only, so black fills in a DXF are not expected to engrave. Judge raster on the PDF.</li>
+    <li>Find Import (often a folder icon or an Import button near the top of UCP). Click <b>Save PDF</b> and import the PDF. Check red cuts, blue scores, black rasters, and the size. If it complains about fonts or the label is missing, judge the shapes on their own.</li>
+    <li>Import the DXFs, <code>plain</code> first: <code>plain</code>, <code>colored</code>, <code>colored_r12</code>, <code>raw_mm</code>, <code>curves</code>, <code>color_codes</code>. ULS says DXF import is vectors only, so black fills in a DXF are not expected to engrave. Judge raster on the PDF. Write down any error text and which shapes went missing.</li>
     <li>On the raw DXF: did UCP ask for units, and is the square 4.000 in? Can you change a line's color inside UCP?</li>
     <li>Screenshot every import dialog.</li>
   </ol>
@@ -138,20 +138,21 @@
   <h2>Step 1: print to the ULS driver</h2>
   <p>Run these in order and write down the printer resolution (DPI) the ULS driver is set to each time. Lines thinner than one printer pixel print as one pixel.</p>
   <ol>
-    <li><b>Adobe Reader</b> (if installed): open the saved PDF, Print, pick the ULS printer. Page Sizing: <b>Actual size</b>, checked every time, because Reader remembers the last setting. <b>Print in grayscale</b> off, <b>Print as image</b> off. The preview shows the art in the top-left corner.</li>
-    <li><b>Saved PDF in Chrome or Edge</b>: open the saved PDF in the browser and print it to the ULS printer. If a <b>Print as image</b> box shows, leave it off.</li>
+    <li><b>Adobe Reader</b> (if installed): open the saved PDF, Print, pick the ULS printer. Paper size: the bed size. Page Sizing: <b>Actual size</b>, checked every time, because Reader remembers the last setting. <b>Choose paper source by PDF page size</b> on. <b>Print in grayscale</b> off, <b>Print as image</b> off. The preview shows the art in the top-left corner.</li>
+    <li><b>Saved PDF in Chrome or Edge</b>: open the saved PDF in the browser and print it to the ULS printer. Paper size: the bed size. Margins: <b>None</b>. Scale: <b>Actual size</b> or 100, not Fit. If a <b>Print as image</b> box shows, leave it off.</li>
     <li><b>Chrome or Edge page print</b>: click <b>Print (Chrome test)</b>. Destination: the ULS printer. Paper size: the bed size above. Margins: <b>None</b>. Scale: <b>Default</b> (100). Headers and footers: off. Color, not black and white.</li>
   </ol>
+  <p>If you change <b>Line width</b>, click <b>Save PDF</b> again before printing; the line width is in the file name (for example <code>_3mil_</code>).</p>
   <p>If the ULS power and speed window can only be reached from the Windows print dialog, write that down. It changes the design.</p>
 
   <h2>Measure</h2>
-  <p>Kerf makes the dropped-out piece small and the hole in the sheet big by the same amount, so average them. Measure X and Y with calipers.</p>
+  <p>Cut each route on its own fresh, labeled piece of scrap. Kerf makes the dropped-out piece small and the hole in the sheet big by the same amount, so average them. Measure X and Y with calipers.</p>
   <p><code>size = (piece + hole) / 2</code> &nbsp; Pass if 4.000 &plusmn; 0.010 in on both axes. &nbsp; <code>kerf = (hole &minus; piece) / 2</code></p>
 </main>
 
 <script>
 // Geometry in inches from the top-left of the bed, y down.
-// Must match make_test_card_dxf_v1.0.py; change both together.
+// Must match make_test_card_dxf_v1.1.py; change both together.
 const GEOMETRY = {
   cut:      { x: 0.25, y: 0.25, w: 4.0, h: 4.0 },
   score:    { x1: 4.75, y1: 0.50, x2: 6.75, y2: 0.50 },
@@ -161,7 +162,7 @@ const GEOMETRY = {
   label:    { x: 4.75, y: 2.75, size: 0.30, text: 'TEST v1' },
 };
 const ART = { w: 7.0, h: 4.5 };   // smallest bed that fits the card with margin
-const VERSION = '1.1';
+const VERSION = '1.2';
 const KAPPA = 0.5522847498;       // cubic Bezier circle constant
 
 const $ = id => document.getElementById(id);
@@ -259,7 +260,8 @@ function buildPdf(s) {
 
   const name = `${fileBase(s)}_v${VERSION}.pdf`;
   const objects = [
-    '<< /Type /Catalog /Pages 2 0 R >>',
+    // PrintScaling None asks viewers (Reader, Chrome's PDF viewer) to default to actual size instead of fit to page.
+    '<< /Type /Catalog /Pages 2 0 R /ViewerPreferences << /PrintScaling /None >> >>',
     '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
     `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${P(s.w)} ${num(H)}] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>`,
     `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
@@ -333,5 +335,6 @@ render();
 </html>
 <!-- CHANGELOG
   v1.0 (2026-10-30): Initial release. Bed size and line width pickers, PDF writer with exact DeviceRGB and 0.072 pt lines, SVG save, true-size Chrome print, Step 0 and Step 1 instructions.
-  v1.1 (2026-10-30): Step 0 instructions updated from the ULS import research: Direct Import Package check, DXF is vectors only, new probe files, recolor check, screenshots. Saved files now tagged v1.1. Step 1 reordered from the print path research (Reader, saved PDF in the browser viewer, then page print), driver DPI recorded, Reader traps listed, and a PDF-only zero-width line option.
+  v1.1 (2026-10-30): Step 0 instructions updated from the ULS import research: Direct Import Package check, DXF is vectors only, new probe files, recolor check, screenshots. Saved files tagged v1.1. Step 1 reordered from the print path research (Reader, saved PDF in the browser viewer, then page print), driver DPI recorded, Reader traps listed, and a PDF-only zero-width line option.
+  v1.2 (2026-10-30): From the independent review: PDF asks viewers not to scale (/PrintScaling /None); every print route lists paper size, margins, and scale; plain DXF first; where to find Import; re-save after changing line width; font note; fresh scrap per route. Saved files tagged v1.2.
 -->

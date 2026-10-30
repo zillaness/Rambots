@@ -1,13 +1,13 @@
 """
-file: make_test_card_extra_dxf_v1.1.py
-version: 1.1
+file: make_test_card_extra_dxf_v1.2.py
+version: 1.2
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
-description: Writes three extra Step 0 import probes: an R12 copy of the cut and score test, a curves file with every curve type CAD exports use, and a color-code file showing how UCP reads DXF color.
+description: Writes four extra Step 0 import probes (a plain red and blue file, an R12 copy, a curves file, and a color-code file) for the UCP import check.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
-Usage: python3 make_test_card_extra_dxf_v1.1.py [output_dir]
+Usage: python3 make_test_card_extra_dxf_v1.2.py [output_dir]
 Needs ezdxf (pip install ezdxf).
 
 R12 probe: if UCP rejects the R2000 test files but takes this one, the app must write R12.
@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 import ezdxf
+from ezdxf import bbox
 
 ART_HEIGHT = 4.5   # same flip as make_test_card_dxf_v1.0.py: inches from the top-left, y down
 ACI_RED, ACI_BLUE = 1, 5
@@ -31,6 +32,33 @@ CUT = {"layer": "CUT", "color": ACI_RED}
 
 def pt(x, y):
     return (x, ART_HEIGHT - y)
+
+
+def finish(doc, inches=True):
+    """Real extents and limits in the header instead of ezdxf placeholders."""
+    ext = bbox.extents(doc.modelspace(), fast=False)
+    # ezdxf copies the model space layout's values into the header on save, so set them there.
+    msp = doc.modelspace()
+    msp.dxf.extmin = (ext.extmin.x, ext.extmin.y, 0)
+    msp.dxf.extmax = (ext.extmax.x, ext.extmax.y, 0)
+    msp.dxf.limmin = (0, 0)
+    msp.dxf.limmax = (ext.extmax.x, ext.extmax.y)
+    if inches and doc.dxfversion != "AC1009":
+        doc.header["$MEASUREMENT"] = 0
+
+
+def write_plain(path):
+    """Only a closed LWPOLYLINE in red and a LINE in blue, R2000, inches. Nothing that could make an importer
+    reject the file except color itself, so a failure here is about color or version, not exotic entities."""
+    doc = ezdxf.new("R2000")
+    doc.header["$INSUNITS"] = 1
+    doc.layers.add("CUT", color=ACI_RED)
+    doc.layers.add("SCORE", color=ACI_BLUE)
+    msp = doc.modelspace()
+    msp.add_lwpolyline([pt(0.25, 0.25), pt(4.25, 0.25), pt(4.25, 4.25), pt(0.25, 4.25)], close=True, dxfattribs=CUT)
+    msp.add_line(pt(4.75, 0.50), pt(6.75, 0.50), dxfattribs={"layer": "SCORE", "color": ACI_BLUE})
+    finish(doc)
+    doc.saveas(path)
 
 
 def write_r12(path):
@@ -42,6 +70,7 @@ def write_r12(path):
     square = [pt(0.25, 0.25), pt(4.25, 0.25), pt(4.25, 4.25), pt(0.25, 4.25)]
     msp.add_polyline2d(square, close=True, dxfattribs=CUT)
     msp.add_line(pt(4.75, 0.50), pt(6.75, 0.50), dxfattribs={"layer": "SCORE", "color": ACI_BLUE})
+    finish(doc)
     doc.saveas(path)
 
 
@@ -89,10 +118,11 @@ def write_curves(path):
     msp.add_blockref("HOLE_0_25", pt(5.75, 2.25), dxfattribs={"layer": "CUT"})
     msp.add_blockref("HOLE_0_25", pt(6.40, 2.25), dxfattribs={"layer": "CUT", "xscale": 2, "yscale": 2})
 
+    finish(doc)
     doc.saveas(path)
 
 
-# Color-code probe, top to bottom. (label, entity ACI or None for BYLAYER, layer, layer ACI, true color or None)
+# Color-code probe, top to bottom. Line i is 2.0 - 0.2 i inches long, so each one can be told apart even if UCP flips the drawing. (label, entity ACI or None for BYLAYER, layer, layer ACI, true color or None)
 COLOR_LINES = [
     ("ACI 1 on entity", 1, "0", 7, None),
     ("ACI 5 on entity", 5, "0", 7, None),
@@ -118,17 +148,19 @@ def write_color_codes(path):
         attribs = {"layer": layer}
         if aci is not None:
             attribs["color"] = aci
-        line = msp.add_line(pt(0.25, y), pt(2.25, y), dxfattribs=attribs)
+        line = msp.add_line(pt(0.25, y), pt(0.25 + 2.0 - 0.2 * i, y), dxfattribs=attribs)
         if rgb is not None:
             line.dxf.true_color = rgb
+    finish(doc)
     doc.saveas(path)
 
 
 def main():
     out = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent
-    write_r12(out / "laser_test_card_colored_r12_v1.0.dxf")
-    write_curves(out / "laser_test_card_curves_v1.0.dxf")
-    write_color_codes(out / "laser_test_card_color_codes_v1.0.dxf")
+    write_plain(out / "laser_test_card_plain_v1.0.dxf")
+    write_r12(out / "laser_test_card_colored_r12_v1.1.dxf")
+    write_curves(out / "laser_test_card_curves_v1.1.dxf")
+    write_color_codes(out / "laser_test_card_color_codes_v1.1.dxf")
 
 
 if __name__ == "__main__":
@@ -137,3 +169,4 @@ if __name__ == "__main__":
 # CHANGELOG
 # v1.0 (2026-10-30): Initial release. R12 cut and score probe, and a curves probe (circle, bulge arcs, loose lines and arcs, ellipse, spline, block inserts).
 # v1.1 (2026-10-30): Added the color-code probe (entity ACI, layer color, true color, and a 62-vs-420 conflict line).
+# v1.2 (2026-10-30): From the independent review: added a plain red and blue R2000 file, real header extents and limits, $MEASUREMENT 0 for inch files, color-code lines of different lengths. R12, curves, and color-code files now v1.1.

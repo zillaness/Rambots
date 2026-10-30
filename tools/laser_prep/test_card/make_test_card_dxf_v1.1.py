@@ -1,24 +1,24 @@
 """
-file: make_test_card_dxf_v1.0.py
-version: 1.0
+file: make_test_card_dxf_v1.1.py
+version: 1.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
 description: Writes the two laser test card DXFs (colored in inches, raw in millimeters) used for the Step 0 UCP import check.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
-Usage: python3 make_test_card_dxf_v1.0.py [output_dir]
+Usage: python3 make_test_card_dxf_v1.1.py [output_dir]
 Needs ezdxf (pip install ezdxf). The geometry must match GEOMETRY in
-laser_test_card_v1.0.html; change both together.
+laser_test_card_v1.2.html; change both together.
 """
 
 import sys
 from pathlib import Path
 
 import ezdxf
-from ezdxf import const
+from ezdxf import bbox, const
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 # Test card geometry in inches, measured from the top-left of the bed, y down.
 CUT_SQUARE = (0.25, 0.25, 4.0, 4.0)        # x, y, w, h  red outline, vector cut
@@ -40,6 +40,18 @@ def pt(x, y, scale):
 
 def rect_points(x, y, w, h, scale):
     return [pt(x, y, scale), pt(x + w, y, scale), pt(x + w, y + h, scale), pt(x, y + h, scale)]
+
+
+def finish(doc):
+    """Real drawing extents and limits in the header (ezdxf leaves placeholder values), so an importer
+    that centers or scales from the header sees the true size."""
+    ext = bbox.extents(doc.modelspace(), fast=False)
+    # ezdxf copies the model space layout's values into the header on save, so set them there.
+    msp = doc.modelspace()
+    msp.dxf.extmin = (ext.extmin.x, ext.extmin.y, 0)
+    msp.dxf.extmax = (ext.extmax.x, ext.extmax.y, 0)
+    msp.dxf.limmin = (0, 0)
+    msp.dxf.limmax = (ext.extmax.x, ext.extmax.y)
 
 
 def new_doc(insunits):
@@ -80,6 +92,7 @@ def write_colored(path):
     msp.add_text(text, height=height,
                  dxfattribs={"layer": "ENGRAVE", "color": ACI_BLACK, "insert": pt(lx, ly, 1)})
 
+    finish(doc)
     doc.saveas(path)
 
 
@@ -102,6 +115,7 @@ def write_raw_mm(path):
     (cx, cy), r = COMPOUND_HOLE
     msp.add_circle(pt(cx, cy, mm), radius=r * mm)
 
+    finish(doc)
     doc.saveas(path)
 
 
@@ -116,3 +130,4 @@ if __name__ == "__main__":
 
 # CHANGELOG
 # v1.0 (2026-10-30): Initial release. Colored inch DXF and raw millimeter DXF for the Step 0 UCP import check.
+# v1.1 (2026-10-30): Header extents and limits set from the drawing instead of ezdxf placeholders; output files now v1.1.
