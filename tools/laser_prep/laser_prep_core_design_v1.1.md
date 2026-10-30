@@ -1,6 +1,6 @@
 ---
-file: laser_prep_core_design_v1.0.md
-version: 1.0
+file: laser_prep_core_design_v1.1.md
+version: 1.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
@@ -10,7 +10,7 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 
 # Laser Prep App: Core Technical Design
 
-**Status:** Draft. This is a plan, not approval to build. PRD v1.1 still gates the build on the laser PC visit and Sam's sign-off.
+**Status:** Draft. This is a plan, not approval to build. v1.1 folds in the three research reports in `research/`. PRD v1.1 still gates the build on the laser PC visit and Sam's sign-off.
 **Applies to:** Options A (browser print), E1 (save file, import into UCP), and E2 (save PDF, print from Reader). They share everything here and differ only in the last step. Option C (native Windows) would port the same design to C#. Option 0 (no app) needs none of it.
 
 ---
@@ -60,13 +60,20 @@ Arcs stay arcs and cubics stay cubics until the writer. Flattening early would b
 | CIRCLE, ARC | Center, radius, angles in degrees counterclockwise. Watch the extrusion vector (210/220/230): if it is (0, 0, -1), the entity sits in a mirrored coordinate system and X must be negated (angles reflect too). Mirrored sketch geometry from CAD exports hits this. |
 | LWPOLYLINE | Vertices with optional bulge (42). Bulge b between two points is an arc of sweep 4·atan(b); radius = chord / (2·sin(sweep/2)). Negative b turns clockwise. Flag 70 bit 1 = closed. Same extrusion rule as arcs. |
 | POLYLINE + VERTEX + SEQEND | Older form of the same thing (R12 files). |
-| SPLINE | Degree, knots, control points, optional weights. Evaluate with de Boor's algorithm and flatten to a Poly with 0.0005 in chord tolerance. If a file has fit points but no control points, fall back to a centripetal Catmull-Rom through the fit points and warn. |
+| SPLINE | Any degree: Fusion sketch exports are reported to write degree 5, which readers limited to degree 3 drop. Knots, control points, optional weights (rational). Evaluate with de Boor's algorithm and flatten to a Poly with 0.0005 in chord tolerance. If a file has fit points but no control points, fall back to a centripetal Catmull-Rom through the fit points and warn; Fusion is reported to write only the end points of fit-point splines, so a spline with two fit points and no control points gets a loud warning. |
 | ELLIPSE | Center, major-axis vector, ratio, start and end parameters. Convert to four cubic Béziers per full turn (error well under 0.0001 in at part sizes). |
 | INSERT | Block name, insert point, x/y scale, rotation, plus MINSERT row/column arrays. Expand recursively with the block's base point subtracted. Guard against blocks that insert themselves. |
-| TEXT, MTEXT | Not in the first version. Count them and warn ("3 text items were skipped; export text as geometry"). |
-| HATCH | Ignored on input. Fills are assigned in the app, not inherited. |
+| TEXT, MTEXT | Not in the first version. Count them and warn ("3 text items were skipped; export text as geometry"). Neither CAD is documented to write TEXT for sketch text anyway (Fusion needs Explode Text; Onshape writes short segments). |
+| HATCH, POINT, DIMENSION, anything else | Ignored and counted by type. **No entity is ever skipped silently**: the warning lists every skipped type and count. Fills are assigned in the app, not inherited. |
 
-Units: `$INSUNITS` 1 = inch, 4 = mm, 5 = cm, 6 = m, 2 = ft. Missing or 0 means ask, and show the overall size both ways ("12.0 x 8.0 in if inches, 0.47 x 0.31 in if mm") so the wrong choice looks wrong.
+Z: drop it. Drawing exports can put views at different heights, and Onshape offers a "z-height to zero, normals positive" option because nonzero Z and flipped normals happen. After the extrusion transform, only X and Y are kept.
+
+**Units: the header is a default, never a decision.** The CAD research found Fusion's File > Export writes centimeters whatever the design uses, Onshape is reported to write `$INSUNITS` = 1 (inches) over millimeter coordinates, and Onshape drawings are reported in meters. So:
+
+- Read `$INSUNITS` (1 = in, 2 = ft, 4 = mm, 5 = cm, 6 = m) as the starting guess. Missing or 0 starts at mm, the default unit in both CAD tools for most students.
+- **Always** show the overall size in inches and make the student confirm it before anything else is unlocked.
+- Also try the factors that real exports get wrong (10, 25.4, 1000, and their inverses). If the header's size does not fit the bed but one of those does, say so: "This reads as 101.6 x 63.5 in. As millimeters it would be 4.0 x 2.5 in. Which is right?"
+- Joining tolerances (section 4) apply only after units are confirmed, since a wrong unit makes them 25.4 times off.
 
 Why not a library: an offline single HTML file can't `npm install`, and vendoring a general DXF library brings tens of kilobytes of code for entities we skip. The subset above is about 300 to 400 lines and is exactly the part we have to test anyway. The tradeoff is ours to maintain. **This is a decision for Sam; see section 10.**
 
@@ -87,7 +94,7 @@ CAD exports often arrive as separate pieces: a slot can be two LINEs and two ARC
 5. When two endpoints meet within tolerance but not exactly, move both to their midpoint so the output has no microscopic gaps.
 6. A full circle or closed LWPOLYLINE is already a loop and skips the graph.
 
-Tolerance: 0.001 in default. Real exports usually join exactly or are off by floating point noise (around 1e-9). A gap bigger than tolerance but under 0.01 in is reported as "almost closed" with a one-click fix, because the student probably meant it to close.
+Tolerance: 0.001 in default, adjustable up to 0.01 in (never defaulted higher: LightBurn users report coarse auto-close joining the wrong things). No source measured real gap sizes; sketch exports of lines and arcs should join exactly or within floating point noise (around 1e-9), and spline-to-polyline joints may need more. After joining, report "joined N endpoint pairs, largest gap X in". A gap bigger than tolerance but under 0.01 in is reported as "almost closed" with a one-click fix, because the student probably meant it to close.
 
 ### 4.1 Duplicates
 
@@ -112,6 +119,7 @@ Hit testing for the UI uses the same tree: a click inside the drawing selects th
 
 Defaults when a file loads:
 
+- Geometry on layers whose names contain BEND, EXTENT, CONSTRUCTION, or CENTER: none, and hidden behind a "show reference layers" toggle. Fusion flat patterns put bend center and bend extent lines on their own layers, and Onshape uses `SHEETMETAL_BEND_LINES_UP` and `_DOWN`; cutting them would slice the part along its folds. (The name list is a starting guess; check it against real exports.)
 - Every closed loop outline: red (cut). That is what students want most of the time.
 - Every open chain outline: none, with a warning, because an open cut does not drop a part out.
 - Insides: none.
@@ -126,7 +134,8 @@ Checks shown before output:
 | Branch point found | Warning, with the location highlighted |
 | Duplicate or overlapping line | Warning (exact duplicates already removed) |
 | Art bigger than the bed | Blocks output |
-| Units were guessed | Reminder showing overall size |
+| Units not yet confirmed | Blocks output |
+| Entities skipped (by type) | Warning listing each type and count |
 | Nothing assigned | Blocks output |
 
 ---
@@ -150,11 +159,11 @@ The ULS Direct File Import page says PDF import carries both vector and raster c
 
 ### 7.2 SVG (Option A)
 
-Inline SVG sized in inches, same structure as the test card's print path: viewBox in inches, strokes at 0.001 user units, `fill-rule="evenodd"` for compound fills, print CSS with `@page` set to the bed and no backgrounds. The test card found Chrome painted a page-sized white fill unless backgrounds were turned off in print CSS; the app must keep that rule.
+Inline SVG sized in inches, same structure as the test card's print path: viewBox in inches, strokes at 0.001 user units, `fill-rule="evenodd"` for compound fills, print CSS with `@page` set to the bed and no backgrounds. The test card found Chrome painted a page-sized white fill unless backgrounds were turned off in print CSS; the app must keep that rule. Chrome and Edge print a page by converting it to PDF and then to EMF with PDFium, which never draws a stroke thinner than one printer pixel. The real hairline width on this route is set by the driver's DPI, so the app's print screen tells students which DPI the visit found works.
 
 ### 7.3 DXF (fallback for E1)
 
-Only if the visit shows UCP imports DXF but not PDF. Write R12 or R2000, whichever the probes show UCP reads, with ACI 1 / 5 / 7 on layers CUT, SCORE, ENGRAVE. Arcs stay ARC entities, Polys become LWPOLYLINE (POLYLINE in R12). Inside fills cannot be expressed reliably here; disable black insides when DXF output is selected.
+Only if the visit shows UCP imports DXF but not PDF. Write R12 or R2000, whichever the probes show UCP reads, with color in whichever form the color-code probe shows UCP reads (entity color index, layer color, or 24-bit true color). If both index and true color are written, they must agree. Layers CUT, SCORE, ENGRAVE. Arcs stay ARC entities, Polys become LWPOLYLINE (POLYLINE in R12). Inside fills cannot be expressed reliably here; disable black insides when DXF output is selected.
 
 ---
 
@@ -179,10 +188,11 @@ The modules are written as separate files during development and inlined into on
 
 ## 9. Testing
 
-- **Fixtures:** a library of small DXFs covering each entity and each failure mode (gaps, branches, duplicates, mirrored arcs, bulges, splines, nested blocks, missing units), each with an expected-results file (loop count, open chain count, nesting depths, bounding box). See the burndown queue for the fixture library unit.
+- **Fixtures:** a library of small DXFs covering each entity and each failure mode (gaps, branches, duplicates, mirrored arcs, bulges, splines, nested blocks, missing units), each with an expected-results file (loop count, open chain count, nesting depths, overall size). Built: `fixtures/` (19 fixtures, `expected_results_v1.0.1.json`, and `reference_check_v1.0.py`, which applies sections 4 and 5 with ezdxf and agrees with all 19).
 - **Unit tests in Node:** parse, join, and nest each fixture and compare to the expected results.
 - **Writer tests:** write a PDF for each fixture, parse it back strictly, render it with Poppler, and check that only the four allowed colors appear and that sizes match to 0.001 in. The test card's verification script already does this and can be reused.
-- **Real exports:** at least three real Fusion and three real Onshape exports of team parts before the first student uses it.
+- **Real exports:** at least three real Fusion and three real Onshape exports of team parts before the first student uses it: Fusion sketch, flat pattern with and without "convert splines to polylines", drawing; Onshape sketch or face, drawing, flat view. These outrank every synthetic fixture.
+- **Fixtures still to add** from the CAD research list: centimeter header, inches header over millimeter coordinates, meters, degree 5 and rational and fit-point-only splines, partial and rotated ellipses, flat-pattern layer names, the same shape on two layers, gap sizes of 0.0001 / 0.005 / 0.02 in, nonzero Z, coordinates far from the origin, DIMENSION and POINT entities, and text as hundreds of short lines.
 
 ---
 
@@ -194,7 +204,9 @@ The modules are written as separate files during development and inlined into on
 | Spline handling | Flatten at 0.0005 in | Simple and exact enough for a laser | Output files a little larger for spline-heavy parts |
 | Text (TEXT, MTEXT) | Skip with a warning in v1 | Students can export text as geometry | Text-only engraving needs a CAD step |
 | Default color for closed loops | Red | Most jobs are cut-only | A student who forgets to change it cuts instead of scoring |
-| Output format for E1 | PDF if the visit confirms DXF import is vectors only | Fills need raster | Depends on Step 0 |
+| Reference layers (bend, extent, construction) | Default to none and hidden | Cutting a bend line ruins a sheet metal part | Layer-name list must be maintained |
+| Units confirmation | Required on every file | Both CAD tools have reported unit header errors | One extra click per job |
+| Output format for E1 | PDF | ULS documents PDF import as raster and vector, DXF as vectors only; fills need raster | DXF only as a fallback, chosen by the probes |
 
 ---
 
@@ -202,16 +214,17 @@ The modules are written as separate files during development and inlined into on
 
 | Part | Hours |
 |---|---|
-| DXF reader (subset, blocks, extrusion) | 4 to 6 |
+| DXF reader (subset, blocks, extrusion, any-degree splines, skip counts) | 5 to 7 |
 | SVG reader | 2 to 3 |
 | Joining, duplicates, nesting, hit testing | 5 to 8 |
 | Writers (PDF, SVG, DXF) | 2 to 4; PDF largely exists in the test card |
-| UI | 6 to 10 |
+| UI (including units confirmation and reference-layer toggle) | 7 to 11 |
 | Fixtures and tests | 4 to 6 |
-| **Total** | **23 to 37** |
+| **Total** | **25 to 39** |
 
 Option C would reuse sections 2 to 7 as a spec; add the Windows printing code and roughly 1.5x the UI time.
 
 ## CHANGELOG
 
 - v1.0 (2026-10-30): Initial draft. Pipeline, data model, DXF and SVG parsing subset, joining and nesting algorithms, color defaults and checks, PDF/SVG/DXF writers, page structure, testing plan, decisions for Sam, and effort estimate.
+- v1.1 (2026-10-30): Folded in the research reports. Units header treated as a default with mandatory size confirmation and plausibility factors; any-degree and fit-point spline handling; Z dropped; every skipped entity counted; adjustable join tolerance with a largest-gap report; reference layers (bend, extent) default to none; DXF color form set by the color-code probe; PDF as E1 output; PDFium one-pixel note on the print route; real exports and missing fixtures listed; effort range updated.
