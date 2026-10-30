@@ -1,7 +1,7 @@
 {
   "_metadata": {
-    "file": "expected_results_v1.0.1.json",
-    "version": "1.0.1",
+    "file": "expected_results_v1.1.json",
+    "version": "1.1",
     "author": "Samuel Cao",
     "created": "2026-10-30",
     "last_updated": "2026-10-30",
@@ -18,6 +18,11 @@
       "version": "1.0.1",
       "date": "2026-10-30",
       "note": "f18 marked unitsMissing (R12 has no $INSUNITS); caught by reference_check."
+    },
+    {
+      "version": "1.1",
+      "date": "2026-10-30",
+      "note": "Added f20 to f33 from the CAD export research; new fields ignored, referenceHidden, fitPointSplines, unitSuggestions."
     }
   ],
   "defaults": {
@@ -28,8 +33,36 @@
       "duplicatesRemoved",
       "overlapsReported",
       "almostClosed",
-      "textSkipped"
-    ]
+      "textSkipped",
+      "referenceHidden",
+      "fitPointSplines"
+    ],
+    "omittedMeansEmpty": [
+      "ignored",
+      "unitSuggestions"
+    ],
+    "referenceLayerWords": [
+      "BEND",
+      "EXTENT",
+      "CONSTRUCTION",
+      "CENTER"
+    ],
+    "plausibility": {
+      "bed": [
+        24,
+        12
+      ],
+      "minLargestSide": 0.25,
+      "factors": [
+        0.001,
+        0.0394,
+        0.1,
+        10,
+        25.4,
+        1000
+      ],
+      "rule": "If the size read from the header does not fit the bed in either orientation, list each factor (rounded to 4 places) whose scaled size fits and whose largest side is at least minLargestSide."
+    }
   },
   "fixtures": [
     {
@@ -341,6 +374,246 @@
       "size": [
         2.5,
         1.5
+      ]
+    },
+    {
+      "file": "f20_cm_units_v1.0.dxf",
+      "description": "Fusion File > Export case: $INSUNITS 5 (cm), 10 x 5 cm rectangle.",
+      "dxfVersion": "AC1015",
+      "units": "cm",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        3.937,
+        1.9685
+      ]
+    },
+    {
+      "file": "f21_header_inches_coords_mm_v1.0.dxf",
+      "description": "Onshape case: header says inches, coordinates are a 101.6 x 50.8 mm part. Read literally it is 101.6 x 50.8 in, too big for the bed; the app should suggest mm (or cm).",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        101.6,
+        50.8
+      ],
+      "unitSuggestions": [
+        0.0394,
+        0.1
+      ]
+    },
+    {
+      "file": "f22_meters_v1.0.dxf",
+      "description": "$INSUNITS 6 (m): a 280 x 100 mm part written as 0.28 x 0.1.",
+      "dxfVersion": "AC1015",
+      "units": "m",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        11.0236,
+        3.937
+      ]
+    },
+    {
+      "file": "f23_spline_degree5_v1.0.dxf",
+      "description": "Degree 5 SPLINE (Fusion's common case) through a 2 in wide hump, closed by a LINE.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.01,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        0.9375
+      ]
+    },
+    {
+      "file": "f24_spline_rational_circle_v1.0.dxf",
+      "description": "Closed rational quadratic SPLINE that is an exact circle of radius 1.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.002,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f25_spline_fit_points_only_v1.0.dxf",
+      "description": "SPLINE with fit points and no control points, closed by a LINE. The app interpolates and warns.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.06,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "fitPointSplines": 1,
+      "size": [
+        2,
+        0.75
+      ]
+    },
+    {
+      "file": "f26_ellipse_half_rotated_v1.0.dxf",
+      "description": "Half ELLIPSE (4 x 2 full size) rotated 30 degrees, closed by a LINE across its ends.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        3.5348,
+        2.3229
+      ]
+    },
+    {
+      "file": "f27_flat_pattern_layers_v1.0.dxf",
+      "description": "6 x 4 plate and a hole, plus two bend lines on Onshape's SHEETMETAL_BEND_LINES layers. Bend lines are set aside, not joined.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 2,
+      "openChains": 0,
+      "depths": [
+        0,
+        1
+      ],
+      "referenceHidden": 2,
+      "size": [
+        6,
+        4
+      ]
+    },
+    {
+      "file": "f28_same_shape_two_layers_v1.0.dxf",
+      "description": "The same 2 in square on two layers: LWPOLYLINE on A, four LINEs on B. Four duplicate sides.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "duplicatesRemoved": 4,
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f29_gap_sizes_v1.0.dxf",
+      "description": "Four 1 in squares, each with one corner gap: 0.0001 and 0.0009 in join, 0.005 in is almost closed, 0.02 in stays open.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 2,
+      "openChains": 2,
+      "depths": [
+        0,
+        0
+      ],
+      "almostClosed": 1,
+      "size": [
+        7,
+        1
+      ]
+    },
+    {
+      "file": "f30_nonzero_z_v1.0.dxf",
+      "description": "Square at Z = 5 and a circle with extrusion (0,0,-1) at another height. Z is dropped; the circle is a hole.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 2,
+      "openChains": 0,
+      "depths": [
+        0,
+        1
+      ],
+      "size": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "f31_far_from_origin_v1.0.dxf",
+      "description": "100 x 50 mm rectangle at x = 10000 mm, y = -5000 mm. Placement must not depend on the origin.",
+      "dxfVersion": "AC1015",
+      "units": "mm",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        3.937,
+        1.9685
+      ]
+    },
+    {
+      "file": "f32_ignored_entities_v1.0.dxf",
+      "description": "3 x 2 rectangle plus a DIMENSION, two POINTs, and a HATCH. All counted and skipped; only the rectangle remains.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.001,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "ignored": {
+        "DIMENSION": 1,
+        "HATCH": 1,
+        "POINT": 2
+      },
+      "size": [
+        3,
+        2
+      ]
+    },
+    {
+      "file": "f33_many_segments_v1.0.dxf",
+      "description": "A 2 in circle made of 360 short LINEs, the way some exporters write curves and text.",
+      "dxfVersion": "AC1015",
+      "units": "in",
+      "sizeTolerance": 0.002,
+      "loops": 1,
+      "openChains": 0,
+      "depths": [
+        0
+      ],
+      "size": [
+        2,
+        2
       ]
     }
   ]

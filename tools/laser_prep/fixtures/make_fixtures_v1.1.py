@@ -1,13 +1,13 @@
 """
-file: make_fixtures_v1.0.1.py
-version: 1.0.1
+file: make_fixtures_v1.1.py
+version: 1.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
-description: Writes the DXF fixture library and expected_results_v1.0.1.json used to test the laser prep app's parser, joining, and nesting.
+description: Writes the DXF fixture library and expected_results_v1.1.json used to test the laser prep app's parser, joining, and nesting.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
-Usage: python3 make_fixtures_v1.0.1.py [output_dir]
+Usage: python3 make_fixtures_v1.1.py [output_dir]
 Needs ezdxf (pip install ezdxf).
 
 Expected counts are written by hand from how each fixture is built, so they
@@ -16,7 +16,10 @@ ezdxf and compared against the hand-written size as a self-check.
 Rules the expectations assume come from laser_prep_core_design_v1.0.md:
 join tolerance 0.001 in; gaps up to 0.01 in are "almost closed"; branch
 points leave their chains open; exact duplicates are dropped; TEXT and
-MTEXT are skipped with a count.
+MTEXT are skipped with a count; DIMENSION, POINT, and HATCH are skipped and counted
+by type; geometry on reference layers (BEND, EXTENT, CONSTRUCTION, CENTER in
+the layer name) is set aside before joining; units that make the part not fit
+the plausibility bed get factor suggestions (see defaults in the JSON).
 """
 
 import json
@@ -28,7 +31,7 @@ import ezdxf
 from ezdxf import bbox
 
 VERSION = "1.0"          # fixture DXF files
-RESULTS_VERSION = "1.0.1"  # expected results file
+RESULTS_VERSION = "1.1"    # expected results file
 RED = {"color": 1}
 FIXTURES = []
 
@@ -221,12 +224,150 @@ def _(doc):
     ref.dxf.column_spacing, ref.dxf.row_spacing = 1.0, 1.0
 
 
+# ---- v1.1 additions, from research/cad_dxf_export_research_v1.0.md ----
+
+def rect(msp, x0, y0, x1, y1, **attrs):
+    msp.add_lwpolyline([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], close=True, dxfattribs={**RED, **attrs})
+
+
+@fixture("f20_cm_units", "Fusion File > Export case: $INSUNITS 5 (cm), 10 x 5 cm rectangle.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [10 / 2.54, 5 / 2.54]}, units="cm")
+def _(doc):
+    rect(doc.modelspace(), 0, 0, 10, 5)
+
+
+@fixture("f21_header_inches_coords_mm", "Onshape case: header says inches, coordinates are a 101.6 x 50.8 mm part. Read literally it is 101.6 x 50.8 in, too big for the bed; the app should suggest mm (or cm).",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [101.6, 50.8], "unitSuggestions": [0.0394, 0.1]})
+def _(doc):
+    rect(doc.modelspace(), 0, 0, 101.6, 50.8)
+
+
+@fixture("f22_meters", "$INSUNITS 6 (m): a 280 x 100 mm part written as 0.28 x 0.1.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [0.28 * 39.37007874, 0.1 * 39.37007874]}, units="m")
+def _(doc):
+    rect(doc.modelspace(), 0, 0, 0.28, 0.1)
+
+
+@fixture("f23_spline_degree5", "Degree 5 SPLINE (Fusion's common case) through a 2 in wide hump, closed by a LINE.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [2, 0.9375]}, size_tol=0.01)
+def _(doc):
+    msp = doc.modelspace()
+    cps = [(0, 0), (0.4, 0), (0.6, 1.5), (1.4, 1.5), (1.6, 0), (2, 0)]
+    msp.add_open_spline(cps, degree=5, dxfattribs=RED)
+    msp.add_line((2, 0), (0, 0), dxfattribs=RED)
+
+
+@fixture("f24_spline_rational_circle", "Closed rational quadratic SPLINE that is an exact circle of radius 1.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [2, 2]}, size_tol=0.002)
+def _(doc):
+    w = math.sqrt(2) / 2
+    cps = [(2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (0, 0), (1, 0), (2, 0), (2, 1)]
+    weights = [1, w, 1, w, 1, w, 1, w, 1]
+    knots = [0, 0, 0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75, 1, 1, 1]
+    msp = doc.modelspace()
+    msp.add_rational_spline(cps, weights, degree=2, knots=knots, dxfattribs=RED)
+
+
+@fixture("f25_spline_fit_points_only", "SPLINE with fit points and no control points, closed by a LINE. The app interpolates and warns.",
+         {"loops": 1, "openChains": 0, "depths": [0], "fitPointSplines": 1, "size": [2, 0.75]}, size_tol=0.06)
+def _(doc):
+    msp = doc.modelspace()
+    fit = [(0, 0), (0.5, 0.75), (1, 0.25), (1.5, 0.75), (2, 0)]
+    msp.add_spline(fit, dxfattribs=RED)
+    msp.add_line((2, 0), (0, 0), dxfattribs=RED)
+
+
+def _half_ellipse_size(a=2.0, b=1.0, rot=math.radians(30)):
+    """Overall size of a rotated half ellipse (params 0 to pi) by dense sampling, independent of ezdxf."""
+    pts = [(a * math.cos(t) * math.cos(rot) - b * math.sin(t) * math.sin(rot),
+            a * math.cos(t) * math.sin(rot) + b * math.sin(t) * math.cos(rot))
+           for t in (math.pi * i / 20000 for i in range(20001))]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return [max(xs) - min(xs), max(ys) - min(ys)]
+
+
+@fixture("f26_ellipse_half_rotated", "Half ELLIPSE (4 x 2 full size) rotated 30 degrees, closed by a LINE across its ends.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": _half_ellipse_size()})
+def _(doc):
+    rot = math.radians(30)
+    major = (2 * math.cos(rot), 2 * math.sin(rot), 0)
+    msp = doc.modelspace()
+    e = msp.add_ellipse((0, 0), major_axis=major, ratio=0.5, start_param=0, end_param=math.pi, dxfattribs=RED)
+    msp.add_line(e.end_point, e.start_point, dxfattribs=RED)
+
+
+@fixture("f27_flat_pattern_layers", "6 x 4 plate and a hole, plus two bend lines on Onshape's SHEETMETAL_BEND_LINES layers. Bend lines are set aside, not joined.",
+         {"loops": 2, "openChains": 0, "depths": [0, 1], "referenceHidden": 2, "size": [6, 4]})
+def _(doc):
+    msp = doc.modelspace()
+    rect(msp, 0, 0, 6, 4)
+    msp.add_circle((3, 2), 0.5, dxfattribs=RED)
+    msp.add_line((2, 0), (2, 4), dxfattribs={"layer": "SHEETMETAL_BEND_LINES_UP"})
+    msp.add_line((4, 0), (4, 4), dxfattribs={"layer": "SHEETMETAL_BEND_LINES_DOWN"})
+
+
+@fixture("f28_same_shape_two_layers", "The same 2 in square on two layers: LWPOLYLINE on A, four LINEs on B. Four duplicate sides.",
+         {"loops": 1, "openChains": 0, "depths": [0], "duplicatesRemoved": 4, "size": [2, 2]})
+def _(doc):
+    msp = doc.modelspace()
+    rect(msp, 0, 0, 2, 2, layer="A")
+    for a, b in zip(SQUARE, SQUARE[1:] + SQUARE[:1]):
+        msp.add_line(a, b, dxfattribs={**RED, "layer": "B"})
+
+
+@fixture("f29_gap_sizes", "Four 1 in squares, each with one corner gap: 0.0001 and 0.0009 in join, 0.005 in is almost closed, 0.02 in stays open.",
+         {"loops": 2, "openChains": 2, "depths": [0, 0], "almostClosed": 1, "size": [7, 1]})
+def _(doc):
+    msp = doc.modelspace()
+    for i, gap in enumerate((0.0001, 0.0009, 0.005, 0.02)):
+        x = 2 * i
+        msp.add_line((x + gap, 0), (x + 1, 0), dxfattribs=RED)
+        lines(msp, [(x + 1, 0), (x + 1, 1), (x, 1), (x, 0)], close=False)
+
+
+@fixture("f30_nonzero_z", "Square at Z = 5 and a circle with extrusion (0,0,-1) at another height. Z is dropped; the circle is a hole.",
+         {"loops": 2, "openChains": 0, "depths": [0, 1], "size": [2, 2]})
+def _(doc):
+    msp = doc.modelspace()
+    pts = [(0, 0, 5), (2, 0, 5), (2, 2, 5), (0, 2, 5)]
+    for a, b in zip(pts, pts[1:] + pts[:1]):
+        msp.add_line(a, b, dxfattribs=RED)
+    # OCS (x, y) maps to world (-x, y) for extrusion (0,0,-1): OCS center (-1, 1) is world (1, 1).
+    msp.add_circle((-1, 1, -3), 0.5, dxfattribs={**RED, "extrusion": (0, 0, -1)})
+
+
+@fixture("f31_far_from_origin", "100 x 50 mm rectangle at x = 10000 mm, y = -5000 mm. Placement must not depend on the origin.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [100 / 25.4, 50 / 25.4]}, units="mm")
+def _(doc):
+    rect(doc.modelspace(), 10000, -5000, 10100, -4950)
+
+
+@fixture("f32_ignored_entities", "3 x 2 rectangle plus a DIMENSION, two POINTs, and a HATCH. All counted and skipped; only the rectangle remains.",
+         {"loops": 1, "openChains": 0, "depths": [0], "ignored": {"DIMENSION": 1, "HATCH": 1, "POINT": 2}, "size": [3, 2]})
+def _(doc):
+    msp = doc.modelspace()
+    rect(msp, 0, 0, 3, 2)
+    dim = msp.add_linear_dim(base=(1.5, 2.6), p1=(0, 2), p2=(3, 2))
+    dim.render()
+    msp.add_point((0.5, 0.5))
+    msp.add_point((2.5, 1.5))
+    h = msp.add_hatch(color=7)
+    h.paths.add_polyline_path([(1, 0.5), (2, 0.5), (2, 1.5), (1, 1.5)], is_closed=True)
+
+
+@fixture("f33_many_segments", "A 2 in circle made of 360 short LINEs, the way some exporters write curves and text.",
+         {"loops": 1, "openChains": 0, "depths": [0], "size": [2, 2]}, size_tol=0.002)
+def _(doc):
+    pts = [(1 + math.cos(math.radians(a)), 1 + math.sin(math.radians(a))) for a in range(360)]
+    lines(doc.modelspace(), pts)
+
+
 def main():
     out = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent
     results, problems = [], []
     for name, description, expect, units, size_tol, build in FIXTURES:
         version = "R12" if units is None else "R2000"
-        doc = new(version, {"in": 1, "mm": 4, None: None}[units])
+        doc = new(version, {"in": 1, "mm": 4, "cm": 5, "m": 6, None: None}[units])
         build(doc)
         path = out / f"{name}_v{VERSION}.dxf"
         doc.saveas(path)
@@ -234,8 +375,9 @@ def main():
         # Self-check: re-read, audit, and measure the overall size with ezdxf.
         back = ezdxf.readfile(path)
         audit = back.audit()
-        ext = bbox.extents(back.modelspace(), fast=False)
-        scale = 1 / 25.4 if units == "mm" else 1
+        skip = {"TEXT", "MTEXT", "DIMENSION", "POINT", "HATCH"}
+        ext = bbox.extents([e for e in back.modelspace() if e.dxftype() not in skip], fast=False)
+        scale = {"mm": 1 / 25.4, "cm": 1 / 2.54, "m": 39.37007874}.get(units, 1)
         measured = [round(ext.size.x * scale, 4), round(ext.size.y * scale, 4)]
         if audit.has_errors:
             problems.append(f"{name}: audit errors {audit.errors}")
@@ -244,7 +386,7 @@ def main():
 
         record = {"file": path.name, "description": description, "dxfVersion": back.dxfversion,
                   "units": units, "sizeTolerance": size_tol}
-        record.update({k: (round(v[0], 4), round(v[1], 4)) if k == "size" else v for k, v in expect.items()})
+        record.update({k: [round(v[0], 4), round(v[1], 4)] if k == "size" else v for k, v in expect.items()})
         results.append(record)
 
     payload = {
@@ -258,9 +400,14 @@ def main():
             "ai_update": "Regenerate with make_fixtures; update last_updated and version. Append to _changelog array.",
         },
         "_changelog": [{"version": "1.0", "date": "2026-10-30", "note": "Initial release, 19 fixtures."},
-                       {"version": "1.0.1", "date": "2026-10-30", "note": "f18 marked unitsMissing (R12 has no $INSUNITS); caught by reference_check."}],
+                       {"version": "1.0.1", "date": "2026-10-30", "note": "f18 marked unitsMissing (R12 has no $INSUNITS); caught by reference_check."},
+                       {"version": "1.1", "date": "2026-10-30", "note": "Added f20 to f33 from the CAD export research; new fields ignored, referenceHidden, fitPointSplines, unitSuggestions."}],
         "defaults": {"joinTolerance": 0.001, "almostClosedMax": 0.01,
-                     "omittedCountsMeanZero": ["branchPoints", "duplicatesRemoved", "overlapsReported", "almostClosed", "textSkipped"]},
+                     "omittedCountsMeanZero": ["branchPoints", "duplicatesRemoved", "overlapsReported", "almostClosed", "textSkipped", "referenceHidden", "fitPointSplines"],
+                     "omittedMeansEmpty": ["ignored", "unitSuggestions"],
+                     "referenceLayerWords": ["BEND", "EXTENT", "CONSTRUCTION", "CENTER"],
+                     "plausibility": {"bed": [24, 12], "minLargestSide": 0.25, "factors": [0.001, 0.0394, 0.1, 10, 25.4, 1000],
+                                      "rule": "If the size read from the header does not fit the bed in either orientation, list each factor (rounded to 4 places) whose scaled size fits and whose largest side is at least minLargestSide."}},
         "fixtures": results,
     }
     (out / f"expected_results_v{RESULTS_VERSION}.json").write_text(json.dumps(payload, indent=2) + "\n")
@@ -276,3 +423,4 @@ if __name__ == "__main__":
 # CHANGELOG
 # v1.0 (2026-10-30): Initial release. 19 fixtures covering joining, gaps, branches, duplicates, overlaps, nesting, bulges, mirrored arcs, splines, ellipses, nested blocks, MINSERT, units, R12, and text.
 # v1.0.1 (2026-10-30): f18 expected unitsMissing true; results file versioned separately from the unchanged DXFs.
+# v1.1 (2026-10-30): Added f20 to f33 from the CAD export research (unit traps, spline variants, rotated partial ellipse, reference layers, two-layer duplicates, gap sizes, nonzero Z, far origin, ignored entities, many segments). Self-check now skips ignored entity types and handles cm and m.

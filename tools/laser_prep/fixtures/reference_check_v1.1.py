@@ -1,13 +1,13 @@
 """
-file: reference_check_v1.0.py
-version: 1.0
+file: reference_check_v1.1.py
+version: 1.1
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
-description: Test oracle that applies the core design's joining and nesting rules with ezdxf and checks every fixture against expected_results_v1.0.1.json.
+description: Test oracle that applies the core design's joining and nesting rules with ezdxf and checks every fixture against expected_results_v1.1.json.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 
-Usage: python3 reference_check_v1.0.py [fixtures_dir]
+Usage: python3 reference_check_v1.1.py [fixtures_dir]
 Needs ezdxf. This is not the app. It exists to prove the rules in
 laser_prep_core_design_v1.0.md (sections 4 and 5) are well defined and that the
 hand-written expected results agree with them. Slow on purpose (pairwise loops);
@@ -21,25 +21,47 @@ from pathlib import Path
 
 import ezdxf
 from ezdxf import path as dxfpath
-from ezdxf.disassemble import recursive_decompose
 
 TOL = 0.001          # join tolerance, inches
 NEAR = 0.01          # almost-closed limit, inches
 SCALE = {1: 1.0, 4: 1 / 25.4, 5: 1 / 2.54, 6: 39.37007874, 2: 12.0}
 
 
-def primitives(doc):
-    """Yield (entity) after expanding blocks, including MINSERT grids."""
-    out, text = [], 0
-    for e in recursive_decompose(doc.modelspace()):
-        if e.dxftype() == "INSERT":   # MINSERT grids come through as INSERT with counts
-            for ins in e.multi_insert():
-                out.extend(recursive_decompose(ins.virtual_entities()))
-        elif e.dxftype() in ("TEXT", "MTEXT"):
-            text += 1
-        else:
-            out.append(e)
-    return out, text
+IGNORED = {"DIMENSION", "POINT", "HATCH", "LEADER", "MLEADER", "IMAGE", "VIEWPORT"}
+
+
+def primitives(doc, ref_words):
+    """Expand blocks (including MINSERT grids); set aside reference layers, text, and ignored types."""
+    out, counts = [], {"text": 0, "ref": 0, "fitonly": 0, "ignored": {}}
+
+    def visit(entities):
+        for e in entities:
+            t = e.dxftype()
+            if any(w in e.dxf.layer.upper() for w in ref_words):
+                counts["ref"] += 1
+            elif t in ("TEXT", "MTEXT"):
+                counts["text"] += 1
+            elif t in IGNORED:
+                counts["ignored"][t] = counts["ignored"].get(t, 0) + 1
+            elif t == "INSERT":
+                for ins in e.multi_insert():
+                    visit(list(ins.virtual_entities()))
+            else:
+                if t == "SPLINE" and e.control_point_count() == 0 and e.fit_point_count() > 0:
+                    counts["fitonly"] += 1
+                out.append(e)
+
+    visit(list(doc.modelspace()))
+    return out, counts
+
+
+def suggestions(size, plaus):
+    bw, bh = plaus["bed"]
+    fits = lambda w, h: (w <= bw and h <= bh) or (w <= bh and h <= bw)
+    if fits(*size):
+        return []
+    return sorted(f for f in plaus["factors"]
+                  if fits(size[0] * f, size[1] * f) and max(size) * f >= plaus["minLargestSide"])
 
 
 def segments(entities, scale):
@@ -100,11 +122,11 @@ def overlaps(segs):
     return count
 
 
-def analyze(path):
+def analyze(path, spec):
     doc = ezdxf.readfile(path)
     units = doc.header.get("$INSUNITS", 0) if doc.dxfversion != "AC1009" else 0
     scale = SCALE.get(units, 1.0)
-    ents, text = primitives(doc)
+    ents, counts = primitives(doc, spec["defaults"]["referenceLayerWords"])
     segs = segments(ents, scale)
     allpts = [p for s in segs for p in s["pts"]]
     xs, ys = [p[0] for p in allpts], [p[1] for p in allpts]
@@ -185,20 +207,26 @@ def analyze(path):
 
     return {"loops": len(loops), "openChains": open_chains, "depths": sorted(depth.values()),
             "branchPoints": branches, "duplicatesRemoved": dup, "overlapsReported": ovl,
-            "almostClosed": near, "textSkipped": text, "unitsMissing": units == 0, "size": size}
+            "almostClosed": near, "textSkipped": counts["text"], "unitsMissing": units == 0, "size": size,
+            "referenceHidden": counts["ref"], "fitPointSplines": counts["fitonly"], "ignored": counts["ignored"],
+            "unitSuggestions": suggestions(size, spec["defaults"]["plausibility"])}
 
 
 def main():
     folder = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent
-    spec = json.loads((folder / "expected_results_v1.0.1.json").read_text())
+    spec = json.loads((folder / "expected_results_v1.1.json").read_text())
     zero_default = spec["defaults"]["omittedCountsMeanZero"]
     failures = 0
     for fx in spec["fixtures"]:
-        got = analyze(folder / fx["file"])
+        got = analyze(folder / fx["file"], spec)
         bad = []
         for key in ["loops", "openChains", "depths", *zero_default]:
             want = fx.get(key, 0 if key in zero_default else None)
             if want is not None and got[key] != want:
+                bad.append(f"{key}: got {got[key]} want {want}")
+        for key in spec["defaults"]["omittedMeansEmpty"]:
+            want = fx.get(key, [] if key == "unitSuggestions" else {})
+            if got[key] != want:
                 bad.append(f"{key}: got {got[key]} want {want}")
         if fx.get("unitsMissing", False) != got["unitsMissing"]:
             bad.append(f"unitsMissing: got {got['unitsMissing']}")
@@ -215,3 +243,4 @@ if __name__ == "__main__":
 
 # CHANGELOG
 # v1.0 (2026-10-30): Initial release. Joining, duplicate and overlap checks, branch and almost-closed counts, nesting depths, and size against expected_results_v1.0.1.json.
+# v1.1 (2026-10-30): Reference layers set aside before joining; DIMENSION, POINT, HATCH and similar counted by type; fit-point-only splines counted; unit suggestions from the plausibility rule; reads expected_results_v1.1.json.
