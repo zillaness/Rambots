@@ -44,7 +44,32 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 
 ## Handoff
 
-(filled at soft-stop or limit)
+**Done tonight (all committed and pushed to `claude/elegant-feynman-q7xk18`):**
+
+- Test card v1.1 (`tools/laser_prep/test_card/`): HTML page, 6 DXFs (colored, R12, raw mm, curves, color codes), README checklist with tables for every probe. PDF, SVG, and Chrome print output checked in headless Chromium.
+- Research (`tools/laser_prep/research/`): ULS direct import, Fusion and Onshape DXF export, Windows print path. Each labels findings Verified, Reported, or Inferred.
+- Core design v1.1 (`tools/laser_prep/laser_prep_core_design_v1.1.md`): shared engine for Options A, E1, E2; effort 25 to 39 hours.
+- Fixture library v1.1 (`tools/laser_prep/fixtures/`): 33 DXFs with hand-written expected results and an ezdxf oracle that agrees with all 33.
+- Proposed PRD v1.2 changes (`tools/laser_prep/prd_v1_2_proposed_changes_v1.0.md`): 28 items, kept out of the PRD because v1.1 is unapproved.
+
+**Biggest findings:**
+
+- DXF import into UCP is vectors only (ULS); PDF carries raster too. E1 should save PDF.
+- Direct import may be a paid "Direct Import Package" (System tab, 30-day trial in one manual). Check it first at the visit; ask a mentor before any trial.
+- No evidence UCP can recolor imported objects, so Option 0 (raw CAD DXF straight into UCP) is unlikely.
+- Never trust the DXF units header: Fusion File > Export writes cm; Onshape reportedly writes an inches header over mm coordinates.
+- Chrome's print engine never draws a line under one printer pixel; driver DPI decides the real hairline. Reader is the commonly reported working print route.
+
+**Waiting on Sam:**
+
+1. Approve, edit, or reject PRD v1.1 (`laser_prep_app_prd_v1.1.md`); v1.0 is still beside it until then.
+2. Then accept or reject the 28 proposed v1.2 changes.
+3. Laser PC visit with the test card README; bring back tables, screenshots, a photo of the cut card, and real CAD exports.
+4. Optional: allow ulsinc.com (and the other hosts named in the research reports) in this environment's network settings so the excerpt-based findings can be checked against full pages.
+
+**Not done, on purpose:** no app code (architecture waits on the visit and approval); nothing outward-facing; Phase 0 usage experiments skipped (no one awake to read `/usage`).
+
+**Suggested next session start:** read this handoff, then the visit results if they exist; update the PRD with the route Section 6 picks; build from the core design using the fixtures as the test suite.
 
 ## CHANGELOG
 
