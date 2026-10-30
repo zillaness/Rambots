@@ -37,7 +37,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:15 ✅ DXF color-code probe (entity ACI, layer color, true color), committed 856bb04
 - 10:15 ✅ CAD DXF export research reviewed, committed c399bd2
 - 10:17 ✅ print path research reviewed + test card v1.1 (README, HTML, zero-width option), committed 5094519
-- 10:17 ▶ NEXT: core design v1.1 with CAD and print findings; then fixture additions from the CAD research list
+- 10:18 ✅ core design v1.1 (research folded in), committed d1fe682
+- 10:18 ▶ NEXT: fixture additions from the CAD research list (units traps, splines, layers, Z, far origin, ignored entities)
 
 ## Handoff
 
