@@ -1,14 +1,18 @@
 ---
 file: README.md
-version: 1.0
+version: 1.0.1
 author: Samuel Cao
 created: 2026-10-08
-last_updated: 2026-10-08
+last_updated: 2026-10-30
 description: What the Print Tracker is, how to build the workbook, install the Apps Script and run the tests.
 ai_update: Update last_updated and version. Append changelog at bottom.
 ---
 
 # Print Tracker
+
+> **Archived 2026-10-30. This copy is no longer maintained.** The Print Tracker moved to the
+> private `zillaness/3Dprinting` repo, folder `print_tracker/`, with its history. Make changes there.
+> These files stay here unchanged so existing links keep working.
 
 A Google Sheet for splitting big 3D print batches across the team. Leads list the parts; people claim
 batches, print at home, and update a status. The Summary tab shows progress, finished kits, whether the
@@ -66,3 +70,4 @@ node --test tools/print_tracker/print_tracker_test_v1.0.mjs
 ## CHANGELOG
 
 - v1.0 (2026-10-08): Initial release.
+- v1.0.1 (2026-10-30): Marked archived; the tracker moved to zillaness/3Dprinting.
