@@ -38,7 +38,8 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:15 ✅ CAD DXF export research reviewed, committed c399bd2
 - 10:17 ✅ print path research reviewed + test card v1.1 (README, HTML, zero-width option), committed 5094519
 - 10:18 ✅ core design v1.1 (research folded in), committed d1fe682
-- 10:18 ▶ NEXT: fixture additions from the CAD research list (units traps, splines, layers, Z, far origin, ignored entities)
+- 10:21 ✅ fixture library v1.1 (33 fixtures, oracle 33/33), committed df2e7b6
+- 10:21 ▶ NEXT: proposed PRD v1.2 change list from research (kept separate, v1.1 unapproved); then handoff
 
 ## Handoff
 
