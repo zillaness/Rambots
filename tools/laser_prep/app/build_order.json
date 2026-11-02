@@ -2,6 +2,7 @@
   "vendor/clipper.js",
   "vendor/geometryutil.js",
   "vendor/placementworker.js",
+  "vendor/svgnest_core.js",
   "vendor/opentype.min.js",
   "fonts_data.js",
   "geom.js",

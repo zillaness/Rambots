@@ -180,6 +180,85 @@ section('joints', () => {
   check('box panels become cut objects', objs.length === 6 && objs.every(o => o.job.stats.loops === 1 && o.assign[o.job.loops[0].id].outline === 'red'));
 });
 
+section('images', async () => {
+  // A 100 x 50 px image: white with a black disk of radius 20 px centered at (50, 25).
+  const w = 100, h = 50, rgba = new Uint8Array(w * h * 4);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = 4 * (y * w + x), ink = Math.hypot(x + 0.5 - 50, y + 0.5 - 25) <= 20;
+    rgba[i] = rgba[i + 1] = rgba[i + 2] = ink ? 0 : 255; rgba[i + 3] = 255;
+  }
+  const px = Object.assign({ w, h }, LP.images.grayFromRGBA(rgba, w, h));
+  const img = LP.images.makeImage(px, 2);
+  check('image is 2 x 1 in and outputs nothing as a line', near(img.image.heightIn, 1) && Object.values(img.assign).every(a => !a.outline && !a.inside));
+  const d = LP.images.dither(Uint8Array.from({ length: 1000 }, () => 128), 100, 10);
+  const blacks = d.filter(v => v === 0).length;
+  check('dithering mid-gray gives about half black dots', blacks > 400 && blacks < 600, blacks + ' of 1000');
+  await LP.images.prepare(img);
+  check('image pixels compressed for the PDF', img.image.pdf && img.image.pdf.filter === 'FlateDecode' && img.image.pdf.data.length < w * h, img.image.pdf && img.image.pdf.data.length + ' bytes');
+  img.x = 1; img.y = 1;
+  const out = LP.images.makeOutline(img, 0.1);
+  const lp = out.job.loops.filter(L => L.depth === 0);
+  const bb = LP.doc.bbox(out);
+  // Disk radius 20 px = 0.4 in; the outline grows by 0.1 in plus half a pixel: radius about 0.51 in.
+  check('offset outline is one red loop around the disk', lp.length === 1 && out.assign[lp[0].id].outline === 'red');
+  check('outline radius about 0.51 in', near(bb.w / 2, 0.51, 0.02) && near(bb.h / 2, 0.51, 0.02), (bb.w / 2).toFixed(3));
+  const ib = LP.doc.bbox(img), cxImg = ib.x + 1, cyImg = ib.y + 0.5, cxOut = bb.x + bb.w / 2, cyOut = bb.y + bb.h / 2;
+  check('outline is centered on the disk in the image', near(cxImg, cxOut, 0.02) && near(cyImg, cyOut, 0.02), `${cxOut.toFixed(3)}, ${cyOut.toFixed(3)}`);
+});
+
+section('patterns', () => {
+  const sq = LP.patterns.testSquare();
+  check('test square is a red 4 in loop', sq.job.stats.loops === 1 && near(sq.job.size[0], 4) && sq.assign[sq.job.loops[0].id].outline === 'red');
+  const k = LP.patterns.kerfComb({ count: 10, width: 0.4 });
+  const red = Object.values(k.assign).filter(a => a.outline === 'red').length;
+  check('kerf comb: outline plus 9 cut lines', red === 10, red);
+  const f = LP.patterns.fitComb({ thickness: 0.125 });
+  const redLoops = f.job.loops.filter(L => f.assign[L.id].outline === 'red');
+  check('fit comb has 11 slots (-10 to +10 thousandths) in one red outline', f.params.steps.length === 11 && redLoops.length === 1, f.params.steps.join(' '));
+  check('fit comb labels are black vector engrave', Object.entries(f.assign).filter(([id]) => !redLoops.some(L => L.id === id)).every(([, a]) => a.outline === 'black'));
+  const widths = f.params.steps.map(d => 0.125 + d);
+  check('fit comb slot widths 0.115 to 0.135', near(widths[0], 0.115) && near(widths[10], 0.135));
+  const g = LP.patterns.colorGrid();
+  const fills = Object.values(g.assign).filter(a => a.inside).map(a => a.inside);
+  const rings = Object.values(g.assign).filter(a => a.outline).map(a => a.outline);
+  check('color grid: 8 filled squares and 8 rings, one per ULS color', fills.length === 8 && rings.length === 8 && new Set(fills).size === 8, fills.join(','));
+});
+
+section('nest', async () => {
+  const mk = () => {
+    const d = LP.doc.newDoc({ w: 24, h: 18 });
+    for (let i = 0; i < 6; i++) d.objects.push(LP.shapes.makeShape('rect', { w: 5, h: 3 }, { name: 'R' + i, x: 30, y: 30 }));
+    for (let i = 0; i < 4; i++) d.objects.push(LP.shapes.makeShape('circle', { d: 3 }, { name: 'C' + i, x: 30, y: 30 }));
+    // L-brackets: 4 x 4 with a 3 x 3 notch, which a true-outline nester can interlock.
+    for (let i = 0; i < 4; i++) {
+      const segs = LP.joints.polySegs([[0, 0], [4, 0], [4, 1], [1, 1], [1, 4], [0, 4]], true);
+      const job = LP.analyze({ kind: 'gen', units: 1, segs, counts: { text: 0, fitOnly: 0, tilted: 0, ignored: {} } }, { scale: 1 });
+      d.objects.push(LP.doc.makeObject('shape', job, { name: 'L' + i, x: 30, y: 30 }));
+    }
+    return d;
+  };
+  const d1 = mk(), ids1 = d1.objects.map(o => o.id);
+  const r1 = await LP.nest.arrange(d1, ids1, { engine: 'outline', rotation: 90, gap: 0.1 });
+  check(`outline nester places all 14 parts with no overlaps (${r1.engine})`, r1.placed === 14 && r1.unplaced.length === 0 && r1.problems.length === 0, JSON.stringify({ placed: r1.placed, unplaced: r1.unplaced, problems: r1.problems.slice(0, 3) }));
+  const rects = LP.doc.newDoc({ w: 24, h: 18 });
+  for (let i = 0; i < 12; i++) rects.objects.push(LP.shapes.makeShape('rect', { w: 5.5, h: 3.3 }, { name: 'B' + i, x: 30, y: 30 }));
+  const r2 = await LP.nest.arrange(rects, rects.objects.map(o => o.id), { engine: 'auto', gap: 0.1 });
+  check(`all-rectangle job routes to the rectangle packer: ${r2.placed}/12 placed`, r2.engine === 'rect' && r2.placed >= 12 && r2.problems.length === 0, JSON.stringify({ engine: r2.engine, problems: r2.problems.slice(0, 2) }));
+  const over = LP.doc.newDoc({ w: 24, h: 18 });
+  for (let i = 0; i < 30; i++) over.objects.push(LP.shapes.makeShape('rect', { w: 5, h: 5 }, { name: 'X' + i, x: 30, y: 30 }));
+  const r3 = await LP.nest.arrange(over, over.objects.map(o => o.id), { engine: 'rect', gap: 0.1 });
+  check('too many parts: the rest are listed and moved off the bed', r3.placed > 0 && r3.unplaced.length === 30 - r3.placed && over.objects.filter(o => o.x > 24).length === r3.unplaced.length, `${r3.placed} placed, ${r3.unplaced.length} left over`);
+  const d4 = mk();
+  const t0 = Date.now();
+  const r4 = await LP.nest.arrange(d4, d4.objects.map(o => o.id), { engine: 'svgnest', rotation: 90, gap: 0.1, timeMs: 3000 });
+  check(`SVGnest places all 14 parts with no overlaps (${r4.evaluated} layouts tried in ${((Date.now() - t0) / 1000).toFixed(1)} s)`, r4.placed === 14 && r4.problems.length === 0, JSON.stringify({ placed: r4.placed, unplaced: r4.unplaced, problems: r4.problems.slice(0, 3) }));
+  const used = doc => { const g = LP.doc.groupBBox(doc.objects.filter(o => o.x < 24)); return (g.w * g.h).toFixed(1); };
+  console.log(`     bounding area used: outline ${used(d1)} sq in, SVGnest ${used(d4)} sq in`);
+  const fr = mk();
+  const r5 = await LP.nest.arrange(fr, fr.objects.slice(10).map(o => o.id), { engine: 'outline', rotation: 'free', gap: 0.1 });
+  check('free rotation mode places the L-brackets with no overlaps', r5.placed === 4 && r5.problems.length === 0, JSON.stringify(r5.problems.slice(0, 2)));
+});
+
 module.exports = { section, check, near, LP };
 if (require.main === module) {
   setImmediate(async () => {
