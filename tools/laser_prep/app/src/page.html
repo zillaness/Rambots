@@ -8,62 +8,66 @@
 <style>
   :root {
     --ink: #1d1d1f; --muted: #5f6368; --line: #d6d9de; --panel: #f6f7f9; --bg: #eceef1;
-    --brand: #A31F36; --accent: #F4A81C; --warn-bg: #fff4e0; --warn-ink: #7a4a00; --err-bg: #fde8ea; --err-ink: #8a1020;
+    --brand: #A31F36; --accent: #F4A81C; --sel: #2b6fd6; --warn-bg: #fff4e0; --warn-ink: #7a4a00; --err-bg: #fde8ea; --err-ink: #8a1020;
     --ok-bg: #e8f5ec; --ok-ink: #1d6b36;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--ink);
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); }
-  header.top { display: flex; align-items: baseline; gap: 12px; padding: 10px 16px; background: #fff; border-top: 5px solid var(--brand); border-bottom: 1px solid var(--line); }
-  header.top h1 { font-size: 18px; margin: 0; }
-  header.top .sub { color: var(--muted); font-size: 13px; }
-  .app { display: grid; grid-template-columns: 360px 1fr; gap: 0; min-height: calc(100vh - 50px); }
-  aside { background: #fff; border-right: 1px solid var(--line); padding: 12px 14px 40px; overflow-y: auto; max-height: calc(100vh - 50px); }
-  section.stage { padding: 14px; overflow: auto; }
-  .step { border-bottom: 1px solid var(--line); padding: 10px 0 12px; }
-  .step:last-child { border-bottom: 0; }
-  .step h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
-  .step.locked { opacity: .45; pointer-events: none; }
-  p, li { font-size: 13.5px; line-height: 1.45; }
-  .small { font-size: 12.5px; color: var(--muted); }
-  #drop { border: 2px dashed var(--line); border-radius: 8px; padding: 14px; text-align: center; cursor: pointer; background: var(--panel); }
-  #drop.over { border-color: var(--ink); }
-  #drop b { display: block; font-size: 14px; margin-bottom: 4px; }
-  label.row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; padding: 3px 0; }
-  select, input[type=number] { font: inherit; font-size: 13.5px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
-  input[type=number] { width: 80px; }
-  button { font: inherit; font-size: 13.5px; font-weight: 600; padding: 7px 11px; border-radius: 6px; border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; }
+  header.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 8px 14px; background: #fff; border-top: 5px solid var(--brand); border-bottom: 1px solid var(--line); }
+  header.top h1 { font-size: 17px; margin: 0; }
+  header.top .sub { color: var(--muted); font-size: 12.5px; }
+  header.top .spacer { flex: 1; }
+  .app { display: grid; grid-template-columns: 370px 1fr; min-height: calc(100vh - 52px); }
+  aside { background: #fff; border-right: 1px solid var(--line); padding: 8px 12px 40px; overflow-y: auto; max-height: calc(100vh - 52px); }
+  section.stage { padding: 12px; overflow: auto; }
+  details.step { border-bottom: 1px solid var(--line); padding: 6px 0 10px; }
+  details.step > summary { cursor: pointer; font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding: 4px 0; list-style: none; }
+  details.step > summary::-webkit-details-marker { display: none; }
+  details.step > summary::before { content: '\25B8'; display: inline-block; width: 14px; }
+  details.step[open] > summary::before { content: '\25BE'; }
+  .locked { opacity: .45; pointer-events: none; }
+  p, li { font-size: 13px; line-height: 1.45; }
+  .small { font-size: 12px; color: var(--muted); }
+  label.row { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 3px 0; flex-wrap: wrap; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 8px; }
+  .field { display: grid; gap: 2px; font-size: 12px; color: var(--muted); }
+  .field input, .field select { width: 100%; }
+  select, input[type=number], input[type=text], textarea { font: inherit; font-size: 13px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--ink); }
+  input[type=number] { width: 78px; }
+  textarea { width: 100%; resize: vertical; }
+  button { font: inherit; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; }
   button.primary { background: var(--ink); color: #fff; }
+  button.small { font-size: 12px; padding: 4px 8px; }
   button:disabled { opacity: .35; cursor: not-allowed; }
-  .btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
   .units { display: grid; gap: 2px; margin: 6px 0; }
-  .units label { display: flex; justify-content: space-between; gap: 8px; padding: 5px 8px; border-radius: 6px; font-size: 13.5px; cursor: pointer; }
+  .units label { display: flex; justify-content: space-between; gap: 8px; padding: 4px 8px; border-radius: 6px; font-size: 13px; cursor: pointer; }
   .units label:hover { background: var(--panel); }
-  .units .fit { color: var(--ok-ink); font-size: 12px; }
-  .units .nofit { color: var(--err-ink); font-size: 12px; }
-  .palette { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .fit { color: var(--ok-ink); font-size: 12px; } .nofit { color: var(--err-ink); font-size: 12px; }
+  .palette { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
   .palette button { display: flex; align-items: center; gap: 8px; justify-content: flex-start; }
-  .sw { width: 14px; height: 14px; border-radius: 3px; display: inline-block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); }
-  .status { font-size: 13px; padding: 7px 9px; border-radius: 6px; margin-top: 6px; }
-  .status.ok { background: var(--ok-bg); color: var(--ok-ink); }
-  .status.warn { background: var(--warn-bg); color: var(--warn-ink); }
-  .status.err { background: var(--err-bg); color: var(--err-ink); }
-  ul.warns { list-style: none; padding: 0; margin: 0; display: grid; gap: 5px; }
-  ul.warns li { padding: 6px 8px; border-radius: 6px; font-size: 13px; }
-  ul.warns li.err { background: var(--err-bg); color: var(--err-ink); }
-  ul.warns li.warn { background: var(--warn-bg); color: var(--warn-ink); }
-  ul.warns li.info { background: var(--panel); color: var(--muted); }
-  ul.warns button { font-size: 12px; padding: 3px 7px; margin-left: 4px; }
-  .counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; margin: 6px 0; }
-  .counts div { background: var(--panel); border-radius: 6px; padding: 6px 2px; font-size: 11.5px; color: var(--muted); }
-  .counts b { display: block; font-size: 17px; color: var(--ink); }
-  #preview { width: 100%; height: auto; display: block; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 2px 10px rgba(0,0,0,.06); user-select: none; }
+  .sw { width: 13px; height: 13px; border-radius: 3px; display: inline-block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); vertical-align: -1px; }
+  .status { font-size: 12.5px; padding: 6px 8px; border-radius: 6px; margin-top: 6px; }
+  .status.ok { background: var(--ok-bg); color: var(--ok-ink); } .status.warn { background: var(--warn-bg); color: var(--warn-ink); } .status.err { background: var(--err-bg); color: var(--err-ink); }
+  ul.warns { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  ul.warns li { padding: 5px 8px; border-radius: 6px; font-size: 12.5px; }
+  ul.warns li.err { background: var(--err-bg); color: var(--err-ink); } ul.warns li.warn { background: var(--warn-bg); color: var(--warn-ink); } ul.warns li.info { background: var(--panel); color: var(--muted); }
+  ul.warns button { font-size: 11.5px; padding: 2px 6px; margin-left: 4px; }
+  .counts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; margin: 6px 0; }
+  .counts div { background: var(--panel); border-radius: 6px; padding: 5px 2px; font-size: 11px; color: var(--muted); }
+  .counts b { display: block; font-size: 16px; color: var(--ink); }
+  #preview { width: 100%; height: auto; display: block; background: #e2e5ea; box-shadow: 0 0 0 1px var(--line); user-select: none; touch-action: none; }
   #preview .hit { cursor: pointer; }
+  #preview.dragging .hit { cursor: grabbing; }
   #empty { color: var(--muted); padding: 60px 20px; text-align: center; }
-  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
-  kbd { font-family: Consolas, monospace; font-size: 11.5px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; background: #fff; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+  kbd { font-family: Consolas, monospace; font-size: 11px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; background: #fff; }
+  .objtitle { font-weight: 700; font-size: 14px; margin: 2px 0 6px; }
+  .hidden { display: none !important; }
   #print-sheet { display: none; }
-  @media (max-width: 860px) { .app { grid-template-columns: 1fr; } aside { max-height: none; border-right: 0; } }
+  @media (max-width: 900px) { .app { grid-template-columns: 1fr; } aside { max-height: none; border-right: 0; } }
   @media print {
     header.top, .app { display: none !important; }
     html, body { margin: 0; padding: 0; background: none; overflow: hidden; }
@@ -76,110 +80,224 @@
 <body>
 <header class="top">
   <h1>Laser Prep</h1>
-  <span class="sub">Rambots · prototype v<span id="ver"></span> · DXF or SVG in, laser-ready PDF out</span>
+  <span class="sub">Rambots · v<span id="ver"></span> · offline</span>
+  <label class="row">Bed
+    <select id="bed">
+      <option value="16x12">16 x 12 in (VLS2.30)</option>
+      <option value="24x12">24 x 12 in (VLS3.50, 3.60, 3.75)</option>
+      <option value="24x18" selected>24 x 18 in (VLS4.60, VLS4.75, PLS4.75)</option>
+      <option value="32x18">32 x 18 in (VLS6.60, 6.75, PLS6.75)</option>
+      <option value="48x24">48 x 24 in (ILS12.75)</option>
+      <option value="custom">Custom</option>
+    </select>
+    <span id="custom-bed" hidden><input id="bw" type="number" min="4" max="60" step="0.01" value="24"> x <input id="bh" type="number" min="4" max="60" step="0.01" value="18"></span>
+  </label>
+  <label class="row"><input type="checkbox" id="grid-on" checked> Grid
+    <select id="grid-step">
+      <option value="0.125">1/8 in</option>
+      <option value="0.25" selected>1/4 in</option>
+      <option value="0.5">1/2 in</option>
+      <option value="1">1 in</option>
+      <option value="0.3937007874">10 mm</option>
+    </select>
+  </label>
+  <label class="row"><input type="checkbox" id="snap-on" checked> Snap</label>
+  <span class="spacer"></span>
+  <button class="small" id="undo" title="Ctrl+Z">Undo</button>
+  <button class="small" id="redo" title="Ctrl+Shift+Z">Redo</button>
 </header>
 <div class="app">
   <aside>
-    <div class="step" id="step-file">
-      <h2>1 · File</h2>
-      <div id="drop" tabindex="0" role="button" aria-label="Choose a DXF or SVG file">
-        <b>Drop a DXF or SVG here</b>
-        <span class="small">or click to choose. Nothing leaves this computer.</span>
+    <details class="step" id="step-add" open>
+      <summary>Add</summary>
+      <div id="drop" tabindex="0" role="button" aria-label="Open a DXF or SVG file" style="border:2px dashed var(--line);border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:var(--panel)">
+        <b style="font-size:13.5px">Drop a DXF or SVG here</b><br><span class="small">or click to open. Nothing leaves this computer.</span>
       </div>
       <input id="file" type="file" accept=".dxf,.svg" hidden>
+      <input id="image-file" type="file" accept="image/*" hidden>
+      <div class="btns">
+        <select id="add-shape" aria-label="Add a shape">
+          <option value="">Shape…</option>
+          <option value="rect">Rectangle</option><option value="circle">Circle</option><option value="ellipse">Ellipse or oval</option>
+          <option value="slot">Slot</option><option value="polygon">Polygon</option><option value="star">Star</option>
+        </select>
+        <button class="small" id="add-text">Text</button>
+        <button class="small" id="add-image">Image</button>
+        <select id="add-pattern" aria-label="Add a test pattern">
+          <option value="">Test pattern…</option>
+          <option value="square">Test square (4 in)</option><option value="kerf">Kerf comb</option>
+          <option value="fit">Press-fit comb</option><option value="colors">Color grid (power and speed)</option>
+        </select>
+        <button class="small" id="add-box">Box…</button>
+      </div>
+      <div id="box-panel" class="hidden" style="margin-top:8px">
+        <div class="grid3">
+          <label class="field">Width<input id="box-w" type="number" step="0.01" value="6"></label>
+          <label class="field">Depth<input id="box-d" type="number" step="0.01" value="4"></label>
+          <label class="field">Height<input id="box-h" type="number" step="0.01" value="3"></label>
+          <label class="field">Thickness<input id="box-t" type="number" step="0.001" value="0.125"></label>
+          <label class="field">Finger width<input id="box-f" type="number" step="0.01" value="0.5"></label>
+        </div>
+        <label class="row"><input type="checkbox" id="box-inside"> Sizes are inside dimensions</label>
+        <label class="row"><input type="checkbox" id="box-open"> Open top</label>
+        <button class="small primary" id="box-make">Make box panels</button>
+      </div>
+      <div id="pattern-opts" class="small" style="margin-top:6px">Press-fit comb thickness <input id="fit-t" type="number" step="0.001" value="0.125"> in</div>
       <div id="file-status"></div>
-    </div>
+    </details>
 
-    <div class="step locked" id="step-units">
-      <h2>2 · Units (confirm every file)</h2>
-      <p class="small" id="units-note"></p>
-      <div class="units" id="units"></div>
-      <button class="primary" id="confirm-units">Confirm units</button>
-      <div id="units-status"></div>
-    </div>
+    <details class="step" id="step-obj" open>
+      <summary>Selected</summary>
+      <div id="obj-none" class="small">Click a part on the bed to select it. <kbd>Shift</kbd>-click adds to the selection; drag to move; arrow keys nudge.</div>
+      <div id="obj-panel" class="hidden">
+        <div class="objtitle" id="obj-name"></div>
+        <div class="grid3">
+          <label class="field">X (in)<input id="obj-x" type="number" step="0.01"></label>
+          <label class="field">Y (in)<input id="obj-y" type="number" step="0.01"></label>
+          <label class="field">Rotate<select id="obj-rot"><option value="0">0</option><option value="90">90</option><option value="180">180</option><option value="270">270</option><option value="custom">other</option></select></label>
+        </div>
+        <label class="row small">Size <span id="obj-size"></span></label>
+        <div id="units-box" class="hidden">
+          <p class="small" id="units-note"></p>
+          <div class="units" id="units"></div>
+          <button class="primary small" id="confirm-units">Confirm units</button>
+          <div id="units-status"></div>
+        </div>
+        <div id="resize-box" class="hidden">
+          <label class="row">Resize CAD part <input id="resize-pct" type="number" min="1" max="1000" step="1" value="100"> %</label>
+          <label class="row small"><input type="checkbox" id="resize-ok"> I understand hole sizes, slots, and press fits change too</label>
+          <button class="small" id="resize-apply">Apply resize</button>
+        </div>
+        <div id="shape-box" class="hidden"><div class="grid3" id="shape-fields"></div></div>
+        <div id="text-box" class="hidden">
+          <textarea id="text-value" rows="2"></textarea>
+          <div class="grid2">
+            <label class="field">Font<select id="text-font"></select></label>
+            <label class="field">Cap height (in)<input id="text-cap" type="number" step="0.01" min="0.02"></label>
+            <label class="field">Letter spacing (in)<input id="text-spacing" type="number" step="0.005"></label>
+            <label class="field">Line spacing (x)<input id="text-line" type="number" step="0.1" min="0.5"></label>
+            <label class="field">Align<select id="text-align"><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></label>
+            <label class="field">Style<select id="text-mode"><option value="fill">Filled engrave</option><option value="outline">Outline only</option></select></label>
+            <label class="field">Follow<select id="text-path"><option value="none">Straight</option><option value="arc-top">Arc, top</option><option value="arc-bottom">Arc, bottom</option><option value="line">Line at angle</option><option value="outline">Selected outline</option></select></label>
+            <label class="field" id="text-path-r-box">Radius or angle<input id="text-path-r" type="number" step="0.1" value="2"></label>
+          </div>
+          <div class="btns"><button class="small" id="pc-fonts">Use fonts on this PC</button><select id="pc-font-list" class="hidden" aria-label="Fonts on this PC"></select></div>
+          <div id="text-status"></div>
+        </div>
+        <div id="image-box" class="hidden">
+          <label class="row">Width <input id="img-w" type="number" step="0.05" min="0.1"> in</label>
+          <label class="row"><input type="checkbox" id="img-dither"> Dither in the app (otherwise the driver does it)</label>
+          <label class="row"><input type="checkbox" id="img-invert"> Invert</label>
+          <label class="row">Cut outline offset <input id="img-offset" type="number" step="0.01" value="0.1"> in, dark below <input id="img-thr" type="number" min="1" max="254" value="200"></label>
+          <button class="small" id="img-outline">Add cut outline</button>
+        </div>
+        <div class="btns"><button class="small" id="obj-dup">Duplicate</button><button class="small" id="obj-del">Delete <kbd>Del</kbd></button><button class="small" id="obj-group" title="Move and arrange together">Group</button><button class="small" id="obj-ungroup">Ungroup</button></div>
+      </div>
+    </details>
 
-    <div class="step locked" id="step-setup">
-      <h2>3 · Bed and lines</h2>
-      <label class="row">Bed
-        <select id="bed">
-          <option value="16x12">16 x 12 in</option>
-          <option value="18x12">18 x 12 in</option>
-          <option value="24x12" selected>24 x 12 in</option>
-          <option value="24x18">24 x 18 in</option>
-          <option value="32x18">32 x 18 in</option>
-          <option value="36x24">36 x 24 in</option>
-          <option value="custom">Custom</option>
-        </select>
-        <span id="custom-bed" hidden><input id="bw" type="number" min="4" max="60" step="0.01" value="24"> x <input id="bh" type="number" min="4" max="60" step="0.01" value="12"></span>
-      </label>
-      <label class="row">Line width
-        <select id="lw">
-          <option value="0.001" selected>0.001 in (hairline)</option>
-          <option value="0.0005">0.0005 in</option>
-          <option value="0.003">0.003 in</option>
-          <option value="0">0 (PDF thinnest)</option>
-        </select>
-      </label>
-      <label class="row">Join gaps up to <input id="tol" type="number" min="0.0001" max="0.01" step="0.0005" value="0.001"> in</label>
-      <p class="small" id="join-note"></p>
-    </div>
-
-    <div class="step locked" id="step-colors">
-      <h2>4 · Colors</h2>
-      <p class="small">Click a line to pick its <b>outline</b>, or click inside a shape to pick its <b>inside</b>. <kbd>Shift</kbd>-click adds to the selection.</p>
+    <details class="step" id="step-colors" open>
+      <summary>Colors</summary>
+      <p class="small">Click a line for its <b>outline</b>, or inside a shape for its <b>inside</b>.</p>
       <div class="palette">
         <button data-color="red"><span class="sw" style="background:#FF0000"></span>Cut <kbd>R</kbd></button>
         <button data-color="blue"><span class="sw" style="background:#0000FF"></span>Score <kbd>B</kbd></button>
         <button data-color="black"><span class="sw" style="background:#000"></span>Engrave <kbd>K</kbd></button>
         <button data-color="none"><span class="sw" style="background:#fff"></span>None <kbd>N</kbd></button>
       </div>
+      <label class="row small">Other ULS colors
+        <select id="more-color"><option value="">pick…</option><option value="green">Green</option><option value="yellow">Yellow</option><option value="magenta">Magenta</option><option value="cyan">Cyan</option><option value="orange">Orange (unverified)</option></select>
+      </label>
       <div class="btns">
-        <button id="sel-outlines">All outlines <kbd>A</kbd></button>
-        <button id="sel-parts">Insides of parts</button>
+        <button class="small" id="sel-outlines">All outlines <kbd>A</kbd></button>
+        <button class="small" id="sel-parts">Insides of parts</button>
         <select id="sel-color" aria-label="Select by color">
-          <option value="">Select by color…</option>
-          <option value="red">Cut lines</option>
-          <option value="blue">Score lines</option>
-          <option value="black">Engrave (lines and fills)</option>
-          <option value="none">Unassigned lines</option>
+          <option value="">By color…</option><option value="red">Cut lines</option><option value="blue">Score lines</option><option value="black">Engrave</option><option value="none">Unassigned lines</option>
         </select>
-        <button id="sel-clear">Clear <kbd>Esc</kbd></button>
+        <button class="small" id="sel-clear">Clear <kbd>Esc</kbd></button>
       </div>
       <p class="small" id="sel-info">Nothing selected.</p>
-    </div>
+    </details>
 
-    <div class="step locked" id="step-output">
-      <h2>5 · Output</h2>
+    <details class="step" id="step-layout">
+      <summary>Layout</summary>
+      <div class="grid3">
+        <label class="field">Rows<input id="copy-rows" type="number" min="1" value="1"></label>
+        <label class="field">Columns<input id="copy-cols" type="number" min="1" value="3"></label>
+        <label class="field">Gap (in)<input id="copy-gap" type="number" step="0.05" value="0.25"></label>
+      </div>
+      <button class="small" id="copy-make">Make copies of the selection</button>
+      <label class="field" style="margin-top:8px">Repeat with a list: one line per copy; {} in a text is replaced, or the whole text is (ranges like 1-20 work)
+        <textarea id="repeat-list" rows="3">1-5</textarea>
+      </label>
+      <button class="small" id="repeat-make">Repeat selection with list</button>
+      <div class="grid2" style="margin-top:10px">
+        <label class="field">Arrange with<select id="nest-engine"><option value="auto">Auto</option><option value="rect">Rectangles (fast)</option><option value="outline">True outlines</option><option value="svgnest">Pack tighter (SVGnest)</option></select></label>
+        <label class="field">Rotation<select id="nest-rot"><option value="0">None</option><option value="90" selected>90°</option><option value="45">45°</option><option value="15">15°</option><option value="free">Free</option></select></label>
+        <label class="field">Spacing (in)<input id="nest-gap" type="number" step="0.01" value="0.1"></label>
+        <label class="field">Search time (s)<input id="nest-time" type="number" min="1" max="120" value="8"></label>
+      </div>
+      <button class="small" id="nest-run">Arrange selection (or everything)</button>
+      <div id="nest-status"></div>
+      <div class="btns" style="margin-top:10px">
+        <select id="align-ref" aria-label="Align to"><option value="selection">Align to selection</option><option value="bed">Align to bed</option></select>
+        <button class="small" data-align="left">Left</button><button class="small" data-align="hcenter">Center</button><button class="small" data-align="right">Right</button>
+        <button class="small" data-align="top">Top</button><button class="small" data-align="vcenter">Middle</button><button class="small" data-align="bottom">Bottom</button>
+        <button class="small" data-dist="x">Space across</button><button class="small" data-dist="y">Space down</button>
+      </div>
+    </details>
+
+    <details class="step" id="step-joints">
+      <summary>Tabs and joints</summary>
+      <p class="small" id="joint-info">Click a part's outline. For fingers and tab-and-slot, click a straight edge.</p>
+      <label class="row">Holding tabs <input id="tab-count" type="number" min="0" max="40" value="4"> of <input id="tab-width" type="number" step="0.01" value="0.08"> in</label>
+      <div class="btns"><button class="small" id="tab-apply">Add to selected outlines</button><button class="small" id="tab-clear">Remove</button></div>
+      <div class="grid3" style="margin-top:8px">
+        <label class="field">Thickness<input id="j-t" type="number" step="0.001" value="0.125"></label>
+        <label class="field">Finger width<input id="j-f" type="number" step="0.01" value="0.5"></label>
+        <label class="field">Start with<select id="j-start"><option value="finger">Finger</option><option value="notch">Notch</option></select></label>
+      </div>
+      <button class="small" id="finger-apply">Fingers on edge</button>
+      <div class="grid3" style="margin-top:8px">
+        <label class="field">Tab width<input id="ts-w" type="number" step="0.01" value="0.5"></label>
+        <label class="field">Tabs<input id="ts-n" type="number" min="1" value="2"></label>
+        <label class="field">Slot clearance<input id="ts-c" type="number" step="0.001" value="0.004"></label>
+      </div>
+      <button class="small" id="tabslot-apply">Tabs on edge + matching slots</button>
+      <div id="joint-status"></div>
+    </details>
+
+    <details class="step" id="step-output" open>
+      <summary>Output</summary>
+      <label class="row"><input type="checkbox" id="kerf-on"> Kerf compensation <input id="kerf" type="number" step="0.001" value="0.006"> in</label>
+      <label class="row">Line width
+        <select id="lw">
+          <option value="0.001" selected>0.001 in (hairline)</option><option value="0.0005">0.0005 in</option><option value="0.003">0.003 in</option><option value="0">0 (PDF thinnest)</option>
+        </select>
+      </label>
       <div class="counts">
-        <div><b id="c-cut">0</b>cut</div><div><b id="c-score">0</b>score</div><div><b id="c-vec">0</b>vector engrave</div><div><b id="c-fill">0</b>raster fills</div>
+        <div><b id="c-cut">0</b>cut</div><div><b id="c-score">0</b>score</div><div><b id="c-vec">0</b>vector engrave</div><div><b id="c-fill">0</b>raster fills</div><div><b id="c-img">0</b>images</div>
       </div>
       <div class="btns">
-        <button class="primary" id="save-pdf">Save PDF</button>
-        <button id="print">Print</button>
-        <button id="save-dxf">Save DXF</button>
-        <button id="save-svg">Save SVG</button>
+        <button class="primary" id="save-pdf">Save PDF</button><button id="print">Print</button><button id="save-dxf">Save DXF</button><button id="save-svg">Save SVG</button>
       </div>
-      <p class="small">PDF is for UCP import or printing from Adobe Reader at Actual size. DXF is vectors only, so black insides are left out. Print uses this browser; set margins to None and scale to Default.</p>
+      <p class="small">PDF is for UCP import or Adobe Reader at Actual size. DXF is vectors only. Print uses this browser: margins None, scale Default.</p>
       <div id="out-status"></div>
-    </div>
+    </details>
 
-    <div class="step" id="step-warn">
-      <h2>Checks</h2>
-      <ul class="warns" id="warns"><li class="info">Load a file to start.</li></ul>
+    <details class="step" id="step-warn" open>
+      <summary>Checks</summary>
+      <ul class="warns" id="warns"><li class="info">Add a file, shape, text, or pattern to start.</li></ul>
       <label class="row small"><input type="checkbox" id="show-ref"> Show bend and reference layers (never output)</label>
-    </div>
+    </details>
   </aside>
 
   <section class="stage">
-    <div id="empty">The bed preview shows up here.</div>
+    <div id="empty">The bed shows up here.</div>
     <svg id="preview" hidden></svg>
     <div class="legend" id="legend" hidden>
-      <span><span class="sw" style="background:#FF0000"></span> cut</span>
-      <span><span class="sw" style="background:#0000FF"></span> score</span>
-      <span><span class="sw" style="background:#000"></span> engrave</span>
-      <span><span class="sw" style="background:#fff;border:1px dashed #999"></span> none (not output)</span>
-      <span><span class="sw" style="background:#F4A81C"></span> selected</span>
-      <span><span class="sw" style="background:#ff7a00;border-radius:50%"></span> problem spot</span>
+      <span><span class="sw" style="background:#FF0000"></span> cut</span><span><span class="sw" style="background:#0000FF"></span> score</span>
+      <span><span class="sw" style="background:#000"></span> engrave</span><span><span class="sw" style="background:#fff;border:1px dashed #999"></span> none</span>
+      <span><span class="sw" style="background:#F4A81C"></span> selected</span><span><span class="sw" style="background:#ff7a00;border-radius:50%"></span> problem spot</span>
     </div>
   </section>
 </div>

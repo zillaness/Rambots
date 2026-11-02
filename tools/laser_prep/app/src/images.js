@@ -158,6 +158,9 @@
     const want = LP.doc.mapper(imgObj)([0, 0]), have = LP.doc.mapper(o)([0, 0]);
     o.x += want[0] - have[0];
     o.y += want[1] - have[1];
+    // The outline belongs to its image: they move and arrange together.
+    imgObj.bond = imgObj.bond || ('b' + LP.doc.newId());
+    o.bond = imgObj.bond;
     return o;
   }
 

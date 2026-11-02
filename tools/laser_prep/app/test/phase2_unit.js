@@ -276,6 +276,34 @@ section('colors', () => {
   check('raw CAD export (layer 0, index 7): no file colors, so the default applies', LP.doc.fileAssign(raw) === null);
 });
 
+section('bonds', async () => {
+  const d = LP.doc.newDoc({ w: 24, h: 18 });
+  const plateA = LP.shapes.makeShape('rect', { w: 4, h: 2 }, { name: 'Plate', x: 30, y: 5 });
+  const label = LP.fonts.makeText({ text: 'A', cap: 0.5 }, { name: 'Label', x: 31, y: 5.5 });
+  LP.doc.bond([plateA, label]);
+  d.objects.push(plateA, label);
+  for (let i = 0; i < 5; i++) d.objects.push(LP.shapes.makeShape('circle', { d: 3 }, { name: 'C' + i, x: 40, y: 40 }));
+  const offset = () => { const a = LP.doc.mapper(plateA)([0, 0]), b = LP.doc.mapper(label)([label.job.box[0], label.job.box[1]]); return [b[0] - a[0], b[1] - a[1]]; };
+  const rel0 = offset(), dist0 = Math.hypot(...rel0);
+  const r = await LP.nest.arrange(d, d.objects.map(o => o.id), { engine: 'outline', rotation: 90, gap: 0.1 });
+  const rel1 = offset();
+  check('arrange keeps a bonded label on its plate (same distance)', r.placed === 6 && r.problems.length === 0 && near(Math.hypot(...rel1), dist0, 1e-6), `${r.placed} items, distance ${dist0.toFixed(4)} -> ${Math.hypot(...rel1).toFixed(4)}`);
+  const lb = LP.doc.bbox(label), pb = LP.doc.bbox(plateA);
+  check('the label is still inside the plate', lb.x >= pb.x - 1e-6 && lb.y >= pb.y - 1e-6 && lb.x + lb.w <= pb.x + pb.w + 1e-6 && lb.y + lb.h <= pb.y + pb.h + 1e-6);
+  const d2 = LP.doc.newDoc({ w: 24, h: 18 });
+  const p2 = LP.shapes.makeShape('rect', { w: 4, h: 2 }, { name: 'P', x: 30, y: 5 }), t2 = LP.fonts.makeText({ text: 'B', cap: 0.5 }, { name: 'T', x: 31, y: 5.5 });
+  LP.doc.bond([p2, t2]); d2.objects.push(p2, t2);
+  const before = Math.hypot(...(() => { const a = LP.doc.mapper(p2)([0, 0]), b = LP.doc.mapper(t2)([t2.job.box[0], t2.job.box[1]]); return [b[0] - a[0], b[1] - a[1]]; })());
+  const r2 = await LP.nest.arrange(d2, [p2.id, t2.id], { engine: 'svgnest', rotation: 90, gap: 0.1, timeMs: 800 });
+  const after = Math.hypot(...(() => { const a = LP.doc.mapper(p2)([0, 0]), b = LP.doc.mapper(t2)([t2.job.box[0], t2.job.box[1]]); return [b[0] - a[0], b[1] - a[1]]; })());
+  check('SVGnest also moves the bonded pair as one', r2.placed === 1 && r2.problems.length === 0 && near(after, before, 1e-6), `${before.toFixed(4)} -> ${after.toFixed(4)}`);
+  const d3 = LP.doc.newDoc({ w: 24, h: 18 });
+  const a = LP.shapes.makeShape('rect', { w: 2, h: 1 }, { x: 5, y: 1 }), b = LP.shapes.makeShape('rect', { w: 1, h: 1 }, { x: 5.5, y: 1.2 }), c = LP.shapes.makeShape('rect', { w: 1, h: 3 }, { x: 10, y: 4 });
+  LP.doc.bond([a, b]); d3.objects.push(a, b, c);
+  LP.doc.align(d3, [a.id, b.id, c.id], 'left', 'selection');
+  check('align moves a bonded pair as one unit', near(LP.doc.bbox(a).x, 5) && near(LP.doc.bbox(b).x, 5.5) && near(LP.doc.bbox(c).x, 5));
+});
+
 module.exports = { section, check, near, LP };
 if (require.main === module) {
   setImmediate(async () => {

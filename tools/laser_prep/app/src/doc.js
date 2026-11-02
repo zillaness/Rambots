@@ -90,6 +90,36 @@
     };
   }
 
+  /** The object's outline points on the bed (flattened geometry plus exact arc extremes). */
+  function pagePoints(obj) {
+    const m = mapper(obj);
+    return localPoints(obj).map(m);
+  }
+
+  /** Objects that move together: everything sharing a bond id with any of the given objects. */
+  function withBonds(doc, objs) {
+    const bonds = new Set(objs.map(o => o.bond).filter(Boolean));
+    const out = new Set(objs);
+    if (bonds.size) for (const o of doc.objects) if (o.bond && bonds.has(o.bond)) out.add(o);
+    return [...out];
+  }
+
+  function bond(objs) { const id = 'b' + nextId++; objs.forEach(o => { o.bond = id; }); return id; }
+  function unbond(objs) { objs.forEach(o => { delete o.bond; }); }
+
+  /** Rotate an object about a bed point by deg degrees (clockwise on screen), keeping its material in place. */
+  function rotateAbout(obj, pivot, deg, shift) {
+    const ref = [obj.job.box[0], obj.job.box[1]], q = mapper(obj)(ref), th = rad(deg), c = Math.cos(th), sn = Math.sin(th);
+    const d = [q[0] - pivot[0], q[1] - pivot[1]];
+    const target = [pivot[0] + d[0] * c - d[1] * sn + (shift ? shift[0] : 0), pivot[1] + d[0] * sn + d[1] * c + (shift ? shift[1] : 0)];
+    obj.rot = (((obj.rot || 0) + deg) % 360 + 360) % 360;
+    obj._frame = null;
+    obj.x = 0; obj.y = 0;
+    const m0 = mapper(obj)(ref);
+    obj.x = target[0] - m0[0];
+    obj.y = target[1] - m0[1];
+  }
+
   function bbox(obj) {
     const f = frame(obj);
     return { x: obj.x, y: obj.y, w: f.maxx - f.minx, h: f.maxy - f.miny };
@@ -143,12 +173,13 @@
     let offBed = 0;
     const group = 'g' + nextId++;
     objs.forEach(o => { o.group = o.group || group; });
+    if (objs.length > 1 && !objs.every(o => o.bond && o.bond === objs[0].bond)) bond(objs);
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         if (!r && !c) continue;
-        const dx = c * (g.w + gap), dy = r * (g.h + gap);
+        const dx = c * (g.w + gap), dy = r * (g.h + gap), copyBond = objs.length > 1 ? 'b' + nextId++ : undefined;
         for (const o of objs) {
-          const k = clone(o, { x: o.x + dx, y: o.y + dy, group: o.group });
+          const k = clone(o, { x: o.x + dx, y: o.y + dy, group: o.group, bond: copyBond });
           doc.objects.push(k);
           added.push(k.id);
           const b = bbox(k);
@@ -160,33 +191,46 @@
   }
 
   /** mode: left | hcenter | right | top | vcenter | bottom; ref: 'selection' or 'bed'. */
+  /** Bonded groups count as one unit for align and distribute. */
+  function units(doc, objs) {
+    const seen = new Set(), out = [];
+    for (const o of objs) {
+      if (seen.has(o)) continue;
+      const members = o.bond ? doc.objects.filter(x => x.bond === o.bond) : [o];
+      members.forEach(x => seen.add(x));
+      out.push(members);
+    }
+    return out;
+  }
+  const moveUnit = (u, dx, dy) => u.forEach(o => { o.x += dx; o.y += dy; });
+
   function align(doc, ids, mode, ref) {
     const objs = doc.objects.filter(o => ids.includes(o.id));
     if (!objs.length) return;
-    const m = doc.margin;
-    const R = ref === 'bed' ? { x: m, y: m, w: doc.bed.w - 2 * m, h: doc.bed.h - 2 * m } : groupBBox(objs);
-    for (const o of objs) {
-      const b = bbox(o);
-      if (mode === 'left') o.x = R.x;
-      else if (mode === 'right') o.x = R.x + R.w - b.w;
-      else if (mode === 'hcenter') o.x = R.x + (R.w - b.w) / 2;
-      else if (mode === 'top') o.y = R.y;
-      else if (mode === 'bottom') o.y = R.y + R.h - b.h;
-      else if (mode === 'vcenter') o.y = R.y + (R.h - b.h) / 2;
+    const m = doc.margin, us = units(doc, objs);
+    const R = ref === 'bed' ? { x: m, y: m, w: doc.bed.w - 2 * m, h: doc.bed.h - 2 * m } : groupBBox([].concat(...us));
+    for (const u of us) {
+      const b = groupBBox(u);
+      if (mode === 'left') moveUnit(u, R.x - b.x, 0);
+      else if (mode === 'right') moveUnit(u, R.x + R.w - b.w - b.x, 0);
+      else if (mode === 'hcenter') moveUnit(u, R.x + (R.w - b.w) / 2 - b.x, 0);
+      else if (mode === 'top') moveUnit(u, 0, R.y - b.y);
+      else if (mode === 'bottom') moveUnit(u, 0, R.y + R.h - b.h - b.y);
+      else if (mode === 'vcenter') moveUnit(u, 0, R.y + (R.h - b.h) / 2 - b.y);
     }
   }
 
   /** Equal gaps between objects along an axis ('x' or 'y'); the two ends stay put. */
   function distribute(doc, ids, axis) {
-    const objs = doc.objects.filter(o => ids.includes(o.id));
-    if (objs.length < 3) return;
+    const us = units(doc, doc.objects.filter(o => ids.includes(o.id)));
+    if (us.length < 3) return;
     const key = axis === 'y' ? 'y' : 'x', size = axis === 'y' ? 'h' : 'w';
-    const items = objs.map(o => ({ o, b: bbox(o) })).sort((p, q) => p.b[key] - q.b[key]);
+    const items = us.map(u => ({ u, b: groupBBox(u) })).sort((p, q) => p.b[key] - q.b[key]);
     const first = items[0].b, last = items[items.length - 1].b;
     const span = last[key] + last[size] - first[key], used = items.reduce((s, it) => s + it.b[size], 0);
     const gap = (span - used) / (items.length - 1);
     let pos = first[key];
-    for (const it of items) { it.o[key] = pos; pos += it.b[size] + gap; }
+    for (const it of items) { const d = pos - it.b[key]; moveUnit(it.u, key === 'x' ? d : 0, key === 'y' ? d : 0); pos += it.b[size] + gap; }
   }
 
   const snap = (v, step) => (step > 0 ? Math.round(v / step) * step : v);
@@ -279,11 +323,11 @@
   }
 
   LP.doc = {
-    newDoc, newId, makeObject, defaultAssign, frame, mapper, inverse, bbox, groupBBox, footprint, clone,
+    newDoc, newId, makeObject, defaultAssign, frame, mapper, inverse, bbox, groupBBox, footprint, clone, pagePoints, withBonds, bond, unbond, rotateAbout, units,
     copyGrid, align, distribute, snap, reassign, rebuild, segmentsOf, snapshot, restore, fileAssign,
   };
 })(globalThis.LP = globalThis.LP || {});
 
 /** CHANGELOG
- * v0.3 (2026-11-02): Initial release.
+ * v0.3 (2026-11-02): Initial release. Bonded groups (move and arrange as one), rotate about a point, bed points.
  */

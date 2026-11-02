@@ -33,15 +33,48 @@
   }
   function range(a, b, s) { const out = []; for (let v = a; v <= b + 1e-9; v += s) out.push(v); return out; }
 
-  /** Footprints of an object at an angle: normalized outline, inflated outline, and their bounds (cached). */
+  // An item is one object or a bonded group, moved and rotated as one rigid body. Rotations are relative to
+  // where the item sits now, about the top-left corner of its current outline (c0).
+  function makeItem(objs) {
+    const pts = [].concat(...objs.map(LP.doc.pagePoints));
+    const c0 = [Math.min(...pts.map(p => p[0])), Math.min(...pts.map(p => p[1]))];
+    const polys = objs.map(o => { const fp = LP.doc.footprint(o, o.rot), b = LP.doc.bbox(o); return fp.poly.map(p => [p[0] + b.x, p[1] + b.y]); });
+    return { objs, pts, polys, c0, name: objs.map(o => o.name).join(' + '), cache: {} };
+  }
+
+  /** Item outline rotated by deg, normalized so its bounding box corner is at (0, 0); minR is the shift that took. */
+  function itemFp(item, deg) {
+    const key = Math.round(((deg % 360) + 360) % 360 * 1e6) / 1e6;
+    item.fpCache = item.fpCache || {};
+    if (item.fpCache[key]) return item.fpCache[key];
+    const th = (key * Math.PI) / 180, c = Math.cos(th), sn = Math.sin(th);
+    const R = q => { const d0 = q[0] - item.c0[0], d1 = q[1] - item.c0[1]; return [d0 * c - d1 * sn, d0 * sn + d1 * c]; };
+    const rp = item.pts.map(R);
+    const minR = [Math.min(...rp.map(p => p[0])), Math.min(...rp.map(p => p[1]))], maxR = [Math.max(...rp.map(p => p[0])), Math.max(...rp.map(p => p[1]))];
+    const rpolys = item.polys.map(poly => poly.map(R));
+    let poly;
+    if (rpolys.length === 1) poly = rpolys[0];
+    else { const u = LP.clip.union(rpolys); poly = u.length === 1 ? u[0] : LP.clip.convexHull([].concat(...rpolys)); }
+    const out = { a: key, base: poly.map(p => [p[0] - minR[0], p[1] - minR[1]]), w: maxR[0] - minR[0], h: maxR[1] - minR[1], minR };
+    item.fpCache[key] = out;
+    return out;
+  }
+
+  /** Rotate the item by deg about c0, then shift so its rotated outline corner lands at (cx, cy). */
+  function placeItem(item, deg, cx, cy) {
+    const fp = itemFp(item, deg), shift = [cx - fp.minR[0] - item.c0[0], cy - fp.minR[1] - item.c0[1]];
+    for (const o of item.objs) LP.doc.rotateAbout(o, item.c0, fp.a, shift);
+  }
+
+  /** Footprint variants with the inflated outline used for spacing (cached per angle). */
   function variantFor(item, a, half) {
-    const key = Math.round(((a % 360) + 360) % 360 * 1e6) / 1e6;
+    const key = Math.round(((a % 360) + 360) % 360 * 1e6) / 1e6 + '|' + half;
     item.cache = item.cache || {};
     if (!item.cache[key]) {
-      const fp = LP.doc.footprint(item.obj, key);
-      const infl = half > 0 ? LP.clip.offset([fp.poly], half, { join: 'miter', miter: 4 }) : [fp.poly];
+      const fp = itemFp(item, a);
+      const infl = half > 0 ? LP.clip.offset([fp.base], half, { join: 'miter', miter: 4 }) : [fp.base];
       const big = infl.reduce((m, p) => (Math.abs(LP.clip.area(p)) > Math.abs(LP.clip.area(m)) ? p : m), infl[0]);
-      item.cache[key] = { a: key, base: fp.poly, w: fp.w, h: fp.h, inflInt: toInt(big), ib: boundsOf(big) };
+      item.cache[key] = { a: fp.a, base: fp.base, w: fp.w, h: fp.h, inflInt: toInt(big), ib: boundsOf(big) };
     }
     return item.cache[key];
   }
@@ -106,7 +139,7 @@
       return best;
     }
 
-    const order = items.slice().sort((p, q) => Math.abs(LP.clip.area(variantFor(q, 0, half).base)) - Math.abs(LP.clip.area(variantFor(p, 0, half).base)));
+    const order = items.slice().sort((p, q) => Math.abs(LP.clip.area(itemFp(q, 0).base)) - Math.abs(LP.clip.area(itemFp(p, 0).base)));
     for (const item of order) {
       const vars = coarse.map(a => variantFor(item, a, half)).filter(v => v.w <= uw + EPS && v.h <= uh + EPS);
       if (!vars.length) { unplaced.push(item); continue; }
@@ -136,12 +169,12 @@
     const placements = [], unplaced = [];
     const rotate = opts.rotation !== 0 && opts.rotation !== 'none';
     const order = items.slice().sort((p, q) => {
-      const a = LP.doc.footprint(p.obj, 0), b = LP.doc.footprint(q.obj, 0);
+      const a = itemFp(p, 0), b = itemFp(q, 0);
       return Math.max(b.w, b.h) - Math.max(a.w, a.h) || b.w * b.h - a.w * a.h;
     });
     for (const item of order) {
-      const f0 = LP.doc.footprint(item.obj, 0), options = [[f0.w + gap, f0.h + gap, 0]];
-      if (rotate) { const f1 = LP.doc.footprint(item.obj, 90); options.push([f1.w + gap, f1.h + gap, 90]); }
+      const f0 = itemFp(item, 0), options = [[f0.w + gap, f0.h + gap, 0]];
+      if (rotate) { const f1 = itemFp(item, 90); options.push([f1.w + gap, f1.h + gap, 90]); }
       let best = null;
       for (const [w, h, a] of options) {
         for (const fr of free) {
@@ -180,7 +213,7 @@
     // no-fit-polygon work grows with the square of the vertex count.
     const SIMPLIFY = 0.01;
     const parts = items.map((it, i) => {
-      const fp = LP.doc.footprint(it.obj, 0);
+      const fp = { poly: itemFp(it, 0).base };
       const simple = LP.clip.clean([fp.poly], SIMPLIFY)[0] || fp.poly;
       const infl = LP.clip.offset([simple], half + SIMPLIFY, { join: 'miter', miter: 4 });
       const big = infl.reduce((mx, p) => (Math.abs(LP.clip.area(p)) > Math.abs(LP.clip.area(mx)) ? p : mx), infl[0]);
@@ -243,16 +276,10 @@
       const placements = [], placedIds = new Set();
       if (best && best.placements.length) {
         for (const pos of best.placements[0]) {
-          // SVGnest rotates the angle-0 outline about the origin, then shifts it by (pos.x, pos.y).
-          // Solve for the object corner that puts the same material in the same place.
-          const obj = items[pos.id].obj, save = obj.rot;
-          obj.rot = 0; const f0 = LP.doc.frame(obj);
-          obj.rot = ((pos.rotation % 360) + 360) % 360; obj._frame = null; const ft = LP.doc.frame(obj);
-          obj.rot = save; obj._frame = null;
-          const th = (pos.rotation * Math.PI) / 180, c = Math.cos(th), sn = Math.sin(th);
-          const x = pos.x / U + m - half + ft.minx - (c * f0.minx - sn * f0.miny);
-          const y = pos.y / U + m - half + ft.miny - (sn * f0.minx + c * f0.miny);
-          placements.push({ item: items[pos.id], x, y, rot: ((pos.rotation % 360) + 360) % 360 });
+          // SVGnest rotates the normalized outline (bed point minus c0) about the origin and shifts it by
+          // (pos.x, pos.y) inside a bin whose corner sits at (m - half, m - half) on the bed.
+          const item = items[pos.id], fp = itemFp(item, pos.rotation);
+          placements.push({ item, rot: fp.a, x: pos.x / U + m - half + fp.minR[0], y: pos.y / U + m - half + fp.minR[1] });
           placedIds.add(pos.id);
         }
       }
@@ -262,58 +289,66 @@
 
   // ---------- check and apply ----------
 
-  /** Overlaps (with the spacing) and parts outside the usable bed, measured on the final positions. */
+  /** Overlaps (with the spacing) and parts outside the usable bed, measured on the final positions. Members of one bonded group may overlap each other. */
   function verify(doc, objs, gap) {
     const m = doc.margin, half = gap / 2, problems = [], polys = [];
     for (const o of objs) {
       const fp = LP.doc.footprint(o, o.rot), b = LP.doc.bbox(o);
       const poly = fp.poly.map(p => [p[0] + b.x, p[1] + b.y]);
-      if (b.x < m - 1e-6 || b.y < m - 1e-6 || b.x + b.w > doc.bed.w - m + 1e-6 || b.y + b.h > doc.bed.h - m + 1e-6) problems.push(`${o.name} is outside the bed margin`);
-      const infl = half > 0 ? LP.clip.offset([poly], half * 0.999, { join: 'miter', miter: 4 }) : [poly];
+      if (b.x < m - 1e-3 || b.y < m - 1e-3 || b.x + b.w > doc.bed.w - m + 1e-3 || b.y + b.h > doc.bed.h - m + 1e-3) problems.push(`${o.name} is outside the bed margin`);
+      const infl = half > 0 ? LP.clip.offset([poly], half * 0.99, { join: 'miter', miter: 4 }) : [poly];
       polys.push({ o, path: toInt(infl[0] || poly), b: boundsOf(infl[0] || poly) });
     }
     for (let i = 0; i < polys.length; i++) {
       for (let j = i + 1; j < polys.length; j++) {
         const p = polys[i], q = polys[j];
+        if (p.o.bond && p.o.bond === q.o.bond) continue;
         if (p.b[0] < q.b[2] && p.b[2] > q.b[0] && p.b[1] < q.b[3] && p.b[3] > q.b[1] && interArea(p.path, q.path) > 1e-6) problems.push(`${p.o.name} and ${q.o.name} are closer than the spacing`);
       }
     }
     return problems;
   }
 
-  /** Does every object look like a plain rectangle? Then the rectangle packer does better. */
-  const allRects = objs => objs.every(o => { const fp = LP.doc.footprint(o, 0); return Math.abs(Math.abs(LP.clip.area(fp.poly)) - fp.w * fp.h) < 0.005 * fp.w * fp.h; });
+  /** Does every item look like a plain rectangle? Then the rectangle packer does better. */
+  const allRects = items => items.every(it => { const fp = itemFp(it, 0); return Math.abs(Math.abs(LP.clip.area(fp.base)) - fp.w * fp.h) < 0.005 * fp.w * fp.h; });
+
+  /** Bonded groups become one item each; everything else is its own item. */
+  function itemsFor(doc, objs) {
+    const seen = new Set(), items = [];
+    for (const o of objs) {
+      if (seen.has(o)) continue;
+      const members = o.bond ? doc.objects.filter(x => x.bond === o.bond) : [o];
+      members.forEach(x => seen.add(x));
+      items.push(makeItem(members));
+    }
+    return items;
+  }
 
   /**
-   * Arrange objects on the bed. opts: { engine: auto | rect | outline | svgnest, rotation: 90 | 45 | 30 | 15 | 5 | free,
-   * gap, timeMs, onProgress }. Objects that do not fit are stacked to the right of the bed and listed.
+   * Arrange objects on the bed. opts: { engine: auto | rect | outline | svgnest, rotation: 0 | 90 | 45 | 30 | 15 | 5 | free,
+   * gap, timeMs, onProgress }. Bonded groups move as one. Items that do not fit are stacked to the right of the bed and listed.
    */
   async function arrange(doc, ids, opts) {
     const o = Object.assign({ engine: 'auto', rotation: 90, gap: 0.1 }, opts || {}, { margin: doc.margin });
-    const objs = doc.objects.filter(x => ids.includes(x.id)), items = objs.map(obj => ({ obj }));
+    if (o.rotation === 0) o.rotation = 360;
+    const objs = doc.objects.filter(x => ids.includes(x.id)), items = itemsFor(doc, objs);
     let engine = o.engine;
-    if (engine === 'auto') engine = allRects(objs) ? 'rect' : 'outline';
-    const res = engine === 'rect' ? maxRects(items, doc.bed, o) : engine === 'svgnest' ? await svgnest(items, doc.bed, o) : greedy(items, doc.bed, o);
-    for (const p of res.placements) {
-      p.item.obj.rot = p.rot;
-      p.item.obj._frame = null;
-      p.item.obj.x = p.x;
-      p.item.obj.y = p.y;
-    }
+    if (engine === 'auto') engine = allRects(items) ? 'rect' : 'outline';
+    const res = engine === 'rect' ? maxRects(items, doc.bed, Object.assign({}, o, { rotation: o.rotation === 360 ? 0 : o.rotation })) : engine === 'svgnest' ? await svgnest(items, doc.bed, o) : greedy(items, doc.bed, o);
+    for (const p of res.placements) placeItem(p.item, p.rot, p.x, p.y);
     let sy = doc.margin;
     for (const it of res.unplaced) {
-      const b = LP.doc.bbox(it.obj);
-      it.obj.x = doc.bed.w + 0.5;
-      it.obj.y = sy;
-      sy += b.h + o.gap;
+      const fp = itemFp(it, 0);
+      placeItem(it, 0, doc.bed.w + 0.5, sy);
+      sy += fp.h + o.gap;
     }
-    const placedObjs = res.placements.map(p => p.item.obj);
-    return { engine, placed: placedObjs.length, unplaced: res.unplaced.map(it => it.obj.name), problems: verify(doc, placedObjs, o.gap), evaluated: res.evaluated };
+    const placedObjs = [].concat(...res.placements.map(p => p.item.objs));
+    return { engine, placed: res.placements.length, unplaced: res.unplaced.map(it => it.name), problems: verify(doc, placedObjs, o.gap), evaluated: res.evaluated };
   }
 
-  LP.nest = { arrange, greedy, maxRects, svgnest, verify, allRects };
+  LP.nest = { arrange, greedy, maxRects, svgnest, verify, allRects, makeItem, itemFp, placeItem };
 })(globalThis.LP = globalThis.LP || {});
 
 /** CHANGELOG
- * v0.3 (2026-11-02): Initial release.
+ * v0.3 (2026-11-02): Initial release. Items are objects or bonded groups moved as rigid bodies (relative rotation about their corner).
  */
