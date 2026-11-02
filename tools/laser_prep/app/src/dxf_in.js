@@ -1,6 +1,6 @@
 /**
  * @file dxf_in.js
- * @version 0.1
+ * @version 0.3
  * @author Samuel Cao
  * @created 2026-10-30
  * @lastUpdated 2026-10-30
@@ -11,6 +11,12 @@
   'use strict';
 
   const TAU = Math.PI * 2;
+  // AutoCAD color index to laser colors. Index 7 ("black or white") is what raw CAD exports use for
+  // everything, so it is treated as "no color" rather than engrave.
+  const ACI = { 1: 'red', 2: 'yellow', 3: 'green', 4: 'cyan', 5: 'blue', 6: 'magenta' };
+  const RGB_NAMES = { ff0000: 'red', '0000ff': 'blue', '000000': 'black', '00ff00': 'green', ffff00: 'yellow', ff00ff: 'magenta', '00ffff': 'cyan', ff6600: 'orange' };
+  const trueColor = v => RGB_NAMES[(Number(v) & 0xffffff).toString(16).padStart(6, '0')] || null;
+  const layerNameColor = name => { const n = String(name || '').toUpperCase(); return /\bCUT/.test(n) ? 'red' : /SCORE/.test(n) ? 'blue' : /ENGRAVE|ETCH|MARK/.test(n) ? 'black' : null; };
   const STRUCTURAL = new Set(['SEQEND', 'VERTEX', 'ATTRIB', 'ATTDEF', 'ENDBLK', 'BLOCK']);
 
   function tokenize(text) {
@@ -215,10 +221,21 @@
     }
   }
 
-  function entity(r, M, ctx, depth, stack) {
+  /** Laser color for an entity: true color, then color index, then its layer, then the block's color. */
+  function entityColor(r, ctx, inherited) {
+    const layer = str(r, 8, '0'), tc = r.data.find(d => d[0] === 420), aci = num(r, 62, 256);
+    if (tc) { const c = trueColor(tc[1]); if (c) return c; }
+    if (aci > 0 && aci < 256) return ACI[aci] || null;
+    if (aci === 0) return inherited || null;
+    const L = ctx.layers[layer];
+    if (L) { if (L.tc !== null) { const c = trueColor(L.tc); if (c) return c; } if (ACI[Math.abs(L.aci)]) return ACI[Math.abs(L.aci)]; }
+    return layerNameColor(layer);
+  }
+
+  function entity(r, M, ctx, depth, stack, inherited) {
     const t = r.type;
     if (depth === 0 && num(r, 67, 0) === 1 && !STRUCTURAL.has(t)) { ctx.bump('paper space ' + t); return; }
-    const meta = { layer: str(r, 8, '0'), eid: ctx.nextId++ };
+    const meta = { layer: str(r, 8, '0'), eid: ctx.nextId++, color: entityColor(r, ctx, inherited) };
     switch (t) {
       case 'LINE':
         emit({ k: 'L', a: [num(r, 10, 0), num(r, 20, 0)], b: [num(r, 11, 0), num(r, 21, 0)], ...meta }, M, ctx.segs);
@@ -308,7 +325,7 @@
             T = compose(T, compose(scale(sx, sy), translate(-blk.base[0], -blk.base[1])));
             if (o.affine) T = compose(o.affine, T);
             const MT = compose(M, T);
-            for (const e of blk.ents) entity(e, MT, ctx, depth + 1, [...stack, name]);
+            for (const e of blk.ents) entity(e, MT, ctx, depth + 1, [...stack, name], meta.color);
           }
         }
         return;
@@ -325,7 +342,7 @@
   /** Parse DXF text. Returns segments in file units plus header units and skip counts. */
   function parseDXF(text) {
     const pairs = tokenize(text);
-    const header = {}, blocks = {};
+    const header = {}, blocks = {}, layers = {};
     let ents = [];
     for (let i = 0; i < pairs.length; i++) {
       if (!(pairs[i][0] === 0 && pairs[i][1] === 'SECTION')) continue;
@@ -345,11 +362,17 @@
         }
       } else if (name === 'ENTITIES') {
         ents = group(records(body));
+      } else if (name === 'TABLES') {
+        for (const r of records(body)) {
+          if (r.type !== 'LAYER') continue;
+          const tc = r.data.find(d => d[0] === 420);
+          layers[str(r, 2, '')] = { aci: num(r, 62, 7), tc: tc ? tc[1] : null };
+        }
       }
       i = j;
     }
     const ctx = {
-      segs: [], blocks, nextId: 0, text: 0, fitOnly: 0, tilted: 0, ignored: {},
+      segs: [], blocks, layers, nextId: 0, text: 0, fitOnly: 0, tilted: 0, ignored: {},
       bump(t) { this.ignored[t] = (this.ignored[t] || 0) + 1; },
     };
     for (const r of ents) entity(r, ID, ctx, 0, []);
@@ -369,4 +392,5 @@
 
 /** CHANGELOG
  * v0.1 (2026-10-30): Initial prototype. HEADER units, BLOCKS, LINE, CIRCLE, ARC, LWPOLYLINE and POLYLINE with bulges, SPLINE (NURBS any degree, fit-point fallback), ELLIPSE, INSERT and MINSERT with nesting guard, OCS extrusion, skip counts by type.
+ * v0.3 (2026-11-02): Laser colors read from the file (true color, color index, layer color, block color, then CUT/SCORE/ENGRAVE layer names); index 7 counts as no color.
  */

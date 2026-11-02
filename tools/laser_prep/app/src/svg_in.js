@@ -1,6 +1,6 @@
 /**
  * @file svg_in.js
- * @version 0.1
+ * @version 0.3
  * @author Samuel Cao
  * @created 2026-10-30
  * @lastUpdated 2026-10-30
@@ -20,6 +20,26 @@
     M[0] * N[4] + M[2] * N[5] + M[4], M[1] * N[4] + M[3] * N[5] + M[5],
   ];
   const ap = (M, p) => [M[0] * p[0] + M[2] * p[1] + M[4], M[1] * p[0] + M[3] * p[1] + M[5]];
+  const NAMED = { red: 'ff0000', blue: '0000ff', black: '000000', lime: '00ff00', yellow: 'ffff00', magenta: 'ff00ff', fuchsia: 'ff00ff', cyan: '00ffff', aqua: '00ffff' };
+  const LASER = { ff0000: 'red', '0000ff': 'blue', '000000': 'black', '00ff00': 'green', ffff00: 'yellow', ff00ff: 'magenta', '00ffff': 'cyan', ff6600: 'orange' };
+  /** A CSS color to a laser color name when it is exactly one of the laser colors, else null. */
+  function laserColor(v) {
+    if (!v) return null;
+    v = String(v).trim().toLowerCase();
+    if (NAMED[v]) v = '#' + NAMED[v];
+    let hex = null, m;
+    if ((m = v.match(/^#([0-9a-f]{3})$/))) hex = m[1].split('').map(c => c + c).join('');
+    else if ((m = v.match(/^#([0-9a-f]{6})$/))) hex = m[1];
+    else if ((m = v.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/))) hex = [m[1], m[2], m[3]].map(n => (+n).toString(16).padStart(2, '0')).join('');
+    return hex ? LASER[hex] || null : null;
+  }
+  /** Explicit stroke or fill on an element (attribute or inline style); undefined when not set here. */
+  function own(el, prop) {
+    const st = (el.getAttribute('style') || '').match(new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)'));
+    if (st) return st[1].trim();
+    const a = el.getAttribute(prop);
+    return a === null ? undefined : a;
+  }
   const nums = s => (String(s || '').match(/-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/g) || []).map(Number);
 
   function parseLength(v) {
@@ -120,6 +140,8 @@
     }
   }
 
+  const layerName = n => { const u = String(n || '').toUpperCase(); return /\bCUT/.test(u) ? 'red' : /SCORE/.test(u) ? 'blue' : /ENGRAVE|ETCH|MARK/.test(u) ? 'black' : null; };
+
   function attr(el, name, def) { const v = el.getAttribute(name); return v === null ? def : parseFloat(v); }
 
   function shapePath(el) {
@@ -172,18 +194,21 @@
     const counts = { text: 0, fitOnly: 0, tilted: 0, ignored: {} };
     const raw = [];
     let eid = 0;
-    (function walk(el, M) {
+    (function walk(el, M, paint) {
       for (const child of Array.from(el.children)) {
         const tag = child.localName;
         if (SKIP.has(tag)) continue;
         if ((child.getAttribute('display') || '') === 'none' || /display\s*:\s*none/.test(child.getAttribute('style') || '')) continue;
         const CM = mul(M, parseTransform(child.getAttribute('transform')));
-        if (tag === 'g' || tag === 'a' || tag === 'svg') walk(child, CM);
-        else if (SHAPES.has(tag)) pathSegs(shapePath(child), CM, { layer: child.getAttribute('id') || tag, eid: eid++ }, raw);
+        // Only explicitly set colors count; SVG's default black fill would otherwise engrave everything.
+        const st = own(child, 'stroke'), fl = own(child, 'fill');
+        const p = { stroke: st !== undefined ? st : paint.stroke, fill: fl !== undefined ? fl : paint.fill, layer: tag === 'g' ? (child.getAttribute('id') || child.getAttribute('inkscape:label') || paint.layer) : paint.layer };
+        if (tag === 'g' || tag === 'a' || tag === 'svg') walk(child, CM, p);
+        else if (SHAPES.has(tag)) pathSegs(shapePath(child), CM, { layer: p.layer || child.getAttribute('id') || tag, eid: eid++, color: laserColor(p.stroke) || layerName(p.layer), fill: laserColor(p.fill) }, raw);
         else if (tag === 'text') counts.text++;
         else counts.ignored[tag] = (counts.ignored[tag] || 0) + 1;
       }
-    })(root, Mroot);
+    })(root, Mroot, { stroke: undefined, fill: undefined, layer: null });
     const flip = p => [p[0] * perUnit, -p[1] * perUnit];
     const segs = raw.map(s => (s.k === 'L' ? { ...s, a: flip(s.a), b: flip(s.b) } : { ...s, p: s.p.map(flip) }));
     return { kind: 'svg', units: absolute ? 1 : null, unitsLabel: absolute ? W.unit : 'px (assumed 96 per inch)', perUnit, segs, counts };
@@ -194,4 +219,5 @@
 
 /** CHANGELOG
  * v0.1 (2026-10-30): Initial prototype. Path commands (MLHVCSQTAZ, absolute and relative), rect with rounded corners, circle, ellipse, line, polyline, polygon, nested transforms, viewBox and absolute units, display none, skip counts.
+ * v0.3 (2026-11-02): Explicit stroke and fill colors and CUT/SCORE/ENGRAVE group names read as laser colors.
  */

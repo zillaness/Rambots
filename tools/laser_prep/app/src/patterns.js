@@ -35,10 +35,20 @@
     return o;
   }
 
-  /** Text segments shifted to (x, y), colored for vector engraving with the single-line font. */
+  /**
+   * Text segments shifted to (x, y), colored for vector engraving with the single-line font. Hershey has
+   * no "+" glyph, so a leading plus sign is drawn as two short strokes.
+   */
   function label(text, x, y, cap, color) {
-    const out = LP.fonts.layout({ text, fontId: 'hershey', cap, align: 'center' });
-    return out.segs.map(s => Object.assign(s.k === 'L' ? { k: 'L', a: [s.a[0] + x, s.a[1] + y], b: [s.b[0] + x, s.b[1] + y] } : s, { layer: 'pattern:' + (color || 'black'), eid: 0 }));
+    const plus = text.startsWith('+'), body = plus ? text.slice(1) : text;
+    const out = LP.fonts.layout({ text: body, fontId: 'hershey', cap, align: 'center' });
+    const lay = 'pattern:' + (color || 'black');
+    const segs = out.segs.map(s => Object.assign(s.k === 'L' ? { k: 'L', a: [s.a[0] + x, s.a[1] + y], b: [s.b[0] + x, s.b[1] + y] } : s, { layer: lay, eid: 0 }));
+    if (plus) {
+      const left = Math.min(...segs.flatMap(s => [s.a[0], s.b[0]])), r = cap * 0.3, cx = left - cap * 0.45, cy = y + cap / 2;
+      segs.push({ k: 'L', a: [cx - r, cy], b: [cx + r, cy], layer: lay, eid: 0 }, { k: 'L', a: [cx, cy - r], b: [cx, cy + r], layer: lay, eid: 0 });
+    }
+    return segs;
   }
 
   function testSquare() {
@@ -102,5 +112,5 @@
 })(globalThis.LP = globalThis.LP || {});
 
 /** CHANGELOG
- * v0.3 (2026-11-02): Initial release.
+ * v0.3 (2026-11-02): Initial release. Plus signs drawn as strokes (Hershey has no + glyph).
  */

@@ -1,6 +1,6 @@
 /**
  * @file geom.js
- * @version 0.1
+ * @version 0.3
  * @author Samuel Cao
  * @created 2026-10-30
  * @lastUpdated 2026-10-30
@@ -83,7 +83,7 @@
   }
 
   function reverse(s) {
-    const meta = { layer: s.layer, eid: s.eid };
+    const meta = { layer: s.layer, eid: s.eid, color: s.color, fill: s.fill };
     switch (s.k) {
       case 'L': return { k: 'L', a: s.b, b: s.a, ...meta };
       case 'A': return { k: 'A', c: s.c, r: s.r, a0: s.a1, a1: s.a0, ccw: !s.ccw, ...meta };
@@ -120,7 +120,7 @@
 
   function scaleSeg(s, f) {
     const sc = p => [p[0] * f, p[1] * f];
-    const meta = { layer: s.layer, eid: s.eid };
+    const meta = { layer: s.layer, eid: s.eid, color: s.color, fill: s.fill };
     switch (s.k) {
       case 'L': return { k: 'L', a: sc(s.a), b: sc(s.b), ...meta };
       case 'A': return { k: 'A', c: sc(s.c), r: s.r * f, a0: s.a0, a1: s.a1, ccw: s.ccw, ...meta };
@@ -400,4 +400,5 @@
 
 /** CHANGELOG
  * v0.1 (2026-10-30): Initial prototype. Segment model, units and suggestions, duplicates, overlaps, joining with a snap grid, nesting, analyze().
+ * v0.3 (2026-11-02): Segments keep their file color and fill through scaling and reversing.
  */

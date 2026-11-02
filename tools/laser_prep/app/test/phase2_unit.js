@@ -259,6 +259,23 @@ section('nest', async () => {
   check('free rotation mode places the L-brackets with no overlaps', r5.placed === 4 && r5.problems.length === 0, JSON.stringify(r5.problems.slice(0, 2)));
 });
 
+section('colors', () => {
+  const fs = require('fs'), path = require('path'), card = path.join(__dirname, '..', '..', 'test_card');
+  const read = f => LP.parseDXF(fs.readFileSync(path.join(card, f), 'utf8'));
+  const jobOf = p => LP.analyze(p, { scale: p.units ? LP.UNIT_FACTORS[p.units] : 1 });
+  const plain = jobOf(read('laser_test_card_plain_v1.0.dxf')), pa = LP.doc.fileAssign(plain);
+  check('plain DXF: square read as cut, line as score', pa && pa.assign[plain.loops[0].id].outline === 'red' && pa.assign[plain.open[0].id].outline === 'blue');
+  const cc = jobOf(read('laser_test_card_color_codes_v1.1.dxf')), ca = LP.doc.fileAssign(cc);
+  // Nine lines, longest at the top: index 1, index 5, index 7, layer 1, layer 5, true red, true blue, true black, index 1 + true blue.
+  const byLength = cc.open.slice().sort((p, q) => LP.bboxOf(q.poly)[2] - LP.bboxOf(p.poly)[2]).map(c => ca.assign[c.id].outline);
+  check('color codes: index, layer, and true colors read; index 7 is no color; true color wins', JSON.stringify(byLength) === JSON.stringify(['red', 'blue', null, 'red', 'blue', 'red', 'blue', 'black', 'blue']), JSON.stringify(byLength));
+  const colored = jobOf(read('laser_test_card_colored_v1.1.dxf')), ka = LP.doc.fileAssign(colored);
+  const sq = colored.loops.find(L => L.depth === 0 && L.box[2] - L.box[0] > 3.9);
+  check('colored DXF: 4 in square is cut (layer CUT, index 1)', ka.assign[sq.id].outline === 'red');
+  const raw = jobOf(read('laser_test_card_raw_mm_v1.1.dxf'));
+  check('raw CAD export (layer 0, index 7): no file colors, so the default applies', LP.doc.fileAssign(raw) === null);
+});
+
 module.exports = { section, check, near, LP };
 if (require.main === module) {
   setImmediate(async () => {

@@ -237,6 +237,32 @@
     return segs;
   }
 
+  /**
+   * Colors read from the file (DXF colors or layer names, SVG stroke and fill). Returns null when the file
+   * carries no laser colors, so the caller keeps the usual default (every closed outline cut).
+   * Geometry without a color is set to none when the rest of the file is colored, and counted.
+   */
+  function fileAssign(job) {
+    const segsOf = item => item.segs;
+    const any = [...job.loops, ...job.open].some(it => segsOf(it).some(s => s.color || s.fill));
+    if (!any) return null;
+    const vote = segs => {
+      const n = {};
+      for (const s of segs) if (s.color) n[s.color] = (n[s.color] || 0) + 1;
+      const best = Object.entries(n).sort((p, q) => q[1] - p[1])[0];
+      return best ? best[0] : null;
+    };
+    const out = {};
+    let uncolored = 0;
+    for (const L of job.loops) {
+      const outline = vote(L.segs), fill = L.segs.every(s => s.fill === 'black') && L.depth % 2 === 0 ? 'black' : null;
+      if (!outline && !fill) uncolored++;
+      out[L.id] = { outline, inside: fill };
+    }
+    for (const c of job.open) { const outline = vote(c.segs); if (!outline) uncolored++; out[c.id] = { outline }; }
+    return { assign: out, uncolored };
+  }
+
   // Undo: objects are shallow-copied; jobs and image data are shared because edits replace them.
   function snapshot(doc) {
     return {
@@ -254,7 +280,7 @@
 
   LP.doc = {
     newDoc, newId, makeObject, defaultAssign, frame, mapper, inverse, bbox, groupBBox, footprint, clone,
-    copyGrid, align, distribute, snap, reassign, rebuild, segmentsOf, snapshot, restore,
+    copyGrid, align, distribute, snap, reassign, rebuild, segmentsOf, snapshot, restore, fileAssign,
   };
 })(globalThis.LP = globalThis.LP || {});
 
