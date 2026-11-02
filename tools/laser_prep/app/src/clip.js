@@ -16,7 +16,13 @@
 
   const toPath = pts => pts.map(p => ({ X: Math.round(p[0] * SCALE), Y: Math.round(p[1] * SCALE) }));
   const fromPath = path => path.map(p => [p.X / SCALE, p.Y / SCALE]);
-  const toPaths = polys => polys.filter(p => p.length >= 3).map(toPath);
+  // Every input polygon is a solid region, so wind them all the same way before any boolean; otherwise
+  // a clockwise tab overlapping a counterclockwise plate cancels out under the nonzero rule.
+  const toPaths = polys => polys.filter(p => p.length >= 3).map(p => {
+    const path = toPath(p);
+    if (!C.Clipper.Orientation(path)) path.reverse();
+    return path;
+  });
   const fromPaths = paths => paths.map(fromPath).filter(p => p.length >= 3);
 
   /** Grow (delta > 0) or shrink closed polygons by delta inches. */
@@ -47,10 +53,10 @@
   const area = poly => C.Clipper.Area(toPath(poly)) / (SCALE * SCALE);
   const totalArea = polys => polys.reduce((s, p) => s + Math.abs(area(p)), 0);
 
-  /** Union, then split into { outer, holes } groups. */
+  /** Union, then split into { outer, holes } groups. Keeps each input's winding, so holes stay holes. */
   function rings(polys, fill) {
     const c = new C.Clipper();
-    c.AddPaths(toPaths(polys), C.PolyType.ptSubject, true);
+    c.AddPaths(polys.filter(p => p.length >= 3).map(toPath), C.PolyType.ptSubject, true);
     const tree = new C.PolyTree();
     const ft = C.PolyFillType[fill === 'evenodd' ? 'pftEvenOdd' : 'pftNonZero'];
     c.Execute(C.ClipType.ctUnion, tree, ft, ft);
@@ -77,5 +83,5 @@
 })(globalThis.LP = globalThis.LP || {});
 
 /** CHANGELOG
- * v0.3 (2026-11-02): Initial release.
+ * v0.3 (2026-11-02): Initial release. Inputs are wound the same way before booleans and offsets (fixes tab unions).
  */
