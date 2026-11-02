@@ -1,0 +1,20 @@
+[
+  "vendor/clipper.js",
+  "vendor/geometryutil.js",
+  "vendor/placementworker.js",
+  "vendor/opentype.min.js",
+  "fonts_data.js",
+  "geom.js",
+  "dxf_in.js",
+  "svg_in.js",
+  "clip.js",
+  "doc.js",
+  "shapes.js",
+  "fonts.js",
+  "joints.js",
+  "images.js",
+  "patterns.js",
+  "nest.js",
+  "writers.js",
+  "ui.js"
+]
