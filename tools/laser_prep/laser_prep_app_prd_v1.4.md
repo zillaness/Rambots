@@ -1,9 +1,9 @@
 ---
-file: laser_prep_app_prd_v1.3.md
-version: 1.3
+file: laser_prep_app_prd_v1.4.md
+version: 1.4
 author: Samuel Cao
 created: 2026-10-30
-last_updated: 2026-10-30
+last_updated: 2026-11-02
 description: PRD for a tool that replaces the CorelDraw prep step (hairline + RGB color assignment) before sending jobs to the Rambots' Universal Laser Systems cutter, with a proposed Phase 2 for layout, shapes, text, images, joints, and calibration.
 ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.
 ---
@@ -11,8 +11,9 @@ ai_update: Update last_updated and version. Rename file to match. Append changel
 # Laser Prep App: PRD
 
 **Status:**
-- **Phase 1 (prep):** draft for review. v1.1 and the 30 proposed changes were accepted on 2026-10-30 and are folded in here. A prototype exists: `app/laser_prep_v0.2.html`.
-- **Phase 2 (design features, Section 11):** proposed. It needs its own approval, after the laser PC visit confirms the Phase 1 output route.
+- **Phase 1 (prep):** draft for review. v1.1 and the 30 proposed changes were accepted on 2026-10-30 and are folded in here.
+- **Phase 2 (design features, Section 11):** built on 2026-11-02 at Sam's request, ahead of the laser PC visit.
+- **Prototype:** `app/laser_prep_v0.3.html` has both phases. It has never been run on the laser; the visit still decides the output route.
 
 **Owner:** Samuel Cao
 **Users:** Rambots students and mentors cutting parts on the Universal laser
@@ -91,7 +92,7 @@ Steps 3 to 5, 7, and 8 happen on nearly every job. Step 6 happens on some jobs (
 
 - Select all outlines and set one color; select by current color.
 - Warn on open contours set to cut, branch points, almost-closed gaps (with a one-click join), duplicate and overlapping lines.
-- Link to the test card (`test_card/laser_test_card_v1.2.html`) for checking a new laser PC or driver.
+- Link to the test card (`test_card/laser_test_card_v1.3.html`) for checking a new laser PC or driver.
 
 ### Could have
 
@@ -151,7 +152,7 @@ The page writes the output file itself: red is literally `1 0 0 RG`, lines are `
 
 ## 6. Recommendation: decide by test, not by guess
 
-Run Step 0 and Step 1 in **one visit** with `test_card/` (version 1.2). Its README has the checklist and tables.
+Run Step 0 and Step 1 in **one visit** with `test_card/` (version 1.3). Its README has the checklist and tables.
 
 **Before anything:** record the ULS model, UCP version, driver bed size and DPI choices, and whether the UCP **System** tab has a **Direct Import Package** box (and whether it is on). Ask a mentor before turning on any trial or license.
 
@@ -172,13 +173,13 @@ Run Step 0 and Step 1 in **one visit** with `test_card/` (version 1.2). Its READ
 5. Chrome print passes: Option A (prototype's Print button).
 6. Nothing passes: Option C.
 
-### Test card (built, v1.2)
+### Test card (built, v1.3)
 
-- Page: the bed size picked on the page; art at top-left; PDF asks viewers not to scale.
+- Page: the bed size picked on the page (presets labeled by ULS model, 24 x 18 in default); art at top-left; PDF asks viewers not to scale.
 - 4.000 in red square, 2.000 in blue line, 0.500 in black square, 1.000 in black plate with a 0.500 in hole (even-odd), label "TEST v1".
 - Line width picker: 0.001 in (default), 0.0005 in, 0.003 in, 0 (PDF only).
 - DXF probes: plain, colored, R12, raw mm, curves, color codes (nine line lengths, one per color encoding).
-- Files: `laser_test_card_v1.2.html`, six DXFs, two generator scripts, `README.md`.
+- Files: `laser_test_card_v1.3.html`, six DXFs, two generator scripts, `README.md`.
 
 ---
 
@@ -245,95 +246,65 @@ Run Step 0 and Step 1 in **one visit** with `test_card/` (version 1.2). Its READ
 - 2026-10-30: design features go in a separate **Phase 2** (Section 11) with its own approval after the visit. No Phase 2 build until then.
 - 2026-10-30: Phase 2 adds **align to grid** (P2-10) and **resizing imported CAD parts with a warning** (P2-11), the latter built last ("get everything else working first").
 - 2026-10-30: for nesting, look at **CutSheetCalculator** (`zillaness/CutSheetCalculator`) first (Section 11.1).
+- 2026-11-02: **build Phase 2 now**, before the visit, replacing the "Phase 2 waits for the visit and approval" gate (Sam). Build everything in one run, testing each part in between.
+- 2026-11-02: **port, do not link**: Laser Prep does its own nesting (CutSheetCalculator's rectangle packer and true-outline nester ported to JavaScript, plus SVGnest as "Pack tighter").
+- 2026-11-02: keep joints, kerf, and layout in the app even though Onshape FeatureScripts (Laser Joint, T-Slot Joint, Kerf Compensation, Auto Layout) exist, so Fusion users and imported files get them too.
+- 2026-11-02: bundle Clipper (Boost) and opentype.js (MIT); fonts Label Sans, Hershey Simplex, Allerta Stencil, plus fonts on the PC; images go to the driver as grayscale with app dithering optional; repeat text comes from a pasted list; holding tabs by count, evenly spaced; bed default 24 x 18 in with presets labeled by model.
+- 2026-11-02: an **Onshape FeatureScript or Onshape app that exports a face in the ULS format** is a separate project with its own chat and PRD.
 
 ---
 
 ## 10. Next actions
 
-1. Sam: try `app/laser_prep_v0.2.html` on a real team part.
+1. Sam: try `app/laser_prep_v0.3.html` on a real team part, including a few Phase 2 features (text on a plate, copies, Arrange).
 2. Sam: laser PC visit with `test_card/README.md`; answer open questions 1 to 6, 9, 11, 12; bring back tables, screenshots, photos, and real exports.
 3. Claude: update this PRD with the results and name the route Section 6 picks; adjust `app/src/writers.js` to match.
-4. Sam: review Section 11 and approve, change, or cut Phase 2 features; answer the Phase 2 open questions.
-5. Then build Phase 2 in the order Sam approves.
+4. Sam: report anything in Phase 2 that does not work the way students need, and answer the Phase 2 open questions left in Section 11.
+5. Separate project (new chat): an Onshape tool that exports a face straight to the ULS format (Section 9).
 
 Related documents: `laser_prep_core_design_v1.1.md` (Phase 1 engine, 25 to 39 hours), `fixtures/` (33 DXFs with an oracle), `research/` (three reports), `app/README.md` (prototype).
 
 ---
 
-## 11. Phase 2: design features (proposed, not approved)
+## 11. Phase 2: design features (built in v0.3)
 
-**Why:** students sometimes lay out copies, repeat parts with changes, add text or shapes, place images, or draw joints in Corel (Section 2, step 6). Phase 1 removes Corel from the prep step only; without Phase 2 those jobs still need Corel or another program.
+**Why:** students sometimes lay out copies, repeat parts with changes, add text or shapes, place images, or draw joints in Corel (Section 2, step 6). Phase 1 removes Corel from the prep step only; Phase 2 covers the rest so students need one program.
 
-**Gate:** Phase 2 starts after the visit confirms the Phase 1 output route and Sam approves this section. Phase 1 must keep working unchanged.
+**Status:** built in `app/laser_prep_v0.3.html` on 2026-11-02 and tested (unit 81/81, browser 29/29, outputs validated). Not yet run on the laser or with real team parts.
 
-**Free tools that already cover parts of this:** Inkscape (shapes, text, text on a path, images, bitmap tracing, a tabbed box extension) and boxes.py or MakerCase (finger-jointed boxes with kerf correction). They save SVG, which the app reads. Building Phase 2 means students need one program instead of two; the cost is the effort below.
+| # | Feature | What was built |
+|---|---|---|
+| P2-1 | **Copies and layout** | Copies in a grid (rows, columns, gap) with an off-bed count; Arrange with the rectangle packer, the true-outline nester, or SVGnest (Section 11.1) |
+| P2-2 | **Repeat with customization** | Pasted list, one line per copy; `{}` in a text is replaced, or the whole text is; ranges like `1-20` expand; each version is grouped with its part |
+| P2-3 | **Basic shapes with size editing** | Rectangle with rounded corners, circle, ellipse or oval, slot, regular polygon, star; typed sizes; move, rotate, duplicate, delete, undo |
+| P2-4 | **Text with options** | Label Sans and Allerta Stencil (filled), Hershey Simplex (single line), fonts on the PC (Chrome and Edge, permission prompt); cap height, letter and line spacing, alignment, filled or outline; text becomes outlines on output; missing characters reported |
+| P2-5 | **Text following a line** | Straight line at an angle, arc (top or bottom, letters upright), or any outline clicked on another part |
+| P2-6 | **Images** | PNG or JPG engraved as grayscale (driver dithers) or dithered in the app, invert; cut outline traced around the image's shape and offset, grouped with the image; PDF image objects, PNG in SVG, left out of DXF with a note |
+| P2-7 | **Tabs and joints** | Holding tabs by count and width, kept off corners; fingers on a picked straight edge (start with finger or notch); tab-and-slot with a matching slot strip; box generator (inside or outside sizes, open top) whose edges interlock and whose corner cubes each have one owner |
+| P2-8 | **Tolerance tweaking** | Kerf compensation (cut outlines grow by half the kerf on parts, shrink on holes); slot clearance for tab-and-slot |
+| P2-9 | **Calibration and test patterns** | 4 in test square, kerf comb, press-fit comb labeled in thousandths, 8-color power and speed grid |
+| P2-10 | **Align and snap to grid** | Grid on the bed (1/8, 1/4, 1/2, 1 in, 10 mm), snap while dragging and nudging, align to selection or bed, space evenly; groups count as one |
+| P2-11 | **Resize imported CAD parts** | Percent with a tick-box warning that holes and fits scale too; flagged in the checks while resized |
+| P2-12 | **Read colors and layers from the file** | DXF true color, color index, layer color, block color, and CUT / SCORE / ENGRAVE names; SVG explicit stroke and fill; color index 7 and SVG's default fill count as no color |
 
-### Features
-
-| # | Feature | Decided 2026-10-30 | Notes and constraints | Effort (estimate) |
-|---|---|---|---|---|
-| P2-1 | **Copies and layout** | Grid first (rows, columns, gap), auto-fit later | The grid checks the bed fit. Auto-fit is nesting; see Section 11.1 for reusing CutSheetCalculator instead of writing a nester | Grid 4 to 8 h; auto-fit by chaining 2 to 4 h (P2-12), by porting 12 to 20 h |
-| P2-2 | **Repeat with customization** | Wanted ("that would be a nice feature") | Copies that differ by text, for example numbered parts or names. Built on P2-1 and P2-4. CutSheetCalculator's piece labels already place an id on each piece or beside its cutout, with a fallback when it does not fit; reuse that placement logic | 4 to 8 h |
-| P2-3 | **Basic shapes with size editing** | Rectangle (with rounded corners), circle, ellipse or oval, regular polygons | Typed sizes and positions, plus moving shapes. Needs an object model (select, move, transform), which the Phase 1 app does not have | 10 to 16 h, including the object model |
-| P2-4 | **Text with options** | Built-in open fonts **plus** fonts installed on the PC | Font, size, bold or italic where the font has them, letter and line spacing, alignment. Text becomes outlines on output (the ULS is not a PostScript device). Engrave as a fill or cut or score as an outline. PC fonts use the browser's Local Font Access feature: Chrome and Edge only, with a permission prompt, and results differ per PC; built-in fonts are the fallback. Helvetica Neue cannot be bundled. CutSheetCalculator already vets two fonts with license files: **Hershey Simplex** (public domain, single-stroke, good for fast score or vector engrave text) and **Label Sans** (SIL OFL subset of Liberation Sans, filled, for raster engrave). Bundle those first | 12 to 18 h |
-| P2-5 | **Text following a line** | Wanted | Along a straight line, an arc, or a chosen path, with start position, offset, and side | 6 to 10 h |
-| P2-6 | **Images** | Raster engrave first, plus a **cut outline offset around the image**; full trace to vectors later | Grayscale raster, PDF output only (DXF cannot carry images). The outline traces the image's shape (non-background pixels) and offsets it outward by a set distance, for keychains and sticker-style cutouts | Raster 6 to 10 h; offset outline 8 to 12 h; full trace later |
-| P2-7 | **Tabs and joints** | All of them: holding tabs, tab-and-slot assembly tabs, and finger joints, both as a **box generator** and **along a chosen edge** | Holding tabs leave small uncut bridges. Tab-and-slot puts tabs on one part and matching slots on another. The box generator takes width, height, depth, and material thickness and makes all panels | Holding tabs 4 to 6 h; tab-and-slot 8 to 12 h; box generator 12 to 18 h; edge fingers 6 to 10 h |
-| P2-8 | **Tolerance tweaking** | Wanted | Kerf compensation (offset cuts outward on parts, inward on holes, by half the kerf) and a fit allowance for joints, set from calibration results. Needs a reliable path offset and boolean library (for example a JavaScript port of Clipper2) | 8 to 12 h |
-| P2-9 | **Calibration and test patterns** | Wanted | Kerf gauge, press-fit comb (slots in small width steps), score depth ladder, and a power and speed grid limited by the number of colors in the ULS color table. Results feed P2-8. The test card is the starting point | 6 to 10 h |
-| P2-10 | **Align and snap to grid** | Wanted | Show a grid on the bed (for example 0.25 in, 1 in, or 10 mm), snap moved and new objects to it, and align or distribute selected objects (left, right, top, bottom, centers). Needs the object model from P2-3 | 4 to 8 h |
-| P2-11 | **Resize imported CAD parts** | Allowed **with a warning**; build **last** | Typed size or percent, aspect ratio locked by default. The warning names what breaks: hole sizes, slot widths, and press fits scale with the part. Never resize silently | 2 to 4 h |
-| P2-12 | **Read colors and layers from the file** | Proposed (enables chaining with CutSheetCalculator) | On import, keep strokes that are exactly 255,0,0 / 0,0,255 / 0,0,0 and map known layer names (CUT, SCORE, ENGRAVE) to colors, instead of resetting every outline to cut. CutSheetCalculator's cut SVG uses CUT (red) and ENGRAVE (blue) layers, so its nested sheets would open ready to save | 2 to 4 h |
-
-**Total Phase 2 estimate:** about 114 to 186 hours (the sum of the ranges above, with auto-fit by porting), or 102 to 166 hours if auto-fit chains to CutSheetCalculator instead. On top of Phase 1. A rough range, not a commitment.
-
-**Suggested order** (Sam to confirm): P2-1 grid, P2-12 read colors and layers (unlocks CutSheetCalculator nesting right away), P2-9 calibration, P2-8 tolerance, P2-7 holding tabs, then P2-3 shapes with P2-10 align and snap and P2-4 text (which unlock P2-2 and P2-5), then images, then joints and the box generator, then a ported auto-fit if chaining is not enough, and **P2-11 resize CAD last**.
+**Effort, corrected:** v1.2 and v1.3 estimated 102 to 186 hours, which assumed hand coding. The whole of Phase 2 was built in one session. The real remaining costs are Sam's review time, testing on real parts, laser visits, and usage quota.
 
 ### 11.1 Reusing CutSheetCalculator (`zillaness/CutSheetCalculator`)
 
-Sam's existing tool already does much of what P2-1, P2-2, and P2-4 need. Read on 2026-10-30:
+Ported into `app/src/nest.js`: the MaxRects rectangle packer (`pack_rect.py`) and the greedy true-outline nester with rotation search, kerf-gap spacing, and the slide toward the top-left (`pack_poly.py`). Reused as data: Label Sans (OFL) and Hershey Simplex (public domain) with their license files. Layer conventions (CUT red, ENGRAVE blue) are read on import, so CutSheetCalculator's cut sheets still open colored. SVGnest (MIT) was added as the slower "Pack tighter" engine; in testing it packed a mixed 14-part job into about 9% less area than the greedy nester.
 
-| What it has | Where | Use for Laser Prep |
-|---|---|---|
-| Rectangle packing: bundled MaxRects and guillotine packers (rectpack when installed) | `scripts/cutsheet/pack_rect.py` | Auto-fit for rectangular parts. Small and deterministic; portable to JavaScript |
-| True-outline nesting: greedy bottom-left nester with rotation search (90 to 1 degree steps), a slide toward the top-left, kerf spacing as a gap/2 buffer, multiple sheets (pynest2d when installed) | `scripts/cutsheet/pack_poly.py`, `references/engine_notes_v1.3.md` | Auto-fit for real part shapes. Depends on shapely (buffers, overlap queries), so a port needs a JavaScript geometry library such as a Clipper2 port |
-| A verifier that proves no overlaps, margins kept, and deterministic output | `scripts/cutsheet/verify.py` | Same checks after any Laser Prep layout |
-| Piece labels on the piece or beside the cutout, with fallbacks | `scripts/cutsheet/labels.py` | P2-2 repeat with customization |
-| Fonts with licenses: Hershey Simplex (public domain), Label Sans (OFL) | `scripts/cutsheet/fonts/` | P2-4 built-in fonts |
-| Machine profiles, including `laser_24x18_raster` (placeholder numbers: kerf 0.01 in, margin 0.25 in) | `assets/profiles/` | Bed size evidence; shared kerf and margin values once calibrated (P2-9) |
-| Cut-ready SVG with CUT (red, 0.001 in) and ENGRAVE (blue) layers; DXF with CUT color 1 and ENGRAVE color 5 | `scripts/cutsheet/render.py` | Opens in Laser Prep today; with P2-12 it opens already colored |
+### Phase 2 constraints (as built)
 
-**The catch:** its web page runs the Python engine in the browser through Pyodide, which downloads about 15 MB from cdn.jsdelivr.net and pypi.org on first load. Laser Prep is a single offline file. So the two cannot simply be merged.
-
-**Options for auto-fit (nesting):**
-
-| Option | How | Effort | Tradeoff |
-|---|---|---|---|
-| **Chain the tools (recommended first)** | Nest in CutSheetCalculator, open its cut SVG or DXF in Laser Prep, check colors, save the PDF | 2 to 4 h (P2-12) | Two tools and internet for CutSheetCalculator's first load; no nesting code to maintain twice |
-| Port the rectangle packer | Rewrite MaxRects in JavaScript inside Laser Prep | 4 to 6 h | Offline, but rectangles only |
-| Port or vendor a true-outline nester | Port the greedy nester with a Clipper2 port, or vendor SVGnest (JavaScript, MIT) | 12 to 20 h | Offline and real shapes; most work; packing quality below Deepnest for dense jobs (CutSheetCalculator's own notes say the same) |
-
-Both repositories should share one kerf and margin source once P2-9 calibration produces real numbers (today's profile values are placeholders).
-
-### Phase 2 constraints
-
-- **Architecture change:** Phase 1 reads a file and assigns colors; Phase 2 needs objects that can be created, selected, moved, copied, and resized, plus undo. Plan this once, before the first Phase 2 feature.
-- **Raster content** (text fills, images) only survives in PDF output.
-- **Fonts:** bundled fonts must be open-licensed (for example OFL). Each bundled font adds file size to the single HTML file.
-- **Geometry library:** offsets, booleans, and tracing are hard to get right by hand; vendor a tested library and add fixtures for it.
+- One offline file of about 590 KB, including the vendored libraries and fonts; license texts are in `app/src/vendor/`.
+- Raster content (fills, images) only survives in PDF output; DXF output drops it and says so.
+- Bonded groups (an image and its outline, each repeat version, multi-object copies, Group button) move, align, copy, delete, and arrange as one rigid unit.
 
 ### Phase 2 open questions
 
-1. Nesting: chain to CutSheetCalculator first (recommended), or port a nester into Laser Prep? (Resizing imported CAD parts is decided: allowed with a warning, built last.)
-2. Which open fonts to bundle (for example a sans, a bold sans, and a stencil font)?
-3. Is a font permission prompt acceptable on the school laser PC, and is the browser Chrome or Edge?
-4. Image raster: should the app dither the image, or pass grayscale and let the ULS driver dither?
-5. Repeat with customization: where does the per-copy text come from (typed list, pasted list, or a spreadsheet file)?
-6. Holding tabs: added automatically, by count per shape, or clicked by hand?
-7. Priority order of P2-1 to P2-9, and which ones to cut.
-8. Is building Phase 2 worth 106 to 170 hours compared with teaching Inkscape and boxes.py for the occasional design job?
-
----
+1. Is the font permission prompt acceptable on the school laser PC, and is its browser Chrome or Edge?
+2. Are the bundled fonts the right ones (Allerta Stencil for cut-out letters, Label Sans for engraving, Hershey for fast single-line text)?
+3. What does the orange pen's RGB value need to be on our UCP (the grid uses 255,102,0, unverified)?
+4. Which Phase 2 features do students actually use after a few weeks? Cut or simplify the rest.
 
 ## Appendix A: ULS bed sizes
 
@@ -369,3 +340,4 @@ No ULS model has an 18 x 22 in bed. Sam's "18 x 24-ish" and the CutSheetCalculat
 - v1.1 (2026-10-30): Folded in review changes 1 to 6. Test card built before Step 0 and used for both steps; Step 0 also tests a raw millimeter DXF; added Option E (app saves a file: E1 UCP import, E2 Reader print) and a "prep off the laser PC" column; file output ranked above printing; new must-have to join loose segments into loops (requirements renumbered); success check moved to a 4.000 in square averaged over piece and hole; issues 15 to 21 and open questions 9 and 10 added; headless Chrome print result recorded under Option A; LightBurn source removed because the body never used it.
 - v1.2 (2026-10-30): v1.1 approved. Applied the 30 proposed changes from `prd_v1_2_proposed_changes_v1.1.md`: Option 0 marked unlikely; E1 saves PDF; direct import may be a paid add-on; print path evidence (PDFium one-pixel minimum); requirements for entities, join tolerance, units confirmation, and hidden reference layers; Step 0 and Step 1 updated to test card v1.2; issues reworded and 22 to 25 added; open questions 11 and 12; prototype and the prototype goal recorded. Workflow map updated with Sam's answer (copies, repeat with customization, text, shapes, images, joints happen sometimes). Geometry editing and layout moved from non-goals to a new Phase 2 section (Section 11) with nine proposed features, decisions from the 2026-10-30 interview, constraints, effort estimates, and open questions; Phase 2 needs its own approval.
 - v1.3 (2026-10-30): Bed presets labeled by ULS model with a 24 x 18 in default (Appendix A: no ULS model is 18 x 22; the 24 x 18 class is VLS4.60, VLS4.75, PLS4.75); issue 11 and open question 3 updated. Phase 2: added P2-10 align and snap to grid, P2-11 resize imported CAD parts with a warning (built last), P2-12 read colors and layers from the file; Section 11.1 on reusing CutSheetCalculator (nesting engines, verifier, labels, fonts, profiles) with chain-versus-port options for auto-fit; fonts, labels, totals (114 to 186 h, or 102 to 166 h chaining), order, and open questions updated.
+- v1.4 (2026-11-02): Phase 2 built (app v0.3) at Sam's request; Section 11 rewritten as built, with the corrected effort note and CutSheetCalculator reuse as ported; Section 9 records the 2026-11-02 build decisions (build now, port not link, keep all features, libraries and fonts, defaults) and moves the Onshape ULS exporter to a separate project; status, next actions, and test card references updated to v1.3.

@@ -1,43 +1,59 @@
 ---
 file: README.md
-version: 0.2
+version: 0.3
 author: Samuel Cao
 created: 2026-10-30
-last_updated: 2026-10-30
-description: How to use, build, and test the laser prep app prototype, and what it does not do yet.
+last_updated: 2026-11-02
+description: How to use, build, and test the laser prep app (v0.3: Phase 1 prep plus Phase 2 design features), and what it does not do yet.
 ai_update: Update last_updated and version. Keep the filename README.md. Append changelog at bottom.
 ---
 
-# Laser Prep app (prototype v0.2)
+# Laser Prep app (v0.3)
 
-Replaces the CorelDraw step: open a Fusion or Onshape DXF (or an SVG), set what gets cut, scored, and engraved, and save a laser-ready PDF. One HTML file, works offline, nothing is uploaded.
+Replaces CorelDraw for the Universal laser: open Fusion or Onshape DXFs (or SVGs), add shapes, text, images, test patterns, and boxes, lay everything out on the bed, set what gets cut, scored, and engraved, and save a laser-ready PDF. One HTML file, works offline, nothing is uploaded.
 
-**Open:** download `laser_prep_v0.2.html` and open it in Chrome or Edge. (GitHub's normal file view shows source code; use the download button.)
+**Open:** download `laser_prep_v0.3.html` and open it in Chrome or Edge. (GitHub's normal file view shows source code; use the download button.)
 
 ## Using it
 
-1. **File.** Drop a `.dxf` or `.svg` on the box, or click it.
-2. **Units.** Every file needs a confirm. The list shows the part's size for each unit choice and whether it fits the bed. CAD exports often have the wrong unit in the file (Fusion's File > Export writes centimeters; Onshape has been reported to write inches over millimeter numbers), so check the size against the part.
-3. **Bed and lines.** Pick the bed size the ULS driver uses. Line width defaults to 0.001 in. "Join gaps up to" closes tiny gaps between line ends (0.001 in default, 0.01 in max).
-4. **Colors.** Every closed shape starts as **cut** (red). Click a line to select its outline, click inside a shape to select its inside, Shift-click to add. Then press **Cut** (R), **Score** (B), **Engrave** (K), or **None** (N). Insides can only be engraved or none. Holes inside an engraved shape stay bare.
-5. **Output.** **Save PDF** for UCP import or for printing from Adobe Reader at Actual size. **Save DXF** writes R12 vectors only (black insides are left out). **Print** prints from the browser at true size (Margins None, Scale Default). **Save SVG** writes the same drawing as an SVG.
+**Add** (left panel, top)
+- **File:** drop a `.dxf` or `.svg`. Every file needs a units confirm; the list shows the part's size for each unit and whether it fits the bed. Colors already in the file (red, blue, black, the CUT / SCORE / ENGRAVE layers that CutSheetCalculator writes) are used; a plain CAD export starts with every closed outline set to cut.
+- **Shape:** rectangle (rounded corners), circle, ellipse or oval, slot, polygon, star. Edit sizes in the Selected panel.
+- **Text:** Label Sans, Allerta Stencil, Hershey Simplex (single line, for fast score or vector engrave), or any font on the PC ("Use fonts on this PC", Chrome and Edge only, asks permission). Cap height, letter and line spacing, alignment, filled or outline. Follow a straight line, an arc (top or bottom), or the outline you clicked last.
+- **Image:** PNG or JPG, engraved as grayscale (the driver dithers) or dithered in the app. "Add cut outline" traces the image's shape and grows it by an offset, for keychains and stickers; the outline stays grouped with the image.
+- **Test pattern:** 4 in test square, kerf comb, press-fit comb (thickness set below the menu), color grid with all eight ULS colors (orange's value is unverified).
+- **Box:** width, depth, height, thickness, finger width, inside or outside sizes, open top. Makes finger-jointed panels.
 
-The **Checks** list flags open lines set to cut, shapes that almost close (with a button to join them), spots where three lines meet, overlapping lines, removed duplicates, skipped items (text, dimensions, hatches), and hidden bend lines from sheet metal flat patterns.
+**Selected**: position, rotation, size; units and resize for files (resizing a CAD part needs a tick-box warning because holes and fits scale too); shape, text, and image settings; Duplicate, Delete, Group, Ungroup.
 
-Output stays locked until units are confirmed, the part fits the bed with a 0.25 in margin, and something is assigned.
+**Colors**: click a line for its outline or inside a shape for its inside, Shift-click to add. Cut (R), Score (B), Engrave (K), None (N), or another ULS color. Insides can be engraved, not cut.
+
+**Layout**: copies in a grid; repeat with a list (one line per copy, `{}` in a text is replaced, `1-20` expands); Arrange with the rectangle packer, the true-outline nester (both ported from CutSheetCalculator), or Pack tighter (SVGnest, searches for the time you set); align and space evenly. Groups (an image and its outline, each repeat version, multi-object copies, anything grouped with the button) always move together.
+
+**Tabs and joints**: holding tabs (count and width) on selected cut outlines; click a straight edge, then Fingers on edge (use the opposite "start with" on the mating edge) or Tabs on edge + matching slots (the slot strip goes onto the mating part).
+
+**Output**: kerf compensation (cut outlines grow by half the kerf on parts and shrink on holes), line width, then Save PDF (for UCP import or Adobe Reader at Actual size), Print, Save DXF (vectors only), or Save SVG.
+
+Output stays locked until every file's units are confirmed, nothing is off the bed or inside the margin, and something is set to cut, score, or engrave. The Checks list says why.
+
+Keys: R B K N colors, A all outlines, Esc clear, Delete removes, arrows nudge (Shift for 4x), Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+D duplicate.
 
 ## What it is built from
 
 | File | What it does |
 |---|---|
-| `src/geom.js` | Segments, units suggestions, duplicates, overlaps, joining, nesting, `analyze()` |
-| `src/dxf_in.js` | DXF reader: header units, blocks, LINE, CIRCLE, ARC, LWPOLYLINE and POLYLINE with bulges, SPLINE (any degree, fit-point fallback), ELLIPSE, INSERT and MINSERT, extrusion, skip counts |
-| `src/svg_in.js` | SVG reader: all path commands, rect, circle, ellipse, line, polyline, polygon, transforms, viewBox and units |
-| `src/writers.js` | Layout from the bed's top-left; PDF (byte by byte, DeviceRGB, `0.072 w`, even-odd fills), SVG, R12 DXF |
+| `src/geom.js`, `src/dxf_in.js`, `src/svg_in.js` | Reading files: segments, units, joining, nesting of holes, file colors |
+| `src/clip.js` | Offsets and booleans (vendored Clipper) |
+| `src/doc.js` | Objects on the bed, transforms, copies, align, groups, undo |
+| `src/shapes.js`, `src/fonts.js`, `src/images.js`, `src/patterns.js`, `src/joints.js` | Phase 2 features |
+| `src/nest.js` | Arrange: MaxRects and greedy true-outline nester (ported from CutSheetCalculator), SVGnest adapter |
+| `src/writers.js` | PDF (byte by byte, DeviceRGB, `0.072 w`, no-scaling preference, image XObjects), SVG, R12 DXF |
 | `src/ui.js`, `src/page.html` | The page |
-| `build.js` | Inlines `src/` into `laser_prep_v0.2.html` |
+| `src/vendor/` | Clipper 6.1.3a (Boost), SVGnest geometry, placement, and genetic search (MIT), opentype.js 1.3.4 (MIT), fonts (OFL, public domain), with license files |
+| `build.js`, `build_order.json` | Inline everything into `laser_prep_v0.3.html` |
+| `tools/make_fonts_data_v1.0.py` | Regenerates `src/fonts_data.js` from the font files |
 
-Design: `../laser_prep_core_design_v1.1.md`. The source modules keep fixed names because the build and tests load them by name; each carries its version in its header.
+Source modules keep fixed names because the build and tests load them by name; each carries its version in its header.
 
 ## Build and test
 
@@ -46,36 +62,41 @@ node build.js
 ```
 
 ```bash
+node test/phase2_unit.js
+```
+
+```bash
 node test/run_fixtures.js
 ```
 
 ```bash
-node test/write_outputs.js /tmp/laser_out
+node test/write_outputs.js /tmp/laser_out && python3 test/validate_outputs.py /tmp/laser_out
 ```
 
 ```bash
-python3 test/validate_outputs.py /tmp/laser_out
+node test/write_doc_outputs.js /tmp/laser_doc && python3 test/validate_doc_outputs.py /tmp/laser_doc
 ```
 
 ```bash
 node test/ui_smoke.js /tmp/laser_ui
 ```
 
-`validate_outputs.py` needs pypdf, Pillow, ezdxf, and `pdftoppm` (Poppler). `ui_smoke.js` needs Playwright with Chromium. This folder is CommonJS (`package.json`) because the repo root is an ES module package.
+The Python checks need pypdf, Pillow, ezdxf, and Poppler's `pdftoppm`; the browser test needs Playwright with Chromium. This folder is CommonJS (`package.json`) because the repo root is an ES module package.
 
-Results at v0.2: fixtures 33/33, written outputs 33/33 valid (strict PDF parse, only the four laser colors in a render, drawn size and position, DXF audit and size), browser checks 17/17.
+Results at v0.3: unit 81/81, fixtures 33/33, Phase 1 outputs 33/33, the everything document valid (strict PDF, only laser colors and image grays, DXF audit), browser 29/29.
 
 ## Not done or not known yet
 
-- **Never run on the laser.** Whether UCP imports the PDF, and whether Reader or Chrome prints it as vectors, is what the test card visit (`../test_card/README.md`) finds out. If the visit says DXF import only, or a specific DXF color form, `writers.js` changes; if it says print only, the Print button becomes the main path.
-- **No real CAD exports tested.** All inputs so far are synthetic fixtures. Real Fusion and Onshape exports of team parts are the next test.
-- Changing units or the join tolerance re-reads the file and resets colors.
-- TEXT and MTEXT are skipped; export text from CAD as outlines.
-- Overlap checking is skipped above 4000 straight lines (it is pairwise).
-- SVG fill and stroke colors are ignored; colors are set in the app.
-- No "remember my colors" between files, no nesting of parts, no geometry editing (by design).
+- **Never run on the laser.** The test card visit (`../test_card/README.md`) decides whether UCP imports the PDF or the print route is used.
+- **No real CAD exports tested yet**; all inputs so far are synthetic.
+- Fonts on the PC: only Chrome and Edge, after a permission prompt; some font files (collections) may not load.
+- Label Sans and Hershey cover letters, digits, and `#-./:?_`; other characters are reported as missing.
+- Arrange's leftovers sit to the right of the bed and lock output until moved or deleted.
+- Changing a file's units or join tolerance re-reads it and resets its colors; editing a text resets its colors to its style.
+- Overlap checking inside a file is skipped above 4000 straight lines.
 
 ## CHANGELOG
 
 - v0.1 (2026-10-30): First prototype and README.
 - v0.2 (2026-10-30): PDF asks viewers not to scale; DXF header extents and limits; tests point at test card v1.2 files.
+- v0.3 (2026-11-02): Phase 2: shapes, text, images, patterns, boxes, layout and arrange, groups, tabs and joints, kerf, file colors, resize with a warning, undo; vendored libraries and fonts; new tests.

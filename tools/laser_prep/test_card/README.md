@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 1.2
+version: 1.3
 author: Samuel Cao
 created: 2026-10-30
 last_updated: 2026-10-30
@@ -21,7 +21,7 @@ Background (not needed at the laser PC): `../research/uls_direct_import_research
 
 | File | What it is |
 |---|---|
-| `laser_test_card_v1.2.html` | Open in Chrome or Edge. Works offline. Saves the PDF (and an optional SVG), and runs the Chrome print test. |
+| `laser_test_card_v1.3.html` | Open in Chrome or Edge. Works offline. Saves the PDF (and an optional SVG), and runs the Chrome print test. |
 | `laser_test_card_plain_v1.0.dxf` | The simplest possible color test: a red 4.000 in square and a blue 2.000 in line. R2000, inches, nothing else. |
 | `laser_test_card_colored_v1.1.dxf` | Colors already set: color 1 red (cut), 5 blue (score), 7 black (engrave). Inches, R2000, closed loops, plus filled shapes (HATCH) and a TEXT label. |
 | `laser_test_card_colored_r12_v1.1.dxf` | The cut square and score line again, in the oldest common DXF version (R12). R12 cannot store units: if UCP reads it as inches the square is 4.000 in. |
@@ -57,7 +57,7 @@ Write these down (PRD open questions 1 to 6 and 9, plus what the research says t
 
 Direct import was a paid add-on in at least one ULS manual, with a 30-day trial. **Ask a mentor before turning on any trial or license** on school equipment.
 
-Then open `laser_test_card_v1.2.html`, set **Bed size** to the driver's size, and click **Save PDF**. Use scrap at least 7.5 x 5 in of a material whose settings you know.
+Then open `laser_test_card_v1.3.html`, set **Bed size** to the model on the nameplate (the default is 24 x 18 in, the VLS4.60, VLS4.75, and PLS4.75 size) and check it matches the driver, and click **Save PDF**. Use scrap at least 7.5 x 5 in of a material whose settings you know.
 
 Cut each route on its **own fresh piece of scrap**, labeled with the route name. Check every job in the UCP preview before firing. Only cut the ones that look right. **Screenshot every import dialog**, including any scale, units, or centering options.
 
@@ -183,3 +183,4 @@ The filled tables, the screenshots (import dialogs, color table), a photo of the
 - v1.0 (2026-10-30): Initial release. Visit checklist, record tables, measurement method, and decision table for the laser test card.
 - v1.1 (2026-10-30): Added from the ULS import research: Direct Import Package check, older-driver check, mentor OK before trials, DXF vectors-only note, recolor test, screenshot step. Added the R12, curves, and color-code probes with their tables, a request for real CAD exports, and a DXF-only row in the decision table. From the print path research: Step 1 order (Reader, PDF in browser viewer, page print), DPI recorded per run, Reader traps, and a failure ladder. HTML renamed to v1.1.
 - v1.2 (2026-10-30): From the independent review: plain DXF added and done first; DXFs v1.1 with real header extents; R12 expected size noted; color-code lines told apart by length; every print route lists paper size and scale; PDF asks viewers not to scale; re-save after changing line width; error text and missing shapes recorded; raw DXF color columns marked n/a; one measurement row per route on fresh scrap; position check limited to PDF and print routes. HTML now v1.2.
+- v1.3 (2026-11-02): HTML v1.3: bed presets labeled by ULS model, 24 x 18 in default.

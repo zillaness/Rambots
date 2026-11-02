@@ -1,9 +1,9 @@
 ---
 file: BURNDOWN.md
-version: 1.1
+version: 1.2
 author: Samuel Cao
 created: 2026-10-30
-last_updated: 2026-10-30
+last_updated: 2026-11-02
 description: Token burndown ledger for the laser prep project on branch claude/elegant-feynman-q7xk18.
 ai_update: Append ledger lines as units finish; keep the NEXT line current; fill Handoff at the end.
 ---
@@ -50,7 +50,11 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 - 10:42 ✅ handoff rewritten; goal met: functional prototype tested end to end
 - 11:07 ✅ PRD v1.2 drafted after Sam's interview: v1.1 approved, 30 changes applied, Phase 2 section (9 features) added; v1.0 and v1.1 retired
 - 11:10 ✅ PRD v1.3: bed sizes by ULS model (24 x 18 default), align to grid, resize CAD with warning (last), read colors and layers, CutSheetCalculator reuse for nesting, labels, and fonts
-- 11:10 ▶ NEXT: Sam reviews PRD v1.3; laser PC visit with test card v1.2 (read the nameplate model)
+- 2026-11-02 ⚑ Sam asked to build Phase 2 now and port (not link) CutSheetCalculator's nesting; build questions answered in chat
+- 2026-11-02 ✅ Phase 2 built as app v0.3 (laser_prep_v0.3.html): shapes, text and PC fonts, text on a path, images with cut outlines, patterns, box, copies, repeat list, arrange (rectangles, outlines, SVGnest), align and snap, groups, tabs, fingers, tab-and-slot, kerf, file colors, resize with a warning, undo; committed through a687c3b
+- 2026-11-02 ✅ tests: unit 81/81, fixtures 33/33, Phase 1 outputs 33/33, everything document valid, browser 29/29
+- 2026-11-02 ✅ test card v1.3 (bed presets by model, 24 x 18 default), app README v0.3, PRD v1.4
+- 2026-11-02 ▶ NEXT: Sam tries v0.3 on real parts; laser PC visit with test card v1.3; Onshape ULS exporter in its own chat
 
 ## Handoff
 
@@ -87,3 +91,4 @@ Phase 0 usage experiments: skipped, the user is asleep and cannot read `/usage`.
 
 - v1.0 (2026-10-30): Ledger started.
 - v1.1 (2026-10-30): Handoff rewritten for the prototype, test card v1.2, and proposed PRD changes v1.1.
+- v1.2 (2026-11-02): Ledger lines for the Phase 2 build session.
