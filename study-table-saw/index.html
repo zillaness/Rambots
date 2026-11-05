@@ -1,8 +1,8 @@
 <title>Table Saw Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_table_saw_study_v1.1.html
-  version: 1.1
+  file: rambots_table_saw_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Table Saw Study",
   "slug": "rambots_table_saw_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-table-saw-study-v1"
@@ -1027,7 +1027,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="ts-gear" data-title="Before you start">
   <div class="hd"><div class="chip">8.5</div><h2 class="t sm">Before you turn it on: glasses, nothing loose, guards on, a push stick in reach, and no gloves</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">You</div><p>Safety glasses on. Long hair up, sleeves rolled, lanyards off. No gloves on group 8 machines.</p></div><div class="card"><div class="k">The saw</div><p>For a through cut, the guard, riving knife, and pawls are on. A push stick is within reach before the cut starts.</p></div><div class="card"><div class="k">Announce it</div><p>Say &quot;using the table saw,&quot; then look around and make sure people nearby know.</p></div></div>
+  <div class="body split-wide">
+    <div class="stack"><div class="card tight"><div class="k">You</div><p>Safety glasses on. Long hair up, sleeves rolled, lanyards off. No gloves on group 8 machines.</p></div><div class="card tight"><div class="k">The saw</div><p>For a through cut, the guard, riving knife, and pawls are on. A push stick is within reach before the cut starts.</p></div><div class="card tight"><div class="k">Announce it</div><p>Say &quot;using the table saw,&quot; then look around and make sure people nearby know.</p></div></div>
+    <figure class="fig"><img src="img/table_saw_stand.webp" alt="A jobsite table saw on a folding stand in a workshop"><figcaption>A jobsite table saw on its stand. Photo: toolstop, CC BY 2.0</figcaption></figure>
+  </div>
   <div class="ft"><span>8.5 bank; FIRST Safety Manual §4.5, §6.1; team rule</span></div>
   <aside class="notes">To confirm in the shop: the hearing protection rule for the table saw.</aside>
 </section>
@@ -1052,8 +1055,15 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
-  <div class="ft"><span>First-try score across 6 quick checks and 4 checkpoints.</span></div>
+  <div class="ft"><span>First-try score across 6 quick checks and 4 checkpoints. <a data-to="credits">Photo credits</a></span></div>
   <aside class="notes">Students type their name, download the CSV, and upload it to the Teams assignment.</aside>
+</section>
+
+<section class="slide" data-id="credits" data-title="Photo credits" data-next="results">
+  <div class="hd"><div class="chip">Credits</div><h2 class="t sm">Photo credits</h2></div>
+  <div class="body"><table class="t2"><thead><tr><th>Photo</th><th>By</th><th>License</th></tr></thead><tbody><tr><td>Jobsite table saw on its stand</td><td>toolstop</td><td>CC BY 2.0</td></tr></tbody></table></div>
+  <div class="ft"><span>Diagram drawn for this deck. Sources: 8.5 bank; DeWalt DWE7491RS manual; SawStop guide and FAQs; OSHA woodworking eTool; FIRST Safety Manual.</span></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- @@/SLIDES@@ -->
@@ -2884,4 +2894,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 <!-- CHANGELOG
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 6 quick checks, 4 checkpoints.
   v1.1 (2026-11-05): Review fixes: checkpoint hints removed, since they show on screen and gave answers away; rewrote cp-stance (now a watcher), cp-stop, cp-push (crosscut), qc-height, and qc-pawls; Q16 SawStop note added to ts-sawstop. Brand names kept to foot lines and notes.
+  v1.1.1 (2026-11-05): Added a photo of a jobsite table saw on its stand (Openverse, CC BY 2.0).
 -->

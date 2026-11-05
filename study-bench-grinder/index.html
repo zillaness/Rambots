@@ -1,8 +1,8 @@
 <title>Bench Grinder Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_bench_grinder_study_v1.1.html
-  version: 1.1
+  file: rambots_bench_grinder_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Bench Grinder Study",
   "slug": "rambots_bench_grinder_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-bench-grinder-study-v1"
@@ -875,7 +875,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="bg-wheels" data-title="Wheels">
   <div class="hd"><div class="chip">8.6</div><h2 class="t sm">A wheel must be uncracked, rated fast enough, and used only on its face, or it can burst</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Ring test</div><p>Before a wheel is mounted, tap it gently and listen. A clear ring is good. A dull, dead sound means it&#x27;s cracked, and it isn&#x27;t used. A mentor does this one.</p></div><div class="card"><div class="k">Speed rating</div><p>The wheel&#x27;s rated maximum speed has to be at least the grinder&#x27;s speed. A wheel spun past its rating can burst. Check the grinder&#x27;s plate and the wheel&#x27;s label.</p></div><div class="card"><div class="k">Face only</div><p>Grind only on the face, never the flat side. A standard wheel isn&#x27;t built for side pressure and can crack.</p></div></div>
+  <div class="body split-wide">
+    <div class="stack"><div class="card tight"><div class="k">Ring test</div><p>Before a wheel is mounted, tap it gently and listen. A clear ring is good. A dull, dead sound means it&#x27;s cracked, and it isn&#x27;t used. A mentor does this one.</p></div><div class="card tight"><div class="k">Speed rating</div><p>The wheel&#x27;s rated maximum speed has to be at least the grinder&#x27;s speed. A wheel spun past its rating can burst. Check the grinder&#x27;s plate and the wheel&#x27;s label.</p></div><div class="card tight"><div class="k">Face only</div><p>Grind only on the face, never the flat side. A standard wheel isn&#x27;t built for side pressure and can crack.</p></div></div>
+    <figure class="fig"><img src="img/bench_grinder.webp" alt="A bench grinder with a wheel on each side and a tool rest in front of each wheel"><figcaption>A bench grinder: a wheel on each side, each with its own rest and guard. Photo: dvanzuijlekom, CC BY-SA 2.0</figcaption></figure>
+  </div>
   <div class="ft"><span>8.6 bank; OSHA 29 CFR 1910.215(d)(1); Cornell EHS; WEN 4276 manual</span></div>
   <aside class="notes">Show the speed on our grinder&#x27;s plate and on a spare wheel&#x27;s label. To confirm in the shop: our grinder&#x27;s RPM and wheels.</aside>
 </section>
@@ -1025,8 +1028,15 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
-  <div class="ft"><span>First-try score across 6 quick checks and 4 checkpoints.</span></div>
+  <div class="ft"><span>First-try score across 6 quick checks and 4 checkpoints. <a data-to="credits">Photo credits</a></span></div>
   <aside class="notes">Students type their name, download the CSV, and upload it to the Teams assignment.</aside>
+</section>
+
+<section class="slide" data-id="credits" data-title="Photo credits" data-next="results">
+  <div class="hd"><div class="chip">Credits</div><h2 class="t sm">Photo credits</h2></div>
+  <div class="body"><table class="t2"><thead><tr><th>Photo</th><th>By</th><th>License</th></tr></thead><tbody><tr><td>Bench grinder</td><td>dvanzuijlekom</td><td>CC BY-SA 2.0</td></tr></tbody></table></div>
+  <div class="ft"><span>Diagram drawn for this deck. Sources: 8.6 bank; OSHA 29 CFR 1910.215; WEN 4276 manual; Protohaven tool guide; Cornell EHS; FIRST Safety Manual.</span></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- @@/SLIDES@@ -->
@@ -2857,4 +2867,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 <!-- CHANGELOG
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 6 quick checks, 4 checkpoints.
   v1.1 (2026-11-05): Review fixes: checkpoint hints removed, since they show on screen and gave answers away; rewrote qc-worn, qc-rating, cp-soft, cp-startup, and cp-shield. Brand names kept to foot lines and notes.
+  v1.1.1 (2026-11-05): Added a bench grinder photo (Openverse, CC BY-SA 2.0).
 -->

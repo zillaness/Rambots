@@ -1,8 +1,8 @@
 <title>CNC Router Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_cnc_router_study_v1.1.4.html
-  version: 1.1.4
+  file: rambots_cnc_router_study_v1.1.5.html
+  version: 1.1.5
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "CNC Router Study",
   "slug": "rambots_cnc_router_study",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-cnc-router-study-v1"
@@ -934,7 +934,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-zero" data-title="Zeroing">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">X and Y mark where the part sits, Z marks the bit tip, so every bit change means probing Z again</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">X and Y</div><p>Where the part sits on the machine. They don&#x27;t change when you swap bits.</p></div><div class="card"><div class="k">Z</div><p>Where the tip of the bit is. A new bit sticks out a different length, so probe Z again after every bit change. A wrong Z drives the bit into the part or the wasteboard.</p></div><div class="card"><div class="k">Using the touch plate</div><p>Pick the right corner in the probing settings first. Check the plate&#x27;s position and clip. Keep a hand near the stop in case the bit heads the wrong way. The spindle stays off while probing.</p></div></div>
+  <div class="body split-wide">
+    <div class="stack"><div class="card tight"><div class="k">X and Y</div><p>Where the part sits on the machine. They don&#x27;t change when you swap bits.</p></div><div class="card tight"><div class="k">Z</div><p>Where the tip of the bit is. A new bit sticks out a different length, so probe Z again after every bit change. A wrong Z drives the bit into the part or the wasteboard.</p></div><div class="card tight"><div class="k">Using the touch plate</div><p>Pick the right corner in the probing settings first. Check the plate&#x27;s position and clip. Keep a hand near the stop in case the bit heads the wrong way. The spindle stays off while probing.</p></div></div>
+    <figure class="fig"><img src="img/cnc_router_gantry.webp" alt="A hobby CNC router with a trim router mounted on a gantry over the bed"><figcaption>A hobby CNC router: the spindle rides a gantry over the bed. Photo: Alexanderpf, CC BY 2.0, cropped</figcaption></figure>
+  </div>
   <div class="ft"><span>8.7 bank; Sienci forum</span></div>
   <aside class="notes">On the Sienci forum, a new user broke a bit when the probe ran toward the wrong corner. To confirm in the shop: our probe kit.</aside>
 </section>
@@ -1065,8 +1068,15 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
-  <div class="ft"><span>First-try score across 7 quick checks and 4 checkpoints.</span></div>
+  <div class="ft"><span>First-try score across 7 quick checks and 4 checkpoints. <a data-to="credits">Photo credits</a></span></div>
   <aside class="notes">Students type their name, download the CSV, and upload it to the Teams assignment.</aside>
+</section>
+
+<section class="slide" data-id="credits" data-title="Photo credits" data-next="results">
+  <div class="hd"><div class="chip">Credits</div><h2 class="t sm">Photo credits</h2></div>
+  <div class="body"><table class="t2"><thead><tr><th>Photo</th><th>By</th><th>License</th></tr></thead><tbody><tr><td>Hobby CNC router on a gantry</td><td>Alexanderpf</td><td>CC BY 2.0</td></tr></tbody></table></div>
+  <div class="ft"><span>Sources: 8.7 bank; Sienci AltMill docs and forum; MIT feeds and speeds; MSC; FIRST Safety Manual.</span></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- @@/SLIDES@@ -->
@@ -2901,4 +2911,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.2 (2026-11-05): Gloves card removed; the bank no longer tests gloves on stopped machines (Sam: not a teaching point).
   v1.1.3 (2026-11-05): Quiz footer points to bank v0.1.2.
   v1.1.4 (2026-11-05): E-stop checkpoint uses new situations (snapped bit, hand near the gantry, depth check) so it no longer rehearses Q14 and Q15.
+  v1.1.5 (2026-11-05): Added a hobby CNC router photo (Openverse, CC BY 2.0).
 -->

@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "author": "Sam Cao",
     "created": "2026-10-14",
     "last_updated": "2026-11-05",
@@ -11,7 +11,7 @@
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "updated": "2026-11-05",
   "topics": [
     "FRC Basics",
@@ -949,7 +949,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 8.5",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Kickback, the riving knife, push sticks, blade height, stance, and the fence.",
       "tags": [
         "study guide",
@@ -965,7 +965,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 8.6",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Rest and tongue gaps, wheel ratings, soft metals, start-up, and heat.",
       "tags": [
         "study guide",
@@ -981,7 +981,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 8.7",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "description": "Zeroing, collets, workholding, the e-stop, dust, and staying with the job.",
       "tags": [
         "study guide",
@@ -1056,6 +1056,11 @@
       "version": "1.5.4",
       "date": "2026-11-05",
       "note": "Shop Safety study guide v1.0.6: walk-around table adds the fire blanket."
+    },
+    {
+      "version": "1.5.5",
+      "date": "2026-11-05",
+      "note": "Table Saw, Bench Grinder, and CNC Router study guides get photos."
     }
   ]
 }
