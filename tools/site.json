@@ -1,18 +1,18 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.4.1",
+    "version": "1.5",
     "author": "Sam Cao",
     "created": "2026-10-14",
-    "last_updated": "2026-10-24",
+    "last_updated": "2026-11-05",
     "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
     "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
   },
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.4.1",
-  "updated": "2026-10-24",
+  "version": "1.5",
+  "updated": "2026-11-05",
   "topics": [
     "FRC Basics",
     "Design & CAD",
@@ -20,6 +20,7 @@
     "Materials & Hardware",
     "Fabrication & 3D Printing",
     "Shop Practices",
+    "Tool Study Guides",
     "Team Leadership",
     "Careers",
     "Life Skills"
@@ -524,6 +525,470 @@
         "quiz",
         "pilot"
       ]
+    },
+    {
+      "slug": "study-safety",
+      "title": "Shop Safety",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · Group 1 (1.28)",
+      "version": "1.0.4",
+      "description": "PPE, conduct, and hazards (Part 1); emergencies, situations, and first aid (Part 2).",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "group 1 (1.28)"
+      ]
+    },
+    {
+      "slug": "study-measuring",
+      "title": "Measuring and Layout",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · Group 3",
+      "version": "1.1.3",
+      "description": "Tapes, calipers, the micrometer, marking, thread checking, fits, and shop math.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "group 3"
+      ]
+    },
+    {
+      "slug": "study-hand-bench-tools",
+      "title": "Hand and Bench Tools",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · Group 4",
+      "version": "1.1.3",
+      "description": "Hand tools, tapping, the arbor press, broaching, rivets, rivet nuts, and chain.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "group 4"
+      ]
+    },
+    {
+      "slug": "study-electrical",
+      "title": "Electrical",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · Group 5",
+      "version": "1.1.3",
+      "description": "Tools and practices, electrical theory with worked math, and battery handling.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "group 5"
+      ]
+    },
+    {
+      "slug": "study-drill-drive",
+      "title": "Drill and Drive",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · Group 6",
+      "version": "1.1.2",
+      "description": "Drill and driver controls, bits, holes, screws, impacts, sanders, and threadlocker.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "group 6"
+      ]
+    },
+    {
+      "slug": "study-heat-press",
+      "title": "Heat Press",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 2.1",
+      "version": "1.1.1",
+      "description": "Setup, the hot platen, mirroring, loading, settings, peeling, and shutting down.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "2.1"
+      ]
+    },
+    {
+      "slug": "study-cricut",
+      "title": "Cricut",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 2.2",
+      "version": "1.0.2",
+      "description": "Blades, mats, mirroring, weeding, and applying vinyl.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "2.2"
+      ]
+    },
+    {
+      "slug": "study-3d-printer",
+      "title": "3D Printer",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 2.3",
+      "version": "1.0.1",
+      "description": "Burns, reaching in, materials, first layers, clogs, and failed prints.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "2.3"
+      ]
+    },
+    {
+      "slug": "study-laser-cutter",
+      "title": "Laser Cutter",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 2.4",
+      "version": "1.1.2",
+      "description": "Approved materials, the BOFA, test cuts, staying with the job, and what to do if it flares.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "2.4"
+      ]
+    },
+    {
+      "slug": "study-hot-glue",
+      "title": "Hot Glue",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 2.5",
+      "version": "1.0.1",
+      "description": "The stand, burns, strain relief, and drips.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "2.5"
+      ]
+    },
+    {
+      "slug": "study-fasteners",
+      "title": "Fasteners",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · B1",
+      "version": "1.0.1",
+      "description": "Sizes like 10-32, heads and drives, nylocs, threadlocker, rivets, and rivet nuts.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "b1"
+      ]
+    },
+    {
+      "slug": "study-materials-fdm",
+      "title": "Materials and FDM",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · Materials and FDM",
+      "version": "1.0.1",
+      "description": "Aluminum, polycarbonate, wood sheet, and 3D printing filaments and strength.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "materials and fdm"
+      ]
+    },
+    {
+      "slug": "study-jigsaw",
+      "title": "Jigsaw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.1",
+      "version": "1.1.1",
+      "description": "Blades, clamping, hands, curves, and cutting plastic.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.1"
+      ]
+    },
+    {
+      "slug": "study-circular-saw",
+      "title": "Circular Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.2",
+      "version": "1.1.1",
+      "description": "Depth, support, the guard, binding, and kickback.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.2"
+      ]
+    },
+    {
+      "slug": "study-track-saw",
+      "title": "Track Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.3",
+      "version": "1.1.1",
+      "description": "The track, setup, plunge cuts, and body position.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.3"
+      ]
+    },
+    {
+      "slug": "study-miter-saw",
+      "title": "Miter Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.4",
+      "version": "1.1.1",
+      "description": "Wood only, the no-hands zone, clamping, stops, and unplugging.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.4"
+      ]
+    },
+    {
+      "slug": "study-metal-chop-saw",
+      "title": "Metal Chop Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.5",
+      "version": "1.1.1",
+      "description": "Blades, the vise, short stock, jams, chips, and hearing.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.5"
+      ]
+    },
+    {
+      "slug": "study-portaband",
+      "title": "Portaband",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.6, 7.7, 8.4",
+      "version": "1.1",
+      "description": "Handheld, on the horizontal stand, and on the vertical stand: blades, feeding, stalls, and coasting.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.6, 7.7, 8.4"
+      ]
+    },
+    {
+      "slug": "study-angle-grinder",
+      "title": "Angle Grinder",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.8, 7.9",
+      "version": "1.1",
+      "description": "Grinding (Section A) and the cut-off wheel (Section B): guards, grip, binding, and the plane of the wheel.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.8, 7.9"
+      ]
+    },
+    {
+      "slug": "study-rotary-tool",
+      "title": "Rotary Tool",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.10",
+      "version": "1.1",
+      "description": "Collets, bits and wheels, speed, and clamping small parts.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.10"
+      ]
+    },
+    {
+      "slug": "study-oscillating-tool",
+      "title": "Oscillating Tool",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.11",
+      "version": "1.1",
+      "description": "Blades, plunge and flush cuts, heat, and cutting near the robot.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.11"
+      ]
+    },
+    {
+      "slug": "study-reciprocating-saw",
+      "title": "Reciprocating Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.12",
+      "version": "1.1",
+      "description": "Blades, the shoe, cutting into walls, and finishing a cut.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.12"
+      ]
+    },
+    {
+      "slug": "study-router",
+      "title": "Router",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 7.13",
+      "version": "1.1",
+      "description": "Bits, collets, depth per pass, and feed direction outside and inside a cutout.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "7.13"
+      ]
+    },
+    {
+      "slug": "study-drill-press",
+      "title": "Drill Press",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 8.1",
+      "version": "1.1",
+      "description": "Clamping, speeds, depth stops, the chuck key, and parts that grab and spin.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "8.1"
+      ]
+    },
+    {
+      "slug": "study-belt-disc-sander",
+      "title": "Belt and Disc Sander",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 8.2",
+      "version": "1.1",
+      "description": "The down side of the disc, small parts, angles, dust, and coasting.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "8.2"
+      ]
+    },
+    {
+      "slug": "study-scroll-saw",
+      "title": "Scroll Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 8.3",
+      "version": "1.1",
+      "description": "Blades, tension, the hold-down, inside cuts, and clearing the table.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "8.3"
+      ]
+    },
+    {
+      "slug": "study-table-saw",
+      "title": "Table Saw",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 8.5",
+      "version": "1.1",
+      "description": "Kickback, the riving knife, push sticks, blade height, stance, and the fence.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "8.5"
+      ]
+    },
+    {
+      "slug": "study-bench-grinder",
+      "title": "Bench Grinder",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 8.6",
+      "version": "1.1",
+      "description": "Rest and tongue gaps, wheel ratings, soft metals, start-up, and heat.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "8.6"
+      ]
+    },
+    {
+      "slug": "study-cnc-router",
+      "title": "CNC Router",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Study guide · 8.7",
+      "version": "1.1.1",
+      "description": "Zeroing, collets, workholding, the e-stop, dust, and staying with the job.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification",
+        "8.7"
+      ]
     }
   ],
   "_changelog": [
@@ -566,6 +1031,11 @@
       "version": "1.4.1",
       "date": "2026-10-24",
       "note": "Shop Safety Quiz pilot v0.3: removed the CA glue question; the two mentor-present questions now ask only about cutting tools."
+    },
+    {
+      "version": "1.5",
+      "date": "2026-11-05",
+      "note": "Added the Tool Study Guides topic: 29 interactive study guides, one per tool or concept quiz, in the order students take them."
     }
   ]
 }

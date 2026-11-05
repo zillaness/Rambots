@@ -1,0 +1,2669 @@
+<title>Hot Glue Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!--
+  file: rambots_hot_glue_study_v1.0.1.html
+  version: 1.0.1
+  author: Sam Cao
+  created: 2026-11-05
+  last_updated: 2026-11-05
+  description: Interactive study deck for the Rambots 2.5 hot glue gun quiz: burns and the stand, sticks and temperatures, strain relief, and drips, with quick checks, a checkpoint on the can't-fail topic, and a downloadable score.
+  ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
+  engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
+-->
+<style id="deck-engine-css">
+/* Layout: a 1600x900 slide canvas scaled to fit above a slim control bar; one slide visible at a time.
+   Below 720px wide the stage reflows into a readable single column (phone fallback). SOP mode (deck.mode "sop") always reflows.
+   Tokens: neutral warm surfaces, one red accent for chrome, a separate data palette (d1-d5), path colors for branches (p1-p4). */
+:root{
+  --outer:#E7E3DD; --slide:#FBFAF8; --surface:#FFFFFF; --soft:#F3EFEA; --ink:#1C1A19; --ink-2:#4A4744; --ink-3:#74706A;
+  --rule:#E2DED8; --grid:#ECE9E4; --focus:#2A6FD1;
+  --accent:#A31F36; --accent-ink:#FFFFFF; --hl:#F4A81C; --hl-ink:#1C1A19; --cover:#A31F36; --cover-ink:#FFFFFF;
+  --d1:#A31F36; --d2:#C27A00; --d3:#2A6FD1; --d4:#14876F; --d5:#7A4FB8; --other:#8E8A84;
+  --p1:#2A6FD1; --p2:#14876F; --p3:#C27A00; --p4:#7A4FB8; --good:#14876F; --warn:#C27A00; --bad:#A31F36;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif; --mono:ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --outer:#0F0E0E; --slide:#1B1A19; --surface:#242321; --soft:#262422; --ink:#F1EFEC; --ink-2:#C8C4BD; --ink-3:#938F88;
+  --rule:#35332F; --grid:#2B2A28; --focus:#4C8EEA;
+  --accent:#E4627A; --accent-ink:#1B1A19; --hl:#F4A81C; --hl-ink:#1B1A19; --cover:#8E1A2F; --cover-ink:#FFFFFF;
+  --d1:#E4627A; --d2:#D18F0F; --d3:#4C8EEA; --d4:#22A88A; --d5:#A07BDB; --other:#77736D;
+  --p1:#4C8EEA; --p2:#22A88A; --p3:#D18F0F; --p4:#A07BDB; --good:#22A88A; --warn:#D18F0F; --bad:#E4627A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --outer:#0F0E0E; --slide:#1B1A19; --surface:#242321; --soft:#262422; --ink:#F1EFEC; --ink-2:#C8C4BD; --ink-3:#938F88;
+  --rule:#35332F; --grid:#2B2A28; --focus:#4C8EEA;
+  --accent:#E4627A; --accent-ink:#1B1A19; --hl:#F4A81C; --hl-ink:#1B1A19; --cover:#8E1A2F; --cover-ink:#FFFFFF;
+  --d1:#E4627A; --d2:#D18F0F; --d3:#4C8EEA; --d4:#22A88A; --d5:#A07BDB; --other:#77736D;
+  --p1:#4C8EEA; --p2:#22A88A; --p3:#D18F0F; --p4:#A07BDB; --good:#22A88A; --warn:#D18F0F; --bad:#E4627A; color-scheme:dark}
+
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--outer);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.35;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;overflow:hidden}
+.app{height:100%;display:flex;flex-direction:column;position:relative}
+.viewport{flex:1;min-height:0;position:relative}
+.stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;transform:translate(-50%,-50%) scale(.5);
+  background:var(--slide);box-shadow:0 2px 24px rgba(0,0,0,.12);border-radius:6px;overflow:hidden}
+button,input,textarea,select{font-family:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+p{margin:0}
+a{color:inherit}
+
+/* ---------- control bar ---------- */
+.bar{flex:none;display:flex;align-items:center;gap:8px;padding-block:8px calc(8px + env(safe-area-inset-bottom,0px));position:relative}
+.bar .prog{position:absolute;left:0;right:0;top:0;height:3px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar .prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.bbtn{border:1px solid var(--rule);background:var(--surface);border-radius:8px;padding:8px 12px;font-size:14px;line-height:1;min-height:36px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.bbtn:hover:not(:disabled){border-color:var(--ink-3)}
+.bbtn:disabled{opacity:.4}
+.bbtn[aria-pressed="true"]{background:var(--ink);color:var(--slide);border-color:var(--ink)}
+.bbtn.nav{font-size:18px;padding:8px 16px}
+.bbtn.go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.counter{font-variant-numeric:tabular-nums}
+.crumb{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-3);font-size:14px}
+.crumb b{color:var(--ink-2);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--surface);flex-wrap:nowrap}
+.seg button{border:0;background:none;padding:8px 10px;font-size:13px;min-height:34px;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.seg button:disabled{opacity:.5}
+@media (max-width:900px){.hide-md{display:none}}
+@media (max-width:760px){.hide-sm{display:none}}
+.panel{position:absolute;left:0;right:0;bottom:calc(100% + 6px);background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;font-size:15px;color:var(--ink-2);box-shadow:0 6px 24px rgba(0,0,0,.12);max-height:40vh;overflow:auto;z-index:40;white-space:pre-line}
+.notice{flex:none;display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;border-radius:8px;border:1px solid var(--hl);background:var(--surface);font-size:14px;color:var(--ink)}
+.notice button{border:0;background:none;font-size:18px;line-height:1;padding:2px 6px;color:var(--ink-3)}
+
+/* ---------- routing map ---------- */
+.map{position:absolute;inset:0;z-index:35;background:var(--outer);display:flex;flex-direction:column;gap:10px;padding:14px 4px 8px;overflow:hidden}
+.map-h{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.map-h h2{margin:0;font-size:20px}
+.map-h .sum{color:var(--ink-3);font-size:14px;flex:1;min-width:160px}
+.map-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-3)}
+.map-legend i{display:inline-block;vertical-align:-2px;margin-right:6px}
+.map-scroll{flex:1;min-height:0;overflow:auto;border:1px solid var(--rule);border-radius:10px;background:var(--slide)}
+.map-canvas{position:relative;display:flex;gap:56px;padding:20px 24px;align-items:flex-start;width:max-content;min-width:100%}
+.map-canvas svg.edges{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.map-col{display:flex;flex-direction:column;gap:22px}
+.run{background:var(--surface);border:2px solid var(--rule);border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:2px;width:250px}
+.run .lane{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pc,var(--ink-3));padding:2px 6px 4px}
+.mnode{display:flex;align-items:center;gap:8px;border:0;background:none;text-align:left;padding:6px 8px;border-radius:6px;font-size:14px;line-height:1.2;width:100%;color:var(--ink-2)}
+.mnode:hover{background:var(--soft)}
+.mnode .st{flex:none;width:16px;height:16px;border-radius:50%;border:2px solid var(--ink-3);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--slide);font-style:normal}
+.mnode.seen{color:var(--ink)}
+.mnode.seen .st{background:var(--ink-3);border-color:var(--ink-3)}
+.mnode.cur{background:var(--soft);color:var(--ink);font-weight:700;box-shadow:inset 0 0 0 2px var(--focus)}
+.mnode.cur .st{background:var(--focus);border-color:var(--focus)}
+.mnode .ty{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.mnode .tt{min-width:0;overflow-wrap:anywhere}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;padding:60px 88px 70px;display:flex;flex-direction:column;gap:26px;background:var(--slide);
+  opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .25s ease}
+@media (prefers-reduced-motion:reduce){.slide,.slide.on,.bar .prog i,.lb-row,.opt .ofill,.idea .ofill{transition:none!important}}
+.notes{display:none}
+.hd{display:flex;flex-direction:column;gap:12px}
+.chip{font-weight:700;font-size:16px;line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.t{font-weight:800;font-size:54px;line-height:1.06;letter-spacing:-.012em;margin:0;text-wrap:balance;max-width:1380px}
+.t.sm{font-size:44px}
+.lede{font-size:26px;line-height:1.35;color:var(--ink-2);margin:0;max-width:62ch}
+.body{flex:1;min-height:0;display:grid;gap:36px;align-content:start}
+.body.fill{align-content:stretch}
+.body.mid{align-content:center}
+.ft{position:absolute;left:88px;right:88px;bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;font-size:15px;color:var(--ink-3)}
+.ft a{color:inherit}
+.num{font-variant-numeric:tabular-nums}
+.copyrow{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.status{font-size:16px;color:var(--ink-3)}
+
+/* layout helpers (use these instead of inline grid templates; they reflow on phones) */
+.cols-2{grid-template-columns:1fr 1fr}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-4{grid-template-columns:repeat(4,1fr)}
+.split{grid-template-columns:1fr 380px}
+.split-wide{grid-template-columns:1fr 460px}
+.split-l{grid-template-columns:560px 1fr}
+.stack{display:flex;flex-direction:column;gap:16px;min-height:0;min-width:0}
+.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+
+/* cards and text */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h3{margin:0;font-size:28px;line-height:1.15;font-weight:700}
+.card p{font-size:21px;color:var(--ink-2);line-height:1.35}
+.card.tight{padding:16px 20px;gap:6px}
+.card.tight p{font-size:19px}
+.card.muted{background:var(--soft)}
+.card.lg{padding:30px 32px;gap:14px}
+.card.lg h3{font-size:34px}
+.card.lg p{font-size:26px;line-height:1.35}
+.card.lg .k{font-size:16px}
+.card b,.card strong{color:var(--ink)}
+.k{font-size:15px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink-3)}
+.big{font-weight:800;font-size:64px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.big.accent{color:var(--accent)}
+.note{font-size:17px;color:var(--ink-3)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.steps.three{grid-template-columns:repeat(3,1fr)}
+.step{border-top:6px solid var(--accent);background:var(--surface);border-radius:0 0 12px 12px;padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.step .n{font-weight:800;font-size:56px;line-height:1;color:var(--accent)}
+.step h3{margin:0;font-size:30px;line-height:1.15}
+.step p{font-size:20px;color:var(--ink-2)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fact{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+.fact .big{font-size:60px;color:var(--accent)}
+.fact p{font-size:21px;color:var(--ink-2);line-height:1.35}
+.pills{display:flex;gap:12px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:10px;font-size:21px;padding:10px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--rule)}
+.dot{width:14px;height:14px;border-radius:50%;flex:none;display:inline-block}
+.tag{display:inline-block;font-size:14px;font-weight:700;letter-spacing:.04em;padding:4px 8px;border-radius:6px;border:1.5px solid var(--ink-3);color:var(--ink-2);white-space:nowrap}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+.tag.good{border-color:var(--good);color:var(--good)}
+.tbtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tbtn{border:1px solid var(--rule);background:var(--surface);border-radius:999px;padding:10px 18px;font-size:18px;line-height:1}
+.tbtn[aria-pressed="true"]{background:var(--ink);color:var(--slide);border-color:var(--ink)}
+.tbtn.armed{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tbtn.small{font-size:15px;padding:8px 14px}
+.legend{display:flex;gap:22px;align-items:center;font-size:17px;color:var(--ink-2);flex-wrap:wrap}
+.sw{display:inline-block;width:22px;height:14px;border-radius:3px;vertical-align:-1px;margin-right:8px;background:var(--ink-3)}
+.hatch{background-image:repeating-linear-gradient(45deg,transparent 0 4px,var(--slide) 4px 7px)}
+table.t2{border-collapse:collapse;font-size:19px;width:100%}
+table.t2 th{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:700;padding:6px 10px;border-bottom:1.5px solid var(--rule)}
+table.t2 td{padding:6px 10px;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums;vertical-align:middle}
+table.t2 td.n,table.t2 th.n{text-align:right}
+table.t2 tr.tot td{border-bottom:none;font-weight:700}
+.scroll{min-height:0;overflow:auto}
+
+/* cover and statement slides */
+.slide.s-cover{background:var(--cover);color:var(--cover-ink);justify-content:space-between;padding:84px 100px 80px}
+.s-cover .chip{color:var(--hl)}
+.s-cover h1{margin:0;font-weight:800;font-size:132px;line-height:.95;letter-spacing:-.03em}
+.s-cover h1 span{color:var(--hl)}
+.s-cover .sub{font-size:32px;line-height:1.3;max-width:34ch;opacity:.95}
+.s-cover .meta{display:flex;gap:40px;flex-wrap:wrap;font-size:22px;align-items:flex-end;justify-content:space-between}
+.s-cover .warn{border:2px solid var(--hl);color:var(--hl);font-weight:700;font-size:18px;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-radius:8px}
+.s-cover .ft{color:rgba(255,255,255,.78)}
+.slide.s-statement{justify-content:center}
+.s-statement .t{font-size:72px;max-width:1300px}
+
+/* ---------- branching: forks, hubs, endings ---------- */
+.fork,.hub{display:grid;grid-template-columns:repeat(var(--n,2),1fr);gap:18px}
+.fork-q{grid-column:1 / -1;font-size:15px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink-3)}
+.choice{position:relative;display:flex;gap:18px;align-items:flex-start;text-align:left;background:var(--surface);border:2px solid var(--rule);border-radius:14px;padding:28px 30px;font-size:32px;font-weight:700;line-height:1.15;color:var(--ink);min-width:0;min-height:150px}
+.choice:hover{border-color:var(--pc,var(--ink-3))}
+.choice .key{flex:none;width:48px;height:48px;border-radius:10px;display:grid;place-items:center;font-size:22px;font-weight:800;color:var(--slide);background:var(--pc,var(--ink-3))}
+.choice .lbl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.choice .hint{font-size:22px;font-weight:400;color:var(--ink-2);line-height:1.3}
+.choice .mark{position:absolute;right:14px;top:12px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.choice.done{background:var(--soft)}
+.choice.done .mark{color:var(--good)}
+.choice.exit{border-color:var(--accent)}
+.choice.exit .key{background:var(--accent);color:var(--accent-ink)}
+.choice.flash{animation:flash .6s ease 2}
+@keyframes flash{50%{border-color:var(--pc,var(--accent));box-shadow:0 0 0 4px var(--soft)}}
+@media (prefers-reduced-motion:reduce){.choice.flash{animation:none;border-color:var(--pc,var(--accent))}}
+.hub-sum{font-size:20px;color:var(--ink-2)}
+.end-actions{display:flex;gap:8px;align-items:center;margin-left:auto}
+.end-actions .k{margin-right:6px}
+.end-actions button{border:1px solid var(--rule);background:var(--surface);border-radius:999px;padding:8px 16px;font-size:16px;color:var(--ink)}
+.end-actions button.go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* ---------- tooltip ---------- */
+.tip{position:absolute;z-index:30;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;font-size:18px;line-height:1.35;box-shadow:0 8px 26px rgba(0,0,0,.16);max-width:420px}
+.tip .m{color:var(--ink-2)}
+svg text{font-family:var(--font)}
+.ax{fill:var(--ink-3);font-size:16px}
+.gl{stroke:var(--grid);stroke-width:1}
+.base{stroke:var(--ink-3);stroke-width:1.5}
+
+/* ---------- widgets: shared bits ---------- */
+.w-empty{color:var(--ink-3);font-style:italic;font-size:18px}
+.undo{align-self:flex-start;border:1px solid var(--rule);background:var(--surface);border-radius:8px;padding:8px 14px;font-size:16px}
+.undo:disabled{opacity:.45}
+.add{display:flex;gap:8px}
+.add input,.add textarea{flex:1;min-width:0;font-size:20px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--slide)}
+.add button{font-size:18px;padding:10px 16px;border-radius:8px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.add button:disabled,.add input:disabled{opacity:.5}
+.copybox{position:absolute;inset:120px 160px;z-index:40;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.copybox textarea{flex:1;font-size:18px;font-family:var(--mono);border:1px solid var(--rule);border-radius:8px;padding:12px;background:var(--slide);color:var(--ink)}
+
+/* poll */
+.poll{display:flex;flex-direction:column;gap:10px;min-width:0}
+.opt{display:grid;grid-template-columns:1fr 80px 92px;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.ofill{position:absolute;left:0;top:0;bottom:0;background:var(--soft);transition:width .3s ease;z-index:0}
+.opt > *:not(.ofill),.idea > *:not(.ofill){position:relative;z-index:1}
+.opt h4{margin:0;font-size:24px}
+.opt p{font-size:17px;color:var(--ink-2)}
+.opt .c{font-size:40px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.opt button,.idea .plus{font-size:20px;font-weight:700;padding:12px 0;border-radius:10px;border:2px solid var(--accent);background:var(--surface);color:var(--accent)}
+.opt button:hover:not(:disabled),.idea .plus:hover:not(:disabled){background:var(--accent);color:var(--accent-ink)}
+.opt button:disabled,.idea .plus:disabled{opacity:.45}
+.poll.sm .opt{grid-template-columns:1fr 52px 76px;padding:12px 14px;gap:10px}
+.poll.sm .opt h4{font-size:21px}
+.poll.sm .opt p{font-size:16px}
+.poll.sm .opt .c{font-size:32px}
+.poll.sm .opt button{font-size:18px;padding:10px 0}
+
+/* brainwrite + dot vote */
+.brain{display:flex;flex-direction:column;gap:14px;min-height:0;min-width:0}
+.hmw{font-size:26px;font-weight:700;line-height:1.25;max-width:32ch}
+.ideas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:auto;min-height:0;flex:1;align-content:start}
+.ideas.one{grid-template-columns:1fr}
+.idea{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:8px 12px;font-size:21px;min-height:52px}
+.idea .tx{flex:1;min-width:0;overflow-wrap:anywhere}
+.idea .mt,.items li .mt{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase;white-space:nowrap}
+.idea .c{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.idea .plus{font-size:18px;padding:8px 14px;border-radius:8px}
+.x{border:0;background:none;font-size:22px;line-height:1;color:var(--ink-3);padding:2px 6px;border-radius:4px}
+.x:hover{color:var(--accent)}
+.ideas .w-empty{grid-column:1/-1}
+
+/* column board and list board */
+.board{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:20px;min-height:0;flex:1}
+.col{background:var(--surface);border:1px solid var(--rule);border-radius:12px;display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden}
+.col-h{padding:16px 20px 12px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:4px}
+.col-h h3{margin:0;font-size:30px;display:flex;align-items:center;gap:10px}
+.col-h p{font-size:17px;color:var(--ink-3)}
+.col-h .cnt{font-size:18px;color:var(--ink-3);font-weight:400;font-variant-numeric:tabular-nums}
+.items{flex:1;min-height:0;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;list-style:none;margin:0}
+.items.two{display:grid;grid-template-columns:1fr 1fr;align-content:start}
+.items li{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border-radius:8px;padding:10px 12px;font-size:20px;line-height:1.3}
+.items li .tx{flex:1;min-width:0;overflow-wrap:anywhere}
+.items li .mt{padding-top:4px}
+.items li.w-empty{background:none}
+.col .add{padding:12px;border-top:1px solid var(--rule)}
+
+/* checklist and day plan (text wraps: textareas grow, never truncate) */
+.chk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;overflow:auto;min-height:0;flex:1}
+.chk li{display:grid;grid-template-columns:26px 1fr 170px 28px;gap:8px;align-items:start}
+.chk li.w-empty{display:block}
+.chk input[type=checkbox]{width:22px;height:22px;accent-color:var(--good);margin:8px 0 0}
+.fld{font-size:18px;line-height:1.3;padding:6px 8px;border:1px solid transparent;border-radius:6px;background:transparent;width:100%;min-width:0;color:var(--ink);resize:none;overflow:hidden;display:block}
+textarea.fld{height:auto}
+.fld:hover:not(:disabled){border-color:var(--rule)}
+.fld:focus{border-color:var(--focus);background:var(--slide);outline:none}
+.fld.who{border-color:var(--rule);background:var(--slide);font-size:16px}
+.fld:disabled{cursor:default}
+.chk li.done .fld.tx{text-decoration:line-through;color:var(--ink-3)}
+.days{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto}
+.drow{display:grid;grid-template-columns:150px 1fr 190px;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:8px 12px}
+.drow h4{margin:0;font-size:19px;padding-top:6px}
+.drow h4 small{display:block;font-size:14px;font-weight:400;color:var(--ink-3)}
+.drow.off{background:var(--soft)}
+.drow.ev{border:2px solid var(--accent)}
+
+/* live model */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px}
+.mstack{display:flex;flex-direction:column;gap:20px}
+.mf{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:600;min-width:0;flex-wrap:wrap}
+.mf > .ml{flex:1;min-width:0}
+.mf small{font-weight:400;color:var(--ink-3);font-size:15px}
+.mf.wide{grid-column:1 / -1}
+.mf.range{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px}
+.mf.range .ml{display:flex;justify-content:space-between;gap:12px}
+.mf.range .ml span{font-weight:400;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.mf input[type=range]{width:100%;margin:0;accent-color:var(--accent);height:28px}
+.min{display:inline-flex;align-items:center;gap:4px;font-weight:400}
+.min input{width:110px;font-size:20px;padding:6px 8px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);font-variant-numeric:tabular-nums}
+.min input:disabled{opacity:.45}
+table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
+.mrow{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+/* charts */
+.hb{display:flex;flex-direction:column;gap:14px}
+.hb-row{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:center}
+.hb-row .nm{font-size:21px;font-weight:600}
+.hb-row .nm small{display:block;font-size:16px;font-weight:400;color:var(--ink-3)}
+.hb-row .trk{display:flex;align-items:center;gap:12px;height:34px}
+.hb-row .seg1{height:100%;border-radius:0 4px 4px 0;display:block}
+.hb-row .v{font-size:19px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.meter{position:relative;height:56px;background:var(--soft);border:1px solid var(--rule);border-radius:10px;margin-top:40px}
+.meter .mfill{position:absolute;left:0;top:0;bottom:0;border-radius:10px 0 0 10px;display:flex;overflow:hidden}
+.meter .mfill i{display:block;height:100%}
+.meter .cap{position:absolute;top:-12px;bottom:-12px;width:3px;background:var(--ink)}
+.meter .caplab{position:absolute;top:-40px;transform:translateX(-50%);font-size:16px;color:var(--ink-2);white-space:nowrap}
+
+/* embed */
+.frame{flex:1;min-height:0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--surface);position:relative}
+.frame iframe{width:100%;height:100%;border:0;display:block}
+.frame .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;color:var(--ink-3)}
+
+/* ---------- phone fallback: reflow instead of shrinking ---------- */
+.app.flow{height:100%}
+.app.flow .viewport{overflow-y:auto;overflow-x:hidden}
+.app.flow .stage{position:relative;left:auto;top:auto;width:auto;height:auto;transform:none!important;border-radius:0;box-shadow:none;overflow:visible;background:transparent}
+.app.flow .slide{position:relative;inset:auto;display:none;padding:18px 0 28px;gap:16px;opacity:1;visibility:visible;transition:none;background:transparent}
+.app.flow .slide.on{display:flex}
+.app.flow .slide.s-cover{padding:24px 18px;border-radius:12px;background:var(--cover);gap:24px}
+.app.flow .s-cover h1{font-size:56px}
+.app.flow .s-cover .sub{font-size:20px}
+.app.flow .s-cover .meta{font-size:16px;gap:14px}
+.app.flow .t,.app.flow .s-statement .t{font-size:28px!important;max-width:none}
+.app.flow .lede{font-size:18px!important}
+.app.flow .chip,.app.flow .k,.app.flow .fork-q{font-size:12px}
+.app.flow .body,.app.flow .stack{gap:14px}
+.app.flow .body,.app.flow .cols-2,.app.flow .cols-3,.app.flow .cols-4,.app.flow .split,.app.flow .split-wide,.app.flow .split-l,
+.app.flow .steps,.app.flow .facts,.app.flow .board,.app.flow .fork,.app.flow .hub,.app.flow .mgrid,
+.app.flow .slide [style*="grid-template-columns"]{grid-template-columns:minmax(0,1fr)!important}
+.app.flow .ideas,.app.flow .items.two{grid-template-columns:1fr}
+.app.flow .card{padding:16px}
+.app.flow .card h3,.app.flow .step h3{font-size:20px}
+.app.flow .card p,.app.flow .fact p,.app.flow .step p,.app.flow .card.tight p{font-size:16px}
+.app.flow .big,.app.flow .fact .big{font-size:40px!important}
+.app.flow .step .n{font-size:36px}
+.app.flow .choice{font-size:20px;padding:14px 16px;min-height:0}
+.app.flow .copyrow{flex-wrap:wrap}
+.app.flow .card.lg h3{font-size:20px}
+.app.flow .card.lg p{font-size:16px}
+.app.flow .choice .hint{font-size:15px}
+.app.flow .choice .key{width:34px;height:34px;font-size:17px}
+.app.flow .ft{position:static;flex-wrap:wrap;font-size:13px;gap:8px}
+.app.flow .pill{font-size:15px}
+.app.flow .legend{font-size:14px}
+.app.flow table.t2{font-size:15px}
+.app.flow .scroll-x,.app.flow .body > table{display:block;overflow-x:auto}
+.app.flow .hb-row{grid-template-columns:1fr}
+.app.flow .hb-row .nm{font-size:16px}
+.app.flow .opt{grid-template-columns:1fr 48px 64px;padding:10px}
+.app.flow .opt h4{font-size:17px}
+.app.flow .opt .c{font-size:24px}
+.app.flow .opt button{font-size:15px;padding:8px 0}
+.app.flow .idea,.app.flow .items li{font-size:16px}
+.app.flow .col-h h3{font-size:20px}
+.app.flow .chk li{grid-template-columns:24px 1fr 28px}
+.app.flow .chk li .who{grid-column:2}
+.app.flow .drow{grid-template-columns:1fr}
+.app.flow .frame{height:70vh;flex:none}
+.app.flow .add input{font-size:16px}
+.app.flow .hmw{font-size:19px}
+.app.flow .items,.app.flow .ideas,.app.flow .chk,.app.flow .days{max-height:none;overflow:visible}
+.app.flow .copybox{position:fixed;inset:12px}
+.app.flow .map{position:fixed;inset:0;padding:max(12px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+/* ---------- SOP mode (deck.mode "sop"): responsive step pages, step gate, checks, measurements, tools, runs ---------- */
+.app.sop .viewport{overflow-y:auto;overflow-x:hidden}
+.app.sop .stage{max-width:920px;margin:0 auto}
+.app.sop .slide{padding:28px 0 32px;gap:18px}
+.app.sop .slide.s-cover{padding:32px 28px}
+.app.sop .t,.app.sop .s-statement .t{font-size:34px!important;line-height:1.12}
+.app.sop .lede{font-size:20px!important;color:var(--ink-2)}
+.app.sop .chip{font-size:13px}
+.app.sop .card p,.app.sop .step p{font-size:18px}
+.app.sop .ft{font-size:14px}
+.app.sop .warnbox{border:1.5px solid var(--warn);background:var(--surface);border-radius:12px;padding:14px 16px;font-size:18px}
+.app.sop .warnbox b{color:var(--warn)}
+.app.sop .figure img{display:block;max-width:100%;border-radius:10px;border:1px solid var(--rule)}
+.app.sop .figure figcaption{font-size:15px;color:var(--ink-3);margin-top:6px}
+.app.sop ol.do{margin:0;padding-left:1.4em;font-size:19px;display:flex;flex-direction:column;gap:8px}
+@media (max-width:719px){
+  .app.sop .slide{padding:16px 0 24px;gap:14px}
+  .app.sop .slide.s-cover{padding:24px 18px}
+  .app.sop .t,.app.sop .s-statement .t{font-size:26px!important}
+  .app.sop .lede{font-size:17px!important}
+  .app.sop .card p,.app.sop ol.do{font-size:17px}
+}
+.bbtn.nav.locked{opacity:.6;border-style:dashed}
+.runchip{font-size:14px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw}
+.runchip.warn{color:var(--warn);font-weight:700}
+.gate{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:10px;border:1.5px dashed var(--ink-3);font-size:17px;line-height:1.35;color:var(--ink-2);background:var(--surface)}
+.gate b{color:var(--ink)}
+.gate.ok{border-style:solid;border-color:var(--good);color:var(--good)}
+.gate.ok b{color:var(--good)}
+.gate.flash{animation:gateflash .5s 2}
+@keyframes gateflash{50%{border-color:var(--bad);box-shadow:0 0 0 3px color-mix(in srgb,var(--bad) 25%,transparent)}}
+@media (prefers-reduced-motion:reduce){.gate.flash{animation:none;border-color:var(--bad)}}
+.sopw{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.sopw .k{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.sopw .none{font-size:17px;color:var(--ink-3);font-style:italic}
+.sopw .tbtn{font-size:17px}
+.sopw .tbtn.go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.sopw .tbtn.bad{border-color:var(--bad);color:var(--bad);font-weight:700}
+.sopw .tbtn:disabled{opacity:.45}
+/* required checks */
+.sc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sc label{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;font-size:19px;line-height:1.35;padding:8px 6px;border-radius:8px;cursor:pointer}
+.sc label:hover{background:var(--soft)}
+.sc input{width:24px;height:24px;margin:2px 0 0;accent-color:var(--good)}
+.sc li.done label{color:var(--ink-2)}
+.sc li.safety label{border-left:4px solid var(--warn);padding-left:10px}
+.sc .sc-opt{font-size:14px;color:var(--ink-3);margin-left:6px}
+/* measurements and gauges */
+.ms-h{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;justify-content:space-between}
+.ms-l{font-size:20px;font-weight:700}
+.ms-spec{font-size:16px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ms-hint{font-size:16px;color:var(--ink-3)}
+.ms-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ms-in{font-family:var(--mono);font-size:28px;width:11ch;max-width:100%;padding:8px 12px;border:2px solid var(--rule);border-radius:10px;background:var(--slide);font-variant-numeric:tabular-nums}
+.ms-in:disabled{opacity:.5}
+.ms-u{font-size:20px;color:var(--ink-2)}
+.ms-v{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.ms-v .vpill,.rl .vpill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:15px;letter-spacing:.06em;margin-right:8px;border:1.5px solid currentColor}
+.ms.pass .ms-in{border-color:var(--good)} .ms.pass .ms-v{color:var(--good)}
+.ms.fail .ms-in{border-color:var(--bad)} .ms.fail .ms-v{color:var(--bad)}
+.ms.live .ms-v{opacity:.75}
+.ms-g{display:flex;flex-wrap:wrap;gap:8px}
+.ms-g button{font-size:18px;padding:12px 18px;border-radius:10px;border:2px solid var(--rule);background:var(--slide);font-weight:700}
+.ms-g button[aria-pressed="true"][data-g="pass"]{border-color:var(--good);color:var(--good)}
+.ms-g button[aria-pressed="true"][data-g="fail"]{border-color:var(--bad);color:var(--bad)}
+.ms-fail{border-top:1px solid var(--rule);padding-top:12px;display:flex;flex-direction:column;gap:10px;font-size:17px}
+.ms-fail .fld{border:1px solid var(--rule);background:var(--slide);font-size:17px}
+.ms-fail small{color:var(--ink-3);font-size:14px}
+.ms-tries{font-size:14px;color:var(--ink-3)}
+/* tools */
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tl li{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;font-size:18px}
+.tl li .tl-st{grid-column:1;font-size:14px;color:var(--ink-3)}
+.tl li.out .tl-st{color:var(--warn);font-weight:700}
+.tl li.back .tl-st{color:var(--good)}
+.tl li > .tbtns{grid-row:1 / span 2;grid-column:2}
+/* run start, run end, run log */
+.runbox .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.runbox label{display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:700;color:var(--ink-2)}
+.runbox input{font-size:20px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--slide);font-weight:400;color:var(--ink);min-width:0}
+.runbox .sop-sum{font-size:18px;line-height:1.45}
+.runbox .sop-sum b{font-variant-numeric:tabular-nums}
+.runbox .sop-note{font-size:15px;color:var(--ink-3)}
+.rl-wrap{overflow-x:auto}
+.rl{width:100%;border-collapse:collapse;font-size:16px;font-variant-numeric:tabular-nums}
+.rl th,.rl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
+.rl th{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.rl .pass{color:var(--good)} .rl .failed{color:var(--bad)} .rl .deviation{color:var(--warn)} .rl .open,.rl .abandoned{color:var(--ink-3)}
+</style>
+<!-- @@CUSTOM_CSS@@ -->
+<style id="deck-custom-css">
+/* Deck-only: photos, definition rows, quick checks, results. Tokens only, so both themes work. */
+.fig{margin:0;display:flex;flex-direction:column;gap:8px;min-height:0}
+.fig img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover;border-radius:12px;border:1px solid var(--rule);background:var(--soft)}
+.fig.tall img{max-height:600px;object-fit:contain}
+.fig figcaption{font-size:15px;color:var(--ink-3);line-height:1.3}
+.defs{display:flex;flex-direction:column;gap:14px}
+.defs .d{display:grid;grid-template-columns:200px 1fr;gap:18px;padding:14px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+.defs .d b{font-size:22px}
+.defs .d p{margin:0;font-size:20px;line-height:1.35}
+.warnline{border-left:6px solid var(--bad);padding:10px 16px;background:var(--soft);border-radius:8px;font-size:20px;margin:0}
+.diag svg{width:100%;height:auto;display:block}
+.diag .ln{stroke:var(--ink);stroke-width:3;fill:none}
+.diag .fl{fill:var(--soft);stroke:var(--ink-2);stroke-width:2}
+.diag .ac{fill:var(--accent)}
+.diag text{fill:var(--ink);font-size:20px;font-family:inherit}
+.diag text.s{fill:var(--ink-3);font-size:17px}
+.qz{max-width:1180px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.qz-q{font-size:30px;line-height:1.3;margin:0}
+.qz-opts{display:flex;flex-direction:column;gap:12px}
+.qz-o{display:grid;grid-template-columns:44px 1fr;gap:4px 16px;align-items:start;text-align:left;padding:16px 20px;border:2px solid var(--rule);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;font-size:23px;line-height:1.3;cursor:pointer}
+.qz-o:hover:not(:disabled){border-color:var(--accent)}
+.qz-o:disabled{cursor:default}
+.qz-l{font-weight:700;color:var(--ink-3)}
+.qz-y{grid-column:2;font-size:19px;color:var(--ink-2)}
+.qz-y:empty{display:none}
+.qz-o.right{border-color:var(--good)} .qz-o.right .qz-l{color:var(--good)}
+.qz-o.wrong{border-color:var(--bad)} .qz-o.wrong .qz-l{color:var(--bad)}
+.qz-o:disabled:not(.right):not(.picked){opacity:.72}
+.qz-fb p{margin:0;font-size:20px;line-height:1.35}
+.qz-v{font-weight:700;margin-bottom:6px!important}
+.qz-v.ok{color:var(--good)} .qz-v.no{color:var(--bad)}
+.res{display:flex;flex-direction:column;gap:18px;width:100%}
+.res-top{display:grid;grid-template-columns:1fr 560px;gap:28px;align-items:start}
+.res-score p{margin:4px 0 0;font-size:20px;color:var(--ink-2)}
+.res-form{display:flex;flex-direction:column;gap:10px;min-width:0}
+.res-in{box-sizing:border-box;width:100%;min-width:0;font:inherit;font-size:22px;padding:10px 14px;border:2px solid var(--rule);border-radius:10px;background:var(--surface);color:var(--ink)}
+.res-msg{margin:0;font-size:18px;color:var(--ink-2);min-height:24px}
+.res-list{max-height:330px;overflow:auto;max-width:100%}
+.res-list td,.res-list th{font-size:18px;padding:6px 10px}
+.st-right{color:var(--good)} .st-missed{color:var(--bad)} .st-not-answered{color:var(--ink-3)}
+.res-foot{align-items:center;gap:14px}
+.app.flow .defs .d{grid-template-columns:1fr;gap:6px}
+.app.flow .res-top{grid-template-columns:minmax(0,1fr)}
+.app.flow .res{min-width:0;max-width:100%}
+.app.flow .res-list{max-height:none}
+.app.flow .res-list td,.app.flow .res-list th{font-size:14px;padding:5px 6px}
+.app.flow .res-list th:nth-child(2),.app.flow .res-list td:nth-child(2){display:none}
+.app.flow .qz-q{font-size:22px}
+.app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
+.app.flow .fig img{max-height:none}
+</style>
+<!-- @@/CUSTOM_CSS@@ -->
+<!-- @@DECK_DATA@@ -->
+<script type="application/json" id="deck-data">
+{
+ "deck": {
+  "title": "Hot Glue Study",
+  "slug": "rambots_hot_glue_study",
+  "version": "1.0.1",
+  "author": "Sam Cao",
+  "start": "cover",
+  "storageKey": "rambots-hot-glue-study-v1"
+ },
+ "sessions": [],
+ "export": {
+  "filename": "rambots_hot_glue_study_notes",
+  "names": false
+ },
+ "assets": [
+  "img/*.webp"
+ ],
+ "widgets": {},
+ "charts": {
+  "qc-burn": {
+   "type": "custom",
+   "fn": "quiz",
+   "id": "qc-burn",
+   "topic": "A glue burn",
+   "review": "g-safe",
+   "q": "A string of hot glue lands on the back of your finger. What's your first move?",
+   "options": [
+    {
+     "t": "Run cool water over it right away, then tell a mentor",
+     "ok": true,
+     "why": "Cool water stops the burn from going deeper."
+    },
+    {
+     "t": "Peel it off fast before it sets",
+     "ok": false,
+     "why": "Peeling hot glue pulls skin off with it."
+    },
+    {
+     "t": "Blow on it and keep working",
+     "ok": false,
+     "why": "That's too slow, and a mentor should know about any burn."
+    }
+   ],
+   "after": "Cool water first, and leave the glue on your skin."
+  },
+  "qc-leak": {
+   "type": "custom",
+   "fn": "quiz",
+   "id": "qc-leak",
+   "topic": "Stick size",
+   "review": "g-sticks",
+   "q": "Your glue gun keeps oozing melted glue out the back, near where the stick goes in. What's the most likely cause?",
+   "options": [
+    {
+     "t": "The sticks are the wrong size for this gun",
+     "ok": true,
+     "why": "A stick that's too thin for the gun lets melted glue squeeze back past it."
+    },
+    {
+     "t": "The gun is set to low temperature",
+     "ok": false,
+     "why": "Low temp makes cooler glue. It doesn't make glue leak out the back."
+    },
+    {
+     "t": "The tip needs a bigger nozzle",
+     "ok": false,
+     "why": "The tip size changes the bead, not the back of the gun."
+    }
+   ],
+   "after": "Use the stick size the gun takes, and push old sticks through rather than pulling them out."
+  },
+  "qc-temp": {
+   "type": "custom",
+   "fn": "quiz",
+   "id": "qc-temp",
+   "topic": "Low or high temp",
+   "review": "g-sticks",
+   "q": "A teammate glued a foam board sign and the glue melted a dent into the foam. What should they have used?",
+   "options": [
+    {
+     "t": "A low-temp gun and low-temp sticks",
+     "ok": true,
+     "why": "Low temp is made for foam, fabric, and other heat-sensitive materials."
+    },
+    {
+     "t": "The high-temp gun, but faster",
+     "ok": false,
+     "why": "Speed doesn't change how hot the glue is when it touches the foam."
+    },
+    {
+     "t": "More glue, so it cools slower",
+     "ok": false,
+     "why": "More hot glue means more heat on the foam."
+    }
+   ],
+   "after": "Save high temp for strong bonds on things heat can't hurt."
+  },
+  "qc-blob": {
+   "type": "custom",
+   "fn": "quiz",
+   "id": "qc-blob",
+   "topic": "Blob or smear",
+   "review": "g-use",
+   "q": "A sensor wire keeps pulling loose at its connector, so you glue it in place. Why does that glue need to be easy to get off later?",
+   "options": [
+    {
+     "t": "Someone will need to unplug, fix, or replace that part",
+     "ok": true,
+     "why": "Strain relief holds the wire, but robots get repaired. A single blob holds and still peels away."
+    },
+    {
+     "t": "It doesn't; strain relief glue is meant to stay forever",
+     "ok": false,
+     "why": "Then the next repair means fighting the glue, or damaging the part."
+    },
+    {
+     "t": "So the glue can be reused",
+     "ok": false,
+     "why": "Old glue gets thrown away. The point is getting to the part underneath."
+    }
+   ],
+   "after": "One blob where the wire meets the connector."
+  },
+  "qc-drip": {
+   "type": "custom",
+   "fn": "quiz",
+   "id": "qc-drip",
+   "topic": "Drips",
+   "review": "g-use",
+   "q": "You're about to glue a part while kneeling over carpet. What do you do first?",
+   "options": [
+    {
+     "t": "Put cardboard or paper down under the work to catch drips",
+     "ok": true,
+     "why": "A drip that lands on cardboard is nothing to clean up."
+    },
+    {
+     "t": "Switch to high temp so the glue sets faster",
+     "ok": false,
+     "why": "The temperature is picked for the material, and glue drips at any setting."
+    },
+    {
+     "t": "Nothing; drips wipe right up",
+     "ok": false,
+     "why": "Wiping hot glue pushes it into the fibers."
+    }
+   ],
+   "after": "Cover first. If a drip lands anyway, let it cool, then peel."
+  },
+  "results": {
+   "type": "custom",
+   "fn": "results",
+   "filename": "hot_glue_study_results",
+   "checkpoints": [
+    {
+     "id": "cp-stand",
+     "topic": "Burns and the stand",
+     "review": "g-safe",
+     "yes": "cp-stand-yes",
+     "no": [
+      "cp-stand-no"
+     ],
+     "labels": {
+      "cp-stand-yes": "A. Upright on its stand",
+      "cp-stand-no": "B or C. Across the open toolbox lid / Tucked under your arm"
+     }
+    }
+   ],
+   "order": [
+    "cp-stand",
+    "qc-burn",
+    "qc-leak",
+    "qc-temp",
+    "qc-blob",
+    "qc-drip"
+   ]
+  }
+ }
+}
+</script>
+<!-- @@/DECK_DATA@@ -->
+<div class="app" id="deck-app">
+  <div class="viewport" id="viewport">
+    <div class="stage" id="stage">
+<!-- @@SLIDES@@ -->
+<section class="slide s-cover" data-id="cover" data-title="Hot Glue Study">
+  <div class="chip">Rambots · 2.5 study session</div>
+  <div class="stack" style="gap:26px">
+    <h1>Hot<br><span>glue gun</span></h1>
+    <p class="sub">Learn the glue gun before the 2.5 quiz: how not to get burned, which sticks and gun to use, how the team uses it for strain relief, and what to do with a drip.</p>
+  </div>
+  <div class="meta"><div>Business and Build ·a short deck for a short quiz</div></div>
+  <aside class="notes">Use this for the study session, or let students click through it on their own before the quiz.</aside>
+</section>
+
+<section class="slide" data-id="how-it-works" data-title="How this works">
+  <div class="hd"><div class="chip">Start here</div><h2 class="t">Learn it here, check yourself, then take the quiz</h2></div>
+  <div class="body cols-3">
+    <div class="card"><div class="k">The quiz</div><p>One part, 5 questions, closed book. This one needs a perfect score: every question right. Passing gets you Supervised; one good use watched by a mentor gets you Certified.</p></div>
+    <div class="card"><div class="k">This deck</div><p>Quick checks save your first answer and explain it, and you can always move on. Checkpoints cover the can't-fail topics, and you can't go on until you get each one right. The last slide shows your score to download and turn in on the Teams assignment.</p></div>
+    <div class="card"><div class="k">Must know</div><p>Hot glue burns, the gun goes on its stand whenever you let go of it, and you unplug it when you&#x27;re done.</p></div>
+  </div>
+  <div class="ft"><span>Pass rules from the maker tools quiz bank, 2.5 hot glue gun</span></div>
+  <aside class="notes">The score here is practice. The real quiz is in person in Forms.</aside>
+</section>
+
+<section class="slide" data-id="g-safe" data-title="Burns and the stand">
+  <div class="hd"><div class="chip">2.5 · Staying safe</div><h2 class="t sm">The tip and fresh glue burn, so the gun lives on its stand</h2></div>
+  <div class="body split-wide">
+    <div class="stack"><div class="card tight"><div class="k">Hot</div><p>The metal tip and the glue coming out are hot enough to burn. Fresh glue stays hot for a while, so don&#x27;t touch it to see if it has set.</p></div><div class="card tight"><div class="k">The stand</div><p>Any time you let go of the gun, even for a second, set it upright on its stand. Lying on its side, the hot tip touches the bench, a cable, or a hand.</p></div><div class="card tight"><div class="k">If glue gets on you</div><p>Don&#x27;t peel it off; that pulls skin with it. Run cool water over it right away and tell a mentor.</p></div><div class="card tight"><div class="k">When you&#x27;re done</div><p>Unplug it and let it cool on its stand before you put it away.</p></div></div>
+    <figure class="fig"><img src="img/glue_gun_stand.webp" alt="A small hot glue gun held in a hand, with its fold-out wire stand under the nose and a glue stick in the back"><figcaption>The wire stand under the nose holds the hot tip off the table. Photo: Plusea, CC BY 2.0</figcaption></figure>
+  </div>
+  <div class="ft"><span>Surebonder L-270 glue gun instructions. This is the can&#x27;t-fail topic.</span></div>
+  <aside class="notes">Show the stand on each team glue gun and where they get plugged in.</aside>
+</section>
+
+<section class="slide" data-id="cp-stand" data-title="Checkpoint: Burns and the stand">
+  <div class="hd"><div class="chip">2.5 · Checkpoint</div><h2 class="t sm">You&#x27;re gluing a cable and need both hands for a moment to hold two wires together. The gun is hot. Where does it go?</h2></div>
+  <div class="body mid"><div data-fork="Pick one">
+    <button data-to="cp-stand-yes" data-hint="">Upright on its stand</button>
+    <button data-to="cp-stand-no" data-hint="">Across the open toolbox lid</button>
+    <button data-to="cp-stand-no" data-hint="">Tucked under your arm</button>
+  </div></div>
+  <div class="ft"><span>Checkpoint: you can't go on until you get it right</span></div>
+  <aside class="notes">This is a can&#x27;t-fail topic on the quiz.</aside>
+</section>
+
+<section class="slide" data-id="cp-stand-yes" data-title="Right: Burns and the stand" data-next="qc-burn">
+  <div class="hd"><div class="chip">2.5 · Checkpoint</div><h2 class="t sm">Right. The stand is the only safe place for a hot gun.</h2></div>
+  <div class="body mid"><div class="card lg"><p>It keeps the tip off the bench, off cables, and away from hands. Laid across a lid or tucked under an arm, the tip ends up touching something, often you. When you finish for the day, unplug it and let it cool on the stand.</p></div></div>
+  <div class="ft"><span>Press → to go on</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="cp-stand-no" data-title="Not quite: Burns and the stand" data-next="cp-stand">
+  <div class="hd"><div class="chip">2.5 · Checkpoint</div><h2 class="t sm">Not quite. Where is the hot tip pointing now?</h2></div>
+  <div class="body mid"><div class="card lg"><p>Wherever the gun rests, the tip touches something. Which spot is made to hold the tip in the air, away from everything?</p></div></div>
+  <div class="ft"><span>Press → to try the question again</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="qc-burn" data-title="Quick check: A glue burn">
+  <div class="hd"><div class="chip">2.5 · Quick check</div><h2 class="t sm">Quick check: glue on your finger</h2></div>
+  <div class="body mid"><div data-chart="qc-burn"></div></div>
+  <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="g-sticks" data-title="Sticks and temperatures">
+  <div class="hd"><div class="chip">2.5 · The right gun</div><h2 class="t sm">Match the stick to the gun, and the temperature to the material</h2></div>
+  <div class="body"><div class="defs"><div class="d"><b>Stick size</b><p>Mini and full-size sticks aren&#x27;t interchangeable. Use the size your gun takes. The wrong size doesn&#x27;t feed right, and melted glue can leak out the back of the gun.</p></div><div class="d"><b>Changing sticks</b><p>Push the old stick through. Never pull a stick back out of the gun.</p></div><div class="d"><b>High temp</b><p>A stronger bond, and worse burns. It can melt foam and scorch fabric.</p></div><div class="d"><b>Low temp</b><p>For foam, fabric, and anything else heat could damage.</p></div><div class="d"><b>Before you start</b><p>Know which gun and which sticks you have. Some guns switch between temperatures.</p></div></div></div>
+  <div class="ft"><span>Surebonder L-270 glue gun instructions</span></div>
+  <aside class="notes">To confirm in the shop: which glue guns the team has (low, high, or dual temp) and which stick sizes.</aside>
+</section>
+
+<section class="slide" data-id="qc-leak" data-title="Quick check: Stick size">
+  <div class="hd"><div class="chip">2.5 · Quick check</div><h2 class="t sm">Quick check: glue out the back</h2></div>
+  <div class="body mid"><div data-chart="qc-leak"></div></div>
+  <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="qc-temp" data-title="Quick check: Low or high temp">
+  <div class="hd"><div class="chip">2.5 · Quick check</div><h2 class="t sm">Quick check: a melted dent</h2></div>
+  <div class="body mid"><div data-chart="qc-temp"></div></div>
+  <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="g-use" data-title="Strain relief and drips">
+  <div class="hd"><div class="chip">2.5 · Using it</div><h2 class="t sm">Blob it, don&#x27;t smear it, and let drips cool before you clean them</h2></div>
+  <div class="body cols-3"><div class="card"><div class="k">Strain relief</div><h3>Why</h3><p>The team uses hot glue a lot to keep cables from pulling out of their connectors, and for quick fixes.</p></div><div class="card"><div class="k">Blob, don&#x27;t smear</div><h3>How</h3><p>One blob that holds the wire to the connector. It holds well and peels off cleanly when someone has to unplug or replace the part. Smeared glue gets into everything and is hard to remove.</p></div><div class="card"><div class="k">Drips</div><h3>Wait</h3><p>Put down cardboard or paper first to catch drips. If glue lands somewhere you didn&#x27;t cover, leave it alone until it cools, then peel it off. Wiping it while it&#x27;s hot smears it deeper into carpet or fabric.</p></div></div>
+  <div class="ft"><span>Team practice</span></div>
+  <aside class="notes">Bring a connector with a good blob and one with a smear, and let students try peeling each.</aside>
+</section>
+
+<section class="slide" data-id="qc-blob" data-title="Quick check: Blob or smear">
+  <div class="hd"><div class="chip">2.5 · Quick check</div><h2 class="t sm">Quick check: a sensor wire keeps pulling loose</h2></div>
+  <div class="body mid"><div data-chart="qc-blob"></div></div>
+  <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="qc-drip" data-title="Quick check: Drips">
+  <div class="hd"><div class="chip">2.5 · Quick check</div><h2 class="t sm">Quick check: over the carpet</h2></div>
+  <div class="body mid"><div data-chart="qc-drip"></div></div>
+  <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="certified" data-title="What Certified takes">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">One good use, watched by a mentor, gets you Certified</h2></div>
+  <div class="body split-wide">
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Strain relief on a real cable, or a quick fix on team work</td><td>Right gun and sticks, gun on its stand between uses, a blob not a smear, unplugged at the end</td></tr></tbody></table></div>
+    <div class="stack"><div class="card tight"><div class="k">Good first job</div><p>Strain relief on a motor wire or a sensor cable the team actually needs.</p></div></div>
+  </div>
+  <div class="ft"><span>From the maker tools quiz bank, Uses for Certified</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" data-id="results" data-title="Your score" data-end>
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
+  <div class="body"><div data-chart="results"></div></div>
+  <div class="ft"><span>First-try score across 5 quick checks and 1 checkpoints. <a data-to="credits">Photo credits</a></span></div>
+  <aside class="notes">Students type their name, download the CSV, and upload it to the Teams assignment.</aside>
+</section>
+
+<section class="slide" data-id="credits" data-title="Photo credits" data-next="results">
+  <div class="hd"><div class="chip">Credits</div><h2 class="t sm">Photo credits</h2></div>
+  <div class="body"><table class="t2"><thead><tr><th>Photo</th><th>By</th><th>License</th></tr></thead><tbody><tr><td>Mini hot glue gun</td><td>Plusea</td><td>CC BY 2.0</td></tr></tbody></table></div>
+  <div class="ft"><span>Flickr photo via Openverse</span></div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- @@/SLIDES@@ -->
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <div class="map" id="d-map" hidden></div>
+  </div>
+  <nav class="bar" id="bar" aria-label="Slide controls"></nav>
+</div>
+<!-- @@CUSTOM_JS@@ -->
+<script id="deck-custom">
+/* Two custom renderers: "quiz" (a quick check that records the first answer and never blocks)
+   and "results" (score, missed topics, name, CSV download). Checkpoint forks are scored from slide visits.
+   Answers stay in this browser only (localStorage), never in shared artifact data. */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  const D = Deck.data || {}, META = D.deck || {}, esc = Deck.esc;
+  const KEY = (META.storageKey || META.slug || 'deck') + '-study';
+  const RES = (D.charts && D.charts.results) || {};
+  const CPS = RES.checkpoints || [];
+  const quizzes = {};
+  const CHARTS = D.charts || {};
+  Object.keys(CHARTS).forEach(k => { if (CHARTS[k].fn === 'quiz') quizzes[k] = null; });
+
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {a:{}, name:''}; } catch(e) { return {a:{}, name:''}; } }
+  let S = load(); if (!S.a) S.a = {};
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+  const now = () => { const d = new Date(), p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds()); };
+  const LET = ['A', 'B', 'C', 'D'];
+  const live = [];
+  const rerender = () => live.forEach(r => { try { r(); } catch(e) { console.error(e); } });
+
+  /* ---- checkpoint scoring from slide visits: the first arrival after the question is the first answer ---- */
+  let lastStep = '';
+  Deck.on('slide', id => {
+    const path = Deck.path, prev = path[path.length - 2], step = path.length + ':' + id;
+    if (step === lastStep) return; lastStep = step;
+    CPS.forEach(cp => {
+      if (prev !== cp.id) return;
+      const isYes = id === cp.yes, isNo = (cp.no || []).indexOf(id) >= 0;
+      if (!isYes && !isNo) return;
+      const r = S.a[cp.id] || (S.a[cp.id] = {kind:'checkpoint', first:'', ok:false, tries:0, at:''});
+      if (r.passed) return;
+      r.tries += 1;
+      if (!r.first) { r.first = (cp.labels && cp.labels[id]) || id; r.ok = isYes; r.at = now(); }
+      if (isYes) { r.passed = true; r.passedAt = now(); }
+      save(); rerender();
+    });
+  });
+
+  /* ---- quiz: one quick check; the first pick is recorded, then the answer and reasons show ---- */
+  Deck.chart('quiz', function(el, cfg){
+    const id = cfg.id || el.dataset.chart, opts = cfg.options || [];
+    el.classList.add('qz');
+    el.innerHTML = '<p class="qz-q">' + esc(cfg.q || '') + '</p><div class="qz-opts">' + opts.map((o, i) =>
+      '<button type="button" class="qz-o" data-i="' + i + '"><span class="qz-l">' + LET[i] + '</span><span class="qz-t">' + esc(o.t) + '</span><span class="qz-y"></span></button>').join('') +
+      '</div><div class="qz-fb" hidden><p class="qz-v"></p><p class="qz-after">' + esc(cfg.after || '') + '</p></div>';
+    el.addEventListener('click', e => {
+      const b = e.target.closest('.qz-o'); if (!b || S.a[id]) return;
+      const i = +b.dataset.i;
+      S.a[id] = {kind:'quick', first:LET[i] + '. ' + opts[i].t, ok:!!opts[i].ok, tries:1, at:now()};
+      save(); rerender();
+    });
+    function render(){
+      const r = S.a[id], fb = el.querySelector('.qz-fb');
+      el.querySelectorAll('.qz-o').forEach((b, i) => {
+        const o = opts[i], picked = r && r.first.indexOf(LET[i] + '. ') === 0;
+        b.disabled = !!r;
+        b.classList.toggle('right', !!r && !!o.ok); b.classList.toggle('wrong', !!r && picked && !o.ok); b.classList.toggle('picked', !!picked);
+        b.querySelector('.qz-y').textContent = r ? (o.why || '') : '';
+      });
+      fb.hidden = !r;
+      if (r) { const v = el.querySelector('.qz-v'); v.textContent = r.ok ? 'Right. Your first answer is saved.' : 'Not quite. Your first answer is saved; the right one is marked.'; v.className = 'qz-v ' + (r.ok ? 'ok' : 'no'); }
+    }
+    live.push(render);
+    return {render:render};
+  });
+
+  /* ---- results: score, the items, name, download ---- */
+  function items(){
+    return (RES.order || []).map(k => {
+      const c = CHARTS[k] && CHARTS[k].fn === 'quiz' ? CHARTS[k] : null, cp = CPS.find(x => x.id === k);
+      const meta = c ? {kind:'Quick check', topic:c.topic, review:c.review} : {kind:'Checkpoint', topic:cp ? cp.topic : k, review:cp ? cp.review : ''};
+      return Object.assign({id:k, r:S.a[k] || null}, meta);
+    });
+  }
+  function csvCell(v){ let s = String(v == null ? '' : v); if (/^[=+\-@]/.test(s)) s = "'" + s; return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function buildCsv(name){
+    const L = [['student','deck','deck_version','item','kind','topic','first_answer','first_try','tries_to_pass','answered_at','exported_at'].join(',')];
+    const t = now();
+    items().forEach(it => {
+      const r = it.r;
+      L.push([name, META.title, META.version, it.id, it.kind, it.topic, r ? r.first : '', r ? (r.ok ? 'right' : 'missed') : 'not answered',
+        it.kind === 'Checkpoint' ? (r && r.passed ? r.tries : '') : '', r ? r.at : '', t].map(csvCell).join(','));
+    });
+    return L.join('\r\n') + '\r\n';
+  }
+  function summaryText(name){
+    const its = items(), done = its.filter(i => i.r), right = its.filter(i => i.r && i.r.ok);
+    return [META.title + ' v' + META.version, 'Student: ' + name, 'First-try score: ' + right.length + ' of ' + its.length, ''].concat(its.map(i =>
+      '- ' + i.topic + ' (' + i.kind + '): ' + (i.r ? (i.r.ok ? 'right' : 'missed') : 'not answered'))).join('\n');
+  }
+  async function saveFile(file, text, mime){
+    let dls = null;
+    if (window.claude && window.claude.use) { try { dls = await window.claude.use('downloads'); } catch(e) { dls = null; } }
+    if (dls) { try { await dls.save({filename:file, data:text}); return 'saved'; } catch(e) { if (e && e.code === 'declined') return 'declined'; } }
+    try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:mime})); a.download = file; document.body.appendChild(a); a.click(); a.remove(); return 'saved'; } catch(e) { return 'failed'; }
+  }
+
+  Deck.chart('results', function(el){
+    el.classList.add('res');
+    el.innerHTML = '<div class="res-top"><div class="res-score"><div class="big accent" data-r="score"></div><p data-r="sub"></p></div>' +
+      '<div class="res-form"><label class="k" for="res-name">Your name for the file</label><input id="res-name" class="res-in" maxlength="40" autocomplete="name" placeholder="First and last name">' +
+      '<div class="row"><button type="button" class="tbtn" data-r="dl">Download results (CSV)</button><button type="button" class="tbtn" data-r="copy">Copy results</button></div>' +
+      '<p class="res-msg" data-r="msg" aria-live="polite"></p></div></div>' +
+      '<div class="res-list" data-r="list"></div>' +
+      '<div class="row res-foot"><button type="button" class="tbtn small" data-r="reset">Clear my answers</button><span class="note">Answers stay in this browser. Clearing them starts the deck over.</span></div>';
+    const $ = s => el.querySelector('[data-r="' + s + '"]'), nameIn = el.querySelector('#res-name');
+    nameIn.value = S.name || '';
+    nameIn.addEventListener('input', () => { S.name = nameIn.value; save(); });
+    const msg = t => { $('msg').textContent = t; };
+    const needName = () => { const n = nameIn.value.trim(); if (!n) { msg('Type your name first, so a mentor knows whose results these are.'); nameIn.focus(); } return n; };
+    $('dl').addEventListener('click', async () => {
+      const n = needName(); if (!n) return;
+      const safe = n.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'student';
+      const d = new Date(), day = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const file = (RES.filename || 'study_results') + '_' + safe + '_' + day + '_v1.0.csv';
+      const r = await saveFile(file, buildCsv(n), 'text/csv');
+      msg(r === 'saved' ? 'Saved ' + file + '. Turn it in on the Teams assignment.' : r === 'declined' ? 'Download cancelled.' : 'The download was blocked here. Use Copy results and paste it into the assignment instead.');
+    });
+    $('copy').addEventListener('click', () => {
+      const n = needName(); if (!n) return;
+      const t = summaryText(n);
+      try { navigator.clipboard.writeText(t).then(() => msg('Copied. Paste it into the Teams assignment.'), () => msg('Copy was blocked. Download the CSV instead.')); } catch(e) { msg('Copy was blocked. Download the CSV instead.'); }
+    });
+    let armed = false;
+    $('reset').addEventListener('click', e => {
+      if (!armed) { armed = true; e.target.textContent = 'Click again to clear'; setTimeout(() => { armed = false; e.target.textContent = 'Clear my answers'; }, 3000); return; }
+      armed = false; e.target.textContent = 'Clear my answers'; S = {a:{}, name:nameIn.value}; save(); rerender(); msg('Answers cleared.');
+    });
+    $('list').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) Deck.go(b.dataset.go); });
+    function render(){
+      const its = items(), right = its.filter(i => i.r && i.r.ok).length, done = its.filter(i => i.r).length;
+      const cps = its.filter(i => i.kind === 'Checkpoint'), passed = cps.filter(i => i.r && i.r.passed).length;
+      $('score').textContent = right + ' of ' + its.length;
+      $('sub').textContent = 'right on the first try · ' + done + ' answered · checkpoints passed ' + passed + ' of ' + cps.length;
+      $('list').innerHTML = '<table class="t2"><thead><tr><th>Topic</th><th>Kind</th><th>First try</th><th>Tries</th><th></th></tr></thead><tbody>' + its.map(i => {
+        const r = i.r, st = r ? (r.ok ? 'right' : 'missed') : 'not answered';
+        return '<tr><td>' + esc(i.topic) + '</td><td>' + esc(i.kind) + '</td><td class="st-' + st.replace(' ', '-') + '">' + esc(st) + '</td><td class="n">' + (i.kind === 'Checkpoint' && r && r.passed ? r.tries : '') + '</td><td>' +
+          (i.review && (!r || !r.ok) ? '<button type="button" class="tbtn small" data-go="' + esc(i.review) + '">Review</button>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table>';
+    }
+    live.push(render);
+    return {render:render};
+  });
+});
+</script>
+<!-- @@/CUSTOM_JS@@ -->
+<script id="deck-engine">
+(function(){
+'use strict';
+/* deck engine: stage, slide graph, history, routing map, sessions, shared store, widgets, charts, export, modules (SOP).
+   Copy this block verbatim. Deck content lives in the slide sections, #deck-data, #deck-custom-css and #deck-custom. */
+const ENGINE_VERSION = '1.1.1';
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const W = 1600, H = 900;
+const nowISO = () => new Date().toISOString();
+const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+function readJSON(id){
+  const el = document.getElementById(id);
+  if (!el) return null;
+  try { return JSON.parse(el.textContent); } catch(e) { console.error('deck: #' + id + ' is not valid JSON', e); return null; }
+}
+const DATA = readJSON('deck-data') || {};
+const META = DATA.deck || {};
+const SNAP = readJSON('deck-snapshot');
+const ASSETS = readJSON('deck-assets');
+const EMBEDS = readJSON('deck-embeds');
+const STANDALONE = !!DATA.standalone;
+const SLUG = String(META.slug || 'deck').replace(/[^A-Za-z0-9_-]/g, '_');
+const KEY = String(META.storageKey || ('deck-' + SLUG));
+const HAS_CLAUDE = !!(window.claude && typeof window.claude.use === 'function');
+const SOP_MODE = META.mode === 'sop';
+function lsGet(k){ try { return localStorage.getItem(KEY + k); } catch(e) { return null; } }
+function lsSet(k, v){ try { localStorage.setItem(KEY + k, v); } catch(e) {} }
+function ssGet(k){ try { return sessionStorage.getItem(KEY + k); } catch(e) { return null; } }
+function ssSet(k, v){ try { sessionStorage.setItem(KEY + k, v); } catch(e) {} }
+
+/* ---------- formats ---------- */
+const F = {
+  money: x => { x = +x || 0; const r = Math.round(x); return (r < 0 ? '−$' : '$') + Math.abs(r).toLocaleString('en-US'); },
+  money2: x => { x = +x || 0; const r = Math.round(x * 100) / 100, a = Math.abs(r); return (r < 0 ? '−$' : '$') + (a % 1 === 0 ? a.toLocaleString('en-US') : a.toFixed(2)); },
+  int: x => Math.round(+x || 0).toLocaleString('en-US'),
+  num1: x => (+x || 0).toFixed(1),
+  pct: x => Math.round(+x || 0) + '%',
+  cents: x => Math.round((+x || 0) * 100) + '¢',
+  raw: x => x == null ? '' : String(x)
+};
+function fmt(name, v){
+  if (typeof v === 'string' && name !== 'raw' && isNaN(+v)) return v;
+  if (typeof v === 'boolean') return v ? 'yes' : 'no';
+  const f = F[name || 'raw'] || F.raw;
+  return f(v);
+}
+
+/* ---------- expressions (no eval: the artifact CSP may block it) ---------- */
+const Expr = (function(){
+  const cache = new Map();
+  const FN = {
+    min: Math.min, max: Math.max, abs: Math.abs, floor: Math.floor, ceil: Math.ceil,
+    round: (x, d) => { const m = Math.pow(10, d || 0); return Math.round(x * m) / m; },
+    money: F.money, money2: F.money2, int: F.int, num1: F.num1, pct: F.pct, cents: F.cents,
+    plural: (n, one, many) => (+n === 1 ? one : many)
+  };
+  function tokenize(s){
+    const t = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; t.push({t:'n', v:parseFloat(s.slice(i, j))}); i = j; continue; }
+      if (c === "'" || c === '"') { let j = i + 1, out = ''; while (j < s.length && s[j] !== c) { if (s[j] === '\\') j++; out += s[j]; j++; } if (j >= s.length) throw new Error('Unclosed string in: ' + s); t.push({t:'s', v:out}); i = j + 1; continue; }
+      if (/[A-Za-z_]/.test(c)) { let j = i; while (j < s.length && /[A-Za-z0-9_.]/.test(s[j])) j++; t.push({t:'id', v:s.slice(i, j)}); i = j; continue; }
+      const two = s.slice(i, i + 2);
+      if (['==', '!=', '<=', '>=', '&&', '||'].indexOf(two) >= 0) { t.push({t:'op', v:two}); i += 2; continue; }
+      if ('+-*/%()<>?:!,'.indexOf(c) >= 0) { t.push({t:'op', v:c}); i++; continue; }
+      throw new Error('Unexpected "' + c + '" in: ' + s);
+    }
+    return t;
+  }
+  function parse(s){
+    const tk = tokenize(s); let p = 0;
+    const isOp = v => tk[p] && tk[p].t === 'op' && tk[p].v === v;
+    const eat = v => { if (!isOp(v)) throw new Error('Expected ' + v + ' in: ' + s); p++; };
+    const bin = (next, ops) => () => { let l = next(); while (tk[p] && tk[p].t === 'op' && ops.indexOf(tk[p].v) >= 0) { const o = tk[p++].v; l = {k:'b', o:o, l:l, r:next()}; } return l; };
+    function prim(){
+      const x = tk[p++];
+      if (!x) throw new Error('Unexpected end of: ' + s);
+      if (x.t === 'n' || x.t === 's') return {k:'c', v:x.v};
+      if (x.t === 'id') {
+        if (x.v === 'true') return {k:'c', v:true};
+        if (x.v === 'false') return {k:'c', v:false};
+        if (isOp('(')) { p++; const args = []; if (!isOp(')')) { args.push(ternary()); while (isOp(',')) { p++; args.push(ternary()); } } eat(')'); return {k:'f', f:x.v, args:args}; }
+        return {k:'v', v:x.v};
+      }
+      if (x.v === '(') { const e = ternary(); eat(')'); return e; }
+      throw new Error('Unexpected "' + x.v + '" in: ' + s);
+    }
+    function unary(){
+      if (isOp('-')) { p++; return {k:'neg', a:unary()}; }
+      if (isOp('!')) { p++; return {k:'not', a:unary()}; }
+      if (isOp('+')) { p++; return unary(); }
+      return prim();
+    }
+    const mul = bin(unary, ['*', '/', '%']), add = bin(mul, ['+', '-']), cmp = bin(add, ['<', '<=', '>', '>=']),
+      eq = bin(cmp, ['==', '!=']), and = bin(eq, ['&&']), or = bin(and, ['||']);
+    function ternary(){ const c = or(); if (isOp('?')) { p++; const a = ternary(); eat(':'); const b = ternary(); return {k:'?', c:c, a:a, b:b}; } return c; }
+    const e = ternary();
+    if (p < tk.length) throw new Error('Unexpected "' + tk[p].v + '" in: ' + s);
+    return e;
+  }
+  function ev(n, scope){
+    switch (n.k) {
+      case 'c': return n.v;
+      case 'v': return scope(n.v);
+      case 'neg': return -ev(n.a, scope);
+      case 'not': return !ev(n.a, scope);
+      case '?': return ev(n.c, scope) ? ev(n.a, scope) : ev(n.b, scope);
+      case 'f': { const f = FN[n.f]; if (!f) throw new Error('Unknown function ' + n.f); return f.apply(null, n.args.map(a => ev(a, scope))); }
+      case 'b': {
+        if (n.o === '&&') return ev(n.l, scope) && ev(n.r, scope);
+        if (n.o === '||') return ev(n.l, scope) || ev(n.r, scope);
+        const a = ev(n.l, scope), b = ev(n.r, scope);
+        switch (n.o) {
+          case '+': return a + b; case '-': return a - b; case '*': return a * b;
+          case '/': return b === 0 ? 0 : a / b; case '%': return b === 0 ? 0 : a % b;
+          case '<': return a < b; case '<=': return a <= b; case '>': return a > b; case '>=': return a >= b;
+          case '==': return a == b; case '!=': return a != b; // loose on purpose: "20" == 20
+        }
+      }
+    }
+    return undefined;
+  }
+  return {
+    run(src, scope){ let n = cache.get(src); if (!n) { n = parse(String(src)); cache.set(src, n); } return ev(n, scope); },
+    parse: parse
+  };
+})();
+const warned = new Set();
+function warnOnce(msg){ if (!warned.has(msg)) { warned.add(msg); console.warn('deck: ' + msg); } }
+
+/* ---------- elements ---------- */
+const app = $('#deck-app'), viewport = $('#viewport'), stage = $('#stage');
+const slides = $$('.slide', stage).filter(s => s.dataset.id);
+const byId = Object.create(null);
+slides.forEach((s, i) => { s._i = i; byId[s.dataset.id] = s; });
+const START = (META.start && byId[META.start]) ? META.start : (slides[0] ? slides[0].dataset.id : null);
+const titleOf = id => (byId[id] && (byId[id].dataset.title || $('.t', byId[id]) && $('.t', byId[id]).textContent)) || id;
+let scale = .5;
+
+/* ---------- events for custom code ---------- */
+const listeners = {};
+function on(evt, fn){ (listeners[evt] = listeners[evt] || []).push(fn); }
+function emit(evt, a){ (listeners[evt] || []).forEach(fn => { try { fn(a); } catch(e) { console.error(e); } }); }
+
+/* ---------- module seam: modules add gates (may this move go ahead?) and bar items; with none, nothing changes ---------- */
+const MODS = [];
+function gateBlock(to){ if (!cur) return null; for (const m of MODS) { if (m.gate) { try { const r = m.gate(cur, to); if (r) return r; } catch(e) { console.error('deck: gate', e); } } } return null; }
+function blocked(why){ MODS.forEach(m => { if (m.blocked) { try { m.blocked(why); } catch(e) { console.error(e); } } }); }
+
+/* ---------- layout ---------- */
+function fit(){
+  const flow = SOP_MODE || window.innerWidth < 720;
+  app.classList.toggle('flow', flow); app.classList.toggle('sop', SOP_MODE);
+  if (flow) { scale = 1; stage.style.transform = ''; return; }
+  const r = viewport.getBoundingClientRect();
+  scale = Math.max(.1, Math.min(r.width / W, r.height / H));
+  stage.style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
+}
+window.addEventListener('resize', () => { fit(); if (mapOpen) drawMapEdges(); });
+
+/* ---------- tooltip ---------- */
+const tip = $('#tip');
+function showTip(html, ev){
+  tip.innerHTML = html; tip.hidden = false;
+  const sr = stage.getBoundingClientRect(), sw = app.classList.contains('flow') ? sr.width : W, sh = app.classList.contains('flow') ? sr.height : H;
+  let x = (ev.clientX - sr.left) / scale + 18, y = (ev.clientY - sr.top) / scale + 18;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  if (x + tw > sw - 12) x = x - tw - 36;
+  if (y + th > sh - 12) y = y - th - 36;
+  tip.style.left = Math.max(12, x) + 'px'; tip.style.top = Math.max(12, y) + 'px';
+}
+function hideTip(){ tip.hidden = true; }
+function bindTips(root){
+  $$('[data-tip]', root).forEach(el => {
+    if (el._tipBound) return; el._tipBound = true;
+    el.addEventListener('pointermove', e => showTip(el.getAttribute('data-tip'), e));
+    el.addEventListener('pointerleave', hideTip);
+  });
+}
+
+/* ---------- slide graph ---------- */
+function kindOf(s){
+  if (s.hasAttribute('data-end')) return 'end';
+  if ($('[data-hub]', s)) return 'hub';
+  if ($('[data-fork]', s)) return 'fork';
+  return 'slide';
+}
+function srcNext(s){ const n = slides[s._i + 1]; return n ? n.dataset.id : null; }
+function staticNext(s){
+  if (s.dataset.next) return s.dataset.next;
+  const k = kindOf(s);
+  if (k !== 'slide') return null;
+  return srcNext(s);
+}
+function choicesOf(s){ return $$('[data-fork] [data-to], [data-hub] [data-to]', s); }
+function edgesOf(s){
+  const out = [], n = staticNext(s);
+  if (n) out.push({to:n, type:'next'});
+  const fork = $('[data-fork]', s), hub = $('[data-hub]', s);
+  if (fork) $$('[data-to]', fork).forEach((b, i) => out.push({to:b.dataset.to, type:'choice', i:i}));
+  if (hub) { let i = 0; $$('[data-to]', hub).forEach(b => out.push(b.hasAttribute('data-exit') ? {to:b.dataset.to, type:'exit'} : {to:b.dataset.to, type:'spoke', i:i++})); }
+  $$('[data-to]', s).forEach(b => { if (!b.closest('[data-fork],[data-hub]')) out.push({to:b.dataset.to, type:'link'}); });
+  return out.filter(e => byId[e.to]);
+}
+const isEndLike = s => kindOf(s) === 'end' || (kindOf(s) === 'slide' && !edgesOf(s).length);
+/* hub spokes: follow each spoke's default chain to the slide that returns to the hub */
+const SPOKES = {};
+slides.forEach(s => {
+  const hub = $('[data-hub]', s); if (!hub) return;
+  const hid = s.dataset.id;
+  SPOKES[hid] = $$('[data-to]', hub).filter(b => !b.hasAttribute('data-exit')).map(b => {
+    let cur = b.dataset.to, last = null, guard = 0;
+    while (cur && byId[cur] && guard++ < 200) {
+      const nx = staticNext(byId[cur]);
+      if (nx === hid) { last = cur; break; }
+      cur = nx;
+    }
+    return {el:b, to:b.dataset.to, last:last};
+  });
+});
+function spokeDone(sp){ return visited.has(sp.last || sp.to); }
+function hubNext(s){
+  const sp = SPOKES[s.dataset.id] || [];
+  const open = sp.find(x => !spokeDone(x));
+  if (open) return open.to;
+  const ex = $('[data-hub] [data-exit]', s);
+  return ex ? ex.dataset.to : null;
+}
+function defaultNext(id){
+  const s = byId[id]; if (!s) return null;
+  if (s.dataset.next) return s.dataset.next;
+  if (kindOf(s) === 'hub') return hubNext(s);
+  return staticNext(s);
+}
+function distToEnd(id){
+  const seen = new Set([id]); let q = [id], d = 0;
+  while (q.length && d < 500) {
+    const nq = [];
+    for (const x of q) {
+      if (isEndLike(byId[x])) return d;
+      edgesOf(byId[x]).forEach(e => { if (!seen.has(e.to)) { seen.add(e.to); nq.push(e.to); } });
+    }
+    q = nq; d++;
+  }
+  return 0;
+}
+
+/* ---------- navigation and history ---------- */
+let hist = [], visited = new Set(), cur = null;
+function saveNav(){ ssSet('-nav', JSON.stringify({hist:hist.slice(-200), visited:Array.from(visited)})); }
+function show(id){
+  const s = byId[id]; if (!s) return;
+  if (cur && byId[cur] && cur !== id) {
+    const prev = byId[cur];
+    prev.classList.remove('on');
+    if (document.activeElement && prev.contains(document.activeElement)) document.activeElement.blur();
+  }
+  cur = id; s.classList.add('on'); visited.add(id);
+  hideTip(); closeCopyBox();
+  onShowSlide(s); updateBar(); saveNav();
+  try { history.replaceState(null, '', '#' + id); } catch(e) {}
+  if (app.classList.contains('flow')) try { viewport.scrollTop = 0; } catch(e) {}
+  emit('slide', id);
+}
+function go(id){ if (!byId[id] || id === cur) return false; if (!visited.has(id)) { const g = gateBlock(id); if (g) { blocked(g); return false; } } hist.push(id); show(id); return true; }
+function next(){ const n = defaultNext(cur); if (!n) { nudge(); return; } const g = gateBlock(n); if (g) { blocked(g); return; } if (n !== cur) { hist.push(n); show(n); } }
+function back(){ if (hist.length > 1) { hist.pop(); show(hist[hist.length - 1]); } }
+function restart(){ hist = [START]; visited = new Set(); const was = cur; cur = null; if (was && byId[was]) byId[was].classList.remove('on'); show(START); }
+function nudge(){
+  const s = byId[cur];
+  $$('.choice, .end-actions button', s).forEach(b => { b.classList.remove('flash'); void b.offsetWidth; b.classList.add('flash'); });
+}
+function onShowSlide(s){
+  // fork and hub state
+  choicesOf(s).forEach(b => b.classList.toggle('seen', visited.has(b.dataset.to)));
+  const hub = $('[data-hub]', s);
+  if (hub) {
+    const sp = SPOKES[s.dataset.id] || [];
+    let done = 0;
+    sp.forEach(x => { const d = spokeDone(x); if (d) done++; x.el.classList.toggle('done', d); const m = $('.mark', x.el); if (m) m.textContent = d ? 'Done' : ''; });
+    const sum = $('[data-hub-sum]', s);
+    if (sum) sum.textContent = done === sp.length ? 'All ' + sp.length + ' topics done.' : done + ' of ' + sp.length + ' topics done.';
+  } else choicesOf(s).forEach(b => { const m = $('.mark', b); if (m) m.textContent = visited.has(b.dataset.to) ? 'Seen' : ''; });
+  // lazy embeds and field sizing
+  widgets.forEach(w => { if (w.slide === s && w.onShow) w.onShow(); });
+  $$('textarea.fld', s).forEach(autosize);
+}
+
+/* ---------- bar ---------- */
+const bar = $('#bar');
+const SESS = Array.isArray(DATA.sessions) ? DATA.sessions.filter(x => x && x.id) : [];
+function pickSession(){
+  const saved = lsGet('-session');
+  if (saved && SESS.some(x => x.id === saved)) return saved;
+  const today = new Date(); today.setHours(23, 59, 59, 0);
+  let best = null;
+  SESS.forEach(x => { if (x.date) { const d = new Date(x.date + 'T00:00:00'); if (!isNaN(d) && d <= today && (!best || d >= best.d)) best = {id:x.id, d:d}; } });
+  if (best) return best.id;
+  return SESS.length ? SESS[0].id : '';
+}
+let session = pickSession();
+const sessLabel = id => { const x = SESS.find(s => s.id === id); return x ? x.label : ''; };
+const inSession = v => SESS.length < 2 || v.session === session;
+
+function buildBar(){
+  const hasWidgets = $$('[data-widget]', stage).some(el => { const c = (DATA.widgets || {})[el.dataset.widget]; return c && c.type !== 'embed'; });
+  let h = '<div class="prog"><i id="d-prog"></i></div>' +
+    '<button class="bbtn nav" id="d-back" type="button" aria-label="Back along the path">‹</button>' +
+    '<button class="bbtn counter" id="d-step" type="button" aria-label="Open the map" aria-expanded="false">Step 1</button>' +
+    '<button class="bbtn nav" id="d-next" type="button" aria-label="Next slide">›</button>' +
+    '<span class="crumb" id="d-crumb"></span>';
+  if (SESS.length > 1) h += '<span class="seg" role="group" aria-label="Session">' + SESS.map(x => '<button type="button" data-sess="' + esc(x.id) + '" aria-pressed="false">' + esc(x.label) + (x.long ? '<span class="hide-sm"> · ' + esc(x.long) + '</span>' : '') + '</button>').join('') + '</span>';
+  if (hasWidgets && !SOP_MODE) h += '<button class="bbtn hide-sm" id="d-export" type="button">Export decisions</button>';
+  MODS.forEach(m => { if (m.bar) h += m.bar(); });
+  h += '<button class="bbtn hide-sm" id="d-theme" type="button">Dark screen</button>' +
+    '<button class="bbtn hide-sm" id="d-notes" type="button" aria-pressed="false">Notes</button>' +
+    '<button class="bbtn hide-md" id="d-fs" type="button">Full screen</button>' +
+    '<div class="panel" id="d-notes-panel" hidden></div>';
+  bar.innerHTML = h;
+  MODS.forEach(m => { if (m.barBind) m.barBind(bar); });
+  $('#d-back').addEventListener('click', back);
+  $('#d-next').addEventListener('click', next);
+  $('#d-step').addEventListener('click', () => toggleMap());
+  $('#d-notes').addEventListener('click', () => toggleNotes());
+  $('#d-theme').addEventListener('click', toggleTheme);
+  $('#d-fs').addEventListener('click', fullscreen);
+  const ex = $('#d-export'); if (ex) ex.addEventListener('click', exportDecisions);
+  $$('[data-sess]', bar).forEach(b => b.addEventListener('click', () => setSession(b.dataset.sess)));
+}
+function setSession(id){
+  session = id; lsSet('-session', id);
+  $$('[data-sess]', bar).forEach(b => b.setAttribute('aria-pressed', b.dataset.sess === id));
+  renderAll();
+}
+function updateBar(){
+  const s = byId[cur]; if (!s) return;
+  const steps = hist.length, rest = distToEnd(cur);
+  $('#d-prog').style.width = (rest === 0 ? 100 : steps / (steps + rest) * 100) + '%';
+  $('#d-step').textContent = 'Step ' + steps;
+  $('#d-step').title = steps + (steps === 1 ? ' slide' : ' slides') + ' on this path. Open the map (M).';
+  $('#d-back').disabled = hist.length < 2;
+  const end = isEndLike(s), dn = defaultNext(cur);
+  const gb = !end && dn ? gateBlock(dn) : null;
+  $('#d-next').disabled = end;
+  $('#d-next').classList.toggle('locked', !!gb); if (MODS.length) $('#d-next').setAttribute('aria-disabled', gb ? 'true' : 'false');
+  $('#d-next').setAttribute('aria-label', end ? 'End of this path' : gb ? 'Locked: ' + gb : dn ? 'Next: ' + titleOf(dn) : 'Pick a path on this slide');
+  MODS.forEach(m => { if (m.barUpdate) m.barUpdate(bar); });
+  const tail = hist.slice(-3).map(titleOf);
+  $('#d-crumb').innerHTML = (hist.length > 3 ? '… › ' : '') + tail.map((t, i) => i === tail.length - 1 ? '<b>' + esc(t) + '</b>' : esc(t)).join(' › ');
+  const n = $('.notes', s); $('#d-notes-panel').textContent = n ? n.textContent.trim() : 'No notes on this slide.';
+  if (mapOpen) paintMap();
+}
+function toggleNotes(on){
+  const p = $('#d-notes-panel'), b = $('#d-notes');
+  on = on === undefined ? p.hidden : on; p.hidden = !on; b.setAttribute('aria-pressed', on);
+}
+function fullscreen(){
+  try {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+  } catch(e) {}
+}
+
+/* ---------- theme ---------- */
+const rootEl = document.documentElement;
+function scheme(){ const t = rootEl.getAttribute('data-theme'); if (t === 'light' || t === 'dark') return t; return (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+function syncThemeBtn(){ const b = $('#d-theme'); if (b) b.textContent = scheme() === 'dark' ? 'Light screen' : 'Dark screen'; }
+function syncFrames(){
+  const t = scheme();
+  $$('.frame iframe', stage).forEach(f => {
+    try { const d = f.contentDocument; if (d && d.documentElement) d.documentElement.setAttribute('data-theme', t); } catch(e) {}
+    try { f.contentWindow && f.contentWindow.postMessage({type:'deck-theme', theme:t}, '*'); } catch(e) {}
+  });
+}
+function toggleTheme(){ const t = scheme() === 'dark' ? 'light' : 'dark'; lsSet('-theme', t); rootEl.setAttribute('data-theme', t); syncThemeBtn(); syncFrames(); emit('theme', t); }
+(function(){ const t = lsGet('-theme'); if (t === 'light' || t === 'dark') rootEl.setAttribute('data-theme', t); })();
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { syncThemeBtn(); syncFrames(); emit('theme', scheme()); }); } catch(e) {}
+
+/* ---------- routing map ---------- */
+const mapEl = $('#d-map');
+let mapOpen = false, mapBuilt = false, mapEdges = [];
+const LANE = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+function buildMap(){
+  const succ = {}, predN = {};
+  slides.forEach(s => { const id = s.dataset.id; succ[id] = []; predN[id] = predN[id] || 0; });
+  slides.forEach(s => edgesOf(s).forEach(e => { if (!succ[s.dataset.id].some(x => x.to === e.to)) { succ[s.dataset.id].push(e); predN[e.to] = (predN[e.to] || 0) + 1; } }));
+  const runOf = {}, runs = [];
+  const startsRun = id => id === START || predN[id] !== 1 || slides.some(s => succ[s.dataset.id].length > 1 && succ[s.dataset.id].some(e => e.to === id)) || kindOf(byId[id]) === 'hub';
+  const order = [];
+  // discovery order: BFS from start, then any leftovers in source order
+  const seen = new Set(); let q = START ? [START] : [];
+  while (q.length) { const id = q.shift(); if (seen.has(id)) continue; seen.add(id); order.push(id); succ[id].forEach(e => q.push(e.to)); }
+  slides.forEach(s => { if (!seen.has(s.dataset.id)) order.push(s.dataset.id); });
+  order.forEach(id => {
+    if (runOf[id] != null) return;
+    if (!startsRun(id)) return;
+    const r = {nodes:[id], i:runs.length}; runOf[id] = r.i; runs.push(r);
+    let x = id;
+    while (succ[x].length === 1 && kindOf(byId[x]) !== 'hub') { const nx = succ[x][0].to; if (runOf[nx] != null || startsRun(nx)) break; r.nodes.push(nx); runOf[nx] = r.i; x = nx; }
+  });
+  order.forEach(id => { if (runOf[id] == null) { const r = {nodes:[id], i:runs.length}; runOf[id] = r.i; runs.push(r); } });
+  // lane labels and colors from the edge that first reaches each run
+  runs.forEach(r => { r.lane = ''; r.color = ''; });
+  slides.forEach(s => edgesOf(s).forEach(e => {
+    const r = runs[runOf[e.to]]; if (!r || r.nodes[0] !== e.to || r.lane) return;
+    if (e.type === 'choice') { r.lane = 'Path ' + LANE[e.i % LANE.length]; r.color = 'var(--p' + (e.i % 4 + 1) + ')'; }
+    else if (e.type === 'spoke') { r.lane = 'Topic ' + (e.i + 1); r.color = 'var(--p' + (e.i % 4 + 1) + ')'; }
+    else if (e.type === 'exit') r.lane = 'Exit';
+  }));
+  // depth by BFS over runs
+  const depth = {}; const rq = [];
+  if (START != null) { depth[runOf[START]] = 0; rq.push(runOf[START]); }
+  while (rq.length) {
+    const ri = rq.shift(), r = runs[ri];
+    r.nodes.forEach(id => succ[id].forEach(e => { const t = runOf[e.to]; if (depth[t] == null) { depth[t] = depth[ri] + 1; rq.push(t); } }));
+  }
+  let maxD = 0; Object.keys(depth).forEach(k => maxD = Math.max(maxD, depth[k]));
+  runs.forEach(r => { if (depth[r.i] == null) depth[r.i] = maxD + 1; r.depth = depth[r.i]; });
+  const cols = [];
+  runs.forEach(r => { (cols[r.depth] = cols[r.depth] || []).push(r); });
+  const typeLabel = id => { const k = kindOf(byId[id]); return k === 'fork' ? 'Fork' : k === 'hub' ? 'Hub' : isEndLike(byId[id]) ? 'End' : ''; };
+  let h = '<div class="map-canvas" id="d-map-canvas"><svg class="edges" id="d-map-svg" aria-hidden="true"></svg>';
+  cols.forEach(col => {
+    if (!col) return;
+    h += '<div class="map-col">' + col.map(r => '<div class="run" style="' + (r.color ? 'border-color:' + r.color + ';--pc:' + r.color : '') + '">' +
+      (r.lane ? '<div class="lane">' + esc(r.lane) + '</div>' : '') +
+      r.nodes.map(id => '<button class="mnode" type="button" data-go="' + esc(id) + '"><i class="st"></i><span class="tt">' + esc(titleOf(id)) + '</span>' + (typeLabel(id) ? '<span class="ty">' + typeLabel(id) + '</span>' : '') + '</button>').join('') +
+      '</div>').join('') + '</div>';
+  });
+  h += '</div>';
+  mapEl.innerHTML = '<div class="map-h"><h2>Map</h2><span class="sum" id="d-map-sum"></span>' +
+    '<span class="map-legend"><span><i class="dot" style="background:var(--ink-3)"></i>Seen</span><span><i class="dot" style="background:var(--focus)"></i>You are here</span><span><i style="width:22px;border-top:2px dashed var(--ink-3)"></i>Back to a hub</span></span>' +
+    '<button class="bbtn" type="button" data-map="restart">Restart</button><button class="bbtn go" type="button" data-map="close">Close</button></div>' +
+    '<div class="map-scroll" id="d-map-scroll">' + h + '</div>';
+  mapEdges = [];
+  slides.forEach(s => edgesOf(s).forEach(e => mapEdges.push({from:s.dataset.id, to:e.to, type:e.type, i:e.i, fromRun:runOf[s.dataset.id], toRun:runOf[e.to]})));
+  mapEdges = mapEdges.filter(e => !(e.fromRun === e.toRun && e.type === 'next' && runs[e.fromRun].nodes.indexOf(e.to) === runs[e.fromRun].nodes.indexOf(e.from) + 1));
+  mapEl.addEventListener('click', e => {
+    const n = e.target.closest('[data-go]'); if (n) { toggleMap(false); go(n.dataset.go); return; }
+    const b = e.target.closest('[data-map]'); if (!b) return;
+    if (b.dataset.map === 'close') toggleMap(false);
+    if (b.dataset.map === 'restart') { toggleMap(false); restart(); }
+  });
+  mapBuilt = true;
+}
+function paintMap(){
+  $$('.mnode', mapEl).forEach(n => { const id = n.dataset.go; n.classList.toggle('seen', visited.has(id)); n.classList.toggle('cur', id === cur); $('.st', n).textContent = visited.has(id) && id !== cur ? '✓' : ''; });
+  $('#d-map-sum').textContent = visited.size + ' of ' + slides.length + ' slides seen · step ' + hist.length + ' on this path';
+}
+function drawMapEdges(){
+  const canvas = $('#d-map-canvas'), svg = $('#d-map-svg'); if (!canvas || !svg) return;
+  const cr = canvas.getBoundingClientRect();
+  svg.setAttribute('width', canvas.scrollWidth); svg.setAttribute('height', canvas.scrollHeight);
+  svg.setAttribute('viewBox', '0 0 ' + canvas.scrollWidth + ' ' + canvas.scrollHeight);
+  const box = id => { const n = $('.mnode[data-go="' + CSS.escape(id) + '"]', canvas); if (!n) return null; const r = n.closest('.run').getBoundingClientRect(), b = n.getBoundingClientRect(); return {l:r.left - cr.left, r:r.right - cr.left, y:b.top - cr.top + b.height / 2}; };
+  let p = '';
+  mapEdges.forEach(e => {
+    const a = box(e.from), b = box(e.to); if (!a || !b) return;
+    const color = (e.type === 'choice' || e.type === 'spoke') ? 'var(--p' + ((e.i || 0) % 4 + 1) + ')' : 'var(--ink-3)';
+    let d, dash = '';
+    if (b.l > a.r + 4) { const mx = (a.r + b.l) / 2; d = 'M' + a.r + ',' + a.y + ' C' + mx + ',' + a.y + ' ' + mx + ',' + b.y + ' ' + (b.l - 6) + ',' + b.y; }
+    else { const x = Math.max(a.r, b.r) + 26; d = 'M' + a.r + ',' + a.y + ' C' + x + ',' + a.y + ' ' + x + ',' + b.y + ' ' + (b.r + 6) + ',' + b.y; dash = ' stroke-dasharray="6 5"'; }
+    p += '<path d="' + d + '" fill="none" stroke-width="2"' + dash + ' style="stroke:' + color + '"></path>';
+  });
+  svg.innerHTML = p;
+}
+function toggleMap(open){
+  open = open === undefined ? !mapOpen : open;
+  if (open && !mapBuilt) buildMap();
+  mapOpen = open; mapEl.hidden = !open;
+  $('#d-step').setAttribute('aria-expanded', open);
+  if (open) {
+    paintMap(); drawMapEdges();
+    const c = $('.mnode.cur', mapEl); if (c) try { c.scrollIntoView({block:'center', inline:'center'}); c.focus({preventScroll:true}); } catch(e) {}
+  }
+}
+
+/* ---------- keys, swipe, clicks ---------- */
+function closeOverlays(){ toggleMap(false); toggleNotes(false); closeCopyBox(); }
+document.addEventListener('keydown', e => {
+  const t = e.target;
+  if (t && t.closest && t.closest('input,textarea,select,[contenteditable="true"]')) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (k === 'Escape') { closeOverlays(); return; }
+  if (k === 'g' || k === 'G' || k === 'm' || k === 'M') { toggleMap(); return; }
+  if (mapOpen) return;
+  if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !(t && t.closest && t.closest('button')))) { e.preventDefault(); next(); }
+  else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); back(); }
+  else if (k === 'Home') { e.preventDefault(); go(START); }
+  else if (/^[1-9]$/.test(k)) { const c = choicesOf(byId[cur])[+k - 1]; if (c) { e.preventDefault(); c.click(); } }
+  else if (k === 'n' || k === 'N') toggleNotes();
+  else if (k === 'f' || k === 'F') fullscreen();
+  else if (k === 't' || k === 'T') toggleTheme();
+});
+let tx = null, ty = null;
+viewport.addEventListener('touchstart', e => {
+  if (mapOpen || e.target.closest('input,textarea,select,button,iframe,[data-widget],[data-chart],.no-swipe')) { tx = null; return; }
+  tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+}, {passive:true});
+viewport.addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) { if (dx < 0) next(); else back(); }
+  tx = null;
+}, {passive:true});
+stage.addEventListener('click', e => {
+  const to = e.target.closest('[data-to],[data-ref]');
+  if (to && stage.contains(to)) { e.preventDefault(); go(to.dataset.to || to.dataset.ref); return; }
+  const ea = e.target.closest('[data-end-act]');
+  if (ea) { const a = ea.dataset.endAct; if (a === 'restart') restart(); else if (a === 'back') back(); else toggleMap(true); return; }
+  const a = e.target.closest('a[href^="#"]');
+  if (a) { const id = decodeURIComponent(a.getAttribute('href').slice(1)); if (byId[id]) { e.preventDefault(); go(id); } }
+});
+window.addEventListener('hashchange', () => { const id = decodeURIComponent((location.hash || '').slice(1)); if (byId[id] && id !== cur) go(id); });
+
+/* decorate forks, hubs, endings and references once */
+function decorate(){
+  slides.forEach(s => {
+    const fork = $('[data-fork]', s), hub = $('[data-hub]', s);
+    [fork, hub].forEach(box => {
+      if (!box) return;
+      const items = $$('[data-to]', box);
+      box.classList.add(box === fork ? 'fork' : 'hub');
+      const n = items.length; box.style.setProperty('--n', n <= 4 ? Math.max(1, n) : n <= 6 ? 3 : 4);
+      const label = box.getAttribute(box === fork ? 'data-fork' : 'data-hub');
+      if (label) box.insertAdjacentHTML('afterbegin', '<div class="fork-q">' + esc(label) + '</div>');
+      let si = 0;
+      items.forEach((b, i) => {
+        const exit = b.hasAttribute('data-exit');
+        const ci = exit ? null : (box === hub ? si++ : i);
+        b.classList.add('choice'); if (exit) b.classList.add('exit');
+        if (!b.getAttribute('type') && b.tagName === 'BUTTON') b.setAttribute('type', 'button');
+        if (ci != null) b.style.setProperty('--pc', 'var(--p' + (ci % 4 + 1) + ')');
+        const hint = b.getAttribute('data-hint');
+        b.innerHTML = '<span class="key">' + (i + 1) + '</span><span class="lbl"><span>' + b.innerHTML + '</span>' + (hint ? '<span class="hint">' + esc(hint) + '</span>' : '') + '</span><span class="mark"></span>';
+        b.setAttribute('aria-keyshortcuts', String(i + 1));
+      });
+    });
+    if (isEndLike(s)) {
+      let ft = $('.ft', s);
+      if (!ft) { ft = document.createElement('div'); ft.className = 'ft'; ft.innerHTML = '<span></span>'; s.insertBefore(ft, $('.notes', s)); }
+      ft.insertAdjacentHTML('beforeend', '<span class="end-actions"><span class="k">End of this path</span><button type="button" data-end-act="back">Back</button><button type="button" data-end-act="map">Map</button><button type="button" class="go" data-end-act="restart">Restart</button></span>');
+    }
+  });
+  $$('[data-ref]', stage).forEach(a => {
+    const id = a.getAttribute('data-ref'); if (!byId[id]) return;
+    if (!a.textContent.trim()) a.textContent = titleOf(id);
+    if (a.tagName === 'A') a.setAttribute('href', '#' + id);
+  });
+}
+
+/* ---------- shared store: artifact db when published, browser storage otherwise ---------- */
+const Store = {
+  mode:'none', db:null, readOnly:false, data:{}, colls:new Set(), pend:{}, lastError:'',
+  register(coll){ if (this.colls.has(coll)) return; this.colls.add(coll); if (this.mode === 'db') this._sub(coll); },
+  items(coll){ const o = this.data[coll] || {}; return Object.keys(o).map(id => Object.assign({id:id}, o[id])).sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')) || (a.id < b.id ? -1 : 1)); },
+  get(coll, id){ const o = this.data[coll]; return o && o[id] ? o[id] : null; },
+  can(){ return (this.mode === 'db' || this.mode === 'local') && !this.readOnly; },
+  async add(coll, doc){
+    if (!this.can()) return null;
+    if (this.mode === 'db') { try { const ref = await this.db.collection(coll).add(doc); return ref.id; } catch(e) { this._err(e); return null; } }
+    const id = rid(); (this.data[coll] = this.data[coll] || {})[id] = doc; this._save(); changed(); return id;
+  },
+  async remove(coll, id){
+    if (!this.can()) return;
+    const path = coll + '/' + id; if (this.pend[path]) { clearTimeout(this.pend[path].timer); delete this.pend[path]; }
+    if (this.mode === 'db') { try { await this.db.doc(path).delete(); } catch(e) { this._err(e); } return; }
+    if (this.data[coll]) delete this.data[coll][id]; this._save(); changed();
+  },
+  put(coll, id, patch, wait){
+    if (!this.can()) return;
+    const o = this.data[coll] = this.data[coll] || {};
+    o[id] = Object.assign({}, o[id] || {}, patch);
+    changed();
+    const path = coll + '/' + id;
+    const p = this.pend[path] || (this.pend[path] = {coll:coll, id:id, patch:{}, timer:null, busy:false});
+    Object.assign(p.patch, patch);
+    clearTimeout(p.timer);
+    p.timer = setTimeout(() => this._flush(path), wait == null ? 600 : wait);
+  },
+  async _flush(path){
+    const p = this.pend[path]; if (!p || p.busy) return;
+    if (!Object.keys(p.patch).length) { delete this.pend[path]; return; }
+    p.patch = {}; p.busy = true;
+    const body = Object.assign({}, (this.data[p.coll] || {})[p.id] || {});
+    try { if (this.mode === 'db') await this.db.doc(path).set(body); else this._save(); } catch(e) { this._err(e); }
+    p.busy = false;
+    if (Object.keys(p.patch).length) this._flush(path); else delete this.pend[path];
+  },
+  _sub(coll){
+    try {
+      this.db.collection(coll).onSnapshot(snap => {
+        const o = {};
+        snap.docs.forEach(d => { o[d.id] = Object.assign({}, d.data()); });
+        Object.keys(this.pend).forEach(path => { const p = this.pend[path]; if (p.coll === coll) o[p.id] = Object.assign({}, o[p.id] || {}, (this.data[coll] || {})[p.id] || {}); });
+        this.data[coll] = o; changed();
+      }, e => this._fail(e));
+    } catch(e) { this._fail(e); }
+  },
+  _fail(e){
+    if (this.mode !== 'db') return;
+    console.warn('deck: shared data unavailable, saving on this device only', e);
+    this.mode = 'local'; this.db = null; this.lastError = 'Lost the shared connection. Saving on this device only.'; this._load(); changed();
+  },
+  _err(e){
+    const code = e && e.code;
+    if (code === 'invalid_argument' || code === 'not_granted') { this.readOnly = true; this.lastError = ''; }
+    else if (code === 'quota_exceeded') this.lastError = 'The shared data is full. Delete a few items first.';
+    else this.lastError = 'That didn’t save. Try again.';
+    changed();
+  },
+  _load(){
+    let o = null;
+    try { o = JSON.parse(lsGet('-local') || 'null'); } catch(e) { o = null; }
+    if (!o && SNAP && SNAP.collections) o = {v:1, data:JSON.parse(JSON.stringify(SNAP.collections))};
+    this.data = (o && o.data) || {};
+  },
+  _save(){ lsSet('-local', JSON.stringify({v:1, data:this.data})); },
+  async init(){
+    if (!this.colls.size) { this.mode = 'none'; changed(); return; }
+    this.mode = 'pending'; changed();
+    let db = null;
+    if (HAS_CLAUDE && !STANDALONE) { try { db = await window.claude.use('db'); } catch(e) { db = null; } }
+    if (!db) { this.mode = 'local'; this._load(); changed(); return; }
+    this.db = db; this.mode = 'db';
+    try { const user = await window.claude.use('user'); if (user && typeof user.can === 'function') { const w = await user.can('data.write'); if (w === false) this.readOnly = true; } } catch(e) {}
+    this.colls.forEach(c => this._sub(c));
+    changed();
+  }
+};
+function saveNote(){
+  if (Store.mode === 'pending') return 'Connecting…';
+  if (Store.lastError) return Store.lastError;
+  if (Store.mode === 'db') return Store.readOnly ? 'View only: you can read, not add' : 'Saved for everyone who opens this deck';
+  if (Store.mode === 'local') return STANDALONE ? 'Offline copy: saves on this computer only' : 'Saving on this device only';
+  return '';
+}
+let renderQueued = false;
+function changed(){ if (renderQueued) return; renderQueued = true; Promise.resolve().then(() => { renderQueued = false; renderAll(); }); }
+
+/* ---------- widget helpers ---------- */
+function setVal(el, v){ if (document.activeElement !== el && el.value !== v) { el.value = v; if (el.tagName === 'TEXTAREA') autosize(el); } }
+function autosize(el){ if (!el || !el.offsetParent) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+function slideTitleFor(el){ const s = el.closest('.slide'); return s ? (s.dataset.title || s.dataset.id) : ''; }
+function sessCols(){ return SESS.length > 1 ? SESS : [{id:'', label:'Votes'}]; }
+const cell = t => String(t == null ? '' : t).replace(/\|/g, '\\|').trim().replace(/\s*\n\s*/g, '; ');
+function sessTag(v){ return SESS.length > 1 && v.session ? '<span class="mt">' + esc(sessLabel(v.session)) + '</span>' : ''; }
+function emptyText(t){ return Store.mode === 'pending' ? 'Loading…' : t; }
+function bindEnterBlur(root){ root.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'TEXTAREA' && e.target.classList.contains('fld')) { e.preventDefault(); e.target.blur(); } }); }
+
+const TYPES = {};
+const widgets = [];
+
+/* poll: options with +1 per session, undo last vote */
+TYPES.poll = function(el, key, cfg){
+  const coll = 'w_' + key, mine = [], opts = cfg.options || [];
+  Store.register(coll);
+  el.classList.add('poll'); if (cfg.compact) el.classList.add('sm');
+  el.innerHTML = '<div class="copyrow">' + (cfg.title ? '<div class="k">' + esc(cfg.title) + '</div>' : '<span></span>') + '<button class="undo" type="button" data-act="undo">Undo last vote</button></div><div class="stack" style="gap:8px" data-opts></div>';
+  const box = $('[data-opts]', el), undo = $('[data-act="undo"]', el);
+  el.addEventListener('click', async e => {
+    const b = e.target.closest('[data-opt]');
+    if (b) { const id = await Store.add(coll, {option:b.dataset.opt, session:session, at:nowISO()}); if (id) { mine.push(id); render(); } return; }
+    if (e.target.closest('[data-act="undo"]')) { const id = mine.pop(); if (id) Store.remove(coll, id); render(); }
+  });
+  const count = (o, sid) => Store.items(coll).filter(v => v.option === o && (sid === undefined ? inSession(v) : (sid === '' || v.session === sid))).length;
+  function render(){
+    const can = Store.can(), c = opts.map(o => count(o.k)), max = Math.max(1, Math.max.apply(null, c.concat([0])));
+    box.innerHTML = opts.map((o, i) => '<div class="opt"><span class="ofill" style="width:' + (c[i] / max * 100) + '%"></span><div><h4>' + esc(o.label) + '</h4>' + (o.hint ? '<p>' + esc(o.hint) + '</p>' : '') + '</div><div class="c">' + c[i] + '</div><button type="button" data-opt="' + esc(o.k) + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(o.label) + '">+1</button></div>').join('');
+    undo.disabled = !can || !mine.length;
+  }
+  function md(L){
+    L.push('## ' + (cfg.title || slideTitleFor(el)), '', '| Option | ' + sessCols().map(s => s.label + (SESS.length > 1 ? ' votes' : '')).join(' | ') + ' |', '|---|' + sessCols().map(() => '---:').join('|') + '|');
+    opts.forEach(o => L.push('| ' + cell(o.label) + ' | ' + sessCols().map(s => count(o.k, s.id)).join(' | ') + ' |'));
+    L.push('');
+  }
+  return {render:render, md:md};
+};
+
+/* brainwrite then dot vote (phased), or add-and-vote at once (open) */
+TYPES.brainvote = function(el, key, cfg){
+  const coll = 'w_' + key, vcoll = 'w_' + key + '_votes', mine = [], phased = cfg.mode !== 'open', max = cfg.max || 120;
+  let phase = 'ideas';
+  Store.register(coll); Store.register(vcoll);
+  el.classList.add('brain');
+  el.innerHTML = '<div class="copyrow" style="align-items:flex-start">' + (cfg.prompt ? '<p class="hmw">' + esc(cfg.prompt) + '</p>' : '<span></span>') +
+    (phased ? '<span class="seg" role="group" aria-label="Step"><button type="button" data-phase="ideas" aria-pressed="true">1 · Ideas</button><button type="button" data-phase="vote" aria-pressed="false">2 · Vote</button></span>' : '') + '</div>' +
+    '<form class="add" data-act="add"><input id="w-' + esc(key) + '-in" maxlength="' + max + '" placeholder="' + esc(cfg.placeholder || 'Add an idea and press Enter') + '" aria-label="' + esc(cfg.placeholder || 'Idea') + '" autocomplete="off"><button type="submit">Add</button></form>' +
+    '<ul class="ideas' + (cfg.oneCol ? ' one' : '') + '" data-list></ul><button class="undo" type="button" data-act="undo">Undo last vote</button>';
+  const form = $('form', el), list = $('[data-list]', el), undo = $('[data-act="undo"]', el);
+  form.addEventListener('submit', e => { e.preventDefault(); const inp = $('input', form), t = inp.value.trim(); if (!t) return; inp.value = ''; Store.add(coll, {text:t.slice(0, max), session:session, at:nowISO()}); });
+  el.addEventListener('click', async e => {
+    const ph = e.target.closest('[data-phase]'); if (ph) { phase = ph.dataset.phase; render(); return; }
+    const v = e.target.closest('[data-vote]'); if (v) { const id = await Store.add(vcoll, {idea:v.dataset.vote, session:session, at:nowISO()}); if (id) { mine.push(id); render(); } return; }
+    const x = e.target.closest('[data-del]'); if (x) { Store.remove(coll, x.dataset.del); return; }
+    if (e.target.closest('[data-act="undo"]')) { const id = mine.pop(); if (id) Store.remove(vcoll, id); render(); }
+  });
+  const counts = sid => { const c = {}; Store.items(vcoll).forEach(v => { if (sid === undefined ? inSession(v) : (sid === '' || v.session === sid)) c[v.idea] = (c[v.idea] || 0) + 1; }); return c; };
+  function render(){
+    const can = Store.can(), c = counts(), ideas = Store.items(coll);
+    const top = ideas.reduce((m, i) => Math.max(m, c[i.id] || 0), 0), mx = Math.max(1, top);
+    const voting = !phased || phase === 'vote';
+    if (!ideas.length) list.innerHTML = '<li class="w-empty">' + esc(emptyText(cfg.empty || 'No ideas yet. Add one above.')) + '</li>';
+    else list.innerHTML = ideas.map(i => {
+      const n = c[i.id] || 0, id = esc(i.id);
+      if (!voting) return '<li class="idea"><span class="tx">' + esc(i.text) + '</span>' + sessTag(i) + (can ? '<button class="x" type="button" data-del="' + id + '" aria-label="Remove ' + esc(i.text) + '">×</button>' : '') + '</li>';
+      return '<li class="idea"><span class="ofill" style="width:' + (n / mx * 100) + '%"></span><span class="tx">' + esc(i.text) + (top > 0 && n === top ? ' <span class="tag hot">Top</span>' : '') + '</span><span class="c">' + n + '</span><button class="plus" type="button" data-vote="' + id + '"' + (can ? '' : ' disabled') + ' aria-label="Add a vote for ' + esc(i.text) + '">+1</button>' + (can && !phased ? '<button class="x" type="button" data-del="' + id + '" aria-label="Remove ' + esc(i.text) + '">×</button>' : '') + '</li>';
+    }).join('');
+    form.hidden = phased && phase !== 'ideas';
+    $$('input,button', form).forEach(n => n.disabled = !can);
+    undo.hidden = !voting; undo.disabled = !can || !mine.length;
+    $$('[data-phase]', el).forEach(b => b.setAttribute('aria-pressed', b.dataset.phase === phase));
+  }
+  function md(L){
+    L.push('## ' + (cfg.title || slideTitleFor(el)), '');
+    const ideas = Store.items(coll);
+    if (!ideas.length) { L.push('(none)', ''); return; }
+    const per = sessCols().map(s => counts(s.id)), tot = id => per.reduce((a, c) => a + (c[id] || 0), 0);
+    L.push('| Idea | ' + sessCols().map(s => s.label + (SESS.length > 1 ? ' votes' : '')).join(' | ') + ' |', '|---|' + sessCols().map(() => '---:').join('|') + '|');
+    ideas.slice().sort((a, b) => tot(b.id) - tot(a.id)).forEach(i => L.push('| ' + cell(i.text) + ' | ' + per.map(c => c[i.id] || 0).join(' | ') + ' |'));
+    L.push('');
+  }
+  return {render:render, md:md};
+};
+
+/* column board (Keep / Add / Remove style) and single-column list board */
+function boardType(el, key, cfg, columns, single){
+  const coll = 'w_' + key, max = cfg.max || 160;
+  Store.register(coll);
+  el.classList.add(single ? 'stack' : 'board');
+  if (!single) el.style.setProperty('--n', columns.length);
+  el.innerHTML = columns.map(c => '<div class="col" data-col="' + esc(c.k) + '"><div class="col-h"><h3>' + esc(c.title || '') + ' <span class="cnt"></span></h3>' + (c.prompt ? '<p>' + esc(c.prompt) + '</p>' : '') + '</div>' +
+    '<ul class="items' + (single && cfg.twoCol ? ' two' : '') + '"></ul><form class="add"><input id="w-' + esc(key) + '-' + esc(c.k) + '" maxlength="' + max + '" placeholder="' + esc(c.placeholder || 'Add an item…') + '" aria-label="' + esc(c.placeholder || ('Add to ' + (c.title || 'the list'))) + '" autocomplete="off"><button type="submit">Add</button></form></div>').join('');
+  if (single) { el.classList.add('fill-col'); el.firstElementChild.style.flex = '1'; }
+  el.addEventListener('submit', e => {
+    e.preventDefault(); const col = e.target.closest('[data-col]'); if (!col) return;
+    const inp = $('input', e.target), t = inp.value.trim(); if (!t) return; inp.value = '';
+    Store.add(coll, {col:col.dataset.col, text:t.slice(0, max), session:session, at:nowISO()});
+  });
+  el.addEventListener('click', e => { const x = e.target.closest('[data-del]'); if (x) Store.remove(coll, x.dataset.del); });
+  function render(){
+    const can = Store.can(), all = Store.items(coll);
+    columns.forEach(c => {
+      const col = $('[data-col="' + CSS.escape(c.k) + '"]', el), items = all.filter(x => x.col === c.k);
+      $('.items', col).innerHTML = items.length ? items.map(x => '<li><span class="tx">' + esc(x.text) + '</span>' + sessTag(x) + (can ? '<button class="x" type="button" data-del="' + esc(x.id) + '" aria-label="Delete">×</button>' : '') + '</li>').join('')
+        : '<li class="w-empty">' + esc(emptyText(c.empty || cfg.empty || 'Nothing yet. Type below and press Enter.')) + '</li>';
+      $('.cnt', col).textContent = items.length ? '(' + items.length + ')' : '';
+      $$('input,button', $('form', col)).forEach(n => n.disabled = !can);
+    });
+  }
+  function md(L){
+    const all = Store.items(coll);
+    L.push('## ' + (cfg.title || slideTitleFor(el)), '');
+    columns.forEach(c => {
+      if (!single) L.push('### ' + (c.title || c.k));
+      const items = all.filter(x => x.col === c.k);
+      if (!items.length) L.push('- (none)');
+      items.forEach(x => L.push('- ' + cell(x.text) + (SESS.length > 1 && x.session ? ' (' + sessLabel(x.session) + ')' : '')));
+      L.push('');
+    });
+  }
+  return {render:render, md:md};
+}
+TYPES.board = (el, key, cfg) => boardType(el, key, cfg, cfg.columns || [], false);
+TYPES.list = (el, key, cfg) => boardType(el, key, cfg, [{k:'item', title:cfg.title, prompt:cfg.prompt, placeholder:cfg.placeholder, empty:cfg.empty}], true);
+
+/* checklist: done box, text, owner; text wraps */
+TYPES.checklist = function(el, key, cfg){
+  const coll = 'w_' + key, max = cfg.max || 80, omax = cfg.ownerMax || 24;
+  Store.register(coll);
+  el.classList.add('stack');
+  el.innerHTML = '<ul class="chk"></ul><form class="add"><input id="w-' + esc(key) + '-in" maxlength="' + max + '" placeholder="' + esc(cfg.placeholder || 'Add something we need…') + '" aria-label="Add a checklist item" autocomplete="off"><button type="submit">Add</button></form>';
+  const ul = $('ul', el), form = $('form', el);
+  bindEnterBlur(el);
+  form.addEventListener('submit', e => { e.preventDefault(); const inp = $('input', form), t = inp.value.trim(); if (!t) return; inp.value = ''; Store.add(coll, {text:t.slice(0, max), owner:'', done:false, at:nowISO()}); });
+  ul.addEventListener('input', e => {
+    const li = e.target.closest('li[data-id]'); if (!li || e.target.type === 'checkbox') return;
+    autosize(e.target);
+    Store.put(coll, li.dataset.id, e.target.classList.contains('who') ? {owner:e.target.value.slice(0, omax)} : {text:e.target.value.slice(0, max)});
+  });
+  ul.addEventListener('change', e => { const li = e.target.closest('li[data-id]'); if (!li || e.target.type !== 'checkbox') return; Store.put(coll, li.dataset.id, {done:e.target.checked}, 0); });
+  ul.addEventListener('click', e => { const x = e.target.closest('.x'); if (x) Store.remove(coll, x.closest('li[data-id]').dataset.id); });
+  function render(){
+    const can = Store.can(), items = Store.items(coll);
+    if (!items.length) { ul.innerHTML = '<li class="w-empty">' + esc(emptyText(cfg.empty || 'Nothing yet. Add the first item below.')) + '</li>'; }
+    else {
+      const e0 = $('.w-empty', ul); if (e0) e0.remove();
+      const keep = new Set();
+      items.forEach((it, idx) => {
+        keep.add(it.id);
+        let li = Array.from(ul.children).find(n => n.dataset.id === it.id);
+        if (!li) {
+          li = document.createElement('li'); li.dataset.id = it.id;
+          const k = esc(key) + '-' + it.id.replace(/[^A-Za-z0-9_-]/g, '');
+          li.innerHTML = '<input type="checkbox" id="c-' + k + '-done" aria-label="Done"><textarea class="fld tx" rows="1" id="c-' + k + '-tx" maxlength="' + max + '" aria-label="Checklist item"></textarea><textarea class="fld who" rows="1" id="c-' + k + '-who" maxlength="' + omax + '" placeholder="' + esc(cfg.ownerLabel || 'Who') + '" aria-label="' + esc(cfg.ownerLabel || 'Who') + '"></textarea><button class="x" type="button" aria-label="Remove">×</button>';
+        }
+        if (ul.children[idx] !== li) ul.insertBefore(li, ul.children[idx] || null);
+        const [cb, t, who, x] = li.children;
+        cb.checked = !!it.done; cb.disabled = !can;
+        setVal(t, it.text || ''); setVal(who, it.owner || '');
+        t.disabled = who.disabled = !can; x.hidden = !can;
+        li.classList.toggle('done', !!it.done);
+      });
+      Array.from(ul.children).forEach(n => { if (n.dataset.id && !keep.has(n.dataset.id)) n.remove(); });
+    }
+    $$('input,button', form).forEach(n => n.disabled = !can);
+  }
+  function md(L){
+    L.push('## ' + (cfg.title || slideTitleFor(el)), '');
+    const items = Store.items(coll);
+    if (!items.length) L.push('(none)');
+    items.forEach(c => L.push('- [' + (c.done ? 'x' : ' ') + '] ' + cell(c.text) + (c.owner ? ' (' + cell(c.owner) + ')' : ' (no owner yet)')));
+    L.push('');
+  }
+  return {render:render, md:md, onShow:() => $$('textarea', el).forEach(autosize)};
+};
+
+/* day plan: one row per day, tasks and owner, days marked off */
+TYPES.dayplan = function(el, key, cfg){
+  const coll = 'w_' + key, days = cfg.days || [], tmax = cfg.tasksMax || 140, wmax = cfg.whoMax || 24;
+  Store.register(coll);
+  el.classList.add('days');
+  el.innerHTML = days.map(d => '<div class="drow' + (d.off ? ' off' : '') + (d.event ? ' ev' : '') + '" data-day="' + esc(d.k) + '"><h4>' + esc(d.label) + (d.sub ? '<small>' + esc(d.sub) + '</small>' : '') + '</h4>' +
+    '<textarea class="fld" rows="1" id="d-' + esc(key) + '-' + esc(d.k) + '-tasks" data-f="tasks" maxlength="' + tmax + '" placeholder="' + esc(cfg.tasksPlaceholder || 'What happens this day') + '" aria-label="' + esc(d.label) + ' tasks"></textarea>' +
+    '<textarea class="fld who" rows="1" id="d-' + esc(key) + '-' + esc(d.k) + '-who" data-f="who" maxlength="' + wmax + '" placeholder="' + esc(cfg.whoPlaceholder || 'Who') + '" aria-label="' + esc(d.label) + ' owner"></textarea></div>').join('');
+  bindEnterBlur(el);
+  el.addEventListener('input', e => {
+    const row = e.target.closest('[data-day]'); if (!row) return;
+    autosize(e.target);
+    const f = e.target.dataset.f; Store.put(coll, row.dataset.day, {[f]: e.target.value.slice(0, f === 'who' ? wmax : tmax)});
+  });
+  function render(){
+    const can = Store.can();
+    days.forEach(d => { const row = $('[data-day="' + CSS.escape(d.k) + '"]', el), v = Store.get(coll, d.k) || {}; $$('textarea', row).forEach(t => { setVal(t, v[t.dataset.f] || ''); t.disabled = !can; }); });
+  }
+  function md(L){
+    L.push('## ' + (cfg.title || slideTitleFor(el)), '', '| Day | Tasks | Who |', '|---|---|---|');
+    days.forEach(d => { const v = Store.get(coll, d.k) || {}; L.push('| ' + cell(d.label + (d.sub ? ' ' + d.sub : '')) + ' | ' + cell(v.tasks) + ' | ' + cell(v.who) + ' |'); });
+    L.push('');
+  }
+  return {render:render, md:md, onShow:() => $$('textarea', el).forEach(autosize)};
+};
+
+/* live model: inputs (number, range, seg) drive calculations; defaults live here, never only in shared data */
+const MODELS = {};
+const modelDefs = {};
+function globalScope(name){
+  const dot = name.indexOf('.');
+  if (dot < 0) { warnOnce('"' + name + '" needs a model prefix, like budget.' + name); return 0; }
+  const m = MODELS[name.slice(0, dot)], v = name.slice(dot + 1);
+  if (!m || !(v in m)) { warnOnce('unknown value ' + name); return 0; }
+  return m[v];
+}
+function evalGlobal(src){ try { return Expr.run(src, globalScope); } catch(e) { warnOnce(e.message); return 0; } }
+function interp(str, scope){ return String(str).replace(/\{([^{}]+)\}/g, (m, ex) => { try { const v = Expr.run(ex, scope); return typeof v === 'number' ? (Math.round(v * 100) / 100).toLocaleString('en-US') : esc(v); } catch(e) { warnOnce(e.message); return ''; } }); }
+TYPES.model = function(el, key, cfg){
+  const coll = 'w_' + key, shared = cfg.shared !== false, inputs = cfg.inputs || [], calc = cfg.calc || [], local = {};
+  if (shared) Store.register(coll);
+  modelDefs[key] = cfg;
+  const inp = k => inputs.find(x => x.k === k);
+  function raw(k){ return shared ? ((Store.get(coll, 'inputs') || {})[k]) : local[k]; }
+  function value(i){
+    let v = raw(i.k);
+    if (i.kind === 'seg') { return i.options.some(o => o[0] == v) ? i.options.find(o => o[0] == v)[0] : i.default; }
+    if (v === '' || v == null || isNaN(+v)) return i.default;
+    v = +v; if (i.min != null) v = Math.max(i.min, v); if (i.max != null) v = Math.min(i.max, v);
+    return v;
+  }
+  function compute(){
+    const vals = {};
+    inputs.forEach(i => { vals[i.k] = value(i); });
+    const scope = n => { if (n in vals) return vals[n]; return globalScope(n); };
+    calc.forEach(c => { const k = Array.isArray(c) ? c[0] : c.k, ex = Array.isArray(c) ? c[1] : c.expr; try { vals[k] = Expr.run(ex, scope); } catch(e) { warnOnce(key + '.' + k + ': ' + e.message); vals[k] = 0; } });
+    MODELS[key] = vals; return vals;
+  }
+  const id = k => 'm-' + key + '-' + k;
+  function control(i){
+    const dis = ' data-k="' + esc(i.k) + '"';
+    if (i.kind === 'seg') return '<span class="seg" role="group" aria-label="' + esc(i.label || i.k) + '">' + i.options.map((o, oi) => '<button type="button"' + dis + ' data-oi="' + oi + '"' + (o[2] ? ' title="' + esc(o[2]) + '"' : '') + ' aria-pressed="false">' + esc(o[1]) + '</button>').join('') + '</span>';
+    if (i.kind === 'range') return '<input type="range" id="' + id(i.k) + '"' + dis + ' min="' + i.min + '" max="' + i.max + '" step="' + (i.step || 1) + '" aria-label="' + esc(i.label || i.k) + '">';
+    return '<span class="min">' + esc(i.prefix || '') + '<input type="number" id="' + id(i.k) + '"' + dis + (i.min != null ? ' min="' + i.min + '"' : '') + (i.max != null ? ' max="' + i.max + '"' : '') + ' step="' + (i.step || 1) + '" aria-label="' + esc(i.label || i.k) + '"' + (i.placeholder ? ' placeholder="' + esc(i.placeholder) + '"' : '') + (i.width ? ' style="width:' + (+i.width) + 'px"' : '') + '>' + esc(i.suffix || '') + '</span>';
+  }
+  function field(i){
+    const lab = '<span class="ml">' + esc(i.label || i.k) + (i.hint ? ' <small>' + esc(i.hint) + '</small>' : '') + '</span>';
+    if (i.kind === 'range') return '<div class="mf range' + (i.wide ? ' wide' : '') + '"><label class="ml" for="' + id(i.k) + '">' + esc(i.label || i.k) + ' <span data-rv="' + esc(i.k) + '"></span></label>' + control(i) + '</div>';
+    if (i.kind === 'seg') return '<div class="mf' + (i.wide ? ' wide' : '') + '">' + lab + control(i) + '</div>';
+    return '<label class="mf' + (i.wide ? ' wide' : '') + '" for="' + id(i.k) + '">' + lab + control(i) + '</label>';
+  }
+  const panelInputs = inputs.filter(i => !i.inline);
+  const hasResetSlot = !!$('[data-reset="' + CSS.escape(key) + '"]');
+  el.innerHTML = (panelInputs.length ? '<div class="' + (cfg.layout === 'stack' ? 'mstack' : 'mgrid') + '">' + panelInputs.map(field).join('') + '</div>' : '') +
+    (cfg.reset !== false && !hasResetSlot ? '<div class="mrow"><span class="status">' + esc(cfg.resetNote || '') + '</span><button class="tbtn small" type="button" data-reset="' + esc(key) + '">Reset numbers</button></div>' : '');
+  inputs.filter(i => i.inline).forEach(i => { $$('[data-in="' + CSS.escape(key + '.' + i.k) + '"]').forEach(slot => { slot.innerHTML = control(i); slot.dataset.model = key; }); });
+  const scopeEls = () => [el].concat($$('[data-model="' + CSS.escape(key) + '"]'));
+  function set(k, v){
+    if (shared) { if (!Store.can()) return; Store.put(coll, 'inputs', {[k]: v}); }
+    else { local[k] = v; changed(); }
+  }
+  const onInput = e => {
+    const t = e.target; if (!t.dataset || !t.dataset.k || t.closest('[data-widget]') !== el && !t.closest('[data-model="' + key + '"]')) return;
+    const i = inp(t.dataset.k); if (!i || i.kind === 'seg') return;
+    set(i.k, t.value === '' ? '' : +t.value);
+  };
+  const onClick = e => {
+    const b = e.target.closest('[data-oi]');
+    if (b && b.dataset.k && (b.closest('[data-widget]') === el || b.closest('[data-model="' + key + '"]'))) { const i = inp(b.dataset.k); if (i) set(i.k, i.options[+b.dataset.oi][0]); return; }
+  };
+  scopeEls().forEach(r => { r.addEventListener('input', onInput); r.addEventListener('click', onClick); });
+  /* two-click reset back to the defaults in code */
+  let armT = null;
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-reset="' + CSS.escape(key) + '"]'); if (!b) return;
+    if (!b.classList.contains('armed')) { b.classList.add('armed'); b.dataset.label = b.textContent; b.textContent = 'Click again to reset'; armT = setTimeout(() => { b.classList.remove('armed'); b.textContent = b.dataset.label; }, 4000); return; }
+    clearTimeout(armT); b.classList.remove('armed'); b.textContent = b.dataset.label;
+    const d = {}; inputs.forEach(i => d[i.k] = i.default);
+    if (shared) { if (Store.can()) Store.put(coll, 'inputs', d, 0); } else { Object.assign(local, d); changed(); }
+  });
+  function render(){
+    const vals = MODELS[key] || compute(), can = !shared || Store.can();
+    inputs.forEach(i => {
+      const v = vals[i.k];
+      scopeEls().forEach(r => {
+        $$('[data-k="' + CSS.escape(i.k) + '"]', r).forEach(c => {
+          if (c.closest('[data-widget]') !== el && !c.closest('[data-model="' + key + '"]')) return;
+          const off = !can || (i.disabledIf ? !!Expr.run(i.disabledIf, n => (n in vals) ? vals[n] : globalScope(n)) : false);
+          if (i.kind === 'seg') { c.setAttribute('aria-pressed', i.options[+c.dataset.oi][0] == v); c.disabled = off; }
+          else { const rv = raw(i.k); setVal(c, rv === '' || (i.blank && (rv == null || rv === i.default)) ? '' : String(v)); c.disabled = off; }
+        });
+        $$('[data-rv="' + CSS.escape(i.k) + '"]', r).forEach(s => s.textContent = fmt(i.fmt, v));
+      });
+    });
+    $$('[data-reset="' + CSS.escape(key) + '"]').forEach(b => b.disabled = !can);
+  }
+  function md(L){
+    if (cfg.export === false) return;
+    const vals = MODELS[key] || compute();
+    L.push('## ' + (cfg.title || slideTitleFor(el)), '', '| Item | Value |', '|---|---:|');
+    inputs.forEach(i => { const v = vals[i.k]; const o = i.kind === 'seg' ? i.options.find(x => x[0] == v) : null; L.push('| ' + cell(i.label || i.k) + ' | ' + cell(o ? o[1] : (i.prefix || '') + fmt(i.fmt || 'raw', v) + (i.suffix || '')) + ' |'); });
+    calc.forEach(c => { if (Array.isArray(c) || !c.label) return; L.push('| **' + cell(c.label) + '** | **' + cell(fmt(c.fmt, vals[c.k])) + '** |'); });
+    L.push('');
+  }
+  return {render:render, md:md, compute:compute};
+};
+function renderBindings(){
+  $$('[data-out]', stage).forEach(o => { const v = evalGlobal(o.dataset.out); o.textContent = fmt(o.dataset.fmt, v); });
+  $$('[data-show-if]', stage).forEach(o => { o.hidden = !evalGlobal(o.dataset.showIf); });
+  $$('[data-class-if]', stage).forEach(o => { o.dataset.classIf.split(';').forEach(part => { const i = part.indexOf(':'); if (i < 0) return; o.classList.toggle(part.slice(0, i).trim(), !!evalGlobal(part.slice(i + 1))); }); });
+}
+
+/* embed: lazy iframe with a placeholder and theme sync */
+TYPES.embed = function(el, key, cfg){
+  el.classList.add('frame');
+  el.innerHTML = '<div class="ph">' + esc(cfg.placeholder || 'Loading…') + '</div><iframe title="' + esc(cfg.title || 'Embedded page') + '"></iframe>';
+  const f = $('iframe', el); let loaded = false;
+  function load(){
+    if (loaded) return; loaded = true;
+    f.addEventListener('load', () => { const ph = $('.ph', el); if (ph) ph.remove(); syncFrames(); }, {once:true});
+    if (EMBEDS && EMBEDS[key]) f.srcdoc = EMBEDS[key]; else if (cfg.src) f.setAttribute('src', cfg.src);
+  }
+  return {render(){}, onShow:load};
+};
+
+/* ---------- charts ---------- */
+const CHARTS = [], CUSTOM = {};
+const color = c => !c ? 'var(--d1)' : /^(d|p)\d$|^(other|ink|ink-2|ink-3|accent|good|warn|bad)$/.test(c) ? 'var(--' + c + ')' : c;
+function hatchDefs(pre, colors){
+  return '<defs>' + colors.map((c, i) => '<pattern id="' + pre + i + '" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:' + color(c) + '"></rect><rect x="5" width="3" height="8" style="fill:var(--slide)"></rect></pattern>').join('') + '</defs>';
+}
+function rbar(x, y, w, h, r){ if (w <= 0) return ''; r = Math.min(r, w, h / 2); return 'M' + x + ',' + y + 'H' + (x + w - r) + 'Q' + (x + w) + ',' + y + ' ' + (x + w) + ',' + (y + r) + 'V' + (y + h - r) + 'Q' + (x + w) + ',' + (y + h) + ' ' + (x + w - r) + ',' + (y + h) + 'H' + x + 'Z'; }
+function chartScope(cfg){
+  const m = cfg.model ? MODELS[cfg.model] || {} : {};
+  return n => (n in m) ? m[n] : globalScope(n);
+}
+function val(v, scope){ if (typeof v === 'string' && v[0] === '=') { try { return Expr.run(v.slice(1), scope); } catch(e) { warnOnce(e.message); return 0; } } return v; }
+const CH = {};
+/* horizontal bars: tracked + hatched estimate, optional range, goal marker, mode toggle */
+CH.hbar = function(el, cfg, state){
+  const rows = cfg.rows || [], modes = cfg.modes || [{k:'v', max:cfg.max, step:cfg.step}];
+  const m = modes.find(x => x.k === state.mode) || modes[0];
+  if (cfg.style === 'simple') {
+    const max = cfg.max || Math.max.apply(null, rows.map(r => (r.value || 0) + (r.est || 0)));
+    return '<div class="hb">' + rows.map((r, i) => {
+      const tot = (r.value || 0) + (r.est || 0), w = tot / max * (cfg.span || 72);
+      const bar = r.est && r.value ? '<span style="display:flex;gap:2px;height:100%;width:' + w + '%"><span class="seg1" style="flex:' + r.value + ';background:' + color(r.color) + ';border-radius:0"></span><span class="seg1 hatch" style="flex:' + r.est + ';background-color:' + color(r.color) + '"></span></span>'
+        : '<span class="seg1' + (r.est ? ' hatch' : '') + '" style="width:' + w + '%;background-color:' + color(r.color) + '"></span>';
+      return '<div class="hb-row"' + (r.tip ? ' data-tip="' + esc(r.tip) + '"' : '') + '><span class="nm"' + (r.muted ? ' style="color:var(--ink-2)"' : '') + '>' + esc(r.label) + (r.sub ? '<small>' + esc(r.sub) + '</small>' : '') + '</span><span class="trk">' + bar + '<span class="v"' + (r.bold ? ' style="font-weight:700"' : '') + '>' + esc(r.text != null ? r.text : ((r.est ? '~' : '') + F.int(tot))) + '</span></span></div>';
+    }).join('') + '</div>';
+  }
+  const w = cfg.width || 1424, rowH = cfg.rowH || 100, top = 34, left = cfg.labelW || 210, right = cfg.valueW || 230, pw = w - left - right, h = top + rowH * rows.length + 40;
+  const pct = m.of === 'goal', max = m.max || 100, step = m.step || max / 5, suf = m.suffix || '';
+  const X = v => left + v / max * pw, cols = rows.map(r => r.color);
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="' + esc(cfg.label || 'Bar chart') + '">' + hatchDefs(state.id + '-', cols);
+  for (let v = 0; v <= max + 1e-9; v += step) s += '<line class="gl" x1="' + X(v) + '" x2="' + X(v) + '" y1="' + (top - 10) + '" y2="' + (h - 34) + '"></line><text class="ax" x="' + X(v) + '" y="' + (h - 10) + '" text-anchor="middle">' + F.int(v) + suf + '</text>';
+  if (pct) s += '<line x1="' + X(100) + '" x2="' + X(100) + '" y1="' + (top - 18) + '" y2="' + (h - 34) + '" style="stroke:var(--ink);stroke-width:3"></line><text x="' + X(100) + '" y="' + (top - 22) + '" text-anchor="middle" style="fill:var(--ink);font-size:16px;font-weight:700">100% = goal</text>';
+  rows.forEach((r, i) => {
+    const cy = top + i * rowH + rowH / 2, bh = 44, y = cy - bh / 2, tr = r.value || 0, es = r.est || 0, tot = tr + es;
+    const f = pct ? 100 / (r.goal || 1) : 1, tw = tr * f / max * pw, ew = es * f / max * pw;
+    s += '<g' + (r.tip ? ' data-tip="' + esc(r.tip) + '"' : '') + '><rect x="0" y="' + (cy - rowH / 2) + '" width="' + w + '" height="' + rowH + '" style="fill:transparent"></rect>';
+    s += '<text x="' + (left - 20) + '" y="' + (cy + 8) + '" text-anchor="end" style="fill:var(--ink);font-size:24px;font-weight:700">' + esc(r.label) + '</text>';
+    if (tr > 0) s += '<path d="' + rbar(left, y, Math.max(0, tw - (es > 0 ? 1 : 0)), bh, es > 0 ? 0 : 4) + '" style="fill:' + color(r.color) + '"></path>';
+    if (es > 0) s += '<path d="' + rbar(left + tw + (tr > 0 ? 1 : 0), y, Math.max(0, ew - (tr > 0 ? 1 : 0)), bh, 4) + '" style="fill:url(#' + state.id + '-' + i + ')"></path>';
+    if (r.lo != null && r.hi > r.lo) { const x1 = left + r.lo * f / max * pw, x2 = left + r.hi * f / max * pw; s += '<path d="M' + x1 + ',' + cy + 'H' + x2 + 'M' + x1 + ',' + (cy - 9) + 'V' + (cy + 9) + 'M' + x2 + ',' + (cy - 9) + 'V' + (cy + 9) + '" style="stroke:var(--ink);stroke-width:2;fill:none"></path>'; }
+    if (!pct && r.goal != null) { const gx = X(r.goal); s += '<line x1="' + gx + '" x2="' + gx + '" y1="' + (y - 12) + '" y2="' + (y + bh + 12) + '" style="stroke:var(--ink);stroke-width:4"></line><text x="' + gx + '" y="' + (y - 18) + '" text-anchor="middle" style="fill:var(--ink-2);font-size:16px">goal ' + F.int(r.goal) + '</text>'; }
+    const endX = left + Math.max(tw + ew, ((r.hi || 0) * f) / max * pw), p = r.goal ? Math.round(tot / r.goal * 100) : null, tl = (es > 0 ? '~' : '') + F.int(tot);
+    const label = r.text != null ? r.text : pct ? (p + '% · ' + tl + (cfg.unit ? ' ' + cfg.unit : '')) : (tl + (p != null ? ' · ' + p + '%' : ''));
+    s += '<text x="' + (Math.max(endX, pct || r.goal == null ? 0 : X(r.goal)) + 16) + '" y="' + (cy + 8) + '" style="fill:var(--ink);font-size:24px;font-variant-numeric:tabular-nums">' + esc(label) + '</text></g>';
+  });
+  return s + '<line class="base" x1="' + left + '" x2="' + left + '" y1="' + (top - 10) + '" y2="' + (h - 34) + '"></line></svg>';
+};
+/* one stacked 100% bar with labels underneath */
+CH.stack = function(el, cfg, state){
+  const segs = cfg.rows || [], w = cfg.width || 1424, h = cfg.height || 268, bh = 96, y = 20;
+  const total = cfg.total || segs.reduce((a, b) => a + (b.value || 0) + (b.est || 0), 0) || 1;
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="' + esc(cfg.label || 'Share chart') + '">' + hatchDefs(state.id + '-', segs.map(g => g.color));
+  s += '<defs><clipPath id="' + state.id + '-clip"><rect x="0" y="' + y + '" width="' + w + '" height="' + bh + '" rx="8"></rect></clipPath></defs><g clip-path="url(#' + state.id + '-clip)">';
+  let x = 0; const placed = [];
+  segs.forEach((g, i) => {
+    const tv = g.value || 0, ev = g.est || 0, sw = (tv + ev) / total * w, gap = i < segs.length - 1 ? 2 : 0, tw = tv / total * w;
+    s += '<g' + (g.tip ? ' data-tip="' + esc(g.tip) + '"' : '') + '>';
+    if (tv > 0) s += '<rect x="' + x + '" y="' + y + '" width="' + Math.max(0, (ev > 0 ? tw : sw - gap)) + '" height="' + bh + '" style="fill:' + color(g.color) + '"></rect>';
+    if (ev > 0) s += '<rect x="' + (x + tw) + '" y="' + y + '" width="' + Math.max(0, sw - tw - gap) + '" height="' + bh + '" style="fill:url(#' + state.id + '-' + i + ')"></rect>';
+    s += '</g>'; placed.push({g:g, x:x, w:sw, tot:tv + ev}); x += sw;
+  });
+  s += '</g>';
+  placed.forEach((p, i) => {
+    const narrow = p.w < 160, row = narrow && i === placed.length - 1 ? 1 : 0, lx = narrow ? w : p.x + 6, anchor = narrow ? 'end' : 'start', ly = y + bh + 34 + row * 62;
+    s += '<text x="' + lx + '" y="' + ly + '" text-anchor="' + anchor + '" style="fill:var(--ink);font-size:22px;font-weight:700">' + esc(p.g.label) + ' ' + Math.round(p.tot / total * 100) + '%</text>';
+    s += '<text x="' + lx + '" y="' + (ly + 26) + '" text-anchor="' + anchor + '" style="fill:var(--ink-2);font-size:18px">' + esc(p.g.sub != null ? p.g.sub : ((p.g.est ? '~' : '') + F.int(p.tot) + (cfg.unit ? ' ' + cfg.unit : ''))) + '</text>';
+  });
+  return s + '</svg>';
+};
+/* vertical columns with an optional band, reference line, notes and an alternate series toggle */
+CH.columns = function(el, cfg, state){
+  const bars = cfg.bars || [], w = cfg.width || 1080, h = cfg.height || 560, left = 70, right = 20, top = 50, bottom = 56, pw = w - left - right, ph = h - top - bottom;
+  const max = cfg.max || 100, step = cfg.step || max / 5, Y = v => top + ph - v / max * ph, bw = pw / bars.length, u = cfg.unit || '';
+  const alt = !!state.alt;
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="' + esc(cfg.label || 'Column chart') + '">';
+  if (cfg.band) s += '<rect x="' + (left + bw * cfg.band.from) + '" y="' + (top - 6) + '" width="' + (bw * (cfg.band.to - cfg.band.from + 1)) + '" height="' + (ph + 6) + '" style="fill:var(--soft)"></rect><text x="' + (left + bw * cfg.band.from + 8) + '" y="' + (top + 14) + '" style="fill:var(--ink-3);font-size:15px">' + esc(cfg.band.label || '') + '</text>';
+  for (let v = 0; v <= max + 1e-9; v += step) s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(v) + 5) + '" text-anchor="end">' + esc(u) + F.int(v) + '</text>';
+  bars.forEach((b, i) => {
+    const v = alt && b.alt != null ? b.alt : b.value, x = left + i * bw + bw * .18, cw = bw * .64, y = Y(v), r = 4;
+    const d = 'M' + x + ',' + Y(0) + 'V' + (y + r) + 'Q' + x + ',' + y + ' ' + (x + r) + ',' + y + 'H' + (x + cw - r) + 'Q' + (x + cw) + ',' + y + ' ' + (x + cw) + ',' + (y + r) + 'V' + Y(0) + 'Z';
+    const t = alt && b.tipAlt ? b.tipAlt : b.tip;
+    s += '<g' + (t ? ' data-tip="' + esc(t) + '"' : '') + '><rect x="' + (left + i * bw) + '" y="' + top + '" width="' + bw + '" height="' + ph + '" style="fill:transparent"></rect><path d="' + d + '" style="fill:' + color(b.color || cfg.color) + '"></path>';
+    s += '<text x="' + (x + cw / 2) + '" y="' + (y - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:20px;font-weight:700">' + esc(u) + F.int(v) + '</text>';
+    s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (h - bottom + 28) + '" text-anchor="middle" style="font-size:18px">' + esc(b.x) + '</text></g>';
+  });
+  if (cfg.ref) s += '<line x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(cfg.ref.value) + '" y2="' + Y(cfg.ref.value) + '" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:8 6"></line><text x="' + (w - right) + '" y="' + (Y(cfg.ref.value) - 10) + '" text-anchor="end" style="fill:var(--ink);font-size:17px">' + esc(cfg.ref.label || '') + '</text>';
+  (cfg.notes || []).forEach(n => { const at = n.at != null ? Y(n.at) - 40 : top - 22; s += '<text x="' + (left + n.i * bw + bw / 2) + '" y="' + at + '" text-anchor="middle" style="fill:var(--ink-2);font-size:17px;font-weight:700">' + esc(n.text) + '</text>'; });
+  return s + '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line></svg>';
+};
+/* waterfall: totals, steps down or up, hatched estimates, net; steps can read a model with "=expr" */
+CH.waterfall = function(el, cfg, state){
+  const scope = chartScope(cfg);
+  const steps = (cfg.steps || []).filter(st => st.if == null || val('=' + st.if, scope)).map(st => Object.assign({}, st, {a:+val(st.from, scope) || 0, b:+val(st.to, scope) || 0}));
+  const w = cfg.width || 1060, h = cfg.height || 400, left = 64, right = 10, top = 34, bottom = 62, pw = w - left - right, ph = h - top - bottom;
+  const max = +val(cfg.max, scope) || 1000, step = cfg.step || 250, lowest = Math.min.apply(null, [0].concat(steps.map(x => Math.min(x.a, x.b))));
+  const lo = Math.min(0, Math.floor(lowest / step) * step), Y = x => top + ph - (Math.max(lo, Math.min(max, x)) - lo) / (max - lo) * ph, bw = pw / Math.max(1, steps.length), cw = bw * .62;
+  const fmtv = cfg.fmt || 'money', fx = x => fmt(fmtv, x);
+  let s = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" role="img" aria-label="' + esc(cfg.label || 'Waterfall chart') + '">' + hatchDefs(state.id + '-', ['other']);
+  for (let t = lo; t <= max + 1e-9; t += step) s += '<line class="gl" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"></line><text class="ax" x="' + (left - 10) + '" y="' + (Y(t) + 5) + '" text-anchor="end">' + fx(t) + '</text>';
+  steps.forEach((st, i) => {
+    const x = left + i * bw + (bw - cw) / 2, y1 = Y(Math.max(st.a, st.b)), y2 = Y(Math.min(st.a, st.b));
+    const fill = st.kind === 'total' ? 'var(--accent)' : st.kind === 'net' ? 'var(--ink)' : st.kind === 'est' ? 'url(#' + state.id + '-0)' : st.kind === 'up' ? 'var(--good)' : 'var(--other)';
+    const lab = st.kind === 'total' || st.kind === 'net' ? fx(st.b) : (st.b < st.a ? '−' : '+') + fx(Math.abs(st.b - st.a));
+    const tipText = st.tip ? interp(st.tip, scope) : '';
+    const L = Array.isArray(st.label) ? st.label : [st.label || '', ''];
+    s += '<g' + (tipText ? ' data-tip="' + esc(tipText) + '"' : '') + '><rect x="' + (left + i * bw) + '" y="' + top + '" width="' + bw + '" height="' + ph + '" style="fill:transparent"></rect>';
+    s += '<rect x="' + x + '" y="' + y1 + '" width="' + cw + '" height="' + Math.max(2, y2 - y1) + '" rx="4" style="fill:' + fill + '"></rect>';
+    s += '<text x="' + (x + cw / 2) + '" y="' + (st.kind === 'net' && st.b < 0 ? y2 + 26 : y1 - 10) + '" text-anchor="middle" style="fill:var(--ink);font-size:21px;font-weight:700;font-variant-numeric:tabular-nums">' + esc(lab) + '</text>';
+    s += '<text class="ax" x="' + (x + cw / 2) + '" y="' + (Y(lo) + 26) + '" text-anchor="middle" style="font-size:16px"><tspan x="' + (x + cw / 2) + '">' + esc(L[0]) + '</tspan><tspan x="' + (x + cw / 2) + '" dy="19">' + esc(L[1] || '') + '</tspan></text></g>';
+    if (i < steps.length - 1) { const nx = left + (i + 1) * bw + (bw - cw) / 2; s += '<line x1="' + (x + cw) + '" x2="' + nx + '" y1="' + Y(st.b) + '" y2="' + Y(st.b) + '" style="stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:4 4"></line>'; }
+  });
+  return s + '<line class="base" x1="' + left + '" x2="' + (w - right) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"></line></svg>';
+};
+/* meter: parts filling a track against cap lines */
+CH.meter = function(el, cfg){
+  const scope = chartScope(cfg), parts = (cfg.parts || []).map(p => ({c:p.color, v:Math.max(0, +val(p.value, scope) || 0)}));
+  const total = parts.reduce((a, p) => a + p.v, 0), stp = cfg.step || 50, smax = Math.max(cfg.min || 100, Math.ceil(total / stp) * stp);
+  return '<div class="meter" role="img" aria-label="' + esc(cfg.label || 'Meter') + '"><div class="mfill" style="width:' + Math.min(100, total / smax * 100) + '%">' + parts.map(p => '<i style="width:' + (total ? p.v / total * 100 : 0) + '%;background:' + color(p.c) + '"></i>').join('') + '</div>' +
+    (cfg.caps || []).map(c => '<div class="cap" style="left:' + (c / smax * 100) + '%"></div><div class="caplab" style="left:' + (c / smax * 100) + '%">' + esc(fmt(cfg.fmt || 'money', c)) + '</div>').join('') + '</div>';
+};
+function mountChart(el){
+  const key = el.dataset.chart, cfg = (DATA.charts || {})[key];
+  if (!cfg) { warnOnce('no charts.' + key + ' in deck-data'); return; }
+  const state = {id:'c-' + key.replace(/[^A-Za-z0-9_-]/g, ''), mode:cfg.modes ? cfg.modes[0].k : null, alt:false};
+  if (cfg.type === 'custom') {
+    const fn = CUSTOM[cfg.fn || key];
+    if (!fn) { warnOnce('custom chart ' + (cfg.fn || key) + ' is not registered'); return; }
+    const inst = fn(el, cfg, API) || {};
+    CHARTS.push({el:el, cfg:cfg, render:inst.render || (() => {})}); return;
+  }
+  const draw = CH[cfg.type]; if (!draw) { warnOnce('unknown chart type ' + cfg.type); return; }
+  const tools = document.createElement('div'); tools.className = 'tbtns';
+  if (cfg.modes && cfg.modes.length > 1) tools.innerHTML = cfg.modes.map(m => '<button class="tbtn" type="button" data-mode="' + esc(m.k) + '" aria-pressed="' + (m.k === state.mode) + '">' + esc(m.label || m.k) + '</button>').join('');
+  if (cfg.toggle) tools.innerHTML += '<button class="tbtn" type="button" data-alt aria-pressed="false">' + esc(cfg.toggle) + '</button>';
+  const area = document.createElement('div'); area.style.minHeight = '0';
+  el.innerHTML = ''; if (tools.innerHTML) { el.appendChild(tools); el.classList.add('stack'); } el.appendChild(area);
+  tools.addEventListener('click', e => {
+    const m = e.target.closest('[data-mode]'); if (m) { state.mode = m.dataset.mode; $$('[data-mode]', tools).forEach(b => b.setAttribute('aria-pressed', b === m)); render(); }
+    const a = e.target.closest('[data-alt]'); if (a) { state.alt = !state.alt; a.setAttribute('aria-pressed', state.alt); render(); }
+  });
+  function render(){ area.innerHTML = draw(el, cfg, state); bindTips(area); }
+  CHARTS.push({el:el, cfg:cfg, render:render});
+}
+
+/* ---------- render everything ---------- */
+function renderAll(){
+  const note = saveNote();
+  $$('[data-save-note]').forEach(n => { n.textContent = note; n.hidden = !note; });
+  for (let pass = 0; pass < 2; pass++) widgets.forEach(w => { if (w.compute) w.compute(); });
+  widgets.forEach(w => { try { w.render(); } catch(e) { console.error('deck: widget ' + w.key, e); } });
+  renderBindings();
+  CHARTS.forEach(c => { try { c.render(); } catch(e) { console.error('deck: chart', e); } });
+  if (MODS.length && cur) updateBar();
+  emit('render');
+}
+
+/* ---------- copy and export ---------- */
+let copyBox = null;
+function closeCopyBox(){ if (copyBox) { copyBox.remove(); copyBox = null; } }
+function showCopyBox(text, label){
+  closeCopyBox();
+  stage.insertAdjacentHTML('beforeend', '<div class="copybox" id="d-copybox"><div class="copyrow"><b style="font-size:22px"></b><button class="tbtn" type="button" data-close>Close</button></div><textarea id="d-copytext" aria-label="Text to copy"></textarea></div>');
+  copyBox = $('#d-copybox'); $('b', copyBox).textContent = label || 'Select all and copy';
+  $('[data-close]', copyBox).addEventListener('click', closeCopyBox);
+  const ta = $('textarea', copyBox); ta.value = text; ta.focus(); ta.select();
+}
+function ymd(d){ const p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+function buildDecisions(only){
+  const now = new Date(), day = ymd(now), ex = DATA.export || {}, title = META.title || document.title || 'Deck';
+  const file = (ex.filename || SLUG + '_decisions') + '_' + day + '_v1.0.md';
+  const L = [];
+  if (!only) {
+    L.push('---', 'file: ' + file, 'version: 1.0', 'author: ' + (META.author || ''), 'created: ' + day, 'last_updated: ' + day,
+      'description: Decisions and inputs saved in the ' + title + ' deck, exported ' + now.toLocaleString('en-US') + '.',
+      'ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.', '---', '',
+      '# ' + title + ': decisions', '', 'Exported ' + now.toLocaleString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'}) + ' from the ' + title + ' deck.' + (SESS.length > 1 ? ' Sessions: ' + SESS.map(s => s.label + (s.long ? ' = ' + s.long : '')).join(', ') + '.' : ''), '');
+    if (ex.names !== false) L.push('**Has student names. Keep this file out of the public repo.**', '');
+  }
+  widgets.forEach(w => { if (w.md && (!only || w.key === only)) w.md(L); });
+  if (!only) {
+    L.push('## Path taken', '');
+    hist.forEach((id, i) => L.push((i + 1) + '. ' + cell(titleOf(id))));
+    L.push('', '## CHANGELOG', '', '- v1.0 (' + day + '): Exported from the ' + title + ' deck.', '');
+  }
+  return {file:file, text:L.join('\n')};
+}
+async function exportDecisions(){
+  const btn = $('#d-export'), out = buildDecisions();
+  const flashLabel = t => { btn.textContent = t; setTimeout(() => btn.textContent = 'Export decisions', 1800); };
+  let dls = null;
+  if (HAS_CLAUDE) { try { dls = await window.claude.use('downloads'); } catch(e) { dls = null; } }
+  if (!dls) {
+    if (!HAS_CLAUDE || STANDALONE) {
+      try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([out.text], {type:'text/markdown'})); a.download = out.file; document.body.appendChild(a); a.click(); a.remove(); flashLabel('Saved'); return; } catch(e) {}
+    }
+    showCopyBox(out.text, 'Select all and copy (' + out.file + ')'); return;
+  }
+  try { await dls.save({filename:out.file, data:out.text}); flashLabel('Saved'); }
+  catch(e) {
+    if (e && e.code === 'declined') return;
+    if (e && e.code === 'rate_limited') { flashLabel('One moment…'); return; }
+    showCopyBox(out.text, 'Select all and copy (' + out.file + ')');
+  }
+}
+async function saveText(file, text, mime){
+  let dls = null;
+  if (HAS_CLAUDE) { try { dls = await window.claude.use('downloads'); } catch(e) { dls = null; } }
+  if (dls) { try { await dls.save({filename:file, data:text}); return 'saved'; } catch(e) { if (e && e.code === 'declined') return 'declined'; } }
+  if (!HAS_CLAUDE || STANDALONE) { try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:mime || 'text/plain'})); a.download = file; document.body.appendChild(a); a.click(); a.remove(); return 'saved'; } catch(e) {} }
+  showCopyBox(text, 'Select all and copy (' + file + ')'); return 'copy';
+}
+stage.addEventListener('click', e => {
+  const b = e.target.closest('[data-copy]'); if (!b) return;
+  const k = b.dataset.copy, out = buildDecisions(k === 'all' ? null : k), label = b.textContent;
+  try { navigator.clipboard.writeText(out.text).then(() => { b.textContent = 'Copied'; setTimeout(() => b.textContent = label, 1600); }, () => showCopyBox(out.text)); }
+  catch(err) { showCopyBox(out.text); }
+});
+
+/* ---------- offline assets (standalone builds) ---------- */
+/* Image paths become inlined data before the browser requests them: markup set through innerHTML or
+   insertAdjacentHTML, setAttribute('src') and img.src are rewritten; a MutationObserver catches the rest. */
+function fixAssets(root){
+  if (!ASSETS) return;
+  $$('img[src],source[src]', root).forEach(img => { const s = img.getAttribute('src'); if (s && ASSETS[s]) img.setAttribute('src', ASSETS[s]); });
+}
+if (ASSETS) {
+  try {
+    const A = ASSETS, rw = h => (typeof h === 'string' && h.indexOf('src') >= 0) ? h.replace(/(\bsrc\s*=\s*)(["'])([^"']+)\2/g, (m, a, q, p) => A[p] ? a + q + A[p] + q : m) : h;
+    const EP = Element.prototype, ih = Object.getOwnPropertyDescriptor(EP, 'innerHTML');
+    if (ih && ih.set) Object.defineProperty(EP, 'innerHTML', {configurable:true, get(){ return ih.get.call(this); }, set(v){ ih.set.call(this, rw(v)); }});
+    const iah = EP.insertAdjacentHTML; EP.insertAdjacentHTML = function(pos, h){ return iah.call(this, pos, rw(h)); };
+    const sa = EP.setAttribute; EP.setAttribute = function(n, v){ return sa.call(this, n, (n === 'src' && A[v]) ? A[v] : v); };
+    const sd = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+    if (sd && sd.set) Object.defineProperty(HTMLImageElement.prototype, 'src', {configurable:true, get(){ return sd.get.call(this); }, set(v){ sd.set.call(this, A[v] || v); }});
+    new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) fixAssets(n.parentNode || n); }))).observe(stage, {subtree:true, childList:true});
+  } catch(e) { console.warn('deck: offline image mapping unavailable', e); }
+}
+
+/* ---------- SOP module (deck.mode "sop"): runs, step gate, checks, measurements, gauges, tools, run log ---------- */
+/* Uses the core only through K, so it can move to its own file when the engine splits into core + modules. */
+function sopModule(K){
+  const Store = K.Store, $ = K.$, $$ = K.$$, esc = K.esc;
+  const CFG = K.DATA.sop || {}, TOOLS = CFG.tools || {}, RUNS = 'sop_runs';
+  const SOPID = K.SLUG, LOGNAME = String((CFG.log && CFG.log.filename) || (K.SLUG + '_log')).replace(/[^A-Za-z0-9_-]/g, '_');
+  const GATED = {checks:1, measure:1, tools:1, runstart:1};
+  Store.register(RUNS);
+  let activeId = K.lsGet('-run') || '', lastClosed = '';
+
+  /* ---- runs ---- */
+  const getRun = id => { const r = id ? Store.get(RUNS, id) : null; return r ? Object.assign({id:id}, r) : null; };
+  const active = () => { const r = getRun(activeId); return r && !r.endedAt ? r : null; };
+  function setActive(id){ activeId = id || ''; K.lsSet('-run', activeId); K.changed(); }
+  function patch(p, wait){ if (activeId) Store.put(RUNS, activeId, p, wait == null ? 0 : wait); }
+  function sub(field, key, val, wait){ const r = active(); if (!r) return; const o = Object.assign({}, r[field] || {}); if (val === undefined) delete o[key]; else o[key] = val; patch({[field]: o}, wait); }
+  const toolLabel = k => { const t = TOOLS[k]; return t == null ? k : typeof t === 'string' ? t : (t.label || k); };
+  const toolsOut = r => Object.keys((r && r.tools) || {}).filter(k => r.tools[k].outAt && !r.tools[k].inAt);
+  const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
+  const clock = iso => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'}); };
+  const ofType = t => K.widgets.filter(w => w.cfg && w.cfg.type === t);
+  const endIds = () => ofType('runend').map(w => w.slide && w.slide.dataset.id).filter(Boolean);
+
+  /* ---- numbers and specs ---- */
+  const norm = x => +(+x).toFixed(9);
+  function decs(c){ if (c.decimals != null) return +c.decimals; const m = String(c.nominal != null ? c.nominal : c.min != null ? c.min : '').split('.')[1]; return m ? m.length : 3; }
+  function spec(c){
+    let lo, hi; const nom = c.nominal != null ? +c.nominal : null;
+    if (c.min != null || c.max != null) { lo = c.min != null ? +c.min : -Infinity; hi = c.max != null ? +c.max : Infinity; }
+    else { const t = c.tol; let minus, plus; if (Array.isArray(t)) { minus = -Math.abs(+t[0]); plus = Math.abs(+t[1]); } else { plus = Math.abs(+t || 0); minus = -plus; } lo = nom + minus; hi = nom + plus; }
+    return {nom:nom, lo:norm(lo), hi:norm(hi)};
+  }
+  function parseNum(s){
+    s = String(s == null ? '' : s).trim(); if (!s) return null;
+    if (s.indexOf(',') >= 0 && s.indexOf('.') < 0) s = s.replace(',', '.');
+    s = s.replace(/[^0-9.+\-eE]/g, '');
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(s)) return null;
+    return +s;
+  }
+  function specText(c){
+    if (c.kind === 'gauge') return c.spec || '';
+    const d = decs(c), u = c.unit ? ' ' + c.unit : '', f = x => (+x).toFixed(d), sp = spec(c);
+    if (c.min != null || c.max != null) {
+      if (c.min != null && c.max != null) return f(sp.lo) + ' to ' + f(sp.hi) + u;
+      return c.min != null ? 'at least ' + f(sp.lo) + u : 'at most ' + f(sp.hi) + u;
+    }
+    const t = c.tol, sym = !Array.isArray(t) || Math.abs(+t[0]) === Math.abs(+t[1]);
+    const tt = sym ? '±' + f(Array.isArray(t) ? Math.abs(t[1]) : Math.abs(+t || 0)) : '+' + f(Math.abs(t[1])) + ' / −' + f(Math.abs(t[0]));
+    return f(sp.nom) + u + ' ' + tt + ' (' + f(sp.lo) + ' to ' + f(sp.hi) + ')';
+  }
+  const isPass = (c, v) => { if (c.kind === 'gauge') return v === 'pass'; const sp = spec(c), n = norm(v); return n >= sp.lo && n <= sp.hi; };
+  function missText(c, v){
+    if (c.kind === 'gauge') return c.failLabel || 'Fails the gauge';
+    const sp = spec(c), d = decs(c), u = c.unit ? ' ' + c.unit : '', n = norm(v);
+    if (n > sp.hi) return (n - sp.hi).toFixed(d) + u + ' over the max';
+    if (n < sp.lo) return (sp.lo - n).toFixed(d) + u + ' under the min';
+    return '';
+  }
+  const numText = (c, v, raw) => { const d = decs(c), r = String(raw == null ? '' : raw), m = r.split('.')[1]; return (+v).toFixed(Math.max(d, m ? m.replace(/[^0-9]/g, '').length : 0)); };
+  const showVal = (c, v, raw) => c.kind === 'gauge' ? (v === 'pass' ? (c.passLabel || 'Pass') : (c.failLabel || 'Fail')) : numText(c, v, raw) + (c.unit ? ' ' + c.unit : '');
+  const resolved = (c, e) => !!e && (e.ok || ((c.onFail || 'override') === 'override' && String(e.why || '').trim().length >= 3));
+
+  /* ---- gate note on every gated step ---- */
+  function gateEl(s){
+    let g = $('.gate', s); if (g) return g;
+    g = document.createElement('div'); g.className = 'gate'; g.setAttribute('role', 'status');
+    const anchor = $('.ft', s) || $('.notes', s); if (anchor) s.insertBefore(g, anchor); else s.appendChild(g);
+    return g;
+  }
+  const gatedWidgets = s => K.widgets.filter(w => w.slide === s && w.cfg && GATED[w.cfg.type] && w.pending);
+  function pendingOf(s){ let out = []; gatedWidgets(s).forEach(w => { try { out = out.concat(w.pending() || []); } catch(e) { console.error(e); } }); return out.filter((x, i) => out.indexOf(x) === i); }
+  function paintGate(s){
+    if (!s || !gatedWidgets(s).length) return;
+    const g = gateEl(s), p = pendingOf(s), r = active();
+    g.classList.toggle('ok', !p.length);
+    if (r && r.stopped) g.innerHTML = '<span><b>Run stopped.</b> Go to the end of the run to return tools and close it.</span>';
+    else g.innerHTML = p.length ? '<span><b>To continue:</b> ' + p.map(esc).join(' · ') + '</span>' : '<span><b>Step complete.</b> Next is unlocked.</span>';
+  }
+  function gate(from, to){
+    const s = K.byId[from]; if (!s) return null;
+    const r = active();
+    if (r && r.stopped) return endIds().indexOf(to) >= 0 ? null : 'This run was stopped: go to the end of the run';
+    for (const w of gatedWidgets(s)) if (w.allows && w.allows(to)) return null;
+    const p = pendingOf(s);
+    return p.length ? p[0] + (p.length > 1 ? ' (and ' + plural(p.length - 1, 'more item', 'more items') + ')' : '') : null;
+  }
+  function blocked(){
+    const s = K.byId[K.cur]; if (!s) return;
+    const r = active(), ids = endIds();
+    if (r && r.stopped && ids.length && !gatedWidgets(s).length) { K.go(ids[0]); return; }
+    const g = gatedWidgets(s).length ? gateEl(s) : null; if (!g) return;
+    paintGate(s); g.classList.remove('flash'); void g.offsetWidth; g.classList.add('flash');
+    try { g.scrollIntoView({block:'nearest', behavior:'smooth'}); } catch(e) {}
+  }
+
+  /* ---- CSV and summaries ---- */
+  const COLS = ['run_id', 'sop', 'sop_version', 'part', 'operator', 'run_started', 'run_ended', 'run_status', 'kind', 'step', 'item', 'value', 'unit', 'nominal', 'min', 'max', 'verdict', 'note', 'attempt', 'final', 'at'];
+  const TEXT = {part:1, operator:1, step:1, item:1, note:1, value:1};
+  function lt(iso){ if (!iso) return ''; const d = new Date(iso); if (isNaN(d)) return ''; const p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds()); }
+  function cellOf(col, x){ let s = x == null ? '' : String(x); if (TEXT[col] && /^[=+\-@\t\r]/.test(s) && isNaN(+s)) s = "'" + s; return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function rowsFor(r){
+    const base = {run_id:r.id, sop:K.META.title || SOPID, sop_version:r.sopVersion || '', part:r.part || '', operator:r.operator || '', run_started:lt(r.startedAt), run_ended:lt(r.endedAt), run_status:r.status || 'open'};
+    const rows = [], row = o => rows.push(Object.assign({}, base, o));
+    ofType('checks').forEach(w => {
+      const got = ((r.checks || {})[w.key]) || {};
+      (w.cfg.items || []).forEach((it, i) => { const t = typeof it === 'string' ? it : it.t; row({kind:'check', step:K.slideTitleFor(w.el), item:t, value:got[i] ? 'done' : '', verdict:got[i] ? 'DONE' : (typeof it === 'object' && it.optional ? 'SKIPPED' : 'NOT DONE'), at:lt(got[i])}); });
+    });
+    ofType('measure').forEach(w => {
+      const c = w.cfg, e = ((r.values || {})[w.key]), sp = c.kind === 'gauge' ? null : spec(c), d = decs(c);
+      const specCols = sp ? {unit:c.unit || '', nominal:sp.nom != null ? sp.nom.toFixed(d) : '', min:isFinite(sp.lo) ? sp.lo.toFixed(d) : '', max:isFinite(sp.hi) ? sp.hi.toFixed(d) : ''} : {unit:'', nominal:'', min:'', max:''};
+      if (!e) { row(Object.assign({kind:c.kind === 'gauge' ? 'gauge' : 'measure', step:K.slideTitleFor(w.el), item:c.label, verdict:'NOT MEASURED'}, specCols)); return; }
+      const tries = (e.hist || []).concat([e]);
+      tries.forEach((t, i) => row(Object.assign({kind:c.kind === 'gauge' ? 'gauge' : 'measure', step:K.slideTitleFor(w.el), item:c.label,
+        value:c.kind === 'gauge' ? showVal(c, t.v) : numText(c, t.v, t.raw), verdict:t.ok ? 'PASS' : 'FAIL', note:t.why || '', attempt:i + 1, final:i === tries.length - 1 ? 'yes' : 'no', at:lt(t.at)}, specCols)));
+    });
+    Object.keys(r.tools || {}).forEach(k => { const t = r.tools[k]; row({kind:'tool', item:toolLabel(k), value:t.inAt ? 'returned' : 'out', verdict:t.inAt ? 'RETURNED' : 'NOT RETURNED', note:'taken ' + lt(t.outAt), at:lt(t.inAt)}); });
+    if (r.stopped) row({kind:'stop', step:r.stopped.step || '', item:r.stopped.item || '', verdict:'STOPPED', at:lt(r.stopped.at)});
+    return rows;
+  }
+  const csv = runs => [COLS.join(',')].concat(...runs.map(r => rowsFor(r).map(o => COLS.map(c => cellOf(c, o[c])).join(',')))).join('\r\n') + '\r\n';
+  const myRuns = () => Store.items(RUNS).filter(r => (r.sop || SOPID) === SOPID).sort((a, b) => String(a.startedAt || '').localeCompare(String(b.startedAt || '')));
+  const safe = s => String(s || '').replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
+  function runFile(r){ return LOGNAME + '_run_' + (safe(r.part) || r.id.slice(0, 6)) + '_' + K.ymd(new Date(r.startedAt || Date.now())) + '_v1.0.csv'; }
+  function downloadRun(r){ return K.saveText(runFile(r), csv([r]), 'text/csv'); }
+  function downloadLog(){ const runs = myRuns(); return K.saveText(LOGNAME + '_' + K.ymd(new Date()) + '_v1.0.csv', csv(runs), 'text/csv'); }
+  function summaryMd(r){
+    const day = K.ymd(new Date()), file = LOGNAME + '_run_' + (safe(r.part) || r.id.slice(0, 6)) + '_summary_' + day + '_v1.0.md', cell = s => String(s == null ? '' : s).replace(/\|/g, '\\|');
+    const L = ['---', 'file: ' + file, 'version: 1.0', 'author: ' + (K.META.author || ''), 'created: ' + day, 'last_updated: ' + day,
+      'description: Run summary for ' + (K.META.title || SOPID) + ', part ' + (r.part || 'without an ID') + '.', 'ai_update: Update last_updated and version. Rename file to match. Append changelog at bottom.', '---', '',
+      '# ' + (K.META.title || SOPID) + ': run summary', '', '**Has operator names. Keep this file out of the public repo.**', '',
+      '- Part: ' + (r.part || '(no ID)'), '- Operator: ' + (r.operator || ''), '- Status: ' + (r.status || 'open'), '- Started: ' + lt(r.startedAt), '- Ended: ' + (lt(r.endedAt) || '(still open)'), '- SOP version: ' + (r.sopVersion || ''), '',
+      '| Kind | Step | Item | Value | Verdict | Note |', '|---|---|---|---|---|---|'];
+    rowsFor(r).filter(o => o.kind !== 'measure' && o.kind !== 'gauge' || o.final === 'yes' || o.verdict === 'NOT MEASURED').forEach(o => L.push('| ' + [o.kind, o.step, o.item, o.value + (o.unit && o.value ? ' ' + o.unit : ''), o.verdict, o.note].map(cell).join(' | ') + ' |'));
+    L.push('', '## CHANGELOG', '', '- v1.0 (' + day + '): Exported from the ' + (K.META.title || SOPID) + ' SOP.', '');
+    return {file:file, text:L.join('\n')};
+  }
+  function statusOf(r){
+    if (r.stopped) return 'failed';
+    const vals = r.values || {};
+    return ofType('measure').some(w => vals[w.key] && !vals[w.key].ok) ? 'deviation' : 'pass';
+  }
+  const STATUS = {pass:'Pass', deviation:'Pass with deviation', failed:'Failed', abandoned:'Abandoned', open:'Open'};
+  function noRun(){ return '<p class="none">No run in progress.' + (K.START ? ' <a href="#' + esc(K.START) + '">Start one</a>.' : '') + '</p>'; }
+  const canEdit = () => Store.can() && !!active() && !active().stopped;
+
+  /* ---- widget: run start ---- */
+  K.TYPES.runstart = function(el, key, cfg){
+    const partLabel = cfg.partLabel || CFG.partLabel || 'Part ID', partReq = cfg.partRequired != null ? cfg.partRequired : CFG.partRequired === true;
+    el.classList.add('sopw', 'runbox');
+    el.innerHTML = '<div data-box></div>';
+    const box = $('[data-box]', el);
+    let armed = false, waitNext = false;
+    K.on('render', () => { if (waitNext && active()) { waitNext = false; K.next(); } });
+    /* no <form>: sandboxed previews block form submission before any submit event fires */
+    let starting = false;
+    async function start(){
+      if (starting || active() || !Store.can()) return;
+      const opEl = $('[name=op]', el), partEl = $('[name=part]', el); if (!opEl) return;
+      const op = opEl.value.trim().slice(0, 24), part = partEl.value.trim().slice(0, 40);
+      if (!op || (partReq && !part)) { blocked(); (op ? partEl : opEl).focus(); return; }
+      starting = true;
+      K.lsSet('-op', op);
+      const now = K.nowISO();
+      let id = null; try { id = await Store.add(RUNS, {sop:SOPID, sopVersion:K.META.version || '', operator:op, part:part, startedAt:now, endedAt:'', status:'open', values:{}, checks:{}, tools:{}, at:now}); } finally { starting = false; }
+      if (!id) return;
+      setActive(id); lastClosed = '';
+      if (active()) K.next(); else waitNext = true;
+    }
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[name=op],[name=part]')) { e.preventDefault(); start(); } });
+    el.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      if (b.dataset.act === 'start') { start(); return; }
+      if (b.dataset.act === 'abandon') {
+        if (!armed) { armed = true; b.textContent = 'Click again to abandon'; b.classList.add('bad'); setTimeout(() => { armed = false; box.dataset.state = ''; render(); }, 3000); return; }
+        armed = false; patch({endedAt:K.nowISO(), status:'abandoned'}); setActive('');
+      }
+    });
+    function render(){
+      const r = active();
+      if (r) {
+        if (box.dataset.state === 'run:' + r.id) return;
+        box.dataset.state = 'run:' + r.id;
+        box.innerHTML = '<div class="k">Run in progress</div><p class="sop-sum">' + (r.part ? partLabel + ' <b>' + esc(r.part) + '</b> · ' : '') + 'by <b>' + esc(r.operator) + '</b> · started ' + esc(clock(r.startedAt)) + '</p>' +
+          '<p class="sop-note">Press Next to pick up where you left off, or abandon it to start over. Abandoned runs stay in the log.</p><div class="tbtns"><button class="tbtn" type="button" data-act="abandon">Abandon this run</button></div>';
+        return;
+      }
+      if (box.dataset.state === 'form') { $$('input,button', box).forEach(n => n.disabled = !Store.can()); return; }
+      box.dataset.state = 'form';
+      box.innerHTML = '<div class="k">Start a run</div><div class="stack" style="gap:12px"><div class="fields">' +
+        '<label>Your name or initials<input name="op" maxlength="24" autocomplete="off" required value="' + esc(K.lsGet('-op') || '') + '"></label>' +
+        '<label>' + esc(partLabel) + (partReq ? '' : ' (optional)') + '<input name="part" maxlength="40" autocomplete="off"' + (partReq ? ' required' : '') + '></label></div>' +
+        '<div class="tbtns"><button class="tbtn go" type="button" data-act="start">Start run</button></div><p class="sop-note">Names stay in this run log and its exports, never in the SOP file.</p></div>';
+      $$('input,button', box).forEach(n => n.disabled = !Store.can());
+    }
+    return {render:render, pending:() => active() ? [] : ['start a run: enter your initials' + (partReq ? ' and the ' + partLabel.toLowerCase() : '')]};
+  };
+
+  /* ---- widget: required checks ---- */
+  K.TYPES.checks = function(el, key, cfg){
+    const items = (cfg.items || []).map(it => typeof it === 'string' ? {t:it} : it);
+    el.classList.add('sopw');
+    el.innerHTML = (cfg.title ? '<div class="k">' + esc(cfg.title) + '</div>' : '') + '<ul class="sc">' + items.map((it, i) =>
+      '<li' + (it.safety ? ' class="safety"' : '') + '><label><input type="checkbox" data-i="' + i + '" id="sc-' + esc(key) + '-' + i + '"><span>' + esc(it.t) + (it.optional ? '<span class="sc-opt">optional</span>' : '') + '</span></label></li>').join('') + '</ul>';
+    el.addEventListener('change', e => {
+      const cb = e.target.closest('input[data-i]'); if (!cb) return;
+      const r = active(); if (!r) return;
+      const o = Object.assign({}, (r.checks || {})[key] || {});
+      if (cb.checked) o[cb.dataset.i] = K.nowISO(); else delete o[cb.dataset.i];
+      sub('checks', key, o);
+    });
+    const got = () => { const r = active(); return (r && (r.checks || {})[key]) || {}; };
+    function render(){
+      const g = got(), can = canEdit();
+      $$('input[data-i]', el).forEach(cb => { cb.checked = !!g[cb.dataset.i]; cb.disabled = !can; cb.closest('li').classList.toggle('done', cb.checked); });
+    }
+    function pending(){
+      if (!active()) return ['start a run first'];
+      const g = got(), left = items.filter((it, i) => !it.optional && !g[i]).length;
+      return left ? ['tick ' + plural(left, 'check', 'checks')] : [];
+    }
+    return {render:render, pending:pending};
+  };
+
+  /* ---- widget: measurement (typed number) or gauge (pass / fail) ---- */
+  K.TYPES.measure = function(el, key, cfg){
+    const gauge = cfg.kind === 'gauge', mode = cfg.onFail || 'override', label = cfg.label || key, id = 'ms-' + esc(key);
+    if (mode === 'rework' && !cfg.rework) K.warnOnce('widgets.' + key + ' has onFail "rework" but no rework slide');
+    el.classList.add('sopw', 'ms');
+    el.innerHTML = '<div class="ms-h"><label class="ms-l"' + (gauge ? '' : ' for="' + id + '"') + '>' + esc(label) + '</label><span class="ms-spec">' + esc(specText(cfg)) + '</span></div>' +
+      (cfg.hint ? '<p class="ms-hint">' + esc(cfg.hint) + '</p>' : '') +
+      (gauge ? '<div class="ms-g" role="group" aria-label="' + esc(label) + '"><button type="button" data-g="pass" aria-pressed="false">' + esc(cfg.passLabel || 'Pass') + '</button><button type="button" data-g="fail" aria-pressed="false">' + esc(cfg.failLabel || 'Fail') + '</button></div><div class="ms-v" aria-live="polite"></div>'
+        : '<div class="ms-row"><input id="' + id + '" class="ms-in" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" enterkeyhint="done" aria-describedby="' + id + '-v"><span class="ms-u">' + esc(cfg.unit || '') + '</span><span class="ms-v" id="' + id + '-v" aria-live="polite"></span></div>') +
+      '<div class="ms-tries" hidden></div><div class="ms-fail" hidden></div>';
+    const inp = $('.ms-in', el), vEl = $('.ms-v', el), failEl = $('.ms-fail', el), triesEl = $('.ms-tries', el);
+    const entry = () => { const r = active(); return r ? (r.values || {})[key] : null; };
+    function liveShow(){
+      const v = parseNum(inp.value), e = entry(), saved = !!e && v != null && norm(e.v) === norm(v);
+      el.classList.toggle('live', v != null && !saved);
+      if (v == null) { vEl.innerHTML = inp.value.trim() ? 'Not a number yet' : ''; el.classList.remove('pass', 'fail'); return; }
+      const ok = isPass(cfg, v); el.classList.toggle('pass', ok); el.classList.toggle('fail', !ok);
+      vEl.innerHTML = verdictHtml(v, ok, !saved, inp.value);
+    }
+    function commit(v, raw){
+      const r = active(); if (!r || r.stopped || v == null) return;
+      const prev = (r.values || {})[key];
+      if (prev && (gauge ? prev.v === v : norm(prev.v) === norm(v))) return;
+      const hist = prev ? (prev.hist || []).concat([{v:prev.v, raw:prev.raw, ok:prev.ok, at:prev.at, why:prev.why || ''}]) : [];
+      sub('values', key, {v:v, raw:gauge ? v : String(raw == null ? v : raw).trim().slice(0, 16), ok:isPass(cfg, v), at:K.nowISO(), why:'', hist:hist});
+    }
+    function verdictHtml(v, ok, live, raw){ return '<span class="vpill">' + (ok ? 'PASS' : 'FAIL') + '</span>' + esc(gauge ? showVal(cfg, v) : ok ? showVal(cfg, v, raw) + ' is in spec' : missText(cfg, v)) + (live ? ' <small>(Enter or tap away to record)</small>' : ''); }
+    if (inp) {
+      inp.addEventListener('input', liveShow);
+      inp.addEventListener('change', () => commit(parseNum(inp.value), inp.value));
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commit(parseNum(inp.value), inp.value); } });
+    }
+    el.addEventListener('click', e => {
+      const g = e.target.closest('[data-g]'); if (g) { commit(g.dataset.g); return; }
+      const st = e.target.closest('[data-act="stop"]');
+      if (st) { const r = active(); if (!r) return; patch({stopped:{key:key, step:K.slideTitleFor(el), item:label, at:K.nowISO()}}); const ids = endIds(); if (ids.length) K.go(ids[0]); }
+    });
+    el.addEventListener('input', e => {
+      if (!e.target.classList.contains('ms-why')) return;
+      K.autosize(e.target);
+      const cur = entry(); if (!cur) return;
+      sub('values', key, Object.assign({}, cur, {why:e.target.value.slice(0, 200)}), 500);
+    });
+    let failKey = '';
+    function render(){
+      const r = active(), e = entry(), can = canEdit();
+      if (inp) { inp.disabled = !can; if (document.activeElement !== inp) { inp.value = e ? numText(cfg, e.v, e.raw) : ''; el.classList.remove('live'); } else liveShow(); }
+      $$('[data-g]', el).forEach(b => { b.disabled = !can; b.setAttribute('aria-pressed', !!e && e.v === b.dataset.g); });
+      if (document.activeElement !== inp) {
+        el.classList.toggle('pass', !!e && e.ok); el.classList.toggle('fail', !!e && !e.ok);
+        vEl.innerHTML = e ? verdictHtml(e.v, e.ok, false, e.raw) : (r ? '' : noRun());
+      }
+      const n = e && e.hist ? e.hist.length : 0;
+      triesEl.hidden = !n; triesEl.textContent = n ? 'Attempt ' + (n + 1) + '. Earlier: ' + e.hist.map(h => showVal(cfg, h.v, h.raw) + ' ' + (h.ok ? 'pass' : 'fail')).join(', ') : '';
+      const fk = e && !e.ok ? mode + ':' + e.at : '';
+      failEl.hidden = !fk;
+      if (fk !== failKey) {
+        failKey = fk;
+        if (!fk) failEl.innerHTML = '';
+        else if (mode === 'override') failEl.innerHTML = '<label class="stack" style="gap:6px"><b>Out of spec. Why is it OK to continue?</b><textarea class="fld ms-why" rows="2" maxlength="200" id="' + id + '-why"></textarea></label><small>Recorded as FAIL with your reason.' + (gauge ? '' : ' Fix the number above instead if it was a typo.') + '</small>';
+        else if (mode === 'stop') failEl.innerHTML = '<p><b>Stop.</b> ' + esc(cfg.stopText || 'This part is out of spec. Set it aside and tag it, then end the run.') + '</p><div class="tbtns"><button class="tbtn bad" type="button" data-act="stop">End run: part failed</button></div><small>' + (gauge ? 'Wrong button? Pick again above.' : 'Typo? Fix the number above.') + '</small>';
+        else failEl.innerHTML = '<p><b>Out of spec.</b> ' + esc(cfg.reworkText || 'Rework the part, then come back and measure again.') + '</p><div class="tbtns"><button class="tbtn go" type="button" data-to="' + esc(cfg.rework || '') + '">Go to rework: ' + esc(K.titleOf(cfg.rework)) + '</button></div>';
+      }
+      const why = $('.ms-why', failEl);
+      if (why) { K.setVal(why, (e && e.why) || ''); why.disabled = !can; }
+      $$('button', failEl).forEach(b => b.disabled = !Store.can() || !r);
+    }
+    function pending(){
+      if (!active()) return ['start a run first'];
+      const e = entry();
+      if (!e) return [gauge ? 'check ' + label : 'record ' + label];
+      if (resolved(cfg, e)) return [];
+      return [mode === 'stop' ? label + ' failed: end the run' : mode === 'rework' ? label + ' failed: rework it and measure again' : label + ' is out of spec: give a reason'];
+    }
+    const allows = to => { const e = entry(); return mode === 'rework' && !!e && !e.ok && to === cfg.rework; };
+    return {render:render, pending:pending, allows:allows, onShow:() => $$('textarea', el).forEach(K.autosize)};
+  };
+
+  /* ---- widget: tools (pull on this step, or return here) ---- */
+  K.TYPES.tools = function(el, key, cfg){
+    const ret = cfg.mode === 'return', items = cfg.items || [];
+    items.forEach(k => { if (TOOLS[k] == null) K.warnOnce('widgets.' + key + ': tool "' + k + '" is not in sop.tools'); });
+    el.classList.add('sopw');
+    el.innerHTML = '<div class="k">' + esc(cfg.title || (ret ? 'Put these back' : 'Tools for this step')) + '</div><ul class="tl"></ul>';
+    const ul = $('ul', el);
+    el.addEventListener('click', e => {
+      const b = e.target.closest('[data-tool]'); if (!b) return;
+      const r = active(); if (!r) return;
+      const k = b.dataset.tool, t = Object.assign({}, (r.tools || {})[k] || {});
+      if (b.dataset.do === 'take') { t.outAt = K.nowISO(); delete t.inAt; t.n = (t.n || 0) + 1; } else t.inAt = K.nowISO();
+      sub('tools', k, t);
+    });
+    function render(){
+      const r = active(), can = Store.can() && !!r;
+      ul.innerHTML = items.map(k => {
+        const t = (r && (r.tools || {})[k]) || {}, out = t.outAt && !t.inAt, back = t.outAt && t.inAt;
+        const st = !r ? 'No run in progress' : out ? 'Out since ' + clock(t.outAt) : back ? 'Returned ' + clock(t.inAt) : 'Not taken yet';
+        const btn = out ? '<button class="tbtn" type="button" data-tool="' + esc(k) + '" data-do="return"' + (can ? '' : ' disabled') + '>Returned</button>'
+          : ret ? '' : '<button class="tbtn' + (ret ? '' : ' go') + '" type="button" data-tool="' + esc(k) + '" data-do="take"' + (can ? '' : ' disabled') + '>' + (back ? 'Took it again' : 'Took it') + '</button>';
+        return '<li class="' + (out ? 'out' : back ? 'back' : '') + '"><span>' + esc(toolLabel(k)) + '</span><span class="tl-st">' + esc(st) + '</span><span class="tbtns">' + btn + '</span></li>';
+      }).join('');
+    }
+    function pending(){
+      const r = active(); if (!r) return ['start a run first'];
+      const tl = r.tools || {};
+      const left = ret ? items.filter(k => tl[k] && tl[k].outAt && !tl[k].inAt) : items.filter(k => !tl[k] || !tl[k].outAt);
+      if (!left.length) return [];
+      return [(ret ? 'return ' : 'take ') + left.map(toolLabel).join(', ')];
+    }
+    return {render:render, pending:pending};
+  };
+
+  /* ---- widget: run end (return tools, close, CSV) ---- */
+  K.TYPES.runend = function(el, key, cfg){
+    el.classList.add('sopw', 'runbox');
+    el.innerHTML = '<div data-box></div>';
+    const box = $('[data-box]', el);
+    el.addEventListener('click', async e => {
+      const b = e.target.closest('[data-act],[data-tool]'); if (!b) return;
+      if (b.dataset.tool) { const r = active(); if (!r) return; sub('tools', b.dataset.tool, Object.assign({}, r.tools[b.dataset.tool], {inAt:K.nowISO()})); return; }
+      const a = b.dataset.act;
+      if (a === 'close') {
+        const r = active(); if (!r || toolsOut(r).length) return;
+        const st = statusOf(r), now = K.nowISO();
+        patch({endedAt:now, status:st});
+        lastClosed = r.id; setActive('');
+        render();
+        if (cfg.autoDownload !== false) await downloadRun(Object.assign({}, r, {endedAt:now, status:st}));
+      }
+      if (a === 'again') { const r = getRun(lastClosed); if (r) downloadRun(r); }
+      if (a === 'summary') { const r = getRun(lastClosed); if (r) { const s = summaryMd(r); K.saveText(s.file, s.text, 'text/markdown'); } }
+      if (a === 'next') { lastClosed = ''; K.restart(); }
+    });
+    function render(){
+      const r = active();
+      if (!r) {
+        const c = getRun(lastClosed);
+        box.innerHTML = c ? '<div class="k">Run closed</div><p class="sop-sum">' + (c.part ? 'Part <b>' + esc(c.part) + '</b>: ' : '') + '<b>' + esc(STATUS[c.status] || c.status) + '</b>. ' + (cfg.autoDownload !== false ? 'The CSV for this run downloaded.' : '') + '</p>' +
+          '<div class="tbtns"><button class="tbtn go" type="button" data-act="next">Start the next part</button><button class="tbtn" type="button" data-act="again">Download CSV again</button><button class="tbtn" type="button" data-act="summary">Run summary</button></div><p class="sop-note">Every run on this device is also in the full log (Download log, bottom bar).</p>'
+          : '<div class="k">Run end</div>' + noRun();
+        return;
+      }
+      const vals = r.values || {}, ms = ofType('measure'), pass = ms.filter(w => vals[w.key] && vals[w.key].ok).length, fail = ms.filter(w => vals[w.key] && !vals[w.key].ok).length, todo = ms.length - pass - fail, out = toolsOut(r);
+      box.innerHTML = '<div class="k">' + (r.stopped ? 'Run stopped: part failed' : 'Finish the run') + '</div>' +
+        '<p class="sop-sum">' + (r.part ? 'Part <b>' + esc(r.part) + '</b> · ' : '') + 'by <b>' + esc(r.operator) + '</b> · measurements: <b>' + pass + '</b> in spec' + (fail ? ', <b>' + fail + ' out of spec</b>' : '') + (todo ? ', ' + todo + ' not measured' : '') + '</p>' +
+        (r.stopped ? '<p class="sop-note">Stopped at ' + esc(r.stopped.step) + ': ' + esc(r.stopped.item) + ' failed.</p>' : '') +
+        (out.length ? '<div class="k" style="margin-top:6px">Still out: return these first</div><ul class="tl">' + out.map(k => '<li class="out"><span>' + esc(toolLabel(k)) + '</span><span class="tl-st">Out since ' + esc(clock(r.tools[k].outAt)) + '</span><span class="tbtns"><button class="tbtn" type="button" data-tool="' + esc(k) + '"' + (Store.can() ? '' : ' disabled') + '>Returned</button></span></li>').join('') + '</ul>' : '<p class="sop-note">All tools are back.</p>') +
+        '<div class="tbtns"><button class="tbtn go" type="button" data-act="close"' + (out.length || !Store.can() ? ' disabled' : '') + '>Close run' + (cfg.autoDownload !== false ? ' and download CSV' : '') + '</button></div>';
+    }
+    return {render:render};
+  };
+
+  /* ---- widget: run log ---- */
+  K.TYPES.runlog = function(el, key, cfg){
+    el.classList.add('sopw');
+    el.innerHTML = '<div class="copyrow"><div class="k">' + esc(cfg.title || 'Runs on this device') + '</div><div class="tbtns"><button class="tbtn small" type="button" data-act="log">Download full log (CSV)</button></div></div><div class="rl-wrap"></div><p class="sop-note" style="font-size:14px;color:var(--ink-3)">Has operator names: keep exports out of the public repo.</p>';
+    const wrap = $('.rl-wrap', el);
+    el.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      if (b.dataset.act === 'log') downloadLog();
+      if (b.dataset.act === 'sum') { const r = getRun(b.dataset.run); if (r) { const s = summaryMd(r); K.saveText(s.file, s.text, 'text/markdown'); } }
+      if (b.dataset.act === 'csv') { const r = getRun(b.dataset.run); if (r) downloadRun(r); }
+    });
+    function render(){
+      const runs = myRuns().reverse().slice(0, cfg.limit || 25);
+      wrap.innerHTML = !runs.length ? '<p class="none">No runs yet.</p>' : '<table class="rl"><thead><tr><th>Started</th><th>Part</th><th>Who</th><th>Status</th><th></th></tr></thead><tbody>' + runs.map(r => {
+        const st = r.endedAt ? r.status : 'open';
+        return '<tr><td>' + esc(lt(r.startedAt).slice(0, 16)) + '</td><td>' + esc(r.part || '–') + '</td><td>' + esc(r.operator || '') + '</td><td class="' + esc(st) + '">' + esc(STATUS[st] || st) + '</td><td><button class="tbtn small" type="button" data-act="csv" data-run="' + esc(r.id) + '">CSV</button> <button class="tbtn small" type="button" data-act="sum" data-run="' + esc(r.id) + '">Summary</button></td></tr>';
+      }).join('') + '</tbody></table>';
+    }
+    return {render:render};
+  };
+
+  /* ---- bar: run chip and full log ---- */
+  K.MODS.push({
+    gate:gate, blocked:blocked,
+    bar:() => '<span class="runchip" id="sop-chip" aria-live="polite"></span><button class="bbtn hide-sm" id="sop-log" type="button">Download log</button>',
+    barBind:bar => { const b = $('#sop-log', bar); if (b) b.addEventListener('click', downloadLog); },
+    barUpdate:bar => {
+      const c = $('#sop-chip', bar); if (!c) return;
+      const r = active(), out = r ? toolsOut(r).length : 0;
+      c.textContent = r ? 'Run: ' + (r.part || r.operator) + (out ? ' · ' + plural(out, 'tool out', 'tools out') : '') + (r.stopped ? ' · stopped' : '') : 'No run in progress';
+      c.classList.toggle('warn', !!out || !!(r && r.stopped));
+    }
+  });
+  K.on('render', () => paintGate(K.byId[K.cur]));
+  K.on('slide', id => paintGate(K.byId[id]));
+  return {csv:() => csv(myRuns()), active:active, downloadLog:downloadLog};
+}
+const SOP = SOP_MODE ? sopModule({
+  Store:Store, TYPES:TYPES, MODS:MODS, widgets:widgets, byId:byId, slides:slides, $:$, $$:$$, esc:esc, DATA:DATA, META:META, SLUG:SLUG, START:START,
+  lsGet:lsGet, lsSet:lsSet, nowISO:nowISO, ymd:ymd, saveText:saveText, setVal:setVal, autosize:autosize, slideTitleFor:slideTitleFor,
+  titleOf:titleOf, warnOnce:warnOnce, on:on, changed:changed, go:go, next:next, restart:restart, get cur(){ return cur; }
+}) : null;
+
+/* ---------- public API for #deck-custom ---------- */
+const API = {
+  version:ENGINE_VERSION, mode:SOP_MODE ? 'sop' : 'deck', sop:SOP, go:go, next:next, back:back, on:on, esc:esc, fmt:fmt, F:F, money:F.money,
+  bindTips:bindTips, color:color, hatchDefs:hatchDefs, rbar:rbar, data:DATA,
+  model:k => MODELS[k] || {}, asset:p => (ASSETS && ASSETS[p]) || p, scheme:scheme,
+  get current(){ return cur; }, get path(){ return hist.slice(); }, get visited(){ return Array.from(visited); },
+  chart(name, fn){ CUSTOM[name] = fn; },
+  /* tooling only (layout check): show a slide without asking the gate */
+  peek(id){ if (byId[id] && id !== cur) { hist.push(id); show(id); } }
+};
+window.Deck = API;
+(window.DECK_CUSTOM || []).forEach(fn => { try { fn(API); } catch(e) { console.error('deck: custom code failed', e); } });
+
+/* ---------- boot ---------- */
+function start(hot){
+  fit(); buildBar(); decorate(); syncThemeBtn();
+  $$('[data-widget]', stage).forEach(el => {
+    const key = el.dataset.widget, cfg = (DATA.widgets || {})[key];
+    if (!cfg || !TYPES[cfg.type]) { warnOnce('widget ' + key + ' has no valid config in deck-data'); return; }
+    const inst = TYPES[cfg.type](el, key, cfg) || {};
+    inst.key = key; inst.cfg = cfg; inst.el = el; inst.slide = el.closest('.slide');
+    widgets.push(inst);
+  });
+  $$('[data-chart]', stage).forEach(mountChart);
+  setSession(session);
+  let saved = null; try { saved = JSON.parse(ssGet('-nav') || 'null'); } catch(e) {}
+  if (hot && Array.isArray(hot.hist)) saved = hot;
+  if (saved && Array.isArray(saved.visited)) visited = new Set(saved.visited.filter(id => byId[id]));
+  const want = decodeURIComponent((location.hash || '').slice(1));
+  const sh = saved && Array.isArray(saved.hist) ? saved.hist.filter(id => byId[id]) : [];
+  if (byId[want]) hist = sh.length && sh[sh.length - 1] === want ? sh : [want];
+  else hist = sh.length ? sh : [START];
+  if (!hist.length) hist = [START];
+  fixAssets(stage);
+  show(hist[hist.length - 1]);
+  if (STANDALONE && SNAP && ssGet('-noticed') !== '1') {
+    const n = document.createElement('div'); n.className = 'notice'; n.setAttribute('role', 'status');
+    n.innerHTML = '<span>Offline copy with meeting data' + (SNAP.takenAt ? ' from ' + esc(new Date(SNAP.takenAt).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'})) : '') + '. It may hold student names: keep this file out of the public repo.</span><button type="button" aria-label="Dismiss">×</button>';
+    app.insertBefore(n, bar); $('button', n).addEventListener('click', () => { n.remove(); ssSet('-noticed', '1'); fit(); }); fit();
+  }
+  Store.init();
+}
+try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({hist:hist, visited:Array.from(visited)})); } catch(e) {}
+if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start);
+else start((window.claude && window.claude.hot && window.claude.hot.data) || null);
+})();
+</script>
+<!-- CHANGELOG
+  v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 5 quick checks, 1 checkpoints.
+  v1.0.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
+-->

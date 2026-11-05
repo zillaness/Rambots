@@ -1,9 +1,9 @@
 ---
 file: README.md
-version: 1.2
+version: 1.3
 author: Sam Cao
 created: 2026-10-14
-last_updated: 2026-10-14
+last_updated: 2026-11-05
 description: How the presentations GitHub Pages site on this branch is organized and rebuilt.
 ai_update: Update last_updated and version. Append changelog at bottom.
 ---
@@ -21,6 +21,7 @@ design-system branches.
 | `index.html` | Landing page (generated) |
 | `<slug>/index.html` | Viewer page for a deck or document (generated), or a hand-made HTML study sheet / game (copied in as-is) |
 | `<slug>/slides/`, `<slug>/thumbs/` | Rendered slide or page images (generated) |
+| `study-<tool>/` | Interactive tool study guides (one per quiz), built in the study guide workspace and copied in as-is with their `img/` folders |
 | `<slug>/overlays/` | Animated GIFs laid over their slide so they keep moving (generated) |
 | `files/` | Downloadable originals and PDFs, named `name_vMAJOR.MINOR.ext` |
 | `assets/` | Shared CSS/JS and index thumbnails |
@@ -53,3 +54,4 @@ branch and at its direct URL.
 - v1.0 (2026-10-14): Initial release.
 - v1.1 (2026-10-14): Documented locked items (`"gated": true`).
 - v1.2 (2026-10-14): Clarified where the closing taps of the touch code can go.
+- v1.3 (2026-11-05): Documented the `study-<tool>/` study guide folders.
