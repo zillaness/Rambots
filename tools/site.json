@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "author": "Sam Cao",
     "created": "2026-10-14",
     "last_updated": "2026-11-05",
@@ -11,7 +11,7 @@
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "updated": "2026-11-05",
   "topics": [
     "FRC Basics",
@@ -981,7 +981,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 8.7",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "description": "Zeroing, collets, workholding, the e-stop, dust, and staying with the job.",
       "tags": [
         "study guide",
@@ -1046,6 +1046,11 @@
       "version": "1.5.2",
       "date": "2026-11-05",
       "note": "Safety, Electrical, Laser Cutter, Drill Press, and CNC Router study guides updated: both extinguisher locations, footer version labels."
+    },
+    {
+      "version": "1.5.3",
+      "date": "2026-11-05",
+      "note": "CNC Router study guide v1.1.4: new e-stop checkpoint situations."
     }
   ]
 }

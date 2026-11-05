@@ -1,8 +1,8 @@
 <title>CNC Router Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_cnc_router_study_v1.1.3.html
-  version: 1.1.3
+  file: rambots_cnc_router_study_v1.1.4.html
+  version: 1.1.4
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "CNC Router Study",
   "slug": "rambots_cnc_router_study",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-cnc-router-study-v1"
@@ -778,8 +778,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
       "cp-estop-no"
      ],
      "labels": {
-      "cp-estop-no": "A or B. E-stop for the chips. Pause for the loose part and the clamp. / Pause for all three. The e-stop is only for fires.",
-      "cp-estop-yes": "C. E-stop for the loose part and the clamp. Pause for the packed chips."
+      "cp-estop-no": "A or B. E-stop for the depth check. Pause for the snapped bit and the teammate. / Pause for all three. The e-stop is only for fires.",
+      "cp-estop-yes": "C. E-stop for the snapped bit and the teammate. Pause for the depth check."
      }
     }
    ],
@@ -1014,11 +1014,11 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 </section>
 
 <section class="slide" data-id="cp-estop" data-title="Checkpoint: E-stop or pause">
-  <div class="hd"><div class="chip">8.7 · Checkpoint</div><h2 class="t sm">Three things go wrong on three jobs: a part breaks loose, chips pack a slot, and the spindle is about to hit a clamp. Which get the e-stop, and which gets pause?</h2></div>
+  <div class="hd"><div class="chip">8.7 · Checkpoint</div><h2 class="t sm">Three moments on three jobs: the end mill snaps and the spindle keeps spinning, a teammate reaches toward the gantry while it moves, and you want to check the first pass&#x27;s depth before it goes on. Which get the e-stop, and which gets pause?</h2></div>
   <div class="body mid"><div data-fork="Pick one">
-    <button data-to="cp-estop-no" data-hint="">E-stop for the chips. Pause for the loose part and the clamp.</button>
+    <button data-to="cp-estop-no" data-hint="">E-stop for the depth check. Pause for the snapped bit and the teammate.</button>
     <button data-to="cp-estop-no" data-hint="">Pause for all three. The e-stop is only for fires.</button>
-    <button data-to="cp-estop-yes" data-hint="">E-stop for the loose part and the clamp. Pause for the packed chips.</button>
+    <button data-to="cp-estop-yes" data-hint="">E-stop for the snapped bit and the teammate. Pause for the depth check.</button>
   </div></div>
   <div class="ft"><span>Checkpoint: you can't go on until you get it right</span></div>
   <aside class="notes">This is a can&#x27;t-fail topic on the quiz.</aside>
@@ -1026,7 +1026,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cp-estop-yes" data-title="Right: E-stop or pause" data-next="qc-pause">
   <div class="hd"><div class="chip">8.7 · Checkpoint</div><h2 class="t sm">Right. Emergencies get the e-stop.</h2></div>
-  <div class="body mid"><div class="card lg"><p>A loose part or an about-to-happen crash can&#x27;t wait, so the physical e-stop stops the spindle right away. Packed chips aren&#x27;t an emergency: pause, let it stop, clear them, and resume.</p></div></div>
+  <div class="body mid"><div class="card lg"><p>A broken bit or a hand near a moving gantry can&#x27;t wait, so the physical e-stop stops everything right away. Checking a depth isn&#x27;t an emergency: pause, let it stop, look, and resume.</p></div></div>
   <div class="ft"><span>Press → to go on</span></div>
   <aside class="notes"></aside>
 </section>
@@ -2900,4 +2900,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.1 (2026-11-05): Final check fix: gloves card reworded as a plain rule.
   v1.1.2 (2026-11-05): Gloves card removed; the bank no longer tests gloves on stopped machines (Sam: not a teaching point).
   v1.1.3 (2026-11-05): Quiz footer points to bank v0.1.2.
+  v1.1.4 (2026-11-05): E-stop checkpoint uses new situations (snapped bit, hand near the gantry, depth check) so it no longer rehearses Q14 and Q15.
 -->
