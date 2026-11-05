@@ -1,8 +1,8 @@
 <title>CNC Router Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_cnc_router_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_cnc_router_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "CNC Router Study",
   "slug": "rambots_cnc_router_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-cnc-router-study-v1"
@@ -856,9 +856,9 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-bits" data-title="Handling end mills">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Hold a bit by its shank, set aside any damaged one, and change bits only with the spindle stopped</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">By the shank</div><p>Handle end mills by the shank, not the flutes. Never touch the flutes while the bit spins, even slowly.</p></div><div class="card"><div class="k">Damaged bits</div><p>A chipped or damaged end mill can shatter in a cut. Set it aside.</p></div><div class="card"><div class="k">Bit changes</div><p>Change bits with the spindle stopped and the machine locked out.</p></div><div class="card"><div class="k">Gloves</div><p>With the spindle off, gloves are OK for handling a sharp bit. Take them off before the spindle runs.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">By the shank</div><p>Handle end mills by the shank, not the flutes. Never touch the flutes while the bit spins, even slowly.</p></div><div class="card"><div class="k">Damaged bits</div><p>A chipped or damaged end mill can shatter in a cut. Set it aside.</p></div><div class="card"><div class="k">Bit changes</div><p>Change bits with the spindle stopped and the machine locked out.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill 4x8 safety page</span></div>
-  <aside class="notes">To confirm in the shop: how we lock out the machine for bit changes. The gloves line follows the bank&#x27;s Q4; Sam to confirm it fits the team&#x27;s no-gloves rule.</aside>
+  <aside class="notes">To confirm in the shop: how we lock out the machine for bit changes.</aside>
 </section>
 
 <section class="slide" data-id="qc-chipped" data-title="Quick check: A chipped bit">
@@ -2898,4 +2898,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 7 quick checks, 4 checkpoints.
   v1.1 (2026-11-05): Review fixes: checkpoint hints removed, since they show on screen and gave answers away; rewrote qc-collet, qc-z (moved part), cp-dust, and cp-estop (sorting e-stop vs pause, now also covers Q15). Brand names kept to foot lines and notes.
   v1.1.1 (2026-11-05): Final check fix: gloves card reworded as a plain rule.
+  v1.1.2 (2026-11-05): Gloves card removed; the bank no longer tests gloves on stopped machines (Sam: not a teaching point).
 -->
