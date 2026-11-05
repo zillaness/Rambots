@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.5.6",
+    "version": "1.5.7",
     "author": "Sam Cao",
     "created": "2026-10-14",
     "last_updated": "2026-11-05",
@@ -11,7 +11,7 @@
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "updated": "2026-11-05",
   "topics": [
     "FRC Basics",
@@ -821,7 +821,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 7.8, 7.9",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Grinding (Section A) and the cut-off wheel (Section B): guards, grip, binding, and the plane of the wheel.",
       "tags": [
         "study guide",
@@ -837,7 +837,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 7.10",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Collets, bits and wheels, speed, and clamping small parts.",
       "tags": [
         "study guide",
@@ -853,7 +853,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 7.11",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Blades, plunge and flush cuts, heat, and cutting near the robot.",
       "tags": [
         "study guide",
@@ -869,7 +869,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 7.12",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Blades, the shoe, cutting into walls, and finishing a cut.",
       "tags": [
         "study guide",
@@ -885,7 +885,7 @@
       "kind": "html",
       "type": "sheet",
       "label": "Study guide · 7.13",
-      "version": "1.1",
+      "version": "1.1.1",
       "description": "Bits, collets, depth per pass, and feed direction outside and inside a cutout.",
       "tags": [
         "study guide",
@@ -1066,6 +1066,11 @@
       "version": "1.5.6",
       "date": "2026-11-05",
       "note": "Final-sweep wording fixes: Measuring, Electrical, Jigsaw, Circular Saw, Track Saw, Metal Chop Saw, Portaband."
+    },
+    {
+      "version": "1.5.7",
+      "date": "2026-11-05",
+      "note": "Angle Grinder, Rotary Tool, Oscillating Tool, Reciprocating Saw, and Router study guides: nine checks rewritten with new scenarios."
     }
   ]
 }

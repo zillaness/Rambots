@@ -1,8 +1,8 @@
 <title>Oscillating Tool Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_multitool_study_v1.1.html
-  version: 1.1
+  file: rambots_multitool_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Oscillating Tool Study",
   "slug": "rambots_multitool_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-multitool-study-v1"
@@ -703,27 +703,27 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "type": "custom",
    "fn": "quiz",
    "id": "qc-hot",
-   "topic": "A hot blade",
+   "topic": "A hot part",
    "review": "t-wrap",
-   "q": "You've just finished a long sanding job and want to wipe the dust off the pad and the part. What's right?",
+   "q": "You just cut a slot in a polycarbonate spacer. A teammate picks it up by the cut and drops it right away. Why?",
    "options": [
     {
-     "t": "Wipe them right away, since sanding pads stay cool",
+     "t": "Polycarbonate gives a static shock after cutting",
      "ok": false,
-     "why": "Pads and parts heat up from friction too."
+     "why": "It can hold a little static, but not enough to make someone drop it."
     },
     {
-     "t": "Only the part is hot, so wipe the pad",
+     "t": "The cut edge is sticky with melted glue from the blade",
      "ok": false,
-     "why": "Both get hot."
+     "why": "Blades don't carry glue. The heat came from the cut itself."
     },
     {
-     "t": "Wait for them to cool first",
+     "t": "Friction left the cut area hot",
      "ok": true,
-     "why": "Right. Friction makes both hot enough to burn."
+     "why": "Right. Give a freshly cut part a moment before anyone handles the cut."
     }
    ],
-   "after": "Let the blade and the part cool before you touch them."
+   "after": "Cut edges can burn. Let them sit before you handle them."
   },
   "qc-ppe": {
    "type": "custom",
@@ -771,15 +771,15 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     },
     {
      "id": "cp-skin",
-     "topic": "It cuts skin",
+     "topic": "Hands out of the path",
      "review": "t-hands",
      "yes": "cp-skin-yes",
      "no": [
       "cp-skin-no"
      ],
      "labels": {
-      "cp-skin-yes": "A. No. The teeth move thousands of times a minute and cut skin. Hands stay out of its path",
-      "cp-skin-no": "B or C. It's true, but only at low speed / It's true for sanding pads, so blades are fine too"
+      "cp-skin-yes": "A. No. When the blade breaks through, it comes out right where that hand is",
+      "cp-skin-no": "B or C. Yes. The panel is between the blade and your hand / Yes, as long as you cut slowly"
      }
     },
     {
@@ -913,27 +913,27 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes">Say &quot;using the multi-tool&quot; out loud and look around before every start.</aside>
 </section>
 
-<section class="slide" data-id="cp-skin" data-title="Checkpoint: It cuts skin">
-  <div class="hd"><div class="chip">7.11 · Checkpoint</div><h2 class="t sm">A teammate saw a video and says you can touch a running multi-tool blade because it just tickles. What do you tell them?</h2></div>
+<section class="slide" data-id="cp-skin" data-title="Checkpoint: Hands out of the path">
+  <div class="hd"><div class="chip">7.11 · Checkpoint</div><h2 class="t sm">You&#x27;re plunge cutting a notch in a clamped panel. Your free hand rests on the panel right behind where the blade will come through. Is that OK?</h2></div>
   <div class="body mid"><div data-fork="Pick one">
-    <button data-to="cp-skin-yes" data-hint="">No. The teeth move thousands of times a minute and cut skin. Hands stay out of its path</button>
-    <button data-to="cp-skin-no" data-hint="">It&#x27;s true, but only at low speed</button>
-    <button data-to="cp-skin-no" data-hint="">It&#x27;s true for sanding pads, so blades are fine too</button>
+    <button data-to="cp-skin-yes" data-hint="">No. When the blade breaks through, it comes out right where that hand is</button>
+    <button data-to="cp-skin-no" data-hint="">Yes. The panel is between the blade and your hand</button>
+    <button data-to="cp-skin-no" data-hint="">Yes, as long as you cut slowly</button>
   </div></div>
   <div class="ft"><span>Checkpoint: you can't go on until you get it right</span></div>
   <aside class="notes">This is a can&#x27;t-fail topic on the quiz.</aside>
 </section>
 
-<section class="slide" data-id="cp-skin-yes" data-title="Right: It cuts skin" data-next="cp-clamp">
-  <div class="hd"><div class="chip">7.11 · Checkpoint</div><h2 class="t sm">Right. It cuts fingers like it cuts plastic.</h2></div>
-  <div class="body mid"><div class="card lg"><p>The small swing is why it feels gentle in videos, but the teeth are still cutting at every stroke. Keep hands out of the path in front and behind.</p></div></div>
+<section class="slide" data-id="cp-skin-yes" data-title="Right: Hands out of the path" data-next="cp-clamp">
+  <div class="hd"><div class="chip">7.11 · Checkpoint</div><h2 class="t sm">Right. Behind the cut is in the blade&#x27;s path too.</h2></div>
+  <div class="body mid"><div class="card lg"><p>A plunge cut ends with the teeth poking out the far side. Rest that hand somewhere well clear of the cut, front and back, or keep it on the tool.</p></div></div>
   <div class="ft"><span>Press → to go on</span></div>
   <aside class="notes"></aside>
 </section>
 
-<section class="slide" data-id="cp-skin-no" data-title="Not quite: It cuts skin" data-next="cp-skin">
-  <div class="hd"><div class="chip">7.11 · Checkpoint</div><h2 class="t sm">Not quite. Think about what the teeth are doing.</h2></div>
-  <div class="body mid"><div class="card lg"><p>Go back to the hands slide. What do people get wrong about this blade?</p></div></div>
+<section class="slide" data-id="cp-skin-no" data-title="Not quite: Hands out of the path" data-next="cp-skin">
+  <div class="hd"><div class="chip">7.11 · Checkpoint</div><h2 class="t sm">Not quite. Follow the blade all the way through.</h2></div>
+  <div class="body mid"><div class="card lg"><p>Go back to the hands slide. Where is the blade&#x27;s path during and after a plunge cut?</p></div></div>
   <div class="ft"><span>Press → to try the question again</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1005,8 +1005,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes">To confirm in the shop: the PPE warnings in our own multi-tool&#x27;s manual (the bank used a related manual&#x27;s standard warnings).</aside>
 </section>
 
-<section class="slide" data-id="qc-hot" data-title="Quick check: A hot blade">
-  <div class="hd"><div class="chip">7.11 · Quick check</div><h2 class="t sm">Quick check: after a long sanding job</h2></div>
+<section class="slide" data-id="qc-hot" data-title="Quick check: A hot part">
+  <div class="hd"><div class="chip">7.11 · Quick check</div><h2 class="t sm">Quick check: a dropped spacer</h2></div>
   <div class="body mid"><div data-chart="qc-hot"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -2862,6 +2862,7 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 })();
 </script>
 <!-- CHANGELOG
+  v1.1.1 (2026-11-05): Second review sweep: Rewrote cp-skin (hand behind a plunge cut) and qc-hot (a hot cut edge) so neither copies its bank question.
   v1.1 (2026-11-05): Review fixes: rewrote cp-clamp, qc-melt, and qc-robot, and rotated right-answer positions. No photo: Openverse searches found none.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 8 quick checks, 3 checkpoints. Checkpoint hint lines removed.
 -->

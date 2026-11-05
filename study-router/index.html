@@ -1,8 +1,8 @@
 <title>Router Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_router_study_v1.1.html
-  version: 1.1
+  file: rambots_router_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Router Study",
   "slug": "rambots_router_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-router-study-v1"
@@ -755,27 +755,27 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "type": "custom",
    "fn": "quiz",
    "id": "qc-gloves",
-   "topic": "Gloves",
+   "topic": "Things that catch",
    "review": "t-hands",
-   "q": "The shop is cold. A teammate wants to wear thin knit gloves while routing. What's the rule?",
+   "q": "A teammate leans over to route an edge with long sleeves down and a hoodie string hanging near the router's base. What's the risk?",
    "options": [
     {
-     "t": "Thin gloves are fine since they're tight",
+     "t": "None, since the base covers the bit",
      "ok": false,
-     "why": "Any glove can catch in a spinning bit."
+     "why": "The bit sticks out below the base, and cloth can be drawn under the edge."
     },
     {
-     "t": "No gloves on the router",
+     "t": "The spinning bit can catch the cloth and pull it, and the hand with it, in toward the bit",
      "ok": true,
-     "why": "Right. A glove can catch in the spinning bit."
+     "why": "Right. Roll the sleeves and get the string out of the way before switching on."
     },
     {
-     "t": "Fine, as long as both hands stay on the handles",
+     "t": "It only matters on a router table",
      "ok": false,
-     "why": "Gloves are off at spinning tools, wherever your hands are."
+     "why": "A handheld router spins just as fast, and you lean right over it."
     }
    ],
-   "after": "No gloves at anything that spins."
+   "after": "Nothing that can catch goes near a spinning bit: no gloves, sleeves rolled, nothing hanging."
   },
   "qc-ppe": {
    "type": "custom",
@@ -1138,8 +1138,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
-<section class="slide" data-id="qc-gloves" data-title="Quick check: Gloves">
-  <div class="hd"><div class="chip">7.13 · Quick check</div><h2 class="t sm">Quick check: a cold shop</h2></div>
+<section class="slide" data-id="qc-gloves" data-title="Quick check: Things that catch">
+  <div class="hd"><div class="chip">7.13 · Quick check</div><h2 class="t sm">Quick check: sleeves and strings</h2></div>
   <div class="body mid"><div data-chart="qc-gloves"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -3009,6 +3009,7 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 })();
 </script>
 <!-- CHANGELOG
+  v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-gloves (sleeves and strings near the base) so it doesn't copy Q12.
   v1.1 (2026-11-05): Review fixes: rewrote qc-inside and the inside-cutout card, changed the passes example to 3/8 ÷ 1/8, rotated right-answer positions, added two photos.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 11 quick checks, 4 checkpoints. Checkpoint hint lines removed.
 -->

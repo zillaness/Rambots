@@ -1,8 +1,8 @@
 <title>Angle Grinder Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_angle_grinder_study_v1.1.html
-  version: 1.1
+  file: rambots_angle_grinder_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Angle Grinder Study",
   "slug": "rambots_angle_grinder_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-angle-grinder-study-v1"
@@ -627,51 +627,51 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "id": "qc-a-firstrun",
    "topic": "First run",
    "review": "t-a-inspect",
-   "q": "Why run a freshly mounted wheel at full speed for a whole minute, pointed away from everyone, before it touches any work?",
+   "q": "During its first spin, a new grinding wheel visibly wobbles and the grinder shakes more than usual. What do you do?",
    "options": [
     {
-     "t": "It warms the wheel up so it cuts better",
+     "t": "Keep it running; a wobble settles once the wheel warms up",
      "ok": false,
-     "why": "Warmth isn't the goal. The run is a safety test."
+     "why": "Heat doesn't true a wheel. A wobbling wheel is under stress it wasn't made for."
     },
     {
-     "t": "A wheel with hidden damage is most likely to fly apart early, so you want that to happen with nobody in its line",
+     "t": "Let go of the switch, let it stop, take the battery out, and have a mentor check the wheel and how it's mounted",
      "ok": true,
-     "why": "Right. The run catches damage a look-over and ring test can miss."
+     "why": "Right. Wobble means something is wrong with the wheel or its mounting."
     },
     {
-     "t": "It lets the flange nut tighten itself",
+     "t": "Press it lightly against scrap to wear it round",
      "ok": false,
-     "why": "You tighten the nut with the wrench. The run doesn't do that."
+     "why": "Loading a wheel that's already off balance makes it worse."
     }
    ],
-   "after": "New wheel: full speed, a full minute, nobody in line, then work."
+   "after": "A wheel that wobbles or shakes doesn't touch work until a mentor has looked at it."
   },
   "qc-a-hold": {
    "type": "custom",
    "fn": "quiz",
    "id": "qc-a-hold",
-   "topic": "Holding the grinder",
+   "topic": "Two hands",
    "review": "t-a-hold",
-   "q": "What is the grinder's side handle for?",
+   "q": "Mid-grind, you want to shift the part in the vise, so you hold the running grinder by its body with one hand and reach for the vise handle with the other. What's the problem?",
    "options": [
     {
-     "t": "Hanging the grinder on a hook between jobs",
+     "t": "None, as long as the wheel isn't touching the part",
      "ok": false,
-     "why": "It's a grip, and it stays on while you work."
+     "why": "A running wheel can catch anything it brushes, and one hand can't control the twist."
     },
     {
-     "t": "Steadying the part with the same hand while you grind",
+     "t": "None, because the guard protects the hand on the vise",
      "ok": false,
-     "why": "The part goes in the vise. Your hand stays on the handle."
+     "why": "The guard catches pieces of a burst wheel. It doesn't hold the grinder steady."
     },
     {
-     "t": "Giving your second hand a solid grip, so you can hold on when the grinder jumps",
+     "t": "One hand can't hold the grinder if the wheel snags, so switch off and let it stop before either hand lets go",
      "ok": true,
-     "why": "Right. A grinder that snags twists hard, and two hands on the body and side handle keep it under control."
+     "why": "Right. Adjusting the vise is a switched-off job."
     }
    ],
-   "after": "One hand on the body, one on the side handle, and the part in the vise."
+   "after": "While it runs, both hands stay on it. Any other job waits for the wheel to stop."
   },
   "qc-a-kickback": {
    "type": "custom",
@@ -755,27 +755,27 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "type": "custom",
    "fn": "quiz",
    "id": "qc-a-coast",
-   "topic": "Setting it down",
+   "topic": "Passing the grinder",
    "review": "t-a-finish",
-   "q": "You let go of the switch and set the grinder straight down on the bench, wheel first. What can happen?",
+   "q": "A teammate lets go of the switch and right away holds the grinder out to you while the wheel is still turning. What do you do?",
    "options": [
     {
-     "t": "Nothing. The wheel stops the instant you let go",
+     "t": "Take it by the guard, which keeps your fingers away from the wheel",
      "ok": false,
-     "why": "It coasts for a few seconds."
+     "why": "The guard isn't a handle, and the wheel is still turning right under it."
     },
     {
-     "t": "The coasting wheel grabs the bench and spins the grinder off it",
+     "t": "Tell them to keep holding it until the wheel stops",
      "ok": true,
-     "why": "Right. Wait for the stop, then set it down wheel up."
+     "why": "Right. A turning wheel passed between people can catch a hand, a sleeve, or the bench."
     },
     {
-     "t": "The guard keeps the wheel from touching anything",
+     "t": "Take it quickly by the side handle, since the motor is off",
      "ok": false,
-     "why": "The guard only covers part of the wheel."
+     "why": "Off isn't stopped. The wheel coasts for a few seconds."
     }
    ],
-   "after": "Wait for the stop. Wheel up, off the bench."
+   "after": "Nobody passes, sets down, or grabs a grinder until its wheel has stopped."
   },
   "qc-a-spot": {
    "type": "custom",
@@ -911,27 +911,27 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "type": "custom",
    "fn": "quiz",
    "id": "qc-b-hot",
-   "topic": "The cut end",
-   "review": "t-b-which",
-   "q": "You just cut a steel rod and want to feel whether the end came out square. What's right?",
+   "topic": "After the cut",
+   "review": "t-a-finish",
+   "q": "You finished some cut-off work near a trash bin and packed up. Ten minutes later, there's a burning smell by the bench. What most likely happened?",
    "options": [
     {
-     "t": "Let it cool first, then file the burr and check it",
+     "t": "A spark landed in the bin and has been smoldering. Cleanup should include checking where the sparks went",
      "ok": true,
-     "why": "Right. The end is hot and sharp."
+     "why": "Right. Sparks can smolder in paper or rags long after the grinder is off."
     },
     {
-     "t": "Grab it right away; steel cools almost instantly",
+     "t": "The cut-off wheel overheated after you set the grinder down",
      "ok": false,
-     "why": "A fresh cut end stays hot enough to burn for a while."
+     "why": "A stopped wheel cools down. It doesn't start burning later."
     },
     {
-     "t": "Check it with a gloved hand",
+     "t": "The battery is overheating from the cut",
      "ok": false,
-     "why": "Let it cool instead. It still has a sharp burr."
+     "why": "Possible with damage, but sparks next to a trash bin are the far likelier cause."
     }
    ],
-   "after": "Cool, deburr, then handle."
+   "after": "Before you walk away, look over everything that was in the spark path."
   },
   "qc-b-spot": {
    "type": "custom",
@@ -1208,7 +1208,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-a-inspect" data-title="Inspect and first run">
   <div class="hd"><div class="chip">7.8 · Inspect</div><h2 class="t sm">Look a wheel over before it goes on, then run it for a minute pointed away</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Look it over</div><p>Check both faces and the edge for chips and cracks. Check the rating, and the expiration date stamped on the metal center ring.</p></div><div class="card"><div class="k">Ring test</div><p>Hang the dry, clean wheel on a pin and tap gently on both sides of center, then turn it 45° and tap again. A dull thud means don&#x27;t use it: show a mentor.</p></div><div class="card"><div class="k">Resin wheels</div><p>Most grinder wheels are resin bonded and ring less clearly, so the look-over matters too. When in doubt, ask a mentor.</p></div><div class="card"><div class="k">First minute</div><p>Point it away from everyone, nobody in line with the wheel, and run it at full speed for one minute before it touches work. A bad wheel usually breaks then.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Look it over</div><p>Check both faces and the edge for chips and cracks. Check the rating, and the expiration date stamped on the metal center ring.</p></div><div class="card"><div class="k">Ring test</div><p>Hang the dry, clean wheel on a pin and tap gently on both sides of center, then turn it 45° and tap again. A dull thud means don&#x27;t use it: show a mentor.</p></div><div class="card"><div class="k">Resin wheels</div><p>Most grinder wheels are resin bonded and ring less clearly, so the look-over matters too. When in doubt, ask a mentor.</p></div><div class="card"><div class="k">First minute</div><p>Point it away from everyone, nobody in line with the wheel, and run it at full speed for one minute before it touches work. A bad wheel usually breaks then. If it wobbles or shakes, stop and get a mentor.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; OSHA 1910.215(d)(1); NFFS ring test guide</span></div>
   <aside class="notes">Ring test a good wheel so students hear it, and show where the expiration date is on the metal ring.</aside>
 </section>
@@ -1228,7 +1228,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 </section>
 
 <section class="slide" data-id="qc-a-firstrun" data-title="Quick check: First run">
-  <div class="hd"><div class="chip">7.8 · Quick check</div><h2 class="t sm">Quick check: the first minute</h2></div>
+  <div class="hd"><div class="chip">7.8 · Quick check</div><h2 class="t sm">Quick check: a wobbly new wheel</h2></div>
   <div class="body mid"><div data-chart="qc-a-firstrun"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -1244,8 +1244,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes">Show the side handle, and demonstrate stance with the battery out. Point out which edges on a sample part would make the wheel bite.</aside>
 </section>
 
-<section class="slide" data-id="qc-a-hold" data-title="Quick check: Holding the grinder">
-  <div class="hd"><div class="chip">7.8 · Quick check</div><h2 class="t sm">Quick check: a small bracket</h2></div>
+<section class="slide" data-id="qc-a-hold" data-title="Quick check: Two hands">
+  <div class="hd"><div class="chip">7.8 · Quick check</div><h2 class="t sm">Quick check: one hand on the grinder</h2></div>
   <div class="body mid"><div data-chart="qc-a-hold"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -1286,8 +1286,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
-<section class="slide" data-id="qc-a-coast" data-title="Quick check: Setting it down">
-  <div class="hd"><div class="chip">7.8 · Quick check</div><h2 class="t sm">Quick check: done grinding</h2></div>
+<section class="slide" data-id="qc-a-coast" data-title="Quick check: Passing the grinder">
+  <div class="hd"><div class="chip">7.8 · Quick check</div><h2 class="t sm">Quick check: handing it over</h2></div>
   <div class="body mid"><div data-chart="qc-a-coast"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -1444,8 +1444,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
-<section class="slide" data-id="qc-b-hot" data-title="Quick check: The cut end">
-  <div class="hd"><div class="chip">7.9 · Quick check</div><h2 class="t sm">Quick check: checking the length</h2></div>
+<section class="slide" data-id="qc-b-hot" data-title="Quick check: After the cut">
+  <div class="hd"><div class="chip">7.9 · Quick check</div><h2 class="t sm">Quick check: a burning smell</h2></div>
   <div class="body mid"><div data-chart="qc-b-hot"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -3308,6 +3308,7 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 })();
 </script>
 <!-- CHANGELOG
+  v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-a-firstrun, qc-a-hold, qc-a-coast, and qc-b-hot so none copies its bank question; added the wobble rule to the first-minute card.
   v1.1 (2026-11-05): Review fixes: rewrote 7 checks that echoed the bank, rotated right-answer positions, added a photo.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 16 quick checks, 6 checkpoints. Checkpoint hint lines removed.
 -->

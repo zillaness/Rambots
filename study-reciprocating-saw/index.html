@@ -1,8 +1,8 @@
 <title>Reciprocating Saw Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_recip_saw_study_v1.1.html
-  version: 1.1
+  file: rambots_recip_saw_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Reciprocating Saw Study",
   "slug": "rambots_recip_saw_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-recip-saw-study-v1"
@@ -616,7 +616,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     {
      "t": "Take the battery out and change to a fine-tooth metal blade",
      "ok": true,
-     "why": "Right. With fine teeth, several teeth share the thin edge, so none of them snags it."
+     "why": "Right. With fine teeth, more teeth are on the thin edge, so none of them snags it."
     }
    ],
    "after": "Thin metal of any shape gets a fine-tooth metal blade."
@@ -703,27 +703,27 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "type": "custom",
    "fn": "quiz",
    "id": "qc-wall",
-   "topic": "Hidden wires",
+   "topic": "Behind the cut",
    "review": "t-bind",
-   "q": "Why could holding the saw by its metal shoe shock you when you cut into a wall?",
+   "q": "You're about to cut an old pipe clamped at the edge of the bench. A teammate is crouched on the far side, sorting parts right below the pipe. What's the problem?",
    "options": [
     {
-     "t": "The shoe builds up static from all the strokes",
+     "t": "None, the pipe is between you and them",
      "ok": false,
-     "why": "Static isn't the danger. A hidden live wire is."
+     "why": "The blade reaches past the pipe as it strokes."
     },
     {
-     "t": "A cordless battery leaks current into the shoe",
+     "t": "None, as long as you cut slowly",
      "ok": false,
-     "why": "The battery isn't the source. The wire the blade hits is."
+     "why": "Slow strokes still reach out past the work."
     },
     {
-     "t": "If the blade hits a hidden live wire, electricity can run through the blade and metal parts into your hand",
+     "t": "The blade tip pokes out past the pipe on every stroke, so they need to move before you start",
      "ok": true,
-     "why": "Right. The insulated grips are where your hands go, and you check behind the wall first."
+     "why": "Right. Look at where the blade tip will travel, not just where the teeth start."
     }
    ],
-   "after": "Check behind first, and hold only the insulated grips."
+   "after": "Before any cut, check what's behind and below it, and use a blade only as long as the job needs."
   },
   "qc-ppe": {
    "type": "custom",
@@ -1021,8 +1021,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
-<section class="slide" data-id="qc-wall" data-title="Quick check: Hidden wires">
-  <div class="hd"><div class="chip">7.12 · Quick check</div><h2 class="t sm">Quick check: the back you can&#x27;t see</h2></div>
+<section class="slide" data-id="qc-wall" data-title="Quick check: Behind the cut">
+  <div class="hd"><div class="chip">7.12 · Quick check</div><h2 class="t sm">Quick check: someone past the cut</h2></div>
   <div class="body mid"><div data-chart="qc-wall"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -2899,6 +2899,7 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 })();
 </script>
 <!-- CHANGELOG
+  v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-wall (a teammate past the cut) and reworded qc-blade's feedback to "more teeth on the thin edge."
   v1.1 (2026-11-05): Review fixes: rewrote qc-finish, qc-wall, qc-lockoff, and qc-blade, rotated right-answer positions, added a photo.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 9 quick checks, 3 checkpoints. Checkpoint hint lines removed.
 -->

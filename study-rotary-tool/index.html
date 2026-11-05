@@ -1,8 +1,8 @@
 <title>Rotary Tool Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_rotary_tool_study_v1.1.html
-  version: 1.1
+  file: rambots_rotary_tool_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Rotary Tool Study",
   "slug": "rambots_rotary_tool_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-rotary-tool-study-v1"
@@ -575,25 +575,25 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "id": "qc-insert",
    "topic": "Shank depth",
    "review": "t-collet",
-   "q": "To reach into a deep slot, a teammate pulls the bit out until only the end of the shank is in the collet. What's the problem?",
+   "q": "Partway through a long job, you notice the bit has slid partway out of the collet and is starting to wobble. What do you do?",
    "options": [
     {
-     "t": "None, as long as the collet nut is tight",
+     "t": "Keep going at a lower speed so the wobble stays small",
      "ok": false,
-     "why": "A tight nut on a short grip still lets the bit flex."
+     "why": "A bit gripped by less of its shank stays loose at any speed."
     },
     {
-     "t": "It just makes the tool a little louder",
+     "t": "Retighten the nut with the battery still in, so you don't lose your place",
      "ok": false,
-     "why": "Noise isn't the risk. A bent, whipping bit is."
+     "why": "Hands at the collet means battery out, every time."
     },
     {
-     "t": "A bit gripped by just its end can bend and whip at high speed",
+     "t": "Switch off, take the battery out, push the shank back in deep, retighten the nut, and check the bit for bends",
      "ok": true,
-     "why": "Right. Use a longer bit or change the approach instead."
+     "why": "Right. A bit that crept out may also have bent while it wobbled."
     }
    ],
-   "after": "Most of the shank stays in the collet."
+   "after": "Reseat a wandering bit deep, with the power out, and look it over before you start again."
   },
   "qc-lock": {
    "type": "custom",
@@ -884,7 +884,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 </section>
 
 <section class="slide" data-id="qc-insert" data-title="Quick check: Shank depth">
-  <div class="hd"><div class="chip">7.10 · Quick check</div><h2 class="t sm">Quick check: reaching a deep spot</h2></div>
+  <div class="hd"><div class="chip">7.10 · Quick check</div><h2 class="t sm">Quick check: a bit that crept out</h2></div>
   <div class="body mid"><div data-chart="qc-insert"></div></div>
   <div class="ft"><span>Quick checks save your first answer and never stop you from moving on</span></div>
   <aside class="notes"></aside>
@@ -2902,6 +2902,7 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 })();
 </script>
 <!-- CHANGELOG
+  v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-insert so it doesn't copy Q5.
   v1.1 (2026-11-05): Review fixes: rewrote qc-clamp, rotated right-answer positions, added two photos.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 9 quick checks, 3 checkpoints. Checkpoint hint lines removed.
 -->
