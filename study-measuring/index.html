@@ -1,8 +1,8 @@
 <title>Measuring and Layout Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_measuring_study_v1.1.4.html
-  version: 1.1.4
+  file: rambots_measuring_study_v1.1.5.html
+  version: 1.1.5
   author: Sam Cao
   created: 2026-11-05
   last_updated: 2026-11-05
@@ -528,7 +528,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Measuring and Layout Study",
   "slug": "rambots_measuring_study",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-measuring-study-v1"
@@ -601,22 +601,22 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "id": "qc-read",
    "topic": "Reading sixteenths",
    "review": "t-tape-read",
-   "q": "The end of a part lands three sixteenth lines past the 6 1/2 in. mark. What's the length?",
+   "q": "The end of a part lands five sixteenth lines past the 4 1/2 in. mark. What's the length?",
    "options": [
     {
-     "t": "6 11/16 in.",
+     "t": "4 5/8 in.",
+     "ok": false,
+     "why": "4 5/8 is 4 10/16, only two sixteenths past the half."
+    },
+    {
+     "t": "4 13/16 in.",
      "ok": true,
-     "why": "6 1/2 is 6 8/16. Three more sixteenths is 6 11/16."
+     "why": "4 1/2 is 4 8/16. Five more sixteenths is 4 13/16."
     },
     {
-     "t": "6 5/8 in.",
+     "t": "4 5/16 in.",
      "ok": false,
-     "why": "6 5/8 is 6 10/16, two sixteenths past the half."
-    },
-    {
-     "t": "6 3/16 in.",
-     "ok": false,
-     "why": "That's three sixteenths past 6, not past 6 1/2."
+     "why": "That's five sixteenths past 4, not past 4 1/2."
     }
    ],
    "after": "Turn the mark you counted from into sixteenths, add, then reduce."
@@ -3452,4 +3452,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.2 (2026-11-05): Final check fix: kerf feedback now says to count one kerf per part cut off, skipping it only when the leftover is the last part.
   v1.1.3 (2026-11-05): Re-verification fix: kerf follow-up line says every part needs its own cut when the leftover is scrap.
   v1.1.4 (2026-11-05): Inches-to-mm example now 0.394 in. = 10 mm, so it no longer matches a quiz question.
+  v1.1.5 (2026-11-05): Tape-reading quick check moved to 4 13/16 so it no longer sits next to the quiz's 7 11/16 reading.
 -->
