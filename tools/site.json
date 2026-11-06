@@ -1,18 +1,18 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.5.8",
+    "version": "1.5.9",
     "author": "Sam Cao",
     "created": "2026-10-14",
-    "last_updated": "2026-11-05",
+    "last_updated": "2026-11-06",
     "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
     "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
   },
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.5.8",
-  "updated": "2026-11-05",
+  "version": "1.5.9",
+  "updated": "2026-11-06",
   "topics": [
     "FRC Basics",
     "Design & CAD",
@@ -524,6 +524,21 @@
         "fire",
         "quiz",
         "pilot"
+      ]
+    },
+    {
+      "slug": "study-guides",
+      "title": "All Study Guides",
+      "topic": "Tool Study Guides",
+      "kind": "html",
+      "type": "sheet",
+      "label": "Start here · 29 guides",
+      "version": "1.0",
+      "description": "One page with every tool and concept study guide, grouped in the order you take the quizzes.",
+      "tags": [
+        "study guide",
+        "tool quiz",
+        "certification"
       ]
     },
     {
@@ -1076,6 +1091,11 @@
       "version": "1.5.8",
       "date": "2026-11-05",
       "note": "Laser Cutter guide: lid rule per Sam. Measuring guide: tape check moved off the quiz's reading."
+    },
+    {
+      "version": "1.5.9",
+      "date": "2026-11-06",
+      "note": "Added study-guides, a page listing only the 29 tool study guides; Hand and Bench guide to 1.1.4."
     }
   ]
 }
