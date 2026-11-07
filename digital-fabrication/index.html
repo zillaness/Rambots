@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!--
-  file: digital_fabrication_review_v1.1.html
-  version: 1.1
+  file: digital_fabrication_review_v1.2.html
+  version: 1.2
   author: Sam Cao
   created: 2026-10-14
-  last_updated: 2026-10-14
+  last_updated: 2026-11-07
   description: Review sheet for the Digital Fabrication lecture (CNC, 3D printing, laser cutting, number systems and color) with embedded interactives.
   sections_total: 22
   sections_complete: 22
@@ -377,6 +377,14 @@ html[data-mode="present"] .seg-ctl button{font-size:13px;}
 .row-sub{font-family:'Fira Code',monospace;font-size:11px;line-height:1.35;color:var(--odo-label-dim);}
 .row-sub .br{display:block;font-style:normal;}
 .row-main{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:0;}
+.odo-scroll{align-self:stretch;overflow-x:auto;max-width:100%;scrollbar-width:thin;}
+.odo-inner{display:flex;flex-direction:column;align-items:flex-end;gap:6px;width:max-content;margin-left:auto;padding:5px;}
+.row-x{justify-self:start;margin-top:6px;font-family:'Fira Code',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;background:transparent;color:var(--odo-label-dim);border:1px solid var(--odo-sep);border-radius:6px;padding:5px 8px;cursor:pointer;}
+.row-x:hover{color:var(--odo-label);border-color:var(--odo-label-dim);}
+.row-x:focus-visible{outline:2px solid var(--odo-label);outline-offset:2px;}
+.segtxt{display:block;height:100%;text-align:center;font-family:'Fira Code',monospace;font-weight:600;font-size:calc(var(--dh) * .62);line-height:var(--dh);color:var(--odo-ink);text-shadow:0 0 6px var(--odo-ink);}
+.cluster[data-odo="lcd"] .segtxt{text-shadow:1.4px 1.8px 0 rgba(0,0,0,.17);}
+.ctl-num{width:7ch;}
 .slot,.places,.brackets{display:flex;gap:var(--ggap);justify-content:flex-end;}
 .slot{padding:var(--sp);border:var(--sb) solid var(--odo-slot-border);border-radius:7px;background:var(--odo-face);box-shadow:var(--odo-slot-shadow);}
 .places,.brackets{padding-inline:calc(var(--sp) + var(--sb));}
@@ -502,7 +510,8 @@ html[data-mode="present"] .quiz-a{font-size:19px;}
   .mode-btn .lbl{display:none;}
   .mode-btn{padding:6px 10px;}
   .row{grid-template-columns:minmax(0,1fr);gap:10px;}
-  .row-label{display:flex;align-items:baseline;gap:10px;padding-top:0;}
+  .row-label{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding-top:0;}
+  .row-x{margin:0 0 0 auto;}
   .row-sub .br{display:inline;}
   .row-sub .br::before{content:" · ";}
   .row-sub{white-space:nowrap;}
@@ -1437,7 +1446,7 @@ G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></di
   </div>
   <p>Each position is worth the base times the position to its right. In binary that's 1, 2, 4, 8 … 128. In hex it's 1, 16, 256. One binary digit is a <strong>bit</strong>; eight bits make a <strong>byte</strong>, which holds 0 to 255. Four bits make exactly one hex digit, so a byte is always two hex digits.</p>
   <div class="interactive-wrap" id="int-odometer">
-    <div class="interactive-title">// Base odometer · one count, three ways</div>
+    <div class="interactive-title">// Base odometer · one count, any base</div>
     <div class="ctl-row" style="margin-top:0">
       <div class="ctl-group"><span class="ctl-label" id="lbl-display">Display</span>
         <div class="seg-ctl" role="group" aria-labelledby="lbl-display" id="themeCtl">
@@ -1447,6 +1456,10 @@ G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></di
         <div class="seg-ctl" role="group" aria-labelledby="lbl-group" id="groupCtl">
           <button type="button" data-v="off">Off</button><button type="button" data-v="hex">On · hex</button>
         </div></div>
+      <div class="ctl-group"><span class="ctl-label" id="lbl-bits">Counter size</span>
+        <div class="seg-ctl" role="group" aria-labelledby="lbl-bits" id="bitsCtl">
+          <button type="button" data-v="8">8 bits</button><button type="button" data-v="12">12</button><button type="button" data-v="16">16</button><button type="button" data-v="24">24</button><button type="button" data-v="32">32</button>
+        </div></div>
       <div class="ctl-group"><span class="ctl-label" id="lbl-place">Place values</span>
         <div class="seg-ctl" role="group" aria-labelledby="lbl-place" id="placeCtl">
           <button type="button" data-v="num">Numbers</button><button type="button" data-v="pow">Powers</button>
@@ -1454,7 +1467,7 @@ G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></di
     </div>
     <div class="cluster" id="cluster" data-odo="classic" role="group" aria-label="Odometer">
       <div class="cl-head">
-        <span class="cl-title">8-bit counter · 0 to 255</span>
+        <span class="cl-title" id="clTitle">8-bit counter · 0 to 255</span>
         <span class="lamp-wrap"><span class="lamp-note" id="lampNote"></span><span class="lamp" id="lamp">Overflow</span></span>
       </div>
       <div class="rows" id="rows"></div>
@@ -1467,11 +1480,18 @@ G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></di
       <label class="speed" for="speed">Speed <input type="range" id="speed" min="0" max="5" step="1" value="2"><output id="speedOut" for="speed">2/s</output></label>
       <button type="button" class="ctl-btn" id="odoReset">Reset</button>
     </div>
+    <form class="ctl-row" id="addForm" novalidate>
+      <label class="ctl-label" for="addBase">Add a base (2 to 36)</label>
+      <input class="ctl-input ctl-num" id="addBase" type="number" min="2" max="36" step="1" inputmode="numeric" placeholder="8" aria-describedby="addMsg">
+      <button type="submit" class="ctl-btn">Add</button>
+      <button type="button" class="ctl-btn" id="resetBases" title="Back to binary, decimal, and hex">Reset bases</button>
+      <p class="ctl-msg" id="addMsg" role="status"></p>
+    </form>
     <form class="ctl-row" id="setForm" novalidate>
       <label class="ctl-label" for="setValue">Set value</label>
       <input class="ctl-input" id="setValue" type="text" autocomplete="off" spellcheck="false" placeholder="FF" aria-describedby="setMsg">
       <label class="sr" for="setBase">Written in</label>
-      <select class="ctl-select" id="setBase"><option value="16">hex (base 16)</option><option value="10">decimal (base 10)</option><option value="2">binary (base 2)</option></select>
+      <select class="ctl-select" id="setBase"></select>
       <button type="submit" class="ctl-btn">Set</button>
       <p class="ctl-msg" id="setMsg" role="status"></p>
     </form>
@@ -1484,6 +1504,9 @@ G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></di
     <li>Turn on <strong>Group bits</strong>. Each group of four binary wheels spells exactly one hex digit.</li>
     <li>Click the <strong>128</strong> wheel. One click on a high position adds its whole place value.</li>
     <li>Set <strong>255</strong>, then flip. Binary and hex run out of wheels, so the count overflows to 0.</li>
+    <li>Add <strong>base 8</strong>. Each octal digit is exactly three bits, so 255 is 377.</li>
+    <li>Add <strong>base 3</strong> or <strong>base 36</strong>. Base 3 needs six wheels for one byte; base 36 needs two, and its digits run 0 to 9, then A to Z.</li>
+    <li>Switch <strong>Counter size</strong> to 16 bits. The same rule carries on: 65,535 + 1 overflows to 0.</li>
   </ol>
   <div class="tbl-wrap">
     <table>
@@ -1532,7 +1555,7 @@ G1 E5.0            <span class="cm">; push 5 mm of filament (extrude)</span></di
           <button type="button" class="ctl-btn preset" data-hex="FFFFFF" style="--sw:#FFFFFF">White</button>
           <button type="button" class="ctl-btn preset" data-hex="000000" style="--sw:#000000">Black</button>
         </div></div>
-      <div class="ctl-group"><span class="ctl-label">Send odometer value <span id="sendVal">0</span> to</span>
+      <div class="ctl-group"><span class="ctl-label"><span id="sendLbl">Send odometer value</span> <span id="sendVal">0</span> to</span>
         <div class="seg-ctl" id="sendCtl"><button type="button" data-ch="0">Red</button><button type="button" data-ch="1">Green</button><button type="button" data-ch="2">Blue</button></div></div>
     </div>
   </div>
@@ -1641,12 +1664,12 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
 /* ── Odometer + color mixer (sections 20 and 21) ───────────────── */
 (function(){
   'use strict';
-  var SYM = '0123456789ABCDEF', MAX = 256;
-  var BASES = [
-    {b:2,  tag:'BIN', sub:'base 2<i class="br"></i>digits 0–1',  n:8, name:'Binary'},
-    {b:10, tag:'DEC', sub:'base 10<i class="br"></i>digits 0–9', n:3, name:'Decimal'},
-    {b:16, tag:'HEX', sub:'base 16<i class="br"></i>digits 0–F', n:2, name:'Hex'}
-  ];
+  var SYM = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var BIT_OPTS = [8, 12, 16, 24, 32], DEFAULT_BASES = [2, 10, 16];
+  var TAGS = {2:'BIN', 8:'OCT', 10:'DEC', 16:'HEX'}, NAMES = {2:'Binary', 8:'Octal', 10:'Decimal', 16:'Hex'};
+  function baseInfo(b){ return {b:b, tag:TAGS[b] || ('B' + b), name:NAMES[b] || ('Base ' + b), sub:'base ' + b + '<i class="br"></i>digits 0–' + SYM[b - 1]}; }
+  function digitsNeeded(b){ var n = 1, v = b; while(v < MAX){ v *= b; n++; } return n; }
+  function ordinal(n){ var t = n % 100, u = n % 10; return n + ((t > 10 && t < 14) ? 'th' : u === 1 ? 'st' : u === 2 ? 'nd' : u === 3 ? 'rd' : 'th'); }
   var THEMES = {classic:'drum', red:'seg', green:'seg', lcd:'seg', modern:'drum'};
   var THEME_ORDER = ['classic','red','green','lcd','modern'];
   var RATES = [0.5, 1, 2, 4, 8, 16];
@@ -1659,6 +1682,12 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
   var theme = sget('theme', 'classic'); if(!THEMES[theme]) theme = 'classic';
   var grouping = sget('group', 'off'); if(grouping !== 'hex') grouping = 'off';
   var placeMode = sget('place', 'num'); if(placeMode !== 'pow') placeMode = 'num';
+  var bits = +sget('bits', '8'); if(BIT_OPTS.indexOf(bits) < 0) bits = 8;
+  var MAX = Math.pow(2, bits);
+  var baseList = (function(){ var out = []; sget('bases', '').split(',').forEach(function(x){ var b = +x; if(b >= 2 && b <= 36 && b === Math.floor(b) && out.indexOf(b) < 0) out.push(b); }); return out.length ? out : DEFAULT_BASES.slice(); })();
+  var BASES = [];
+  function makeBases(){ BASES = baseList.map(baseInfo); BASES.forEach(function(B){ B.n = digitsNeeded(B.b); }); }
+  makeBases();
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var playing = false, timer = null, rateIdx = 2, lampTimer = null;
   function $(id){ return document.getElementById(id); }
@@ -1670,6 +1699,8 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
   function digitsOf(v, b, n){ var out = []; for(var i = 0; i < n; i++){ out.unshift(v % b); v = Math.floor(v / b); } return out; }
   function pow(b, e){ return Math.pow(b, e); }
   function wrap(v){ return ((v % MAX) + MAX) % MAX; }
+  function wrap8(v){ return ((v % 256) + 256) % 256; }
+  function fmt(v){ return v.toLocaleString('en-US'); }
   function hex2(v){ return SYM[v >> 4] + SYM[v & 15]; }
   function bin8(v){ return digitsOf(v, 2, 8).join(''); }
   function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
@@ -1692,7 +1723,7 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
     w.strip.style.transform = 'translateY(calc(' + (-idx) + ' * var(--dh)))';
     if(!animate) void w.strip.offsetHeight;
   }
-  function showSeg(w, d){ var on = SEGMAP[d]; for(var i = 0; i < w.polys.length; i++){ var p = w.polys[i]; p.classList.toggle('on', on.indexOf(p.getAttribute('data-s')) >= 0); } }
+  function showSeg(w, d){ if(w.txt){ w.txt.textContent = SYM[d]; return; } var on = SEGMAP[d]; for(var i = 0; i < w.polys.length; i++){ var p = w.polys[i]; p.classList.toggle('on', on.indexOf(p.getAttribute('data-s')) >= 0); } }
   function flash(w){ if(reduceMotion) return; w.el.classList.remove('flash'); void w.el.offsetWidth; w.el.classList.add('flash'); }
   function makeWheel(kind, b, n, p, d, label){
     var btn = el('button', 'wheel' + (p === n - 1 ? ' ones' : '')); btn.type = 'button';
@@ -1704,7 +1735,8 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
       var strip = el('span', 'strip');
       for(var i = 0; i <= b; i++){ var c = el('span', 'cell'); c.textContent = SYM[i % b]; strip.appendChild(c); }
       btn.appendChild(strip); w.strip = strip; placeStrip(w, d, false);
-    } else { btn.innerHTML = SEG_SVG; w.polys = btn.querySelectorAll('polygon'); showSeg(w, d); }
+    } else if(b > 16){ var tx = el('span', 'segtxt'); btn.appendChild(tx); w.txt = tx; showSeg(w, d); }
+    else { btn.innerHTML = SEG_SVG; w.polys = btn.querySelectorAll('polygon'); showSeg(w, d); }
     return w;
   }
   function setDigit(w, d, dir, delay, dur){
@@ -1736,8 +1768,15 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
   }
 
   /* Main counter */
-  function groupsFor(B){ var all = []; for(var i = 0; i < B.n; i++) all.push(i); if(B.b !== 2 || grouping === 'off') return [all]; return [[0,1,2,3],[4,5,6,7]]; }
-  function placeLabel(b, e){ return placeMode === 'pow' ? b + '<sup>' + e + '</sup>' : String(pow(b, e)); }
+  function groupsFor(B){ var all = []; for(var i = 0; i < B.n; i++) all.push(i); if(B.b !== 2 || grouping === 'off') return [all]; var gs = []; for(var i2 = 0; i2 < B.n; i2 += 4) gs.push(all.slice(i2, i2 + 4)); return gs; }
+  function placeLabel(b, e, dw){ var num = String(pow(b, e)); if(placeMode === 'pow' || num.length * 6.8 > dw + 4) return b + '<sup>' + e + '</sup>'; return num; }
+  function baseDw(){ return Math.min(54, Math.max(26, window.innerWidth * 0.064)); }
+  function rowDw(B){
+    var small = window.innerWidth <= 600, w = rowsEl.clientWidth || 300;
+    var avail = w - (small ? 0 : 126) - 14, groups = groupsFor(B).length;
+    var gaps = (groups - 1) * (small ? 10 : 14) + (B.n - groups) * (small ? 3 : 4);
+    return Math.max(16, Math.min(baseDw(), Math.floor((avail - gaps) / B.n)));
+  }
   function sumHTML(row){
     var d = digitsOf(value, row.b, row.n);
     return d.map(function(x, p){
@@ -1745,35 +1784,39 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
       return '<span class="term' + (x ? '' : ' zero') + '">' + SYM[x] + (x > 9 ? '<small>(' + x + ')</small>' : '') + '×' + pv + '</span>';
     }).join('<span class="plus">+</span>') + '<span class="eq">= ' + value + '</span>';
   }
-  function updateBrackets(){ rows.forEach(function(row){ if(!row.bkLabels) return; var d = digitsOf(value, 16, 2); row.bkLabels.forEach(function(lab, gi){ lab.textContent = '= ' + SYM[d[gi]]; }); }); }
+  function updateBrackets(){ rows.forEach(function(row){ if(!row.bkLabels) return; var d = digitsOf(value, 16, row.bkLabels.length); row.bkLabels.forEach(function(lab, gi){ lab.textContent = '= ' + SYM[d[gi]]; }); }); }
   function buildMain(kind){
     rowsEl.innerHTML = ''; rows = [];
     BASES.forEach(function(B, ri){
       var row = {b:B.b, n:B.n, wheels:[], bkLabels:null};
-      var rowEl = el('div', 'row'), lab = el('div', 'row-label');
+      var rowEl = el('div', 'row'), lab = el('div', 'row-label'), dw = rowDw(B);
+      rowEl.style.setProperty('--dw', dw + 'px'); rowEl.style.setProperty('--dh', (dw * 1.42).toFixed(1) + 'px');
       lab.innerHTML = '<span class="row-tag">' + B.tag + '</span><span class="row-sub">' + B.sub + '</span>';
-      var main = el('div', 'row-main'), slot = el('div', 'slot'), places = el('div', 'places');
+      if(BASES.length > 1){ var x = el('button', 'row-x'); x.type = 'button'; x.textContent = 'Remove'; x.setAttribute('aria-label', 'Remove ' + B.name.toLowerCase() + ' row'); x.addEventListener('click', function(){ removeBase(B.b); }); lab.appendChild(x); }
+      var main = el('div', 'row-main'), slot = el('div', 'slot'), places = el('div', 'places'), scroller = el('div', 'odo-scroll'), inner = el('div', 'odo-inner');
       var groups = groupsFor(B), digs = digitsOf(value, B.b, B.n), linked = grouping === 'hex' && B.b === 16, brackets = null;
       if(groups.length > 1){ brackets = el('div', 'brackets'); row.bkLabels = []; }
       groups.forEach(function(g, gi){
         var sg = el('div', 'grp'), pg = el('div', 'grp');
         g.forEach(function(p){
           var w = makeWheel(kind, B.b, B.n, p, digs[p], B.name);
-          if(linked){ w.el.classList.add('linked'); w.el.style.setProperty('--g', GCOL[p]); }
+          if(linked){ w.el.classList.add('linked'); w.el.style.setProperty('--g', GCOL[p % 2]); }
           w.el.addEventListener('click', function(e){ var s = e.shiftKey ? -1 : 1; update(value + s * pow(B.b, B.n - 1 - p), s); });
           sg.appendChild(w.el); row.wheels[p] = w;
-          var pl = el('div', 'place'); pl.innerHTML = placeLabel(B.b, B.n - 1 - p); pg.appendChild(pl);
+          var pl = el('div', 'place'); pl.innerHTML = placeLabel(B.b, B.n - 1 - p, dw); pg.appendChild(pl);
         });
         slot.appendChild(sg); places.appendChild(pg);
         if(brackets){
-          var bk = el('div', 'bracket'); bk.style.setProperty('--k', g.length); bk.style.setProperty('--g', GCOL[gi]);
+          var bk = el('div', 'bracket'); bk.style.setProperty('--k', g.length); bk.style.setProperty('--g', GCOL[gi % 2]);
           var line = el('span', 'bk-line'), txt = el('span', 'bk-label'); bk.appendChild(line); bk.appendChild(txt);
           brackets.appendChild(bk); row.bkLabels.push(txt);
         }
       });
       var sum = el('div', 'sum'); row.sumEl = sum; sum.innerHTML = sumHTML(row);
-      main.appendChild(slot); main.appendChild(places); if(brackets) main.appendChild(brackets); main.appendChild(sum);
+      inner.appendChild(slot); inner.appendChild(places); if(brackets) inner.appendChild(brackets);
+      scroller.appendChild(inner); main.appendChild(scroller); main.appendChild(sum);
       rowEl.appendChild(lab); rowEl.appendChild(main); rowsEl.appendChild(rowEl); rows.push(row);
+      scroller.scrollLeft = scroller.scrollWidth;
     });
     updateBrackets();
   }
@@ -1781,14 +1824,14 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
     lamp.classList.add('lit'); lampNote.textContent = note; lampNote.classList.add('show');
     clearTimeout(lampTimer); lampTimer = setTimeout(function(){ lamp.classList.remove('lit'); lampNote.classList.remove('show'); }, 1100);
   }
-  function announce(){ live.textContent = 'Value ' + value + '. Binary ' + bin8(value) + ', decimal ' + value + ', hex ' + hex2(value) + '.'; }
+  function announce(){ live.textContent = 'Value ' + value + '. ' + BASES.map(function(B){ return B.name + ' ' + value.toString(B.b).toUpperCase(); }).join(', ') + '.'; }
   function update(raw, dir, quiet){
-    if(dir > 0 && raw >= MAX) showLamp('255 + 1 needs a 9th bit');
-    else if(dir < 0 && raw < 0) showLamp('0 − 1 borrows from a 9th bit');
+    if(dir > 0 && raw >= MAX) showLamp(fmt(MAX - 1) + ' + 1 needs a ' + ordinal(bits + 1) + ' bit');
+    else if(dir < 0 && raw < 0) showLamp('0 − 1 borrows from a ' + ordinal(bits + 1) + ' bit');
     value = wrap(raw);
     var t = timing(false);
     rows.forEach(function(row){ rollRow(row, value, dir, t); row.sumEl.innerHTML = sumHTML(row); });
-    updateBrackets(); sendVal.textContent = value;
+    updateBrackets(); sendVal.textContent = wrap8(value);
     if(!quiet) announce();
   }
 
@@ -1829,7 +1872,7 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
   function applyColor(arr, dir, src, fast){
     var t = timing(fast);
     arr.forEach(function(v, i){
-      v = wrap(v); var ch = chRows[i]; rgb[i] = v;
+      v = wrap8(v); var ch = chRows[i]; rgb[i] = v;
       rollRow(ch.hex, v, dir, t); rollRow(ch.dec, v, dir, t); paintBits(ch);
       if(+ch.slider.value !== v) ch.slider.value = v;
       ch.slider.setAttribute('aria-valuetext', v + ', hex ' + hex2(v));
@@ -1879,20 +1922,40 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
   dragSurface(sv, function(e){ var r = sv.getBoundingClientRect(); hsv.s = clamp01((e.clientX - r.left) / r.width); hsv.v = 1 - clamp01((e.clientY - r.top) / r.height); placeHandles(); applyColor(hsv2rgb(hsv.h, hsv.s, hsv.v), 0, 'picker', true); });
   dragSurface(hue, function(e){ var r = hue.getBoundingClientRect(); hsv.h = clamp01((e.clientX - r.left) / r.width) * 359.9; placeHandles(); applyColor(hsv2rgb(hsv.h, hsv.s, hsv.v), 0, 'picker', true); });
   document.querySelectorAll('[data-hex]').forEach(function(b){ b.addEventListener('click', function(){ loadHex(b.getAttribute('data-hex')); }); });
-  $('sendCtl').addEventListener('click', function(e){ var b = e.target.closest('button[data-ch]'); if(!b) return; setChannel(+b.getAttribute('data-ch'), value, 0, 'send', false); });
+  $('sendCtl').addEventListener('click', function(e){ var b = e.target.closest('button[data-ch]'); if(!b) return; setChannel(+b.getAttribute('data-ch'), wrap8(value), 0, 'send', false); });
 
   /* Build, controls */
   function syncButtons(){
-    [['themeCtl', theme], ['groupCtl', grouping], ['placeCtl', placeMode]].forEach(function(pair){
+    [['themeCtl', theme], ['groupCtl', grouping], ['placeCtl', placeMode], ['bitsCtl', String(bits)]].forEach(function(pair){
       document.querySelectorAll('#' + pair[0] + ' button').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-v') === pair[1] ? 'true' : 'false'); });
     });
   }
-  function build(){ var kind = THEMES[theme]; cluster.setAttribute('data-odo', theme); colorCluster.setAttribute('data-odo', theme); buildMain(kind); buildColor(kind); syncButtons(); }
+  function build(){
+    var kind = THEMES[theme]; cluster.setAttribute('data-odo', theme); colorCluster.setAttribute('data-odo', theme);
+    $('clTitle').textContent = bits + '-bit counter · 0 to ' + fmt(MAX - 1);
+    $('sendLbl').textContent = bits > 8 ? 'Send the low byte of the odometer,' : 'Send odometer value';
+    buildMain(kind); buildColor(kind); fillSetBase(); syncButtons();
+  }
+  var lastW = window.innerWidth, rsz = null;
+  window.addEventListener('resize', function(){ if(window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(rsz); rsz = setTimeout(function(){ buildMain(THEMES[theme]); }, 150); });
+  var addBase = $('addBase'), addMsg = $('addMsg');
+  function saveBases(){ sset('bases', baseList.join(',')); makeBases(); build(); }
+  function removeBase(b){ if(baseList.length < 2) return; baseList = baseList.filter(function(x){ return x !== b; }); addMsg.textContent = ''; saveBases(); }
+  $('addForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var raw = addBase.value.trim(), b = +raw;
+    if(!raw){ addMsg.textContent = 'Type a base from 2 to 36.'; return; }
+    if(!(b >= 2 && b <= 36) || b !== Math.floor(b)){ addMsg.textContent = 'Pick a whole number from 2 to 36. Base 36 uses every digit and letter, 0 to Z.'; return; }
+    if(baseList.indexOf(b) >= 0){ addMsg.textContent = 'Base ' + b + ' is already showing.'; return; }
+    baseList.push(b); baseList.sort(function(a, c){ return a - c; }); addMsg.textContent = ''; addBase.value = ''; saveBases();
+  });
+  $('resetBases').addEventListener('click', function(){ baseList = DEFAULT_BASES.slice(); addMsg.textContent = ''; saveBases(); });
   function bindSeg(id, set){ $(id).addEventListener('click', function(e){ var btn = e.target.closest('button[data-v]'); if(btn) set(btn.getAttribute('data-v')); }); }
   function setTheme(v){ theme = v; sset('theme', v); build(); }
   bindSeg('themeCtl', setTheme);
   bindSeg('groupCtl', function(v){ grouping = v; sset('group', v); build(); });
   bindSeg('placeCtl', function(v){ placeMode = v; sset('place', v); build(); });
+  bindSeg('bitsCtl', function(v){ bits = +v; sset('bits', v); MAX = Math.pow(2, bits); value = wrap(value); makeBases(); build(); sendVal.textContent = wrap8(value); announce(); });
 
   var playBtn = $('odoPlay'), speed = $('speed'), speedOut = $('speedOut');
   function rateText(){ var r = RATES[rateIdx]; return r < 1 ? '1 per 2s' : r + '/s'; }
@@ -1906,15 +1969,23 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
   $('odoReset').addEventListener('click', function(){ setPlaying(false); update(0, 0); });
 
   var setValue = $('setValue'), setBase = $('setBase'), setMsg = $('setMsg');
-  var VALID = {2:/^[01]+$/, 10:/^[0-9]+$/, 16:/^[0-9A-F]+$/}, BNAME = {2:'binary', 10:'decimal', 16:'hex'}, DIGITS = {2:'0 and 1', 10:'0 through 9', 16:'0 through 9 and A through F'};
-  setBase.addEventListener('change', function(){ setValue.placeholder = {16:'FF', 10:'255', 2:'11111111'}[setBase.value]; setMsg.textContent = ''; });
+  function bname(b){ return (NAMES[b] || ('base ' + b)).toLowerCase(); }
+  function digitWords(b){ if(b === 2) return '0 and 1'; if(b <= 10) return '0 through ' + (b - 1); return '0 through 9 and A through ' + SYM[b - 1]; }
+  function fillSetBase(){
+    var keep = +setBase.value || 16, order = baseList.slice().sort(function(a, c){ return (c === 16) - (a === 16) || a - c; });
+    setBase.innerHTML = order.map(function(b){ return '<option value="' + b + '">' + (NAMES[b] ? bname(b) + ' (base ' + b + ')' : 'base ' + b) + '</option>'; }).join('');
+    setBase.value = order.indexOf(keep) >= 0 ? keep : order[0];
+    setValue.placeholder = (MAX - 1).toString(+setBase.value).toUpperCase();
+  }
+  setBase.addEventListener('change', function(){ setValue.placeholder = (MAX - 1).toString(+setBase.value).toUpperCase(); setMsg.textContent = ''; });
   $('setForm').addEventListener('submit', function(e){
     e.preventDefault();
     var b = +setBase.value, s = setValue.value.trim().toUpperCase().replace(/^#|^0X|^0B/, '').replace(/[\s_]/g, '');
     if(!s){ setMsg.textContent = 'Type a number first.'; return; }
-    if(!VALID[b].test(s)){ setMsg.textContent = BNAME[b].charAt(0).toUpperCase() + BNAME[b].slice(1) + ' only uses the digits ' + DIGITS[b] + '.'; return; }
+    var ok = SYM.slice(0, b);
+    for(var i = 0; i < s.length; i++){ if(ok.indexOf(s[i]) < 0){ var nm = bname(b); setMsg.textContent = nm.charAt(0).toUpperCase() + nm.slice(1) + ' only uses the digits ' + digitWords(b) + '.'; return; } }
     var v = parseInt(s, b);
-    if(v > 255){ setMsg.textContent = s + ' in ' + BNAME[b] + ' is ' + v + '. One byte only goes up to 255 (FF in hex).'; return; }
+    if(v > MAX - 1){ setMsg.textContent = s + ' in ' + bname(b) + ' is ' + fmt(v) + '. A ' + bits + '-bit counter only goes up to ' + fmt(MAX - 1) + '. Pick a bigger counter size to fit it.'; return; }
     setMsg.textContent = ''; setPlaying(false); update(v, 0);
   });
 
@@ -2036,6 +2107,7 @@ backTop.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ t
 </script>
 
 <!-- CHANGELOG
+  v1.2 (2026-11-07): Base odometer: add or remove any base from 2 to 36 (defaults 2, 10, 16), counter size from 8 bits (default) to 32 bits, rows scroll sideways when they can't fit, LED digits above F shown as lit text, set value in every shown base, three new Try this steps. Color mixer stays one byte per channel and takes the odometer's low byte.
   v1.1 (2026-10-14): Complete: 22 sections and 4 interactives. Deck text and images reused, duplicate slides merged, MJF, infill, and hairline fixes applied, electromagnetic spectrum section added.
   v1.0.4 (2026-10-14): Interactives: Can I laser this material lookup (16 materials) and 20-card review quiz with missed-card retry.
   v1.0.3 (2026-10-14): Interactives: base odometer (BIN, DEC, HEX, five display styles) and color mixer (picker, channel odometers, presets, send-to-channel), keyboard shortcuts scoped to the odometer box.

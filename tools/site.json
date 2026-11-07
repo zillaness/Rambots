@@ -1,18 +1,18 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.5.9",
+    "version": "1.6.0",
     "author": "Sam Cao",
     "created": "2026-10-14",
-    "last_updated": "2026-11-06",
+    "last_updated": "2026-11-07",
     "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
     "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
   },
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.5.9",
-  "updated": "2026-11-06",
+  "version": "1.6.0",
+  "updated": "2026-11-07",
   "topics": [
     "FRC Basics",
     "Design & CAD",
@@ -326,7 +326,7 @@
       "topic": "Fabrication & 3D Printing",
       "kind": "html",
       "label": "Interactive review",
-      "version": "1.1",
+      "version": "1.2",
       "description": "CNC and G-code, 3D printing, infill and layer strength, laser cutters and the EM spectrum, and color as bytes, with interactives and a review quiz.",
       "tags": [
         "cnc",
@@ -334,6 +334,22 @@
         "laser",
         "infill",
         "msla"
+      ]
+    },
+    {
+      "slug": "base-odometer",
+      "title": "Base Odometer",
+      "topic": "Fabrication & 3D Printing",
+      "kind": "html",
+      "label": "Interactive",
+      "version": "1.2",
+      "description": "Count in binary, decimal, hex, or any base from 2 to 36, from 8 bits up to 32, and see each RGB color channel as one byte.",
+      "tags": [
+        "binary",
+        "hex",
+        "number systems",
+        "color",
+        "interactive"
       ]
     },
     {
@@ -1096,6 +1112,11 @@
       "version": "1.5.9",
       "date": "2026-11-06",
       "note": "Added study-guides, a page listing only the 29 tool study guides; Hand and Bench guide to 1.1.4."
+    },
+    {
+      "version": "1.6.0",
+      "date": "2026-11-07",
+      "note": "Added base-odometer (v1.2: any base 2 to 36, 8 to 32 bits). Digital Fabrication Review to 1.2 with the same odometer update."
     }
   ]
 }
