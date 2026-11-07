@@ -1,11 +1,11 @@
 <title>Laser Cutter Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_laser_study_v1.1.4.html
-  version: 1.1.4
+  file: rambots_laser_study_v1.1.5.html
+  version: 1.1.5
   author: Sam Cao
   created: 2026-11-03
-  last_updated: 2026-11-05
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots 2.4 laser cutter quiz: teaches the machine, materials, files, setup, fire response, and finishing, with quick checks, blocking checkpoints on can't-fail topics, and a downloadable score.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Laser Cutter Study",
   "slug": "rambots_laser_study",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-laser-study-v1"
@@ -929,10 +943,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="body split-l">
     <figure class="fig"><img src="img/laser_head_beam.webp" alt="Close-up of a laser cutter head moving over a sheet, with a bright spot where the beam meets the material"><figcaption>That bright spot is the material burning. The beam itself is invisible. Photo: matthewvenn, CC BY-SA 2.0</figcaption></figure>
     <div class="defs">
-      <div class="d"><b>The beam</b><p>A CO2 laser makes infrared light you can't see. Mirrors carry it to the head, and a lens focuses it to a spot a fraction of a millimeter wide.</p></div>
-      <div class="d"><b>Cut and engrave</b><p>A vector cut follows a line and burns all the way through. A raster engrave sweeps back and forth like a printer and only marks the surface.</p></div>
+      <div class="d"><b>The beam</b><p>A CO2 laser makes infrared light you can't see. Mirrors carry it to the head, and a <button type="button" class="gl" data-term="lens" data-def="A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot." aria-expanded="false">lens</button> <button type="button" class="gl" data-term="focus" data-def="On the laser, the distance from the lens to the material where the beam is smallest and cuts or engraves best." aria-expanded="false">focuses</button> it to a spot a fraction of a millimeter wide.</p></div>
+      <div class="d"><b>Cut and engrave</b><p>A <button type="button" class="gl" data-term="vector" data-def="A cut or score that follows a line, the way a pen traces it." aria-expanded="false">vector</button> cut follows a line and burns all the way through. A <button type="button" class="gl" data-term="raster" data-def="Engraving by sweeping the laser back and forth line by line, like a printer, to fill in an area." aria-expanded="false">raster</button> engrave sweeps back and forth like a printer and only marks the surface.</p></div>
       <div class="d"><b>What it's good at</b><p>Wood, acrylic, paper, and cardboard. It can't cut bare metal; this laser's light bounces off it.</p></div>
-      <div class="d"><b>Smoke</b><p>Every cut makes smoke, and some of it is toxic. That's why the BOFA fume extractor runs for every job.</p></div>
+      <div class="d"><b>Smoke</b><p>Every cut makes smoke, and some of it is toxic. That's why the <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> fume extractor runs for every job.</p></div>
     </div>
   </div>
   <div class="ft"><span>Our machine: Universal Laser Systems PLS4.75 with a BOFA fume extractor. More on wavelengths and focus in the Digital Fabrication Review.</span></div>
@@ -988,7 +1002,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="l-bofa" data-title="The BOFA">
   <div class="hd"><div class="chip">Staying safe</div><h2 class="t sm">BOFA on first, laser on second, every job</h2></div>
   <div class="body cols-3">
-    <div class="card"><div class="k">Why</div><p>Laser smoke is toxic, and some of it is corrosive. The BOFA pulls it out of the cabinet and filters it. Without it, smoke fills the room and coats the lens and mirrors.</p></div>
+    <div class="card"><div class="k">Why</div><p>Laser smoke is toxic, and some of it is corrosive. The <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> pulls it out of the cabinet and filters it. Without it, smoke fills the room and coats the <button type="button" class="gl" data-term="lens" data-def="A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot." aria-expanded="false">lens</button> and mirrors.</p></div>
     <div class="card"><div class="k">Our setup</div><p>Nothing stops our laser from cutting with the BOFA off: there's no interlock yet. So the BOFA goes on before you even turn the laser on, and stays on for the whole session, between jobs too. Waiting until you're ready to cut is how people forget it.</p></div>
     <div class="card"><div class="k">The hose</div><p>The hose between the laser and the BOFA knocks loose easily. Don't slide or move either one. If the hose comes off or the BOFA stops mid-cut, pause the job with the lid closed and get Sam.</p></div>
   </div>
@@ -1034,16 +1048,16 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <table class="t2">
       <thead><tr><th>Never</th><th>Why</th></tr></thead>
       <tbody>
-        <tr><td><b>PVC and adhesive vinyl</b></td><td>Gives off chlorine gas that harms you and corrodes the machine. Iron-on films vary, so they don't go in either.</td></tr>
+        <tr><td><b><button type="button" class="gl" data-term="PVC" data-def="A common plastic used in pipes and some vinyl. Never laser cut it: it gives off chlorine gas that hurts people and the machine." aria-expanded="false">PVC</button> and adhesive vinyl</b></td><td>Gives off chlorine gas that harms you and corrodes the machine. Iron-on films vary, so they don't go in either.</td></tr>
         <tr><td><b>Polycarbonate (Lexan)</b></td><td>Soaks up the heat, melts, turns brown, and can catch fire, at any power. It looks like acrylic. To mark it, use a rotary tool engraving bit or a Cricut vinyl sticker.</td></tr>
-        <tr><td><b>ABS</b></td><td>Melts and gives off cyanide.</td></tr>
+        <tr><td><b><button type="button" class="gl" data-term="ABS" data-def="A tough plastic that handles heat well. It gives off fumes when printed, so it needs an enclosed, ventilated printer." aria-expanded="false">ABS</button></b></td><td>Melts and gives off cyanide.</td></tr>
         <tr><td><b>Fiberglass, coated carbon fiber</b></td><td>Toxic fumes from the resin.</td></tr>
         <tr><td><b>Unknown plastics</b></td><td>No way to know which of the above it is. A test cut can't tell you either: if it's polycarbonate or PVC, the test cut is the hazard.</td></tr>
         <tr><td><b>Bare metal</b></td><td>Not dangerous, just won't cut: it reflects this laser.</td></tr>
       </tbody>
     </table>
     <div class="stack">
-      <div class="card tight"><div class="k">What we cut</div><p>Cast acrylic, plywood, MDF (medium-density fiberboard), cardboard, and paper, all labeled. The label or the printing on the paper backing tells you what it is. Cardboard and paper flare up easily, so watch them closely.</p></div>
+      <div class="card tight"><div class="k">What we cut</div><p>Cast acrylic, plywood, <button type="button" class="gl" data-term="MDF" data-def="Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut." aria-expanded="false">MDF</button> (medium-density fiberboard), cardboard, and paper, all labeled. The label or the printing on the paper backing tells you what it is. Cardboard and paper flare up easily, so watch them closely.</p></div>
       <figure class="fig"><img src="img/acrylic_parts.webp" alt="A pile of clear laser-cut acrylic parts with clean edges" style="max-height:250px"><figcaption>Acrylic cuts with a clean, clear edge. Photo: Felipe C. da S. Sanches, CC BY-SA 2.0</figcaption></figure>
     </div>
   </div>
@@ -1088,7 +1102,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="body split-l">
     <figure class="fig"><img src="img/engraved_cut_plywood.webp" alt="A laser-cut plywood phone case with engraved number buttons and cut-out holes"><figcaption>Engraved surfaces and cut-through holes on one part. Photo: dam, CC BY 2.0</figcaption></figure>
     <div class="defs">
-      <div class="d"><b>Cut</b><p>A hairline stroke (0.001 in. or thinner) is a vector line the laser follows. A common default like 1 pt (1/72 in., about 0.014 in.) is much thicker, and it gets engraved instead.</p></div>
+      <div class="d"><b>Cut</b><p>A <button type="button" class="gl" data-term="hairline" data-def="The thinnest line width a design program can draw. Many laser drivers only treat hairline strokes as cut lines." aria-expanded="false">hairline</button> stroke (0.001 in. or thinner) is a <button type="button" class="gl" data-term="vector" data-def="A cut or score that follows a line, the way a pen traces it." aria-expanded="false">vector</button> line the laser follows. A common default like 1 pt (1/72 in., about 0.014 in.) is much thicker, and it gets engraved instead.</p></div>
       <div class="d"><b>Engrave</b><p>Filled shapes and thick lines get rastered: swept back and forth on the surface.</p></div>
       <div class="d"><b>Color</b><p>Each color gets its own power and speed in the driver, matched by exact color code. Keep the file in RGB; CMYK can shift your red to a different red.</p></div>
       <div class="d"><b>Order and size</b><p>The driver engraves first and cuts last, so parts don't drop before the engraving's done. Our bed is 24 by 18 in.; both sides of the design have to fit.</p></div>
@@ -1116,12 +1130,12 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Setup</div><h2 class="t sm">Flat, focused, and set from the database or a test grid on approved material</h2></div>
   <div class="body cols-2">
     <div class="stack">
-      <div class="card tight"><div class="k">Focus every job</div><p>By default, focus is set to the top of the material. Stand the focus tool on your material and raise or lower the table until the tool just fits against the head. Or measure the thickness with calipers, in decimals, and enter it in the software.</p></div>
+      <div class="card tight"><div class="k">Focus every job</div><p>By default, <button type="button" class="gl" data-term="focus" data-def="On the laser, the distance from the lens to the material where the beam is smallest and cuts or engraves best." aria-expanded="false">focus</button> is set to the top of the material. Stand the focus tool on your material and raise or lower the table until the tool just fits against the head. Or measure the thickness with calipers, in decimals, and enter it in the software.</p></div>
       <div class="card tight"><div class="k">Keep it flat</div><p>Focus is only sharp in a small range, so a bowed sheet cuts through in some spots and not others. Hold it flat without putting anything in the cut path, or use a flatter sheet.</p></div>
     </div>
     <div class="stack">
       <div class="card tight"><div class="k">Settings</div><p>Pick the material and thickness in the ULS materials database. If a labeled, approved material isn't listed, run a small grid of power and speed on a scrap of that same labeled sheet. A test grid finds settings; it never tells you what a plastic is.</p></div>
-      <div class="card tight"><div class="k">Before you press Start</div><p>BOFA on and pulling air. Material approved, flat, and focused. Lid closed. Extinguisher, spray bottle, and fire blanket where they belong. And you can stay for the whole job.</p></div>
+      <div class="card tight"><div class="k">Before you press Start</div><p><button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> on and pulling air. Material approved, flat, and focused. Lid closed. Extinguisher, spray bottle, and fire blanket where they belong. And you can stay for the whole job.</p></div>
     </div>
   </div>
   <div class="ft"><span>Universal Laser Systems PLS user guide and team practice</span></div>
@@ -1146,10 +1160,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
       </svg>
     </div>
     <div class="defs">
-      <div class="d"><b>Focal point</b><p>The lens bends the beam down to its smallest spot at one height. There the energy is packed tightest, so the line is narrowest and cleanest.</p></div>
+      <div class="d"><b>Focal point</b><p>The <button type="button" class="gl" data-term="lens" data-def="A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot." aria-expanded="false">lens</button> bends the beam down to its smallest spot at one height. There the energy is packed tightest, so the line is narrowest and cleanest.</p></div>
       <div class="d"><b>Above and below</b><p>Away from the focal point, the spot spreads out, so lines get wider and cuts get weaker. A few millimeters off makes a big difference.</p></div>
-      <div class="d"><b>Thick material</b><p>The bottom of a thick sheet sits in the wide part of the hourglass, so it's the first part to stay uncut. Thick parts need slower speed or more power, and a mentor may have you focus partway in.</p></div>
-      <div class="d"><b>Air assist</b><p>A small jet of air at the head blows smoke away from the cut, helps stop flare-ups, keeps the lens cleaner, and leaves a cleaner edge. It doesn't replace the BOFA.</p></div>
+      <div class="d"><b>Thick material</b><p>The bottom of a thick sheet sits in the wide part of the hourglass, so it's the first part to stay uncut. Thick parts need slower speed or more power, and a mentor may have you <button type="button" class="gl" data-term="focus" data-def="On the laser, the distance from the lens to the material where the beam is smallest and cuts or engraves best." aria-expanded="false">focus</button> partway in.</p></div>
+      <div class="d"><b>Air assist</b><p>A small jet of air at the head blows smoke away from the cut, helps stop flare-ups, keeps the lens cleaner, and leaves a cleaner edge. It doesn't replace the <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button>.</p></div>
     </div>
   </div>
   <div class="ft"><span>Universal Laser Systems PLS user guide. Focusing on the surface matters most for engraving.</span></div>
@@ -1181,7 +1195,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Running</div><h2 class="t sm">A laser cut is a controlled fire, so someone watches the whole time</h2></div>
   <div class="body cols-3">
     <div class="card"><div class="k">Stay</div><p>Never leave a running laser, not even for a minute. If you can't stay to the end, don't start the job. An extinguisher only helps if someone is standing there.</p></div>
-    <div class="card"><div class="k">Flare-up</div><p>Smoke often lights for a moment as the BOFA pulls it past the beam, and it goes out once the head moves on or changes direction. That's normal. Keep watching.</p></div>
+    <div class="card"><div class="k">Flare-up</div><p>Smoke often lights for a moment as the <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> pulls it past the beam, and it goes out once the head moves on or changes direction. That's normal. Keep watching.</p></div>
     <div class="card"><div class="k">Fire</div><p>A flame that stays lit after the head moves on, or grows, is a fire. Cardboard, paper, and thin wood catch most easily, and slow cuts make it more likely.</p></div>
   </div>
   <div class="ft"><span>Universal Laser Systems PLS user guide (constant supervision), Georgetown Maker Hub and Stanford EHS. Staying with the laser is a can't-fail topic.</span></div>
@@ -1226,12 +1240,12 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>Pause</h3><p>Press Pause on the laser to stop the beam (Stop also stops it; Pause keeps your place in the job). Keep the lid closed; opening it feeds the fire air.</p></div>
       <div class="step"><div class="n">2</div><h3>Watch</h3><p>Give it a few seconds. Is it going out, or still growing?</p></div>
-      <div class="step"><div class="n">3</div><h3>Pause the BOFA</h3><p>If the airflow seems to be feeding the flames, pause the BOFA and see what happens.</p></div>
+      <div class="step"><div class="n">3</div><h3>Pause the BOFA</h3><p>If the airflow seems to be feeding the flames, pause the <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> and see what happens.</p></div>
       <div class="step"><div class="n">4</div><h3>Call out</h3><p>Alert the mentor. If you're the only one at the laser, stay and shout. Don't walk away and let it grow.</p></div>
     </div>
     <div class="cols-2" style="margin-top:18px">
-      <div class="card tight"><div class="k">Still burning?</div><p>A mentor or an experienced student leader opens the lid and sprays the burning material (not the lens or the head) or smothers it with the fire blanket. If no mentor is in the room and it's still growing, do what you have to do. Never pour water into the machine.</p></div>
-      <div class="card tight"><div class="k">The extinguisher</div><p>The Halotron extinguisher right next to the laser is a clean agent, so it won't wreck the machine. Only a mentor or an experienced student leader uses it. Everyone else gets out. If it spreads past the machine, call 911.</p></div>
+      <div class="card tight"><div class="k">Still burning?</div><p>A mentor or an experienced student leader opens the lid and sprays the burning material (not the <button type="button" class="gl" data-term="lens" data-def="A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot." aria-expanded="false">lens</button> or the head) or smothers it with the fire blanket. If no mentor is in the room and it's still growing, do what you have to do. Never pour water into the machine.</p></div>
+      <div class="card tight"><div class="k">The extinguisher</div><p>The <button type="button" class="gl" data-term="Halotron" data-def="A clean fire extinguisher agent that leaves no powder behind, so it&#x27;s safe for electronics and machines like the laser cutter." aria-expanded="false">Halotron</button> extinguisher right next to the laser is a clean agent, so it won't wreck the machine. Only a mentor or an experienced student leader uses it. Everyone else gets out. If it spreads past the machine, call 911.</p></div>
     </div>
   </div>
   <div class="ft"><span>Team fire steps (Sam, 10/26), LightBurn fire safety. The fire steps are a can't-fail topic.</span></div>
@@ -1273,9 +1287,9 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="l-finish" data-title="Finishing up">
   <div class="hd"><div class="chip">Finishing</div><h2 class="t sm">Let the smoke clear, take everything out, and leave the machine where it is</h2></div>
   <div class="body cols-3">
-    <div class="card"><div class="k">Open the lid</div><p>Wait a few seconds after the job ends so the BOFA clears the smoke, then open it.</p></div>
+    <div class="card"><div class="k">Open the lid</div><p>Wait a few seconds after the job ends so the <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> clears the smoke, then open it.</p></div>
     <div class="card"><div class="k">Clear the bed</div><p>Take out your parts and every scrap, including bits that fell into the tray. Scraps left behind are fuel for the next job's flare-up.</p></div>
-    <div class="card"><div class="k">The lens</div><p>Laser off, unplugged, and cooled down before anyone touches the optics. Dampen the cloth outside the machine; never spray cleaner into it. Banned materials coat the lens with soot that can overheat and crack it.</p></div>
+    <div class="card"><div class="k">The lens</div><p>Laser off, unplugged, and cooled down before anyone touches the optics. Dampen the cloth outside the machine; never spray cleaner into it. Banned materials coat the <button type="button" class="gl" data-term="lens" data-def="A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot." aria-expanded="false">lens</button> with soot that can overheat and crack it.</p></div>
   </div>
   <div class="ft"><span>Universal Laser Systems PLS user guide and the old team laser doc</span></div>
   <aside class="notes">Who cleans the optics is still to be decided. Until then, students report a dirty lens to Sam.</aside>
@@ -1294,11 +1308,11 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <table class="t2">
       <thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead>
       <tbody>
-        <tr><td>Prepare a file</td><td>Hairline cut lines, fills for engraving, sized to fit the bed</td></tr>
-        <tr><td>Set up a job</td><td>Labeled, approved material; flat; focused; BOFA on; lid closed</td></tr>
+        <tr><td>Prepare a file</td><td><button type="button" class="gl" data-term="hairline" data-def="The thinnest line width a design program can draw. Many laser drivers only treat hairline strokes as cut lines." aria-expanded="false">Hairline</button> cut lines, fills for engraving, sized to fit the bed</td></tr>
+        <tr><td>Set up a job</td><td>Labeled, approved material; flat; focused; <button type="button" class="gl" data-term="BOFA" data-def="The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it." aria-expanded="false">BOFA</button> on; lid closed</td></tr>
         <tr><td>Cut acrylic</td><td>Right settings, stays the whole job, part comes out clean</td></tr>
-        <tr><td>Cut plywood or MDF</td><td>Watches for flare-ups, holds the sheet flat</td></tr>
-        <tr><td>Engrave a logo</td><td>Raster settings, engraving before cutting</td></tr>
+        <tr><td>Cut plywood or <button type="button" class="gl" data-term="MDF" data-def="Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut." aria-expanded="false">MDF</button></td><td>Watches for flare-ups, holds the sheet flat</td></tr>
+        <tr><td>Engrave a logo</td><td><button type="button" class="gl" data-term="raster" data-def="Engraving by sweeping the laser back and forth line by line, like a printer, to fill in an area." aria-expanded="false">Raster</button> settings, engraving before cutting</td></tr>
         <tr><td>Finish</td><td>Waits for the smoke to clear, removes every scrap, leaves the laser and BOFA in place</td></tr>
       </tbody>
     </table>
@@ -1311,6 +1325,12 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>ABS</dt><dd>A tough plastic that handles heat well. It gives off fumes when printed, so it needs an enclosed, ventilated printer.</dd></div><div class="gl-item"><dt>BOFA</dt><dd>The fume extractor connected to the laser cutter. It pulls smoke and fumes out through filters. BOFA is the name of the company that makes it.</dd></div><div class="gl-item"><dt>focus</dt><dd>On the laser, the distance from the lens to the material where the beam is smallest and cuts or engraves best.</dd></div><div class="gl-item"><dt>hairline</dt><dd>The thinnest line width a design program can draw. Many laser drivers only treat hairline strokes as cut lines.</dd></div><div class="gl-item"><dt>Halotron</dt><dd>A clean fire extinguisher agent that leaves no powder behind, so it&#x27;s safe for electronics and machines like the laser cutter.</dd></div><div class="gl-item"><dt>lens</dt><dd>A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot.</dd></div><div class="gl-item"><dt>MDF</dt><dd>Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut.</dd></div><div class="gl-item"><dt>PVC</dt><dd>A common plastic used in pipes and some vinyl. Never laser cut it: it gives off chlorine gas that hurts people and the machine.</dd></div><div class="gl-item"><dt>raster</dt><dd>Engraving by sweeping the laser back and forth line by line, like a printer, to fill in an area.</dd></div><div class="gl-item"><dt>vector</dt><dd>A cut or score that follows a line, the way a pen traces it.</dd></div></dl></div></div>
+  <div class="ft"><span>10 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1487,6 +1507,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3167,4 +3243,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.2 (2026-11-05): Final check fixes: fire step 1 notes that Stop also stops the beam; Still burning card adds never pour water into the machine.
   v1.1.3 (2026-11-05): Extinguisher card names the Halotron (clean agent) extinguisher next to the laser.
   v1.1.4 (2026-11-05): Lid rule per Sam: a mentor or experienced student leader opens the lid; in a real emergency with no mentor in the room, do what you have to do. Pause stopping the beam at once is confirmed.
+  v1.1.5 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

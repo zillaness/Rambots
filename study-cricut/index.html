@@ -1,11 +1,11 @@
 <title>Cricut Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_cricut_study_v1.0.2.html
-  version: 1.0.2
+  file: rambots_cricut_study_v1.0.3.html
+  version: 1.0.3
   author: Sam Cao
   created: 2026-11-05
-  last_updated: 2026-11-05
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots 2.2 Cricut quiz: how it cuts, blades and blade safety, mats, mirroring, weeding, and applying decals, with quick checks, checkpoints on the can't-fail topics, and a downloadable score.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Cricut Study",
   "slug": "rambots_cricut_study",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-cricut-study-v1"
@@ -802,7 +816,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">2.2 · The machine</div><h2 class="t sm">A tiny blade dragged at a set depth, with no heat at all</h2></div>
   <div class="body split-l">
     <figure class="fig"><img src="img/vinyl_cutter.webp" alt="A desktop vinyl cutting machine with a sheet of green vinyl feeding through it"><figcaption>A vinyl cutter works the same way as our Cricut. Photo: Nadya Peek, CC BY 2.0</figcaption></figure>
-    <div class="defs"><div class="d"><b>The cut</b><p>The Cricut drags a small, very sharp blade across the material. Nothing heats up. The laser cutter is the tool that cuts with heat.</p></div><div class="d"><b>How deep</b><p>On adhesive vinyl, the blade cuts through the vinyl but not the paper backing. The design stays on the backing while you weed and apply it.</p></div><div class="d"><b>The material setting</b><p>Picking the exact material in Design Space sets how hard the blade presses and how many passes it makes. Too light doesn&#x27;t cut through; too heavy cuts the backing or tears the material.</p></div><div class="d"><b>Not sure?</b><p>Do a small test cut first.</p></div></div>
+    <div class="defs"><div class="d"><b>The cut</b><p>The Cricut drags a small, very sharp blade across the material. Nothing heats up. The laser cutter is the tool that cuts with heat.</p></div><div class="d"><b>How deep</b><p>On adhesive vinyl, the blade cuts through the vinyl but not the paper backing. The design stays on the backing while you <button type="button" class="gl" data-term="weeding" data-def="Picking away the vinyl you don&#x27;t want after a cut, so only the design is left on the backing." aria-expanded="false">weed</button> and apply it.</p></div><div class="d"><b>The material setting</b><p>Picking the exact material in Design Space sets how hard the blade presses and how many passes it makes. Too light doesn&#x27;t cut through; too heavy cuts the backing or tears the material.</p></div><div class="d"><b>Not sure?</b><p>Do a small test cut first.</p></div></div>
   </div>
   <div class="ft"><span>Cricut Help and the maker tools quiz bank</span></div>
   <aside class="notes">To confirm in the shop: which Cricut model we have (Maker, Explore, or Joy). Some blades only fit some machines.</aside>
@@ -866,7 +880,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="c-mats" data-title="Mats">
   <div class="hd"><div class="chip">2.2 · Mats</div><h2 class="t sm">Keep the mat sticky, and keep your fingers off it</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Grips</div><p>Mats come in grips: blue LightGrip, green StandardGrip, purple StrongGrip, and pink FabricGrip. Use the one your material calls for.</p></div><div class="card"><div class="k">Keep it sticky</div><p>Put the clear cover back on as soon as you&#x27;re done, and store the mat flat so it doesn&#x27;t warp. Don&#x27;t touch the sticky surface with your fingers.</p></div><div class="card"><div class="k">Cleaning</div><p>No wipes with lotion or oil; they break down the stickiness. After washing, let it air dry. A towel leaves lint stuck to it.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Grips</div><p>Mats come in grips: blue LightGrip, green StandardGrip, purple StrongGrip, and pink FabricGrip. Use the one your material calls for.</p></div><div class="card"><div class="k">Keep it sticky</div><p>Put the clear cover back on as soon as you&#x27;re done, and store the mat flat so it doesn&#x27;t <button type="button" class="gl" data-term="warping" data-def="When a flat part bends or curls out of shape. In 3D printing, a print&#x27;s corners curl up off the plate as the plastic cools and shrinks." aria-expanded="false">warp</button>. Don&#x27;t touch the sticky surface with your fingers.</p></div><div class="card"><div class="k">Cleaning</div><p>No wipes with lotion or oil; they break down the stickiness. After washing, let it air dry. A towel leaves lint stuck to it.</p></div></div>
   <div class="ft"><span>Cricut blog: how to clean a Cricut mat</span></div>
   <aside class="notes">To confirm in the shop: which mats we have.</aside>
 </section>
@@ -922,7 +936,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="c-weed" data-title="Weeding and applying">
   <div class="hd"><div class="chip">2.2 · Weeding and applying</div><h2 class="t sm">Weed with the hook pulling away from you, then burnish and peel low</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">The weeding hook</div><p>It&#x27;s a sharp metal hook, and it slips when a piece lets go. Pull it away from your other hand. Set it down flat or capped, hand it over handle first, and never pocket it point up.</p></div><div class="card"><div class="k">Clean surface</div><p>Stick decals onto a clean, dry surface so the vinyl grips in the first place.</p></div><div class="card"><div class="k">Burnish</div><p>Rub the decal down through the transfer tape so the vinyl presses onto the surface.</p></div><div class="card"><div class="k">Peel low</div><p>Peel the tape slowly, folded back close to flat. If a letter starts lifting, lay the tape back down, rub that spot again, and keep going.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">The weeding hook</div><p>It&#x27;s a sharp metal hook, and it slips when a piece lets go. Pull it away from your other hand. Set it down flat or capped, hand it over handle first, and never pocket it point up.</p></div><div class="card"><div class="k">Clean surface</div><p>Stick decals onto a clean, dry surface so the vinyl grips in the first place.</p></div><div class="card"><div class="k">Burnish</div><p>Rub the decal down through the <button type="button" class="gl" data-term="transfer tape" data-def="Clear tape that lifts a weeded vinyl design off its backing so you can stick it down in one piece." aria-expanded="false">transfer tape</button> so the vinyl presses onto the surface.</p></div><div class="card"><div class="k">Peel low</div><p>Peel the tape slowly, folded back close to flat. If a letter starts lifting, lay the tape back down, rub that spot again, and keep going.</p></div></div>
   <div class="ft"><span>Cricut Help: Cricut Vinyl</span></div>
   <aside class="notes">To confirm: whether the weeding tool also counts under 4.3 sharps.</aside>
 </section>
@@ -944,13 +958,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Two different jobs, watched by a mentor, get you Certified</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Cut, weed, and apply an adhesive vinyl decal with transfer tape</td><td>Right material setting, not mirrored, weeds pulling away from the other hand, burnishes and peels low</td></tr><tr><td>Cut and weed an iron-on (HTV) design</td><td>Mirror on, shiny side down on the mat, weeding tool set down safely</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Cut, <button type="button" class="gl" data-term="weeding" data-def="Picking away the vinyl you don&#x27;t want after a cut, so only the design is left on the backing." aria-expanded="false">weed</button>, and apply an adhesive vinyl decal with <button type="button" class="gl" data-term="transfer tape" data-def="Clear tape that lifts a weeded vinyl design off its backing so you can stick it down in one piece." aria-expanded="false">transfer tape</button></td><td>Right material setting, not mirrored, weeds pulling away from the other hand, <button type="button" class="gl" data-term="burnish" data-def="To rub hard over vinyl or tape with a scraper so it sticks fully." aria-expanded="false">burnishes</button> and peels low</td></tr><tr><td>Cut and weed an iron-on (<button type="button" class="gl" data-term="HTV" data-def="Heat transfer vinyl, also called iron-on: vinyl with heat-activated glue on the back. Cut it on the Cricut, then press it onto fabric with the heat press." aria-expanded="false">HTV</button>) design</td><td>Mirror on, shiny side down on the mat, weeding tool set down safely</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Across both</div><p>The mentor also watches mat care (cover back on, stored flat) and any blade change.</p></div></div>
   </div>
   <div class="ft"><span>From the maker tools quiz bank, Uses for Certified</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>burnish</dt><dd>To rub hard over vinyl or tape with a scraper so it sticks fully.</dd></div><div class="gl-item"><dt>HTV</dt><dd>Heat transfer vinyl, also called iron-on: vinyl with heat-activated glue on the back. Cut it on the Cricut, then press it onto fabric with the heat press.</dd></div><div class="gl-item"><dt>transfer tape</dt><dd>Clear tape that lifts a weeded vinyl design off its backing so you can stick it down in one piece.</dd></div><div class="gl-item"><dt>warping</dt><dd>When a flat part bends or curls out of shape. In 3D printing, a print&#x27;s corners curl up off the plate as the plastic cools and shrinks.</dd></div><div class="gl-item"><dt>weeding</dt><dd>Picking away the vinyl you don&#x27;t want after a cut, so only the design is left on the backing.</dd></div></dl></div></div>
+  <div class="ft"><span>5 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1117,6 +1137,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2794,4 +2870,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 7 quick checks, 2 checkpoints.
   v1.0.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
   v1.0.2 (2026-11-05): Final check fix: blade quick check now uses felt letters (Rotary).
+  v1.0.3 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

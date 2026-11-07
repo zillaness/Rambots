@@ -1,11 +1,11 @@
 <title>Drill Press Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_drill_press_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_drill_press_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the Rambots 8.1 drill press written test: parts, speeds, the belt change, dress, the chuck key, clamping, drilling, hole saws, and cleanup.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Drill Press Study",
   "slug": "rambots_drill_press_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-drill-press-study-v1"
@@ -828,7 +842,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-parts" data-title="Parts that matter">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Know the parts you touch: the quill moves, the column holds, the depth stop limits</h2></div>
-  <div class="body"><div class="defs"><div class="d"><b>Quill</b><p>The sliding sleeve inside the head. It carries the spindle and chuck down when you pull the feed handle. The column is the round post everything else clamps to.</p></div><div class="d"><b>Depth stop</b><p>Locks how far the quill can travel. Set it on the first hole, measure that hole, then drill the rest to the same depth.</p></div><div class="d"><b>Chuck and chuck key</b><p>The chuck grips the bit. The key tightens it and then goes straight back in its holder.</p></div><div class="d"><b>Belt cover, step pulleys, belt</b><p>Under the cover on top, a belt runs between two stacks of pulleys. Which steps it sits on sets the speed.</p></div><div class="d"><b>Belt tension knob or motor lock</b><p>Loosens the belt so you can move it to other steps, then tightens it again.</p></div></div></div>
+  <div class="body"><div class="defs"><div class="d"><b><button type="button" class="gl" data-term="quill" data-def="The part of a drill press that moves the spindle up and down when you turn the handle." aria-expanded="false">Quill</button></b><p>The sliding sleeve inside the head. It carries the <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> and <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button> down when you pull the feed handle. The column is the round post everything else clamps to.</p></div><div class="d"><b>Depth stop</b><p>Locks how far the quill can travel. Set it on the first hole, measure that hole, then drill the rest to the same depth.</p></div><div class="d"><b>Chuck and <button type="button" class="gl" data-term="chuck key" data-def="The small geared key that tightens and loosens a keyed chuck. Never leave it in the chuck." aria-expanded="false">chuck key</button></b><p>The chuck grips the bit. The key tightens it and then goes straight back in its holder.</p></div><div class="d"><b>Belt cover, step pulleys, belt</b><p>Under the cover on top, a belt runs between two stacks of pulleys. Which steps it sits on sets the speed.</p></div><div class="d"><b>Belt tension knob or motor lock</b><p>Loosens the belt so you can move it to other steps, then tightens it again.</p></div></div></div>
   <div class="ft"><span>8.1 bank, parts section; Ryobi DP103L manual</span></div>
   <aside class="notes">Stand at the press and point to each part as you read it. Open the belt cover with the press unplugged so everyone sees both pulley stacks. To confirm in the shop: our drill press model. The bank is written for the Ryobi DP103L, a 10 in. press with five speeds from 620 to 3,100 RPM.</aside>
 </section>
@@ -842,7 +856,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-speed" data-title="Picking a speed">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Big bits and hard metals run slow, because the edge travels farther and heats up</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Size</div><h3>Bigger bit, slower speed</h3><p>The outside edge of a big bit travels farther each turn, so it needs fewer turns per minute to cut at the same edge speed. Hole saws and big Forstner bits run near the slowest step.</p></div><div class="card"><div class="k">Material</div><h3>Steel slower than aluminum</h3><p>For the same bit, steel runs much slower than aluminum. Use cutting oil on steel 1/8 in. or thicker.</p></div><div class="card"><div class="k">Too fast</div><h3>Heat ruins the edge</h3><p>Smoke at the tip and chips turning blue mean the bit is overheating and losing its hardness. A dull bit then grabs. Top speed never means the cleanest hole.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Size</div><h3>Bigger bit, slower speed</h3><p>The outside edge of a big bit travels farther each turn, so it needs fewer turns per minute to cut at the same edge speed. <button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">Hole saws</button> and big <button type="button" class="gl" data-term="Forstner bit" data-def="A bit that cuts clean, flat-bottomed holes in wood." aria-expanded="false">Forstner</button> bits run near the slowest step.</p></div><div class="card"><div class="k">Material</div><h3>Steel slower than aluminum</h3><p>For the same bit, steel runs much slower than aluminum. Use cutting oil on steel 1/8 in. or thicker.</p></div><div class="card"><div class="k">Too fast</div><h3>Heat ruins the edge</h3><p>Smoke at the tip and chips turning blue mean the bit is overheating and losing its hardness. A dull bit then grabs. Top speed never means the cleanest hole.</p></div></div>
   <div class="ft"><span>8.1 bank, speeds section; Fine Woodworking drill press speed chart</span></div>
   <aside class="notes">Ask the room why a 2 in. hole saw would run slower than a 1/8 in. bit. Show the speed chart inside our belt cover. To confirm in the shop: the numbers on our chart.</aside>
 </section>
@@ -850,8 +864,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="dp-chart" data-title="Speeds from a common chart">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Read the chart: on one common chart, the same bit runs 1,500 RPM in aluminum and 600 in steel</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Bit and material</th><th>Speed on one common chart</th></tr></thead><tbody><tr><td><b>7/16 to 5/8 in. twist bit, aluminum</b></td><td>About 1,500 RPM</td></tr><tr><td><b>7/16 to 5/8 in. twist bit, steel</b></td><td>About 600 RPM, with cutting oil</td></tr><tr><td><b>Hole saw, aluminum up to 1/16 in. thick</b></td><td>About 250 RPM</td></tr><tr><td><b>2 in. Forstner, hardwood</b></td><td>About 250 RPM</td></tr><tr><td><b>Forstner, aluminum, brass, or steel</b></td><td>Not recommended</td></tr></tbody></table></div></div>
-    <div class="stack"><div class="card tight"><div class="k">RPM</div><p>Revolutions per minute: how many times the chuck turns each minute.</p></div><div class="card tight"><div class="k">Our chart</div><p>It&#x27;s inside the belt cover. Use it, not memory, every time you change bits or material.</p></div></div>
+    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Bit and material</th><th>Speed on one common chart</th></tr></thead><tbody><tr><td><b>7/16 to 5/8 in. twist bit, aluminum</b></td><td>About 1,500 <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button></td></tr><tr><td><b>7/16 to 5/8 in. twist bit, steel</b></td><td>About 600 RPM, with cutting oil</td></tr><tr><td><b><button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">Hole saw</button>, aluminum up to 1/16 in. thick</b></td><td>About 250 RPM</td></tr><tr><td><b>2 in. <button type="button" class="gl" data-term="Forstner bit" data-def="A bit that cuts clean, flat-bottomed holes in wood." aria-expanded="false">Forstner</button>, hardwood</b></td><td>About 250 RPM</td></tr><tr><td><b>Forstner, aluminum, brass, or steel</b></td><td>Not recommended</td></tr></tbody></table></div></div>
+    <div class="stack"><div class="card tight"><div class="k">RPM</div><p>Revolutions per minute: how many times the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button> turns each minute.</p></div><div class="card tight"><div class="k">Our chart</div><p>It&#x27;s inside the belt cover. Use it, not memory, every time you change bits or material.</p></div></div>
   </div>
   <div class="ft"><span>Fine Woodworking drill press speed chart, as cited in the 8.1 bank</span></div>
   <aside class="notes">These are the numbers the bank uses. To confirm in the shop: our own chart&#x27;s numbers, and whether we replace the tired press (if so, re-check speeds against the new manual).</aside>
@@ -898,7 +912,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-dress" data-title="Before you start">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">A spinning chuck winds up anything loose, so tie it down, take it off, and leave gloves off</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Hair and sleeves</div><p>Long hair up, bangs pinned, sleeves rolled up. Tied back isn&#x27;t enough if a ponytail can swing into the chuck.</p></div><div class="card"><div class="k">Loose things</div><p>Lanyards off. Hoodie strings and jewelry off or out of the way. Safety glasses on before power.</p></div><div class="card"><div class="k">No gloves</div><p>Not leather, not knit, not nitrile. A glove catches on the chuck or bit and drags your whole hand in. Nitrile doesn&#x27;t tear free fast enough.</p></div><div class="card"><div class="k">Announce it</div><p>Say &quot;using the drill press,&quot; then look around and make sure people nearby know.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Hair and sleeves</div><p>Long hair up, bangs pinned, sleeves rolled up. Tied back isn&#x27;t enough if a ponytail can swing into the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>.</p></div><div class="card"><div class="k">Loose things</div><p>Lanyards off. Hoodie strings and jewelry off or out of the way. Safety glasses on before power.</p></div><div class="card"><div class="k">No gloves</div><p>Not leather, not knit, not nitrile. A glove catches on the chuck or bit and drags your whole hand in. Nitrile doesn&#x27;t tear free fast enough.</p></div><div class="card"><div class="k">Announce it</div><p>Say &quot;using the drill press,&quot; then look around and make sure people nearby know.</p></div></div>
   <div><p class="warnline">Gloves are the hazard at the drill press, not the protection.</p></div>
   <div class="ft"><span>8.1 bank; FIRST Safety Manual §4.2, §4.5, §6.1; team rule</span></div>
   <aside class="notes">Can&#x27;t-fail topic: no gloves. Clear chips with a brush instead. To confirm in the shop: the team hasn&#x27;t settled whether tucked hoodie drawstrings are allowed or must come off; the bank says tucked or off.</aside>
@@ -931,7 +945,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-key" data-title="The chuck key">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">The chuck key goes back in its holder the moment you let go of it, even for a second</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">What goes wrong</div><p>A key left in the chuck gets flung when the motor starts. It can hit you or anyone nearby.</p></div><div class="card"><div class="k">The rule</div><p>The manual says the key must be out before the press is plugged in or turned on.</p></div><div class="card"><div class="k">The habit</div><p>Tighten, key out, key in its holder. Every time, even if someone calls you over mid-step. Habits hold up when you&#x27;re distracted.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">What goes wrong</div><p>A key left in the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button> gets flung when the motor starts. It can hit you or anyone nearby.</p></div><div class="card"><div class="k">The rule</div><p>The manual says the key must be out before the press is plugged in or turned on.</p></div><div class="card"><div class="k">The habit</div><p>Tighten, key out, key in its holder. Every time, even if someone calls you over mid-step. Habits hold up when you&#x27;re distracted.</p></div></div>
   <div class="ft"><span>8.1 bank; Ryobi DP103L manual</span></div>
   <aside class="notes">Can&#x27;t-fail topic. Show where our key&#x27;s holder is. If the key has no holder, fix that before training.</aside>
 </section>
@@ -963,7 +977,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-hold" data-title="Holding the work">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Clamp or vise every part, every time, because a part that grabs spins like a propeller</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">The danger</div><p>If the bit grabs, an unclamped part spins with it. That spinning part is the classic drill press injury, and small parts are the worst.</p></div><div class="card"><div class="k">The rule</div><p>Clamp it, or put it in the vise. Never fingers, never pliers. The manual allows bracing against the column; the team rule is stricter.</p></div><div class="card"><div class="k">Why it&#x27;s still needed</div><p>A press can&#x27;t twist your wrists like a hand drill, because the column takes the force. The part itself can still grab and spin.</p></div><div class="card"><div class="k">Under it</div><p>Put a scrap backing board under the part.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">The danger</div><p>If the bit grabs, an unclamped part spins with it. That spinning part is the classic drill press injury, and small parts are the worst.</p></div><div class="card"><div class="k">The rule</div><p>Clamp it, or put it in the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>. Never fingers, never pliers. The manual allows bracing against the column; the team rule is stricter.</p></div><div class="card"><div class="k">Why it&#x27;s still needed</div><p>A press can&#x27;t twist your wrists like a hand drill, because the column takes the force. The part itself can still grab and spin.</p></div><div class="card"><div class="k">Under it</div><p>Put a scrap backing board under the part.</p></div></div>
   <div class="ft"><span>8.1 bank; Ryobi DP103L manual; team rule</span></div>
   <aside class="notes">Can&#x27;t-fail topic. Show the vise and the clamps we use at the press.</aside>
 </section>
@@ -1002,7 +1016,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-xvise" data-title="The cross slide vise">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">The cross slide vise moves the part between holes; lock it, then drill straight down</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">What it&#x27;s for</div><p>Two handwheels slide the part side to side and front to back, so you can line up a hole pattern without unclamping.</p></div><div class="card"><div class="k">How to use it</div><p>Move to the next hole, lock both slides, then drill straight down.</p></div><div class="card"><div class="k">What it&#x27;s not for</div><p>Milling. A drill press is built to push down, not sideways. A side load can loosen the chuck and let the cutter grab. Slots go to a mill or the CNC router.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">What it&#x27;s for</div><p>Two handwheels slide the part side to side and front to back, so you can line up a hole pattern without unclamping.</p></div><div class="card"><div class="k">How to use it</div><p>Move to the next hole, lock both slides, then drill straight down.</p></div><div class="card"><div class="k">What it&#x27;s not for</div><p>Milling. A drill press is built to push down, not sideways. A side load can loosen the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button> and let the cutter grab. Slots go to a mill or the <button type="button" class="gl" data-term="CNC" data-def="Computer numerical control: a machine that moves its cutter along a path that a computer sends it." aria-expanded="false">CNC</button> router.</p></div></div>
   <div class="ft"><span>8.1 bank</span></div>
   <aside class="notes">Show the vise&#x27;s handwheels and locks. Point out that nothing on a drill press is built for side loads.</aside>
 </section>
@@ -1016,7 +1030,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-drill" data-title="Drilling through">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Ease off as the tip breaks through, because that&#x27;s where the bit grabs</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Breakthrough</div><p>When the tip comes out the far side, the cutting edges bite into a thin ring of metal and can catch. Ease off the feed as you get close.</p></div><div class="card"><div class="k">Keep the bit out of the table</div><p>Use a scrap backing board, set the depth stop so the bit goes just through, and line up the table&#x27;s center hole under the bit.</p></div><div class="card"><div class="k">Don&#x27;t rush</div><p>Feeding faster to finish sooner doesn&#x27;t save the table, and it makes the grab worse. A backing board also gives a cleaner exit with a smaller burr.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Breakthrough</div><p>When the tip comes out the far side, the cutting edges bite into a thin ring of metal and can catch. Ease off the feed as you get close.</p></div><div class="card"><div class="k">Keep the bit out of the table</div><p>Use a scrap backing board, set the depth stop so the bit goes just through, and line up the table&#x27;s center hole under the bit.</p></div><div class="card"><div class="k">Don&#x27;t rush</div><p>Feeding faster to finish sooner doesn&#x27;t save the table, and it makes the grab worse. A backing board also gives a cleaner exit with a smaller <button type="button" class="gl" data-term="burr" data-def="A sharp, rough edge left on metal after cutting or drilling." aria-expanded="false">burr</button>.</p></div></div>
   <div class="ft"><span>8.1 bank</span></div>
   <aside class="notes">Drill a through hole in scrap with and without a backing board and pass both around so they can feel the burr.</aside>
 </section>
@@ -1030,7 +1044,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-holesaw" data-title="Hole saws and Forstner bits">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Hole saws and big Forstner bits grab hard, so run them slow, clamped, and with a light feed</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Hole saw</div><p>Near the slowest speed (about 250 RPM on the common chart for aluminum). The chart rates it for aluminum only up to 1/16 in. thick. Clamp the sheet, feed lightly, and back out now and then to clear chips.</p></div><div class="card"><div class="k">The slug</div><p>Turn it off and wait for it to stop. Push the slug out through the side slots with a dowel or pin punch, never your fingers.</p></div><div class="card"><div class="k">Forstner bit</div><p>Makes clean, flat-bottomed holes in wood. A 2 in. one in hardwood runs about 250 RPM. It grabs hard, so clamp the work. Not recommended for aluminum, brass, or steel.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Hole saw</div><p>Near the slowest speed (about 250 <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> on the common chart for aluminum). The chart rates it for aluminum only up to 1/16 in. thick. Clamp the sheet, feed lightly, and back out now and then to clear chips.</p></div><div class="card"><div class="k">The slug</div><p>Turn it off and wait for it to stop. Push the slug out through the side slots with a dowel or <button type="button" class="gl" data-term="pin punch" data-def="A punch with a straight, flat tip for driving pins out of holes." aria-expanded="false">pin punch</button>, never your fingers.</p></div><div class="card"><div class="k">Forstner bit</div><p>Makes clean, flat-bottomed holes in wood. A 2 in. one in hardwood runs about 250 RPM. It grabs hard, so clamp the work. Not recommended for aluminum, brass, or steel.</p></div></div>
   <div class="ft"><span>8.1 bank; Fine Woodworking drill press speed chart</span></div>
   <aside class="notes">Show a hole saw, its side slots, and a Forstner bit. To confirm in the shop: which hole saws we own and their thickness limits.</aside>
 </section>
@@ -1044,7 +1058,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="dp-after" data-title="After the cut">
   <div class="hd"><div class="chip">8.1</div><h2 class="t sm">Wait for the spindle to stop, then clear chips with a brush and deburr before you handle the part</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Chips</div><p>Steel chips are razor sharp and hot, and long ones wrap the bit. Turn it off, wait for it to stop, then clear them with a brush, never your fingers.</p></div><div class="card"><div class="k">The part</div><p>It may be hot right after drilling. The exit side has a burr that cuts skin. Deburr it before you handle the part bare-handed.</p></div><div class="card"><div class="k">Leave it ready</div><p>Key in its holder, chips brushed off the table, press off.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Chips</div><p>Steel chips are razor sharp and hot, and long ones wrap the bit. Turn it off, wait for it to stop, then clear them with a brush, never your fingers.</p></div><div class="card"><div class="k">The part</div><p>It may be hot right after drilling. The exit side has a <button type="button" class="gl" data-term="burr" data-def="A sharp, rough edge left on metal after cutting or drilling." aria-expanded="false">burr</button> that cuts skin. <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">Deburr</button> it before you handle the part bare-handed.</p></div><div class="card"><div class="k">Leave it ready</div><p>Key in its holder, chips brushed off the table, press off.</p></div></div>
   <div class="ft"><span>8.1 bank</span></div>
   <aside class="notes">Show a curly steel chip in a clear bag if you have one. Deburr a test hole with the chamfer tool.</aside>
 </section>
@@ -1059,13 +1073,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Through hole in aluminum plate</td><td>Vise or clamp, backing board, speed from the chart, eases off at breakthrough</td></tr><tr><td>Hole in steel</td><td>Slower speed, cutting oil, chips cleared with a brush after it stops</td></tr><tr><td>Change the speed</td><td>Unplugs first, re-tensions the belt, closes the cover</td></tr><tr><td>Repeat blind holes to one depth</td><td>Sets and checks the depth stop on the first hole</td></tr><tr><td>Hole pattern with the cross slide vise</td><td>Moves and locks the vise between holes; never feeds it sideways into a cutter</td></tr><tr><td>Hole through square or round tube</td><td>Tube held in the vise or a V-block, hole centered, doesn&#x27;t crush the tube</td></tr><tr><td>Hole saw or large Forstner bit</td><td>Slowest speed, clamped, slug removed with the press stopped</td></tr><tr><td>Every use</td><td>Chuck key out, hair and sleeves, no gloves, deburrs before handling</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Through hole in aluminum plate</td><td><button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">Vise</button> or clamp, backing board, speed from the chart, eases off at breakthrough</td></tr><tr><td>Hole in steel</td><td>Slower speed, cutting oil, chips cleared with a brush after it stops</td></tr><tr><td>Change the speed</td><td>Unplugs first, re-tensions the belt, closes the cover</td></tr><tr><td>Repeat blind holes to one depth</td><td>Sets and checks the depth stop on the first hole</td></tr><tr><td>Hole pattern with the cross slide vise</td><td>Moves and locks the vise between holes; never feeds it sideways into a cutter</td></tr><tr><td>Hole through square or round tube</td><td>Tube held in the vise or a V-block, hole centered, doesn&#x27;t crush the tube</td></tr><tr><td><button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">Hole saw</button> or large <button type="button" class="gl" data-term="Forstner bit" data-def="A bit that cuts clean, flat-bottomed holes in wood." aria-expanded="false">Forstner</button> bit</td><td>Slowest speed, clamped, slug removed with the press stopped</td></tr><tr><td>Every use</td><td><button type="button" class="gl" data-term="chuck key" data-def="The small geared key that tightens and loosens a keyed chuck. Never leave it in the chuck." aria-expanded="false">Chuck key</button> out, hair and sleeves, no gloves, <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburrs</button> before handling</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Certified</div><p>A mentor watches each use on real work, a personal project, or a small check station. Certified 8.1 earns the red third stripe.</p></div><div class="card tight"><div class="k">Stand-ins</div><p>A spot-the-problem check can stand in for a use that won&#x27;t come up soon.</p></div></div>
   </div>
   <div class="ft"><span>Proposed uses from the 8.1 bank</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>burr</dt><dd>A sharp, rough edge left on metal after cutting or drilling.</dd></div><div class="gl-item"><dt>chuck</dt><dd>The jaws on a drill or drill press that close around a bit to hold it.</dd></div><div class="gl-item"><dt>chuck key</dt><dd>The small geared key that tightens and loosens a keyed chuck. Never leave it in the chuck.</dd></div><div class="gl-item"><dt>CNC</dt><dd>Computer numerical control: a machine that moves its cutter along a path that a computer sends it.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>Forstner bit</dt><dd>A bit that cuts clean, flat-bottomed holes in wood.</dd></div><div class="gl-item"><dt>hole saw</dt><dd>A cup-shaped saw on a drill for cutting big round holes.</dd></div><div class="gl-item"><dt>pin punch</dt><dd>A punch with a straight, flat tip for driving pins out of holes.</dd></div><div class="gl-item"><dt>quill</dt><dd>The part of a drill press that moves the spindle up and down when you turn the handle.</dd></div><div class="gl-item"><dt>RPM</dt><dd>Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute.</dd></div><div class="gl-item"><dt>spindle</dt><dd>The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>12 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1225,6 +1245,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2902,4 +2978,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 7 quick checks, 4 checkpoints.
   v1.1 (2026-11-05): Review fixes: checkpoint hints removed, since they show on screen and gave answers away; rewrote qc-depth and qc-column. Brand names kept to foot lines and notes.
   v1.1.1 (2026-11-05): Quiz footer points to bank v0.1.3.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

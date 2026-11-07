@@ -1,11 +1,11 @@
 <title>Track Saw Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_track_saw_study_v1.1.2.html
-  version: 1.1.2
+  file: rambots_track_saw_study_v1.1.3.html
+  version: 1.1.3
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the Rambots 7.3 track saw written test: the track and strip, depth and riving knife, kickback, support, blade changes, and body position, with checks along the way.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Track Saw Study",
   "slug": "rambots_track_saw_study",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-track-saw-study-v1"
@@ -733,7 +747,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-what" data-title="Why a track saw">
   <div class="hd"><div class="chip">7.3</div><h2 class="t sm">A track saw cuts straight, clean, and right on the line, but the track still gets clamped</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Straight</div><p>The saw rides a track, so the cut can&#x27;t wander the way a freehand circular saw cut can.</p></div><div class="card"><div class="k">Clean, on the line</div><p>The splinter strip holds fibers down and marks the cut edge, so you line up on your pencil mark with no offset to measure.</p></div><div class="card"><div class="k">Housed blade</div><p>On a plunge track saw, the blade stays inside the housing until you plunge it into the cut.</p></div><div class="card"><div class="k">Our setup</div><p>We have a track attachment that guides a saw along a track. The rules on the next slides apply to it and to any track saw.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Straight</div><p>The saw rides a track, so the cut can&#x27;t wander the way a freehand circular saw cut can.</p></div><div class="card"><div class="k">Clean, on the line</div><p>The splinter strip holds fibers down and marks the cut edge, so you line up on your pencil mark with no offset to measure.</p></div><div class="card"><div class="k">Housed blade</div><p>On a <button type="button" class="gl" data-term="plunge cut" data-def="Starting a cut in the middle of the material by lowering the spinning blade or bit straight down into it." aria-expanded="false">plunge</button> track saw, the blade stays inside the housing until you plunge it into the cut.</p></div><div class="card"><div class="k">Our setup</div><p>We have a track attachment that guides a saw along a track. The rules on the next slides apply to it and to any track saw.</p></div></div>
   <div class="ft"><span>7.3 bank; team inventory</span></div>
   <aside class="notes">To confirm in the shop: our track setup is a Kreg attachment, and the bank was written around a DeWalt plunge track saw. Show which features ours has (plunge, riving knife, anti-kickback stop, blade lock) as you go.</aside>
 </section>
@@ -781,7 +795,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-depth" data-title="Depth and riving knife">
   <div class="hd"><div class="chip">7.3</div><h2 class="t sm">Set the depth for the work plus the track, and keep the riving knife in for through cuts</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Depth</div><p>Less than a full tooth below the work, about 1/8 in. extra. The saw sits on the track, so the depth has to account for the track&#x27;s thickness too.</p></div><div class="card"><div class="k">Riving knife</div><p>A thin plate behind the blade that rides in the kerf and holds it open, so the wood can&#x27;t close on the back of the blade.</p></div><div class="card"><div class="k">When to use it</div><p>On every through cut. On plunge saws it retracts so you can plunge in the middle of a panel.</p></div><div class="card"><div class="k">Bent knife</div><p>Never run the saw with a bent riving knife. It drags in the kerf or steers the saw. Tag it out.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Depth</div><p>Less than a full tooth below the work, about 1/8 in. extra. The saw sits on the track, so the depth has to account for the track&#x27;s thickness too.</p></div><div class="card"><div class="k">Riving knife</div><p>A thin plate behind the blade that rides in the <button type="button" class="gl" data-term="kerf" data-def="The width of material a blade, bit, or laser removes as it cuts." aria-expanded="false">kerf</button> and holds it open, so the wood can&#x27;t close on the back of the blade.</p></div><div class="card"><div class="k">When to use it</div><p>On every through cut. On <button type="button" class="gl" data-term="plunge cut" data-def="Starting a cut in the middle of the material by lowering the spinning blade or bit straight down into it." aria-expanded="false">plunge</button> saws it retracts so you can plunge in the middle of a panel.</p></div><div class="card"><div class="k">Bent knife</div><p>Never run the saw with a bent <button type="button" class="gl" data-term="riving knife" data-def="A curved metal fin right behind the table saw blade. It keeps the cut from closing on the blade, which helps prevent kickback." aria-expanded="false">riving knife</button>. It drags in the kerf or steers the saw. Tag it out.</p></div></div>
   <div class="ft"><span>7.3 bank; track saw manuals</span></div>
   <aside class="notes">To confirm in the shop: whether our saw&#x27;s depth scale already counts the track, and whether our setup has a riving knife.</aside>
 </section>
@@ -795,7 +809,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-kickback" data-title="Preventing kickback">
   <div class="hd"><div class="chip">7.3</div><h2 class="t sm">Clamp the track, keep the knife in, and only ever push forward</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Clamp the track</div><p>A track that shifts mid-cut twists the blade in the kerf, and a twisted blade binds.</p></div><div class="card"><div class="k">Knife and stop</div><p>Riving knife on for through cuts. For a plunge in the middle of a panel, set the anti-kickback stop if your saw has one, so it can&#x27;t run backward.</p></div><div class="card"><div class="k">Forward only</div><p>Always push the saw forward, away from you. Pulling it back in the kerf climbs the blade out of the cut.</p></div><div class="card"><div class="k">If it stalls</div><p>Let go of the trigger and hold the saw still until the blade stops. Then find out why.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Clamp the track</div><p>A track that shifts mid-cut twists the blade in the <button type="button" class="gl" data-term="kerf" data-def="The width of material a blade, bit, or laser removes as it cuts." aria-expanded="false">kerf</button>, and a twisted blade <button type="button" class="gl" data-term="bind" data-def="When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back." aria-expanded="false">binds</button>.</p></div><div class="card"><div class="k">Knife and stop</div><p><button type="button" class="gl" data-term="riving knife" data-def="A curved metal fin right behind the table saw blade. It keeps the cut from closing on the blade, which helps prevent kickback." aria-expanded="false">Riving knife</button> on for through cuts. For a <button type="button" class="gl" data-term="plunge cut" data-def="Starting a cut in the middle of the material by lowering the spinning blade or bit straight down into it." aria-expanded="false">plunge</button> in the middle of a panel, set the anti-kickback stop if your saw has one, so it can&#x27;t run backward.</p></div><div class="card"><div class="k">Forward only</div><p>Always push the saw forward, away from you. Pulling it back in the kerf climbs the blade out of the cut.</p></div><div class="card"><div class="k">If it stalls</div><p>Let go of the trigger and hold the saw still until the blade stops. Then find out why.</p></div></div>
   <div class="ft"><span>7.3 bank; track saw manuals</span></div>
   <aside class="notes">To confirm in the shop: whether our setup has an anti-kickback stop and how to set it.</aside>
 </section>
@@ -827,7 +841,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-support" data-title="Supporting a full sheet">
   <div class="hd"><div class="chip">7.3</div><h2 class="t sm">Lay a full sheet on foam board, or support it near both sides of the line</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Foam board</div><p>Lay the sheet on rigid foam and set the blade to cut a little into the foam. Both halves stay flat and supported the whole cut.</p></div><div class="card"><div class="k">Supports</div><p>If you use supports instead, put them near both sides of the cut line, not just at the ends of the sheet.</p></div><div class="card"><div class="k">Why</div><p>A sheet held only at its ends sags in the middle. The kerf closes on the blade, and the offcut can drop and tear.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Foam board</div><p>Lay the sheet on rigid foam and set the blade to cut a little into the foam. Both halves stay flat and supported the whole cut.</p></div><div class="card"><div class="k">Supports</div><p>If you use supports instead, put them near both sides of the cut line, not just at the ends of the sheet.</p></div><div class="card"><div class="k">Why</div><p>A sheet held only at its ends sags in the middle. The <button type="button" class="gl" data-term="kerf" data-def="The width of material a blade, bit, or laser removes as it cuts." aria-expanded="false">kerf</button> closes on the blade, and the offcut can drop and tear.</p></div></div>
   <div class="ft"><span>7.3 bank; track saw manuals</span></div>
   <aside class="notes"></aside>
 </section>
@@ -841,7 +855,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-blade" data-title="Changing the blade">
   <div class="hd"><div class="chip">7.3</div><h2 class="t sm">Unplug it or take the battery out before the blade lock and the wrench</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Power out</h3><p>Unplug a corded saw, or take the battery out.</p></div><div class="step"><div class="n">2</div><h3>Blade lock</h3><p>Press the blade lock so the arbor can&#x27;t turn, and use the wrench that came with the saw.</p></div><div class="step"><div class="n">3</div><h3>Never the trigger</h3><p>Never pull the trigger with the blade lock on. It can wreck the motor or the lock, and spin the wrench.</p></div><div class="step"><div class="n">4</div><h3>Check after</h3><p>Mount the new blade with its arrow matching the guard, then check the riving knife is straight and in place.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Power out</h3><p>Unplug a corded saw, or take the battery out.</p></div><div class="step"><div class="n">2</div><h3>Blade lock</h3><p>Press the blade lock so the <button type="button" class="gl" data-term="arbor" data-def="The shaft that a saw blade or grinding wheel mounts on." aria-expanded="false">arbor</button> can&#x27;t turn, and use the wrench that came with the saw.</p></div><div class="step"><div class="n">3</div><h3>Never the trigger</h3><p>Never pull the trigger with the blade lock on. It can wreck the motor or the lock, and spin the wrench.</p></div><div class="step"><div class="n">4</div><h3>Check after</h3><p>Mount the new blade with its arrow matching the guard, then check the <button type="button" class="gl" data-term="riving knife" data-def="A curved metal fin right behind the table saw blade. It keeps the cut from closing on the blade, which helps prevent kickback." aria-expanded="false">riving knife</button> is straight and in place.</p></div></div></div>
   <div class="ft"><span>7.3 bank; track saw manuals</span></div>
   <aside class="notes"></aside>
 </section>
@@ -920,13 +934,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Full-sheet cut on foam board</td><td>Track clamped, strip on the line, forward only, both hands, standing to the side</td></tr><tr><td>Plunge cut in the middle of a panel</td><td>Anti-kickback stop set, plunges slowly, lets the blade stop before lifting</td></tr><tr><td>Blade change</td><td>Unplugged, blade lock, riving knife checked</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Full-sheet cut on foam board</td><td>Track clamped, strip on the line, forward only, both hands, standing to the side</td></tr><tr><td><button type="button" class="gl" data-term="plunge cut" data-def="Starting a cut in the middle of the material by lowering the spinning blade or bit straight down into it." aria-expanded="false">Plunge cut</button> in the middle of a panel</td><td>Anti-kickback stop set, plunges slowly, lets the blade stop before lifting</td></tr><tr><td>Blade change</td><td>Unplugged, blade lock, <button type="button" class="gl" data-term="riving knife" data-def="A curved metal fin right behind the table saw blade. It keeps the cut from closing on the blade, which helps prevent kickback." aria-expanded="false">riving knife</button> checked</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Supervised first</div><p>Passing the test gets you Supervised. A mentor directly supervises every group 7 use.</p></div><div class="card tight"><div class="k">Certified</div><p>Comes from a mentor watching you do these uses well on real work or a check station.</p></div></div>
   </div>
   <div class="ft"><span>7.3 bank, Uses for Certified</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>arbor</dt><dd>The shaft that a saw blade or grinding wheel mounts on.</dd></div><div class="gl-item"><dt>bind</dt><dd>When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back.</dd></div><div class="gl-item"><dt>kerf</dt><dd>The width of material a blade, bit, or laser removes as it cuts.</dd></div><div class="gl-item"><dt>plunge cut</dt><dd>Starting a cut in the middle of the material by lowering the spinning blade or bit straight down into it.</dd></div><div class="gl-item"><dt>riving knife</dt><dd>A curved metal fin right behind the table saw blade. It keeps the cut from closing on the blade, which helps prevent kickback.</dd></div></dl></div></div>
+  <div class="ft"><span>5 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1086,6 +1106,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2764,4 +2840,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1 (2026-11-05): Review fix: never drape the cord over your shoulder, added to the hands and body slide (Q10). Kreg features still to confirm.
   v1.1.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
   v1.1.2 (2026-11-05): Quiz slide says you retake after a mentor goes over every miss with you. Our setup card no longer names a brand.
+  v1.1.3 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

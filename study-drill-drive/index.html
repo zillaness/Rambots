@@ -1,11 +1,11 @@
 <title>Drill and Drive Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_drill_drive_study_v1.1.2.html
-  version: 1.1.2
+  file: rambots_drill_drive_study_v1.1.3.html
+  version: 1.1.3
   author: Sam Cao
   created: 2026-10-26
-  last_updated: 2026-11-05
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots group 6 drill and drive quizzes: teaches each tool, quick checks that record first answers, blocking checkpoints on can't-fail topics, and a downloadable score.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Drill and Drive Study",
   "slug": "rambots_drill_drive_study",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-drill-drive-study-v1"
@@ -875,8 +889,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="parts" data-title="Two parts">
   <div class="hd"><div class="chip">Start here</div><h2 class="t">Two parts, each matching a quiz</h2></div>
   <div class="body cols-2">
-    <div class="card lg"><div class="k">Part 1</div><h3>Drill/driver</h3><p>Controls, trigger and stance, bits and the chuck, grabs, materials, step bits and hole saws, wood screws. Ends with a three-question checkpoint.</p><div class="row"><button class="tbtn" data-to="p1-controls">Start Part 1</button></div></div>
-    <div class="card lg"><div class="k">Part 2</div><h3>Impact, ratchet, and sander</h3><p>Impact driver, cordless ratchet, palm sander, sawdust. Ends with a two-question checkpoint.</p><div class="row"><button class="tbtn" data-to="p2-impact">Skip to Part 2</button></div></div>
+    <div class="card lg"><div class="k">Part 1</div><h3>Drill/driver</h3><p>Controls, trigger and stance, bits and the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>, grabs, materials, <button type="button" class="gl" data-term="step bit" data-def="A cone-shaped bit with stair-step sizes, for clean holes in thin sheet." aria-expanded="false">step bits</button> and <button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">hole saws</button>, wood screws. Ends with a three-question checkpoint.</p><div class="row"><button class="tbtn" data-to="p1-controls">Start Part 1</button></div></div>
+    <div class="card lg"><div class="k">Part 2</div><h3>Impact, ratchet, and sander</h3><p><button type="button" class="gl" data-term="impact driver" data-def="A driver that adds quick hammering bursts as it turns, for driving long screws. It takes hex shank bits only." aria-expanded="false">Impact driver</button>, cordless ratchet, palm sander, sawdust. Ends with a two-question checkpoint.</p><div class="row"><button class="tbtn" data-to="p2-impact">Skip to Part 2</button></div></div>
   </div>
   <div class="ft"><span>The parts can be done at different meetings. Your answers stay saved in this browser.</span></div>
   <aside class="notes">The two parts are taken as separate quizzes, so teach them at separate meetings if that's easier. Press → to start Part 1, or use Skip to Part 2 on the second day.</aside>
@@ -887,10 +901,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="p1-controls" data-title="Controls">
   <div class="hd"><div class="chip">Part 1 · Controls</div><h2 class="t sm">Know the four controls before you pull the trigger</h2></div>
   <div class="body split-l">
-    <figure class="fig"><img src="img/drill_controls.webp" alt="Cordless drill/driver with a numbered clutch ring behind the chuck, a gear selector on top, and a direction switch above the trigger"><figcaption>Clutch ring behind the chuck, gear selector on top, direction switch above the trigger. Photo: dvanzuijlekom, CC BY-SA 2.0</figcaption></figure>
+    <figure class="fig"><img src="img/drill_controls.webp" alt="Cordless drill/driver with a numbered clutch ring behind the chuck, a gear selector on top, and a direction switch above the trigger"><figcaption><button type="button" class="gl" data-term="clutch" data-def="The numbered ring on a drill/driver that slips at a set twisting force, so you don&#x27;t strip or snap the screw." aria-expanded="false">Clutch</button> ring behind the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>, gear selector on top, direction switch above the trigger. Photo: dvanzuijlekom, CC BY-SA 2.0</figcaption></figure>
     <div class="defs">
-      <div class="d"><b>Clutch ring</b><p>The numbers set how much torque goes out before the clutch slips and clicks. The drill icon past the highest number takes the clutch out of the way.</p></div>
-      <div class="d"><b>Gear selector</b><p>1 is low gear: slower, more torque, for bigger holes and hole saws. 2 is high gear: faster, for small holes under about 1/2 inch. Shift only with the chuck stopped.</p></div>
+      <div class="d"><b>Clutch ring</b><p>The numbers set how much <button type="button" class="gl" data-term="torque" data-def="Twisting force, like how hard a driver turns a screw." aria-expanded="false">torque</button> goes out before the clutch slips and clicks. The drill icon past the highest number takes the clutch out of the way.</p></div>
+      <div class="d"><b>Gear selector</b><p>1 is low gear: slower, more torque, for bigger holes and <button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">hole saws</button>. 2 is high gear: faster, for small holes under about 1/2 inch. Shift only with the chuck stopped.</p></div>
       <div class="d"><b>Trigger and switch</b><p>The trigger sets speed. The switch above it is forward, reverse, and a center lock that keeps the trigger from running the motor.</p></div>
       <div class="d"><b>Chuck</b><p>Three jaws. Keyless: you tighten it by hand.</p></div>
       <p class="warnline">Before any power tool: glasses on, hair tied back, and no gloves of any kind, nitrile included. Say "using the drill," then look around to make sure everyone near you knows.</p>
@@ -913,7 +927,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <div class="stack">
       <div class="card tight"><div class="k">Trigger</div><p>Ease in until the bit bites, smoothly add speed, and ease off at the end. A grab at a slow start is a small one.</p></div>
       <div class="card tight"><div class="k">Stance</div><p>Feet apart, one foot back, steady firm pressure. Never lean your whole weight in: when the bit punches through, your weight goes with it.</p></div>
-      <div class="card tight"><div class="k">Second hand</div><p>Our drill/drivers have no side handles. Steady the top of the body or push on the back in line with the bit. Keep it off the spinning chuck and off the vents, which cool the motor.</p></div>
+      <div class="card tight"><div class="k">Second hand</div><p>Our drill/drivers have no side handles. Steady the top of the body or push on the back in line with the bit. Keep it off the spinning <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button> and off the vents, which cool the motor.</p></div>
       <div class="card tight"><div class="k">Setting it down</div><p>On its side, every time. Team rule: drills and drivers never stand on their batteries, because they get knocked over and break bits.</p></div>
     </div>
     <figure class="fig"><img src="img/drill_clamped_work.webp" alt="A cordless drill lying on its side next to a workpiece held by a C-clamp"><figcaption>Lying on its side, with the work clamped. Photo: Phil and Pam, CC BY 2.0</figcaption></figure>
@@ -934,8 +948,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="body split-wide">
     <div class="stack">
       <div class="steps">
-        <div class="step"><div class="n">1</div><h3>Lock the switch</h3><p>Center the direction switch, or pull the battery. A bumped trigger then can't spin the chuck.</p></div>
-        <div class="step"><div class="n">2</div><h3>Seat the bit</h3><p>Deep, and centered between all three jaws. Hex shanks are fine in a three-jaw chuck.</p></div>
+        <div class="step"><div class="n">1</div><h3>Lock the switch</h3><p>Center the direction switch, or pull the battery. A bumped trigger then can't spin the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>.</p></div>
+        <div class="step"><div class="n">2</div><h3>Seat the bit</h3><p>Deep, and centered between all three jaws. Hex <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shanks</button> are fine in a three-jaw chuck.</p></div>
         <div class="step"><div class="n">3</div><h3>Tighten by hand</h3><p>Let go of the bit, then finish tightening the sleeve firmly by hand.</p></div>
         <div class="step"><div class="n">4</div><h3>Pull out forward</h3><p>Pull the bit out spinning forward, or stop it and pull straight out. Even a stuck bit comes out spinning forward; reverse packs the chips back in.</p></div>
       </div>
@@ -951,9 +965,9 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Part 1 · When it grabs</div><h2 class="t sm">Expect the drill to grab, and know when it happens</h2></div>
   <div class="body split-wide">
     <div class="cols-3">
-      <div class="card tight"><div class="k">When</div><p>Right as the bit breaks through the far side. When a hole saw's teeth first meet the material. When a big spade bit catches in soft wood. When chips pack up in a deep hole.</p></div>
+      <div class="card tight"><div class="k">When</div><p>Right as the bit breaks through the far side. When a <button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">hole saw</button>'s teeth first meet the material. When a big spade bit catches in soft wood. When chips pack up in a deep hole.</p></div>
       <div class="card tight"><div class="k">Prevent it</div><p>Clamp the work so it can't spin. Ease off as the bit comes through. Never hold the part: your other hand stays on the drill or well clear, never under the work or next to the hole.</p></div>
-      <div class="card tight"><div class="k">If it grabs</div><p>Let off the trigger so the motor stops. Trying to out-muscle a stalled drill sprains wrists. The drill manual puts it plainly: "Always expect the stall."</p></div>
+      <div class="card tight"><div class="k">If it grabs</div><p>Let off the trigger so the motor stops. Trying to out-muscle a <button type="button" class="gl" data-term="stall" data-def="When a motor stops turning under load while it&#x27;s still powered." aria-expanded="false">stalled</button> drill sprains wrists. The drill manual puts it plainly: "Always expect the stall."</p></div>
     </div>
     <figure class="fig"><img src="img/spade_bit_wood.webp" alt="A spade bit cutting into a board, throwing chips"><figcaption>Spade bits are fast and grabby. Photo: Knowles Gallery, CC BY 2.0</figcaption></figure>
   </div>
@@ -974,9 +988,9 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <table class="t2">
       <thead><tr><th></th><th>Before</th><th>While drilling</th><th>After</th></tr></thead>
       <tbody>
-        <tr><td><b>Wood</b> (plywood, 2x4)</td><td>Clamp scrap behind the spot. Blue painter's tape on a plywood face.</td><td>Ease off as the bit comes through so the back doesn't splinter.</td><td>Check the exit side. Spade bits tear it out; a Forstner bit (flat bottom, smooth rim) leaves a cleaner hole.</td></tr>
-        <tr><td><b>Polycarbonate</b></td><td>Center at least twice the hole's diameter from the edge. Scrap behind it.</td><td>No petroleum oil or WD-40; it can crack the plastic. Air or a light water mist, clear chips often, slow at breakthrough.</td><td>No threadlocker on bolts through it; it can crack the plastic. Use a nylon-insert locknut.</td></tr>
-        <tr><td><b>Aluminum</b></td><td>Center punch the mark. Small pilot hole first for bigger holes.</td><td>A little cutting fluid or WD-40. Back out to clear chips, still spinning forward.</td><td>Deburr both sides. The bit and chips can burn you, so let them cool. Never grab a hot bit with a rag; it can wrap around the chuck.</td></tr>
+        <tr><td><b>Wood</b> (plywood, 2x4)</td><td>Clamp scrap behind the spot. Blue painter's tape on a plywood face.</td><td>Ease off as the bit comes through so the back doesn't splinter.</td><td>Check the exit side. Spade bits tear it out; a <button type="button" class="gl" data-term="Forstner bit" data-def="A bit that cuts clean, flat-bottomed holes in wood." aria-expanded="false">Forstner</button> bit (flat bottom, smooth rim) leaves a cleaner hole.</td></tr>
+        <tr><td><b>Polycarbonate</b></td><td>Center at least twice the hole's diameter from the edge. Scrap behind it.</td><td>No petroleum oil or WD-40; it can crack the plastic. Air or a light water mist, clear chips often, slow at breakthrough.</td><td>No <button type="button" class="gl" data-term="threadlocker" data-def="Liquid put on screw threads that hardens and keeps the screw from vibrating loose. Blue can be removed with hand tools; red needs heat." aria-expanded="false">threadlocker</button> on bolts through it; it can crack the plastic. Use a nylon-insert locknut.</td></tr>
+        <tr><td><b>Aluminum</b></td><td><button type="button" class="gl" data-term="center punch" data-def="A pointed punch that makes a small dimple, so a drill bit starts exactly where you want." aria-expanded="false">Center punch</button> the mark. Small <button type="button" class="gl" data-term="pilot hole" data-def="A small hole drilled first to guide a bigger bit or a screw." aria-expanded="false">pilot hole</button> first for bigger holes.</td><td>A little cutting fluid or WD-40. Back out to clear chips, still spinning forward.</td><td><button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">Deburr</button> both sides. The bit and chips can burn you, so let them cool. Never grab a hot bit with a rag; it can wrap around the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>.</td></tr>
       </tbody>
     </table>
   </div>
@@ -1005,7 +1019,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
           <text class="s" x="120" y="186">tape on the 3/4 step to stop at 5/8</text><path class="ln" d="M208 168 v-14"/>
         </svg>
       </div>
-      <p>For thin stock, up to about 1/4 inch. Each step is one size, and the hole is whatever step last cut all the way around. Mark the step above your size, use light pressure and a little wax or fluid on aluminum, then deburr.</p>
+      <p>For thin stock, up to about 1/4 inch. Each step is one size, and the hole is whatever step last cut all the way around. Mark the step above your size, use light pressure and a little wax or fluid on aluminum, then <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburr</button>.</p>
     </div>
     <div class="card">
       <div class="k">Hole saw</div>
@@ -1027,7 +1041,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="p1-screws" data-title="Wood screws">
   <div class="hd"><div class="chip">Part 1 · Wood screws</div><h2 class="t sm">Pilot holes and smooth shanks are why wood screws pull tight</h2></div>
   <div class="body cols-3">
-    <div class="card tight"><div class="k">Pilot hole</div><p>Keeps the wood from splitting, especially near an end or edge. Keeps the screw going in straight. Takes less force, so the screw is less likely to strip or snap. Too big a pilot hole leaves the threads nothing to grab.</p></div>
+    <div class="card tight"><div class="k">Pilot hole</div><p>Keeps the wood from splitting, especially near an end or edge. Keeps the screw going in straight. Takes less force, so the screw is less likely to strip or snap. Too big a <button type="button" class="gl" data-term="pilot hole" data-def="A small hole drilled first to guide a bigger bit or a screw." aria-expanded="false">pilot hole</button> leaves the threads nothing to grab.</p></div>
     <div class="card tight"><div class="k">Partial threads</div>
       <div class="diag" aria-label="Diagram: the smooth shank passes through the top board and the threads in the bottom board pull the two boards together">
         <svg viewBox="0 0 360 230" role="img">
@@ -1037,8 +1051,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
           <text class="s" x="214" y="80">smooth shank</text><text class="s" x="214" y="160">threads grip</text>
         </svg>
       </div>
-      <p>Only the bottom board should hold threads. The smooth shank, or a clearance hole a little wider than the threads in the top board, lets the top board slide down as the screw pulls in.</p></div>
-    <div class="card tight"><div class="k">Driving</div><p>Hold the screw by the head while you start it slowly, then let go once the threads bite. Set the clutch low and step it up until the head seats, not sunk. A long screw backed out of hard wood is hot, so let it cool.</p></div>
+      <p>Only the bottom board should hold threads. The smooth <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button>, or a <button type="button" class="gl" data-term="clearance hole" data-def="A hole a little bigger than the screw, so it slides through without threading." aria-expanded="false">clearance hole</button> a little wider than the threads in the top board, lets the top board slide down as the screw pulls in.</p></div>
+    <div class="card tight"><div class="k">Driving</div><p>Hold the screw by the head while you start it slowly, then let go once the threads bite. Set the <button type="button" class="gl" data-term="clutch" data-def="The numbered ring on a drill/driver that slips at a set twisting force, so you don&#x27;t strip or snap the screw." aria-expanded="false">clutch</button> low and step it up until the head seats, not sunk. A long screw backed out of hard wood is hot, so let it cool.</p></div>
   </div>
   <div class="ft"><span>From the group 6 quiz bank v0.4.3 and team practice</span></div>
   <aside class="notes">Show a partly threaded screw next to a fully threaded one. The clutch habit here is the delicate-material use on the Certified list.</aside>
@@ -1064,7 +1078,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cp1-bits-yes" data-title="Right: stop teammate B" data-next="cp1-grab">
   <div class="hd"><div class="chip">Part 1 · Checkpoint</div><h2 class="t sm">Right. Teammate B has their fingers at the jaws while they spin.</h2></div>
-  <div class="body mid"><div class="card lg"><p>A and C are both fine: a centered switch or a pulled battery means a bumped trigger can't spin the chuck. B's fingers are in the jaws while the motor can turn them. Fingers come away from the bit before the chuck moves, and the last snug of the sleeve is a hand job, with the switch locked.</p></div></div>
+  <div class="body mid"><div class="card lg"><p>A and C are both fine: a centered switch or a pulled battery means a bumped trigger can't spin the <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>. B's fingers are in the jaws while the motor can turn them. Fingers come away from the bit before the chuck moves, and the last snug of the sleeve is a hand job, with the switch locked.</p></div></div>
   <div class="ft"><span>Ryobi drill manual. Press → for the next checkpoint question.</span></div>
   <aside class="notes">Remind them the team habit is center lock every time.</aside>
 </section>
@@ -1103,7 +1117,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cp1-grab-gear" data-title="Not quite: gear 1" data-next="cp1-grab">
   <div class="hd"><div class="chip">Part 1 · Checkpoint</div><h2 class="t sm">Not quite. Gear 1 is slower and gives you more control.</h2></div>
-  <div class="body mid"><div class="card lg"><p>The gear changes speed and torque, but any drill can grab at breakthrough. Think about what keeps a motor running after your hand comes off the handle.</p></div></div>
+  <div class="body mid"><div class="card lg"><p>The gear changes speed and <button type="button" class="gl" data-term="torque" data-def="Twisting force, like how hard a driver turns a screw." aria-expanded="false">torque</button>, but any drill can grab at breakthrough. Think about what keeps a motor running after your hand comes off the handle.</p></div></div>
   <div class="ft"><span>Press → to try the question again</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1128,7 +1142,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cp1-holesaw-yes" data-title="Right: clamp it" data-next="p2-impact">
   <div class="hd"><div class="chip">Part 1 · Done</div><h2 class="t sm">Right. Clamped work can't spin with the saw.</h2></div>
-  <div class="body mid"><div class="card lg"><p>A hole saw grabs harder than any other bit, and a part held by hand, even with two hands, spins with it. The same goes for a big spade bit in a 2x4. Then: gear 1, a slow start, both hands on the drill, and let it stop before pulling it out. That's Part 1. Press → to start Part 2.</p></div></div>
+  <div class="body mid"><div class="card lg"><p>A <button type="button" class="gl" data-term="hole saw" data-def="A cup-shaped saw on a drill for cutting big round holes." aria-expanded="false">hole saw</button> grabs harder than any other bit, and a part held by hand, even with two hands, spins with it. The same goes for a big spade bit in a 2x4. Then: gear 1, a slow start, both hands on the drill, and let it stop before pulling it out. That's Part 1. Press → to start Part 2.</p></div></div>
   <div class="ft"><span>Hole saw manual and team practice</span></div>
   <aside class="notes">Part 1 is done. A good break point if Part 2 is another day.</aside>
 </section>
@@ -1145,11 +1159,11 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="p2-impact" data-title="Impact driver">
   <div class="hd"><div class="chip">Part 2 · Impact driver</div><h2 class="t sm">The impact driver hammers, and it has no clutch</h2></div>
   <div class="body split-l">
-    <figure class="fig tall"><img src="img/impact_driver.webp" alt="A cordless impact driver with a quick-release hex collet at the front"><figcaption>Hex collet at the front, no chuck. Photo: toolstop, CC BY 2.0</figcaption></figure>
+    <figure class="fig tall"><img src="img/impact_driver.webp" alt="A cordless impact driver with a quick-release hex collet at the front"><figcaption>Hex <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button> at the front, no <button type="button" class="gl" data-term="chuck" data-def="The jaws on a drill or drill press that close around a bit to hold it." aria-expanded="false">chuck</button>. Photo: toolstop, CC BY 2.0</figcaption></figure>
     <div class="defs">
-      <div class="d"><b>Collet, not a chuck</b><p>Takes 1/4-inch hex shanks only, so round shanks don't fit. A socket fits on a 1/4-inch hex-shank socket adapter. Use bits with a groove the collet locks onto, push them in until they click, and tug to check.</p></div>
+      <div class="d"><b>Collet, not a chuck</b><p>Takes 1/4-inch hex <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shanks</button> only, so round shanks don't fit. A socket fits on a 1/4-inch hex-shank socket adapter. Use bits with a groove the collet locks onto, push them in until they click, and tug to check.</p></div>
       <div class="d"><b>Impact-rated bits</b><p>Bits not rated for impact can shatter under the hammering and throw pieces.</p></div>
-      <div class="d"><b>Best at</b><p>Lots of long wood screws, with much less twist on your wrist than the drill/driver. With impact-rated hex drill bits it can drill pilot holes too.</p></div>
+      <div class="d"><b>Best at</b><p>Lots of long wood screws, with much less twist on your wrist than the drill/driver. With impact-rated hex drill bits it can drill <button type="button" class="gl" data-term="pilot hole" data-def="A small hole drilled first to guide a bigger bit or a screw." aria-expanded="false">pilot holes</button> too.</p></div>
       <div class="d"><b>Keep it off</b><p>Small machine screws like #10-32, and screws into 3D-printed parts. It strips or snaps them before you feel it. Small or accurate holes go on the drill/driver.</p></div>
     </div>
   </div>
@@ -1168,11 +1182,11 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Part 2 · Cordless ratchet</div><h2 class="t sm">The cordless ratchet runs bolts down; your hand finishes them</h2></div>
   <div class="body split-wide">
     <div class="stack">
-      <div class="card tight"><div class="k">Running it down</div><p>Socket all the way on, direction set. Expect the ratchet to twist when the bolt seats or the tool stalls. Keep your fingers and knuckles out of the gap between the handle and anything it could swing into, and let off the trigger as it seats.</p></div>
+      <div class="card tight"><div class="k">Running it down</div><p>Socket all the way on, direction set. Expect the ratchet to twist when the bolt seats or the tool <button type="button" class="gl" data-term="stall" data-def="When a motor stops turning under load while it&#x27;s still powered." aria-expanded="false">stalls</button>. Keep your fingers and knuckles out of the gap between the handle and anything it could swing into, and let off the trigger as it seats.</p></div>
       <div class="card tight"><div class="k">Holding the bolt</div><p>If the bolt head spins, hold it with a wrench, never your fingers.</p></div>
-      <div class="card tight"><div class="k">By hand</div><p>Turning it by hand to break a fastener loose or snug one is fine. It isn't a breaker bar: if a bolt still won't budge, switch to a hand ratchet or breaker bar. It isn't a torque wrench either; finish to a spec with one.</p></div>
+      <div class="card tight"><div class="k">By hand</div><p>Turning it by hand to break a fastener loose or snug one is fine. It isn't a <button type="button" class="gl" data-term="breaker bar" data-def="A long socket handle with no ratchet, for extra leverage to break a tight bolt loose." aria-expanded="false">breaker bar</button>: if a bolt still won't budge, switch to a hand ratchet or breaker bar. It isn't a <button type="button" class="gl" data-term="torque wrench" data-def="A wrench that clicks or reads out when a bolt reaches a set tightness." aria-expanded="false">torque wrench</button> either; finish to a spec with one.</p></div>
     </div>
-    <figure class="fig"><img src="img/hand_ratchet.webp" alt="A hand ratchet with a socket attached"><figcaption>Finish by hand: a hand ratchet, a hex key, or a torque wrench. Photo: Public Domain Photos, CC BY 2.0</figcaption></figure>
+    <figure class="fig"><img src="img/hand_ratchet.webp" alt="A hand ratchet with a socket attached"><figcaption>Finish by hand: a hand ratchet, a <button type="button" class="gl" data-term="hex key" data-def="An L-shaped six-sided key for screws with a hex socket." aria-expanded="false">hex key</button>, or a torque wrench. Photo: Public Domain Photos, CC BY 2.0</figcaption></figure>
   </div>
   <div class="ft"><span>DeWalt cordless ratchet manual: "Always expect the tool to twist." This topic is a can't-fail.</span></div>
   <aside class="notes">If the team ratchet is handy, show the head and point out how little room there is between the handle and a frame rail.</aside>
@@ -1208,8 +1222,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="body split-wide">
     <div class="stack">
       <div class="card tight"><div class="k">Changing paper</div><p>Battery out, every time. Then the new sheet goes on flat and centered. If the pad has dust holes, line the sheet's holes up with them.</p></div>
-      <div class="card tight"><div class="k">Sanding</div><p>Moderate, steady pressure with the pad flat, and keep it moving. Pressing harder only wears out the paper and the tool. Clamp the part and move the sander over it; never clamp the sander in a vise.</p></div>
-      <div class="card tight"><div class="k">Dust</div><p>Mask on and empty the bag. Sawdust is a breathing, slipping, eye, and fire hazard, especially near soldering, the heat gun, or the laser.</p></div>
+      <div class="card tight"><div class="k">Sanding</div><p>Moderate, steady pressure with the pad flat, and keep it moving. Pressing harder only wears out the paper and the tool. Clamp the part and move the sander over it; never clamp the sander in a <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>.</p></div>
+      <div class="card tight"><div class="k">Dust</div><p>Mask on and empty the bag. Sawdust is a breathing, slipping, eye, and fire hazard, especially near <button type="button" class="gl" data-term="solder" data-def="Metal melted with a hot iron to join wires or parts electrically." aria-expanded="false">soldering</button>, the heat gun, or the laser.</p></div>
     </div>
     <figure class="fig"><img src="img/sander_pad_holes.webp" alt="The sanding pad of a random orbit sander, showing its ring of dust holes"><figcaption>A pad with dust holes. Photo: Charles &amp; Hudson, CC BY-SA 2.0</figcaption></figure>
   </div>
@@ -1259,22 +1273,28 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
       <tbody>
         <tr><td>a. Drill wood</td><td>Work clamped, drill icon, scrap backer, eases off at breakthrough</td></tr>
         <tr><td>b. Drill polycarbonate</td><td>Edge distance, scrap backer, no oil, slows at breakthrough</td></tr>
-        <tr><td>c. Drill aluminum</td><td>Center punch, pilot hole if needed, cutting fluid, clears chips, deburrs</td></tr>
+        <tr><td>c. Drill aluminum</td><td><button type="button" class="gl" data-term="center punch" data-def="A pointed punch that makes a small dimple, so a drill bit starts exactly where you want." aria-expanded="false">Center punch</button>, <button type="button" class="gl" data-term="pilot hole" data-def="A small hole drilled first to guide a bigger bit or a screw." aria-expanded="false">pilot hole</button> if needed, cutting fluid, clears chips, <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburrs</button></td></tr>
         <tr><td>d. Spade bit in wood</td><td>Clamped, both hands, eases off as the point comes through</td></tr>
-        <tr><td>e. Step bit in thin stock</td><td>Marks the step, light pressure, stops on the step, deburrs</td></tr>
-        <tr><td>f. Screw into a delicate material</td><td>Pilot hole, low clutch stepped up, head seated, not sunk</td></tr>
+        <tr><td>e. <button type="button" class="gl" data-term="step bit" data-def="A cone-shaped bit with stair-step sizes, for clean holes in thin sheet." aria-expanded="false">Step bit</button> in thin stock</td><td>Marks the step, light pressure, stops on the step, deburrs</td></tr>
+        <tr><td>f. Screw into a delicate material</td><td>Pilot hole, low <button type="button" class="gl" data-term="clutch" data-def="The numbered ring on a drill/driver that slips at a set twisting force, so you don&#x27;t strip or snap the screw." aria-expanded="false">clutch</button> stepped up, head seated, not sunk</td></tr>
       </tbody>
     </table>
     <div class="stack">
       <div class="card tight"><div class="k">Every use</div><p>Bit deep and centered, switch center-locked or battery out for bit changes, slow-fast-slow trigger, balanced stance, set down on its side.</p></div>
       <div class="card tight"><div class="k">Hole saw</div><p>A separate add-on, watched on its own.</p></div>
-      <div class="card tight"><div class="k">6.2 to 6.4</div><p>Uses for the impact driver, cordless ratchet, and palm sander are still drafts.</p></div>
+      <div class="card tight"><div class="k">6.2 to 6.4</div><p>Uses for the <button type="button" class="gl" data-term="impact driver" data-def="A driver that adds quick hammering bursts as it turns, for driving long screws. It takes hex shank bits only." aria-expanded="false">impact driver</button>, cordless ratchet, and palm sander are still drafts.</p></div>
     </div>
   </div>
   <div class="ft"><span>From the group 6 quiz bank v0.4.3, For mentors section</span></div>
   <aside class="notes">Mention drill day if one is scheduled: all six uses in one sitting, about 20 minutes per student in groups of three.</aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>breaker bar</dt><dd>A long socket handle with no ratchet, for extra leverage to break a tight bolt loose.</dd></div><div class="gl-item"><dt>center punch</dt><dd>A pointed punch that makes a small dimple, so a drill bit starts exactly where you want.</dd></div><div class="gl-item"><dt>chuck</dt><dd>The jaws on a drill or drill press that close around a bit to hold it.</dd></div><div class="gl-item"><dt>clearance hole</dt><dd>A hole a little bigger than the screw, so it slides through without threading.</dd></div><div class="gl-item"><dt>clutch</dt><dd>The numbered ring on a drill/driver that slips at a set twisting force, so you don&#x27;t strip or snap the screw.</dd></div><div class="gl-item"><dt>collet</dt><dd>A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>Forstner bit</dt><dd>A bit that cuts clean, flat-bottomed holes in wood.</dd></div><div class="gl-item"><dt>hex key</dt><dd>An L-shaped six-sided key for screws with a hex socket.</dd></div><div class="gl-item"><dt>hole saw</dt><dd>A cup-shaped saw on a drill for cutting big round holes.</dd></div><div class="gl-item"><dt>impact driver</dt><dd>A driver that adds quick hammering bursts as it turns, for driving long screws. It takes hex shank bits only.</dd></div><div class="gl-item"><dt>pilot hole</dt><dd>A small hole drilled first to guide a bigger bit or a screw.</dd></div><div class="gl-item"><dt>shank</dt><dd>The smooth or hex end of a bit that the chuck or collet grips.</dd></div><div class="gl-item"><dt>solder</dt><dd>Metal melted with a hot iron to join wires or parts electrically.</dd></div><div class="gl-item"><dt>stall</dt><dd>When a motor stops turning under load while it&#x27;s still powered.</dd></div><div class="gl-item"><dt>step bit</dt><dd>A cone-shaped bit with stair-step sizes, for clean holes in thin sheet.</dd></div><div class="gl-item"><dt>threadlocker</dt><dd>Liquid put on screw threads that hardens and keeps the screw from vibrating loose. Blue can be removed with hand tools; red needs heat.</dd></div><div class="gl-item"><dt>torque</dt><dd>Twisting force, like how hard a driver turns a screw.</dd></div><div class="gl-item"><dt>torque wrench</dt><dd>A wrench that clicks or reads out when a bolt reaches a set tightness.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>20 words; scroll the list to see them all. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1456,6 +1476,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3134,4 +3210,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1 (2026-11-05): Matched to quiz bank v0.4.3: stuck bits come out spinning forward, other hand clear at breakthrough (new quick check), hot bits and screws with no rag, hole saw plug pushed out through the slots, Forstner bits, team PPE and "using the drill" rule. Review fixes: gear 1 and gear 2 uses, socket adapter on the impact, clearance holes, new scenarios for the breakthrough, screws, impact, and sander checks, and reworded explanations that echoed the quiz bank.
   v1.1.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
   v1.1.2 (2026-11-05): Final check fix: impact quick check's third job is now hex-head bolts on a socket adapter.
+  v1.1.3 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

@@ -1,11 +1,11 @@
 <title>Angle Grinder Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_angle_grinder_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_angle_grinder_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the angle grinder quiz: Section A grinding (7.8) and Section B cut-off wheel (7.9).
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Angle Grinder Study",
   "slug": "rambots_angle_grinder_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-angle-grinder-study-v1"
@@ -1105,7 +1119,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-a-wheels" data-title="Wheels and speed ratings">
   <div class="hd"><div class="chip">7.8 · Wheels</div><h2 class="t sm">Every wheel must be rated at least as fast as the grinder&#x27;s top speed</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Speed rating</div><p>Each wheel is printed with a maximum speed in revolutions per minute (RPM). It must be at least the grinder&#x27;s maximum. Spun past its rating, a wheel can burst.</p></div><div class="card"><div class="k">Size</div><p>A 4-1/2 in. grinder takes 4-1/2 in. wheels. A bigger wheel doesn&#x27;t fit the guard, whatever its rating.</p></div><div class="card"><div class="k">Type 27</div><p>The standard grinding wheel. Its middle is dished, so the nut sits below the grinding face. It goes under the Type 27 grinding guard.</p></div><div class="card"><div class="k">Type 1 and 41</div><p>Thin, flat cut-off wheels. They&#x27;re for Section B, and they get a different guard.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Speed rating</div><p>Each wheel is printed with a maximum speed in revolutions per minute (<button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button>). It must be at least the grinder&#x27;s maximum. Spun past its rating, a wheel can burst.</p></div><div class="card"><div class="k">Size</div><p>A 4-1/2 in. grinder takes 4-1/2 in. wheels. A bigger wheel doesn&#x27;t fit the guard, whatever its rating.</p></div><div class="card"><div class="k">Type 27</div><p>The standard grinding wheel. Its middle is dished, so the nut sits below the grinding face. It goes under the Type 27 grinding guard.</p></div><div class="card"><div class="k">Type 1 and 41</div><p>Thin, flat cut-off wheels. They&#x27;re for Section B, and they get a different guard.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; OSHA 1910.243(c)(5)</span></div>
   <aside class="notes">Pass around a Type 27 wheel and a cut-off wheel. Have students find the RPM rating on each, and on the grinder&#x27;s label. To confirm in the shop: our grinder&#x27;s model and maximum RPM.</aside>
 </section>
@@ -1144,7 +1158,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-a-guard" data-title="The guard">
   <div class="hd"><div class="chip">7.8 · Guard</div><h2 class="t sm">The guard sits between the wheel and your body, every time</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Why it&#x27;s there</div><p>If a wheel bursts, the guard catches the pieces. That only works if it&#x27;s between the wheel and you.</p></div><div class="card"><div class="k">Never to the front</div><p>Don&#x27;t turn it toward the front for a better view. Move yourself or the part instead.</p></div><div class="card"><div class="k">Never off</div><p>Never run the grinder with the guard missing or loose, even for a tight spot. OSHA requires the top half of the wheel to be enclosed.</p></div><div class="card"><div class="k">Moving it</div><p>Take the battery out before you rotate or adjust the guard.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Why it&#x27;s there</div><p>If a wheel bursts, the guard catches the pieces. That only works if it&#x27;s between the wheel and you.</p></div><div class="card"><div class="k">Never to the front</div><p>Don&#x27;t turn it toward the front for a better view. Move yourself or the part instead.</p></div><div class="card"><div class="k">Never off</div><p>Never run the grinder with the guard missing or loose, even for a tight spot. <button type="button" class="gl" data-term="OSHA" data-def="The U.S. Occupational Safety and Health Administration, the federal agency that sets workplace safety rules." aria-expanded="false">OSHA</button> requires the top half of the wheel to be enclosed.</p></div><div class="card"><div class="k">Moving it</div><p>Take the battery out before you rotate or adjust the guard.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; OSHA 1910.243(c)(4); FIRST Safety Manual §3.3</span></div>
   <aside class="notes">With the battery out, show how the guard rotates, and set it correctly for a right-handed and a left-handed student.</aside>
 </section>
@@ -1176,7 +1190,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-a-change" data-title="Changing a wheel">
   <div class="hd"><div class="chip">7.8 · Wheel change</div><h2 class="t sm">Change wheels with the battery out, using the spindle lock and the wrench</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Battery out</h3><p>First, every time. The grinder must not be able to start while your hands are on the wheel.</p></div><div class="step"><div class="n">2</div><h3>Lock and loosen</h3><p>Press the spindle lock and loosen the flange nut with the wrench. Never touch the trigger while the spindle lock is pressed.</p></div><div class="step"><div class="n">3</div><h3>Check the new wheel</h3><p>Its rated RPM is at least the grinder&#x27;s, and it has no cracks or chips.</p></div><div class="step"><div class="n">4</div><h3>Mount and tighten</h3><p>Seat it on the flange, tighten the nut with the wrench, and check the guard is set before the battery goes back in.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Battery out</h3><p>First, every time. The grinder must not be able to start while your hands are on the wheel.</p></div><div class="step"><div class="n">2</div><h3>Lock and loosen</h3><p>Press the <button type="button" class="gl" data-term="spindle lock" data-def="A button that keeps the spindle from turning, so you can loosen or tighten the blade, wheel, or collet." aria-expanded="false">spindle lock</button> and loosen the flange nut with the wrench. Never touch the trigger while the spindle lock is pressed.</p></div><div class="step"><div class="n">3</div><h3>Check the new wheel</h3><p>Its rated <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> is at least the grinder&#x27;s, and it has no cracks or chips.</p></div><div class="step"><div class="n">4</div><h3>Mount and tighten</h3><p>Seat it on the flange, tighten the nut with the wrench, and check the guard is set before the battery goes back in.</p></div></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder</span></div>
   <aside class="notes">Demonstrate a wheel change with the battery in view on the bench, not in the tool.</aside>
 </section>
@@ -1237,7 +1251,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="t-a-hold" data-title="Holding and kickback">
   <div class="hd"><div class="chip">7.8 · Holding</div><h2 class="t sm">Both hands on the grinder and the part in the vise, because a snagged wheel throws the tool</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">Two hands</div><p>One hand on the body and one on the side handle. The side handle is how you hold on when the grinder jumps.</p></div><div class="card tight"><div class="k">The part</div><p>Clamped in a vise, never held in your other hand.</p></div><div class="card tight"><div class="k">Kickback</div><p>A spinning wheel that snags throws the grinder back at you. It happens when the wheel catches a sharp corner or edge, when the part moves, or when the wheel is jammed or twisted.</p></div><div class="card tight"><div class="k">Prevent it</div><p>Light, steady pressure on a flat face. Stand so that if it jumps, it doesn&#x27;t come at your body.</p></div></div>
+    <div class="stack"><div class="card tight"><div class="k">Two hands</div><p>One hand on the body and one on the side handle. The side handle is how you hold on when the grinder jumps.</p></div><div class="card tight"><div class="k">The part</div><p>Clamped in a <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>, never held in your other hand.</p></div><div class="card tight"><div class="k">Kickback</div><p>A spinning wheel that snags throws the grinder back at you. It happens when the wheel catches a sharp corner or edge, when the part moves, or when the wheel is jammed or twisted.</p></div><div class="card tight"><div class="k">Prevent it</div><p>Light, steady pressure on a flat face. Stand so that if it jumps, it doesn&#x27;t come at your body.</p></div></div>
     <figure class="fig"><img src="img/grinder_vise.webp" alt="A grinding wheel throwing sparks off a steel part clamped in a blue bench vise."><figcaption>Grinding steel clamped in a vise. Photo by toolstop, CC BY 2.0, cropped.</figcaption></figure>
   </div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; FLEX safety guide</span></div>
@@ -1281,7 +1295,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-a-finish" data-title="Finishing up">
   <div class="hd"><div class="chip">7.8 · Finish</div><h2 class="t sm">The wheel keeps spinning after you let go, so wait before you set the grinder down</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">It coasts</div><p>Let go of the switch and the wheel keeps spinning for a few seconds. Set it down too soon and it can grab the bench and spin itself off.</p></div><div class="card"><div class="k">Set it down</div><p>Wait for the wheel to stop, then set the grinder down with the wheel up, off the bench.</p></div><div class="card"><div class="k">Clean up</div><p>Check for smoldering sparks and sweep up the grit.</p></div><div class="card"><div class="k">Spot the problem</div><p>A part in a hand, the guard to the front, no face shield, someone in line, or rags in the spark path: stop and fix it.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">It coasts</div><p>Let go of the switch and the wheel keeps spinning for a few seconds. Set it down too soon and it can grab the bench and spin itself off.</p></div><div class="card"><div class="k">Set it down</div><p>Wait for the wheel to stop, then set the grinder down with the wheel up, off the bench.</p></div><div class="card"><div class="k">Clean up</div><p>Check for smoldering sparks and sweep up the <button type="button" class="gl" data-term="grit" data-def="How coarse sandpaper or a wheel is. A lower number is coarser and cuts faster; a higher number is finer and smoother." aria-expanded="false">grit</button>.</p></div><div class="card"><div class="k">Spot the problem</div><p>A part in a hand, the guard to the front, no face shield, someone in line, or rags in the spark path: stop and fix it.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1308,7 +1322,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-b-guard" data-title="Cut-off wheel and its guard">
   <div class="hd"><div class="chip">7.9 · Guard</div><h2 class="t sm">A thin cut-off wheel needs the cutting guard, which covers both sides</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">The wheel</div><p>A cut-off wheel (Type 1 or Type 41) is thin and flat. If it shatters, pieces fly out on both sides.</p></div><div class="card"><div class="k">The guard</div><p>The open grinding guard only covers one side. Swap to the Type 1 cutting guard, which closes over both. Right guard for the wheel, every time.</p></div><div class="card"><div class="k">Before mounting</div><p>Rated RPM at least the grinder&#x27;s maximum, the right diameter and arbor size for our grinder, and no cracks, chips, or bent spots.</p></div><div class="card"><div class="k">Thin means fragile</div><p>A thin wheel is weaker than a grinding wheel, not stronger. That&#x27;s why it gets its own guard.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">The wheel</div><p>A cut-off wheel (Type 1 or Type 41) is thin and flat. If it shatters, pieces fly out on both sides.</p></div><div class="card"><div class="k">The guard</div><p>The open grinding guard only covers one side. Swap to the Type 1 cutting guard, which closes over both. Right guard for the wheel, every time.</p></div><div class="card"><div class="k">Before mounting</div><p>Rated <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> at least the grinder&#x27;s maximum, the right diameter and <button type="button" class="gl" data-term="arbor" data-def="The shaft that a saw blade or grinding wheel mounts on." aria-expanded="false">arbor</button> size for our grinder, and no cracks, chips, or bent spots.</p></div><div class="card"><div class="k">Thin means fragile</div><p>A thin wheel is weaker than a grinding wheel, not stronger. That&#x27;s why it gets its own guard.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; FLEX safety guide; OSHA 1910.243(c)(5)</span></div>
   <aside class="notes">Show both guards side by side if we have them. To confirm in the shop: that the team owns the Type 1 cutting guard for our grinder, and which cut-off wheels we stock (rating and size). Open DECIDE in the bank: whether Section B can be taken the same meeting as Section A.</aside>
 </section>
@@ -1347,7 +1361,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-b-side" data-title="Edge only">
   <div class="hd"><div class="chip">7.9 · Edge only</div><h2 class="t sm">A cut-off wheel cuts with its edge, and side pressure can shatter it</h2></div>
-  <div class="body cols-2"><div class="card"><div class="k">Built for the edge</div><p>A cut-off wheel is made to take force only on its edge. Pressing its flat side on the work can make it shatter.</p></div><div class="card"><div class="k">Burrs after the cut</div><p>Don&#x27;t smooth them with the cut-off wheel. Switch to a grinding wheel or a flap disc (and its guard), or use a file.</p></div></div>
+  <div class="body cols-2"><div class="card"><div class="k">Built for the edge</div><p>A cut-off wheel is made to take force only on its edge. Pressing its flat side on the work can make it shatter.</p></div><div class="card"><div class="k">Burrs after the cut</div><p>Don&#x27;t smooth them with the cut-off wheel. Switch to a grinding wheel or a <button type="button" class="gl" data-term="flap disc" data-def="A grinder disc made of overlapping sandpaper flaps, for smoothing and blending." aria-expanded="false">flap disc</button> (and its guard), or use a file.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; FLEX safety guide; Dremel manual</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1418,7 +1432,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-b-setup" data-title="Setting up a cut">
   <div class="hd"><div class="chip">7.9 · Setup</div><h2 class="t sm">Clamp the work, cut on the waste side, and aim the sparks down and away</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Clamp it</div><p>The work goes in the vise so it can&#x27;t move. Both hands stay on the grinder.</p></div><div class="card"><div class="k">Waste side</div><p>Cut on the waste side so the cut-off piece falls free, away from you.</p></div><div class="card"><div class="k">Sparks</div><p>Cut-off sparks are heavier than grinding sparks. Aim them down and away from people and batteries.</p></div><div class="card"><div class="k">PPE</div><p>Same as grinding: safety glasses with a face shield over them (or the shield over your own prescription glasses), hearing protection, and no gloves.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Clamp it</div><p>The work goes in the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button> so it can&#x27;t move. Both hands stay on the grinder.</p></div><div class="card"><div class="k">Waste side</div><p>Cut on the waste side so the cut-off piece falls free, away from you.</p></div><div class="card"><div class="k">Sparks</div><p>Cut-off sparks are heavier than grinding sparks. Aim them down and away from people and batteries.</p></div><div class="card"><div class="k">PPE</div><p>Same as grinding: safety glasses with a face shield over them (or the shield over your own prescription glasses), hearing protection, and no gloves.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; team rules</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1432,7 +1446,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-b-which" data-title="What it cuts">
   <div class="hd"><div class="chip">7.9 · The job</div><h2 class="t sm">The cut-off wheel is for steel the chop saw can&#x27;t do, and the cut end comes off hot</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Yes</div><p>Steel bolts, threaded rod, and other steel the chop saw can&#x27;t handle.</p></div><div class="card"><div class="k">No</div><p>All aluminum, MAXTube included, goes on the metal chop saw (7.5), even when it&#x27;s busy. Aluminum also clogs abrasive wheels.</p></div><div class="card"><div class="k">The cut end</div><p>Hot enough to burn and sharp with a burr. Let it cool, then deburr it with a file.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Yes</div><p>Steel bolts, threaded rod, and other steel the chop saw can&#x27;t handle.</p></div><div class="card"><div class="k">No</div><p>All aluminum, MAXTube included, goes on the metal chop saw (7.5), even when it&#x27;s busy. Aluminum also clogs <button type="button" class="gl" data-term="abrasive" data-def="Hard, gritty material that grinds or sands material away. Also means a filament or cut that wears tools down." aria-expanded="false">abrasive</button> wheels.</p></div><div class="card"><div class="k">The cut end</div><p>Hot enough to burn and sharp with a <button type="button" class="gl" data-term="burr" data-def="A sharp, rough edge left on metal after cutting or drilling." aria-expanded="false">burr</button>. Let it cool, then <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburr</button> it with a file.</p></div></div>
   <div class="ft"><span>Bank: 7.8 and 7.9 Angle Grinder; team rule</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1461,13 +1475,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>7.8: wheel change and one-minute run</td><td>Battery out, RPM checked, guard between wheel and body, run pointed away from everyone</td></tr><tr><td>7.8: grind a weld or sharp edge on a clamped steel part</td><td>Part in the vise, both hands, glasses and face shield, sparks aimed away, area cleared</td></tr><tr><td>7.8: clean up after grinding</td><td>Waits for the wheel to stop, checks for smoldering sparks, sweeps grit</td></tr><tr><td>7.9: guard and wheel swap to a cut-off wheel</td><td>Cutting guard on, wheel rated for the tool, one-minute run</td></tr><tr><td>7.9: cut off a steel bolt or threaded rod</td><td>Work clamped, out of the wheel&#x27;s plane, no twisting, no side grinding, cut end left to cool</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>7.8: wheel change and one-minute run</td><td>Battery out, <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> checked, guard between wheel and body, run pointed away from everyone</td></tr><tr><td>7.8: grind a weld or sharp edge on a clamped steel part</td><td>Part in the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>, both hands, glasses and face shield, sparks aimed away, area cleared</td></tr><tr><td>7.8: clean up after grinding</td><td>Waits for the wheel to stop, checks for smoldering sparks, sweeps <button type="button" class="gl" data-term="grit" data-def="How coarse sandpaper or a wheel is. A lower number is coarser and cuts faster; a higher number is finer and smoother." aria-expanded="false">grit</button></td></tr><tr><td>7.9: guard and wheel swap to a cut-off wheel</td><td>Cutting guard on, wheel rated for the tool, one-minute run</td></tr><tr><td>7.9: cut off a steel bolt or threaded rod</td><td>Work clamped, out of the wheel&#x27;s plane, no twisting, no side grinding, cut end left to cool</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Passing</div><p>Section A gets you Supervised on 7.8. Section B gets you Supervised on 7.9.</p></div><div class="card tight"><div class="k">Certified</div><p>A mentor watches you do these on real work, and every group 7 use has a mentor directly supervising.</p></div></div>
   </div>
   <div class="ft"><span>From the bank&#x27;s Uses for Certified table (proposed).</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>abrasive</dt><dd>Hard, gritty material that grinds or sands material away. Also means a filament or cut that wears tools down.</dd></div><div class="gl-item"><dt>arbor</dt><dd>The shaft that a saw blade or grinding wheel mounts on.</dd></div><div class="gl-item"><dt>burr</dt><dd>A sharp, rough edge left on metal after cutting or drilling.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>flap disc</dt><dd>A grinder disc made of overlapping sandpaper flaps, for smoothing and blending.</dd></div><div class="gl-item"><dt>grit</dt><dd>How coarse sandpaper or a wheel is. A lower number is coarser and cuts faster; a higher number is finer and smoother.</dd></div><div class="gl-item"><dt>OSHA</dt><dd>The U.S. Occupational Safety and Health Administration, the federal agency that sets workplace safety rules.</dd></div><div class="gl-item"><dt>RPM</dt><dd>Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute.</dd></div><div class="gl-item"><dt>spindle lock</dt><dd>A button that keeps the spindle from turning, so you can loosen or tighten the blade, wheel, or collet.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>10 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1634,6 +1654,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3311,4 +3387,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-a-firstrun, qc-a-hold, qc-a-coast, and qc-b-hot so none copies its bank question; added the wobble rule to the first-minute card.
   v1.1 (2026-11-05): Review fixes: rewrote 7 checks that echoed the bank, rotated right-answer positions, added a photo.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 16 quick checks, 6 checkpoints. Checkpoint hint lines removed.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

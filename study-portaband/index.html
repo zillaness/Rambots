@@ -1,11 +1,11 @@
 <title>Portaband Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_portaband_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_portaband_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the three portaband quizzes: handheld (7.6), horizontal stand (7.7), and vertical stand (8.4).
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Portaband Study",
   "slug": "rambots_portaband_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-portaband-study-v1"
@@ -1424,7 +1438,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 </section>
 
 <section class="slide s-statement" data-id="p1" data-title="Part 1: Handheld">
-  <div class="hd"><div class="chip">7.6 · Part 1</div><h2 class="t">Part 1: the handheld portaband</h2><p class="lede">You carry the saw to the work. The work sits in the vise, and both your hands stay on the saw.</p></div>
+  <div class="hd"><div class="chip">7.6 · Part 1</div><h2 class="t">Part 1: the handheld portaband</h2><p class="lede">You carry the saw to the work. The work sits in the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>, and both your hands stay on the saw.</p></div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld</span></div>
   <aside class="notes">Prerequisite for the 7.6 quiz: 6.1 drill/driver Certified.</aside>
 </section>
@@ -1432,8 +1446,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="t-p1-saw" data-title="What the portaband is for">
   <div class="hd"><div class="chip">7.6 · The saw</div><h2 class="t sm">The portaband is a bandsaw you hold, for metal the chop saw can&#x27;t handle</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">How it works</div><p>A loop of thin blade runs around two wheels inside the housing. It cuts in the open gap between two guide bearings at the front, and a metal guide plate rests on the work.</p></div><div class="card tight"><div class="k">What it&#x27;s for</div><p>Threaded rod, a tube already on an assembly, or anything that can&#x27;t go to the metal chop saw. Most aluminum tube still goes on the chop saw (7.5).</p></div><div class="card tight"><div class="k">Our saw</div><p>A corded, wired saw: it plugs into the wall. &quot;Unplug&quot; in this deck means pull the plug, not just let go of the trigger.</p></div></div>
-    <figure class="fig"><img src="img/portaband_handheld.webp" alt="A person cutting a pipe held in a bench vise with a handheld band saw, both hands on the saw."><figcaption>A handheld band saw cutting pipe held in a vise. Photo: &quot;Cutting&quot; by sparr0, CC BY-SA 2.0, cropped.</figcaption></figure>
+    <div class="stack"><div class="card tight"><div class="k">How it works</div><p>A loop of thin blade runs around two wheels inside the housing. It cuts in the open gap between two guide <button type="button" class="gl" data-term="bearing" data-def="A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide." aria-expanded="false">bearings</button> at the front, and a metal guide plate rests on the work.</p></div><div class="card tight"><div class="k">What it&#x27;s for</div><p>Threaded rod, a tube already on an assembly, or anything that can&#x27;t go to the metal chop saw. Most aluminum tube still goes on the chop saw (7.5).</p></div><div class="card tight"><div class="k">Our saw</div><p>A corded, wired saw: it plugs into the wall. &quot;Unplug&quot; in this deck means pull the plug, not just let go of the trigger.</p></div></div>
+    <figure class="fig"><img src="img/portaband_handheld.webp" alt="A person cutting a pipe held in a bench vise with a handheld band saw, both hands on the saw."><figcaption>A handheld band saw cutting pipe held in a <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>. Photo: &quot;Cutting&quot; by sparr0, CC BY-SA 2.0, cropped.</figcaption></figure>
   </div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld; team tool notes</span></div>
   <aside class="notes">Hold up the saw and point to the wheels, both guide bearings, the open gap, the guide plate, and the tension handle. Before every start, students announce &quot;using the portaband&quot; and look around to be sure everyone nearby heard. To confirm in the shop: whether the handheld saw is ever used on the robot itself (open DECIDE in the bank).</aside>
@@ -1441,7 +1455,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p1-change" data-title="Changing the blade">
   <div class="hd"><div class="chip">7.6 · Blade change</div><h2 class="t sm">Change the blade unplugged, and let the tension off before the old blade comes out</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Unplug</h3><p>Pull the plug. Fingers go on the blade and the wheels, so the saw must not be able to start.</p></div><div class="step"><div class="n">2</div><h3>Release tension</h3><p>Turn the tension handle to let the blade go slack before you lift it off. The old blade can spring, so point its teeth away from you and others.</p></div><div class="step"><div class="n">3</div><h3>Fit the new one</h3><p>Teeth face the way the manual shows. Seat it in both guide bearings and evenly on both wheels.</p></div><div class="step"><div class="n">4</div><h3>Tension, then plug in</h3><p>Set the tension first. Only then plug the saw back in. Never spin the wheels with fingers on the blade.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Unplug</h3><p>Pull the plug. Fingers go on the blade and the wheels, so the saw must not be able to start.</p></div><div class="step"><div class="n">2</div><h3>Release tension</h3><p>Turn the tension handle to let the blade go slack before you lift it off. The old blade can spring, so point its teeth away from you and others.</p></div><div class="step"><div class="n">3</div><h3>Fit the new one</h3><p>Teeth face the way the manual shows. Seat it in both guide <button type="button" class="gl" data-term="bearing" data-def="A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide." aria-expanded="false">bearings</button> and evenly on both wheels.</p></div><div class="step"><div class="n">4</div><h3>Tension, then plug in</h3><p>Set the tension first. Only then plug the saw back in. Never spin the wheels with fingers on the blade.</p></div></div></div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld</span></div>
   <aside class="notes">Demonstrate a full blade change with the saw unplugged and the plug in view. Let students feel how much the slack blade wants to spring open.</aside>
 </section>
@@ -1473,7 +1487,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p1-blade" data-title="Blade direction and riding">
   <div class="hd"><div class="chip">7.6 · The blade</div><h2 class="t sm">A backwards or off-center blade rubs, heats up, and wanders off the line</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Direction</div><p>Teeth point the way the manual shows. On our handheld saw that&#x27;s up and facing you where they cross the gap. Backwards, the teeth rub instead of cut.</p></div><div class="card"><div class="k">What backwards looks like</div><p>Slow cutting, a hot blade, and a cut that wanders, even with a brand-new blade.</p></div><div class="card"><div class="k">Riding wrong</div><p>Our saw has no tracking screws. Unplug, let the tension off, center the blade in both guide bearings and evenly on the wheels, then retension.</p></div><div class="card"><div class="k">Still wrong?</div><p>If it still rides off after you reseat it, stop and get a mentor.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Direction</div><p>Teeth point the way the manual shows. On our handheld saw that&#x27;s up and facing you where they cross the gap. Backwards, the teeth rub instead of cut.</p></div><div class="card"><div class="k">What backwards looks like</div><p>Slow cutting, a hot blade, and a cut that wanders, even with a brand-new blade.</p></div><div class="card"><div class="k">Riding wrong</div><p>Our saw has no tracking screws. Unplug, let the tension off, center the blade in both guide <button type="button" class="gl" data-term="bearing" data-def="A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide." aria-expanded="false">bearings</button> and evenly on the wheels, then retension.</p></div><div class="card"><div class="k">Still wrong?</div><p>If it still rides off after you reseat it, stop and get a mentor.</p></div></div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld</span></div>
   <aside class="notes">To confirm in the shop: whether the frame has a direction arrow, and point it out if it does.</aside>
 </section>
@@ -1494,7 +1508,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p1-teeth" data-title="Teeth per inch">
   <div class="hd"><div class="chip">7.6 · Teeth</div><h2 class="t sm">Thin metal needs the finest blade, so more teeth sit in the wall</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">The rule</div><p>Aim for at least three teeth in the metal at once. Too few, and each tooth catches on the wall and the saw jerks.</p></div><div class="card"><div class="k">Thin walls</div><p>Tube with a 1/16 in. wall, thin strip, and sheet get the finest blade we have, 24 teeth per inch (TPI).</p></div><div class="card"><div class="k">Thick stock</div><p>Coarser blades like 14 TPI are for thick solid bar. The manual&#x27;s 14 TPI for aluminum means solid stock, not tube.</p></div><div class="card"><div class="k">Most tube</div><p>Goes on the metal chop saw (7.5), not the portaband.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">The rule</div><p>Aim for at least three teeth in the metal at once. Too few, and each tooth catches on the wall and the saw jerks.</p></div><div class="card"><div class="k">Thin walls</div><p>Tube with a 1/16 in. wall, thin strip, and sheet get the finest blade we have, 24 teeth per inch (<button type="button" class="gl" data-term="TPI" data-def="Teeth per inch on a saw blade, or threads per inch on a screw. More teeth give a smoother cut in thin material." aria-expanded="false">TPI</button>).</p></div><div class="card"><div class="k">Thick stock</div><p>Coarser blades like 14 TPI are for thick solid bar. The manual&#x27;s 14 TPI for aluminum means solid stock, not tube.</p></div><div class="card"><div class="k">Most tube</div><p>Goes on the metal chop saw (7.5), not the portaband.</p></div></div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld; Bank: 7.7 Portaband, Part 2: Horizontal stand</span></div>
   <aside class="notes">To confirm in the shop: which blades are stocked and where they&#x27;re kept. Show a 24 TPI and a coarser blade side by side.</aside>
 </section>
@@ -1508,7 +1522,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p1-hold" data-title="Holding the work">
   <div class="hd"><div class="chip">7.6 · Workholding</div><h2 class="t sm">The work goes in the vise, because the saw needs both of your hands</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Clamp it</div><p>Put the work in the vise or clamp it down. Nobody holds it: not you, and not a teammate.</p></div><div class="card"><div class="k">Close to the jaws</div><p>Cut close to the vise jaws so the work can&#x27;t flex or chatter.</p></div><div class="card"><div class="k">Offcut falls free</div><p>Set it up so the piece you cut off can drop away. A trapped offcut pinches the blade.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Clamp it</div><p>Put the work in the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button> or clamp it down. Nobody holds it: not you, and not a teammate.</p></div><div class="card"><div class="k">Close to the jaws</div><p>Cut close to the vise jaws so the work can&#x27;t flex or chatter.</p></div><div class="card"><div class="k">Offcut falls free</div><p>Set it up so the piece you cut off can drop away. A trapped offcut pinches the blade.</p></div></div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld; FIRST Safety Manual §3.2.1</span></div>
   <aside class="notes">Set up a piece of threaded rod in the vise. Show cutting near the jaws versus far out, and where the offcut lands.</aside>
 </section>
@@ -1540,7 +1554,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p1-hands" data-title="Where your hands go">
   <div class="hd"><div class="chip">7.6 · Hands</div><h2 class="t sm">Both hands stay on the handles, out of the open gap where the blade runs</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Both hands</div><p>One hand on each of the saw&#x27;s handles for the whole cut.</p></div><div class="card"><div class="k">The open gap</div><p>Between the two guide bearings, the blade is bare. No fingers or thumbs near it, and never reach under the saw.</p></div><div class="card"><div class="k">No gloves</div><p>A glove can catch on the blade and pull your hand into the guide or housing. Gloves are fine only for carrying stock or handling the blade unplugged.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Both hands</div><p>One hand on each of the saw&#x27;s handles for the whole cut.</p></div><div class="card"><div class="k">The open gap</div><p>Between the two guide <button type="button" class="gl" data-term="bearing" data-def="A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide." aria-expanded="false">bearings</button>, the blade is bare. No fingers or thumbs near it, and never reach under the saw.</p></div><div class="card"><div class="k">No gloves</div><p>A glove can catch on the blade and pull your hand into the guide or housing. Gloves are fine only for carrying stock or handling the blade unplugged.</p></div></div>
   <div class="ft"><span>Bank: 7.6 Portaband, Part 1: Handheld; team rule: no gloves at spinning tools</span></div>
   <aside class="notes">Show the lesson diagram of the open gap if you have it, or point to the gap on the real saw. Have each student grip the saw both ways and point out where a thumb would creep.</aside>
 </section>
@@ -1634,7 +1648,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p2-stand" data-title="How the stand works">
   <div class="hd"><div class="chip">7.7 · The stand</div><h2 class="t sm">On the stand, the stand&#x27;s switch turns the saw on and off</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">The arm</div><p>The saw hangs from an arm over a base with a fence and a clamp slot. A gas strut holds the arm up between cuts. It doesn&#x27;t feed the cut.</p></div><div class="card"><div class="k">The switch</div><p>A trigger lever holds the saw&#x27;s trigger in, so the stand&#x27;s own switch is the on and off. Make sure it&#x27;s off before you plug in.</p></div><div class="card"><div class="k">No clamp, no extras</div><p>We have no clamp for the slot, so you hold the work firmly against the fence by hand. There&#x27;s no coolant, no automatic feed, and no auto shutoff.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">The arm</div><p>The saw hangs from an arm over a base with a <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button> and a clamp slot. A gas strut holds the arm up between cuts. It doesn&#x27;t feed the cut.</p></div><div class="card"><div class="k">The switch</div><p>A trigger lever holds the saw&#x27;s trigger in, so the stand&#x27;s own switch is the on and off. Make sure it&#x27;s off before you plug in.</p></div><div class="card"><div class="k">No clamp, no extras</div><p>We have no clamp for the slot, so you hold the work firmly against the fence by hand. There&#x27;s no coolant, no automatic feed, and no auto shutoff.</p></div></div>
   <div class="ft"><span>Bank: 7.7 Portaband, Part 2: Horizontal stand</span></div>
   <aside class="notes">Show the trigger lever and the stand switch. To confirm in the shop: the stand&#x27;s item number, and that the trigger lever and switch both work. Open DECIDE in the bank: whether to buy a clamp for the clamp slot.</aside>
 </section>
@@ -1648,7 +1662,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p2-check" data-title="Before the first cut">
   <div class="hd"><div class="chip">7.7 · Setup</div><h2 class="t sm">A saw that wiggles on its stand cuts crooked and binds, so check it first</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Solid</div><p>The stand is bolted to the bench and doesn&#x27;t rock.</p></div><div class="card"><div class="k">Tight</div><p>Adjustment knobs and bracket bolts are tight, and the blade sits in the middle of the blade channel.</p></div><div class="card"><div class="k">Angle cuts</div><p>Set the angle with the miter knob on the base (marks at 0, 30, 45, and 60), then retighten it. The other adjustment knobs are for mentors.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Solid</div><p>The stand is bolted to the bench and doesn&#x27;t rock.</p></div><div class="card"><div class="k">Tight</div><p>Adjustment knobs and bracket bolts are tight, and the blade sits in the middle of the blade channel.</p></div><div class="card"><div class="k">Angle cuts</div><p>Set the angle with the <button type="button" class="gl" data-term="miter" data-def="An angled cut across the face of a board, made by turning the saw left or right." aria-expanded="false">miter</button> knob on the base (marks at 0, 30, 45, and 60), then retighten it. The other adjustment knobs are for mentors.</p></div></div>
   <div class="ft"><span>Bank: 7.7 Portaband, Part 2: Horizontal stand</span></div>
   <aside class="notes">Walk the check with students: rock the stand, try the knobs, sight down the blade channel. Have one student set a 45 and check it with a square.</aside>
 </section>
@@ -1670,7 +1684,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="t-p2-unplug" data-title="When to unplug">
   <div class="hd"><div class="chip">7.7 · Unplug</div><h2 class="t sm">Unplug any time your hands go near the blade</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Job</th><th>What it takes</th></tr></thead><tbody><tr><td><b>Changing the blade</b></td><td>Unplugged</td></tr><tr><td><b>Putting the saw in or taking it out of the stand</b></td><td>Unplugged</td></tr><tr><td><b>Centering the blade in the channel</b></td><td>Unplugged</td></tr><tr><td><b>Loading the next piece against the fence</b></td><td>Switch off, saw up, blade stopped</td></tr><tr><td><b>Plugging in</b></td><td>Stand switch off first</td></tr></tbody></table></div></div>
+    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Job</th><th>What it takes</th></tr></thead><tbody><tr><td><b>Changing the blade</b></td><td>Unplugged</td></tr><tr><td><b>Putting the saw in or taking it out of the stand</b></td><td>Unplugged</td></tr><tr><td><b>Centering the blade in the channel</b></td><td>Unplugged</td></tr><tr><td><b>Loading the next piece against the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button></b></td><td>Switch off, saw up, blade stopped</td></tr><tr><td><b>Plugging in</b></td><td>Stand switch off first</td></tr></tbody></table></div></div>
     <div class="stack"><div class="card tight"><div class="k">Why</div><p>The trigger lever holds the saw&#x27;s trigger in. A bumped stand switch starts the blade, so a switch that&#x27;s off isn&#x27;t enough when your hands are at the blade.</p></div></div>
   </div>
   <div class="ft"><span>Bank: 7.7 Portaband, Part 2: Horizontal stand</span></div>
@@ -1704,7 +1718,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p2-which" data-title="Which saw, which blade">
   <div class="hd"><div class="chip">7.7 · Which saw</div><h2 class="t sm">The stand is for thin strip and rod; tube goes on the metal chop saw</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Metal chop saw (7.5)</div><p>Box tube and most aluminum tube, especially a batch of pieces the same length.</p></div><div class="card"><div class="k">Portaband stand</div><p>A thin aluminum strip, or rod, cut to length.</p></div><div class="card"><div class="k">Miter saw</div><p>Wood only. No metal goes on it.</p></div><div class="card"><div class="k">Blade</div><p>Keep three or more teeth in the metal. Thick solid stock can use 14 TPI. Thin walls and strip use the finest, 24 TPI. A 1/16 in. wall is too thin for three teeth even with that.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Metal chop saw (7.5)</div><p>Box tube and most aluminum tube, especially a batch of pieces the same length.</p></div><div class="card"><div class="k">Portaband stand</div><p>A thin aluminum strip, or rod, cut to length.</p></div><div class="card"><div class="k">Miter saw</div><p>Wood only. No metal goes on it.</p></div><div class="card"><div class="k">Blade</div><p>Keep three or more teeth in the metal. Thick solid stock can use 14 <button type="button" class="gl" data-term="TPI" data-def="Teeth per inch on a saw blade, or threads per inch on a screw. More teeth give a smoother cut in thin material." aria-expanded="false">TPI</button>. Thin walls and strip use the finest, 24 TPI. A 1/16 in. wall is too thin for three teeth even with that.</p></div></div>
   <div class="ft"><span>Bank: 7.7 Portaband, Part 2: Horizontal stand; team tool notes</span></div>
   <aside class="notes">To confirm in the shop: which blades are stocked for the stand.</aside>
 </section>
@@ -1718,7 +1732,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p2-hold" data-title="Holding long work">
   <div class="hd"><div class="chip">7.7 · Workholding</div><h2 class="t sm">Hold the work against the fence with your hand well back, and let the offcut fall</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Against the fence</div><p>Press the strip firmly against the fence with your hand well back from the blade&#x27;s path.</p></div><div class="card"><div class="k">Support the long end</div><p>Rest the long end on a stand or blocks at the height of the base. Not on a person.</p></div><div class="card"><div class="k">Never hold the offcut</div><p>Holding both sides of the cut pinches the blade. Let the offcut drop.</p></div><div class="card"><div class="k">Too short?</div><p>If a piece is too short to hold that way with your hand well back, it doesn&#x27;t get cut on the stand.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Against the fence</div><p>Press the strip firmly against the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button> with your hand well back from the blade&#x27;s path.</p></div><div class="card"><div class="k">Support the long end</div><p>Rest the long end on a stand or blocks at the height of the base. Not on a person.</p></div><div class="card"><div class="k">Never hold the offcut</div><p>Holding both sides of the cut pinches the blade. Let the offcut drop.</p></div><div class="card"><div class="k">Too short?</div><p>If a piece is too short to hold that way with your hand well back, it doesn&#x27;t get cut on the stand.</p></div></div>
   <div class="ft"><span>Bank: 7.7 Portaband, Part 2: Horizontal stand</span></div>
   <aside class="notes">Set up a long strip with a roller stand or blocks. Show the hand position, then what happens to the kerf if someone holds the offcut.</aside>
 </section>
@@ -1796,7 +1810,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p2-wrap" data-title="PPE and cleanup">
   <div class="hd"><div class="chip">7.7 · PPE and cleanup</div><h2 class="t sm">Glasses every time, no gloves, and chips get brushed, never blown</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">PPE</div><p>Safety glasses always. A face shield goes over them, not instead. Hearing protection is recommended.</p></div><div class="card"><div class="k">Prep</div><p>Long hair up, sleeves rolled, nothing loose. No gloves while cutting.</p></div><div class="card"><div class="k">Chips</div><p>Brush them off with a brush. Never blow them or wipe them with a bare hand.</p></div><div class="card"><div class="k">The burr</div><p>File or deburr the cut edge before the part goes anywhere.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">PPE</div><p>Safety glasses always. A face shield goes over them, not instead. Hearing protection is recommended.</p></div><div class="card"><div class="k">Prep</div><p>Long hair up, sleeves rolled, nothing loose. No gloves while cutting.</p></div><div class="card"><div class="k">Chips</div><p>Brush them off with a brush. Never blow them or wipe them with a bare hand.</p></div><div class="card"><div class="k">The burr</div><p>File or <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburr</button> the cut edge before the part goes anywhere.</p></div></div>
   <div class="ft"><span>Bank: 7.7 Portaband, Part 2: Horizontal stand</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1823,7 +1837,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-p3-setup" data-title="The vertical setup">
   <div class="hd"><div class="chip">8.4 · Setup</div><h2 class="t sm">On the vertical setup, the blade stays put and you feed the work into it</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Why it&#x27;s group 8</div><p>Handheld, you move the saw to the work. Here, you push the work into a fixed blade, like a shop machine, so your hands travel toward the teeth.</p></div><div class="card"><div class="k">How it&#x27;s set up</div><p>The arm is raised upright, the stand is bolted at the bench edge with its base hanging down, and the guide plate is swapped for a small table.</p></div><div class="card"><div class="k">The blade</div><p>Teeth run down toward the table. The deep-cut opening leaves the blade bare near the table. The trigger lever and stand switch work as in Part 2.</p></div><div class="card"><div class="k">Hand fed</div><p>A push stick won&#x27;t work here, so your hands guide the work, and pieces too small to hold safely don&#x27;t get cut.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Why it&#x27;s group 8</div><p>Handheld, you move the saw to the work. Here, you push the work into a fixed blade, like a shop machine, so your hands travel toward the teeth.</p></div><div class="card"><div class="k">How it&#x27;s set up</div><p>The arm is raised upright, the stand is bolted at the bench edge with its base hanging down, and the guide plate is swapped for a small table.</p></div><div class="card"><div class="k">The blade</div><p>Teeth run down toward the table. The deep-cut opening leaves the blade bare near the table. The trigger lever and stand switch work as in Part 2.</p></div><div class="card"><div class="k">Hand fed</div><p>A <button type="button" class="gl" data-term="push stick" data-def="A notched stick that pushes the board past the blade so your hand stays well away from it." aria-expanded="false">push stick</button> won&#x27;t work here, so your hands guide the work, and pieces too small to hold safely don&#x27;t get cut.</p></div></div>
   <div class="ft"><span>Bank: 8.4 Portaband, Part 3: Vertical stand; team tool notes</span></div>
   <aside class="notes">To confirm in the shop: the stand&#x27;s table is currently misplaced and needs to be found and set up (open FILL in the bank), and the stand&#x27;s item number.</aside>
 </section>
@@ -2039,13 +2053,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>7.6: blade change</td><td>Unplugged, tension off first, teeth the right way, tensioned before plugging in</td></tr><tr><td>7.6: cut tube or threaded rod in the vise</td><td>Clamped near the jaws, both hands, plate on the work, barely pushing</td></tr><tr><td>7.7: check the stand, then cut strip or rod to length</td><td>Stand solid, knobs tight, hand well back, long end supported</td></tr><tr><td>7.7: angle cut, checked with a square</td><td>Miter knob set and retightened, offcut left free</td></tr><tr><td>8.4: check the vertical setup</td><td>Unplugged, table bolted, blade centered in the slot</td></tr><tr><td>8.4: straight cut, curve with relief cuts, and a small part</td><td>Fingers off the line, relief cuts first, small part freed last</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>7.6: blade change</td><td>Unplugged, tension off first, teeth the right way, tensioned before plugging in</td></tr><tr><td>7.6: cut tube or threaded rod in the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button></td><td>Clamped near the jaws, both hands, plate on the work, barely pushing</td></tr><tr><td>7.7: check the stand, then cut strip or rod to length</td><td>Stand solid, knobs tight, hand well back, long end supported</td></tr><tr><td>7.7: angle cut, checked with a square</td><td><button type="button" class="gl" data-term="miter" data-def="An angled cut across the face of a board, made by turning the saw left or right." aria-expanded="false">Miter</button> knob set and retightened, offcut left free</td></tr><tr><td>8.4: check the vertical setup</td><td>Unplugged, table bolted, blade centered in the slot</td></tr><tr><td>8.4: straight cut, curve with relief cuts, and a small part</td><td>Fingers off the line, relief cuts first, small part freed last</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Passing</div><p>Each part&#x27;s quiz gets you Supervised on that part.</p></div><div class="card tight"><div class="k">Certified</div><p>A mentor watches you do these on real work. A spot-the-problem check can stand in for one use on 8.4.</p></div></div>
   </div>
   <div class="ft"><span>From the bank&#x27;s Uses for Certified tables (proposed).</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>bearing</dt><dd>A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>fence</dt><dd>A straight guide the material sits or slides against, so cuts come out straight and square.</dd></div><div class="gl-item"><dt>miter</dt><dd>An angled cut across the face of a board, made by turning the saw left or right.</dd></div><div class="gl-item"><dt>push stick</dt><dd>A notched stick that pushes the board past the blade so your hand stays well away from it.</dd></div><div class="gl-item"><dt>TPI</dt><dd>Teeth per inch on a saw blade, or threads per inch on a screw. More teeth give a smoother cut in thin material.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>7 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -2212,6 +2232,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3889,4 +3965,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1 (2026-11-05): Review fixes: rewrote 13 checks that echoed the bank, added a check for feeding flat (8.4 Q5), taught switching off between cuts (8.4 Q13), rotated right-answer positions, added a photo.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 25 quick checks, 10 checkpoints. Checkpoint hint lines removed.
   v1.1.1 (2026-11-05): Two quick check headings now match their questions.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

@@ -1,11 +1,11 @@
 <title>Bench Grinder Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_bench_grinder_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_bench_grinder_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the Rambots 8.6 bench grinder written test: guards and gaps, wheels and ratings, soft metals, start-up, heat, and eye and face protection.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Bench Grinder Study",
   "slug": "rambots_bench_grinder_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-bench-grinder-study-v1"
@@ -801,7 +815,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="bg-parts" data-title="Parts that matter">
   <div class="hd"><div class="chip">8.6</div><h2 class="t sm">The tool rest holds the work, and the tongue guard closes the top of the guard opening</h2></div>
-  <div class="body"><div class="defs"><div class="d"><b>Tool rest</b><p>The shelf in front of the wheel that you rest the work on.</p></div><div class="d"><b>Tongue guard</b><p>The adjustable piece at the top of the wheel guard&#x27;s opening, just above the wheel. Also called a spark arrestor. It keeps wheel pieces from flying out at you if the wheel breaks.</p></div><div class="d"><b>Eye shield</b><p>The clear shield mounted on the grinder. It helps, but it doesn&#x27;t replace your own eye and face protection.</p></div><div class="d"><b>Face of the wheel</b><p>The round outside edge facing you. This is the only part you grind on.</p></div></div></div>
+  <div class="body"><div class="defs"><div class="d"><b><button type="button" class="gl" data-term="tool rest" data-def="The small shelf in front of a grinder wheel that supports the part. Keep it about 1/8 inch from the wheel." aria-expanded="false">Tool rest</button></b><p>The shelf in front of the wheel that you rest the work on.</p></div><div class="d"><b>Tongue guard</b><p>The adjustable piece at the top of the wheel guard&#x27;s opening, just above the wheel. Also called a spark arrestor. It keeps wheel pieces from flying out at you if the wheel breaks.</p></div><div class="d"><b>Eye shield</b><p>The clear shield mounted on the grinder. It helps, but it doesn&#x27;t replace your own eye and face protection.</p></div><div class="d"><b>Face of the wheel</b><p>The round outside edge facing you. This is the only part you grind on.</p></div></div></div>
   <div class="ft"><span>8.6 bank; OSHA 29 CFR 1910.215; WEN 4276 manual</span></div>
   <aside class="notes">Point to each part on our grinder, unplugged. To confirm in the shop: our model, its RPM, and its wheels (the bank is written from the WEN 4276, 3,450 RPM), and whether we keep a wire wheel on one side.</aside>
 </section>
@@ -906,7 +920,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="bg-soft" data-title="Soft metals">
   <div class="hd"><div class="chip">8.6</div><h2 class="t sm">No aluminum, brass, or copper on the grinder, because soft metal clogs the wheel and can make it burst</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">What happens</div><p>Soft metal embeds in the wheel. That heats the wheel fast and can make it burst. A loaded wheel also stops cutting, which tempts people to push harder.</p></div><div class="card"><div class="k">The rule</div><p>Grind only the materials a wheel is meant for. Bench grinders aren&#x27;t for aluminum, brass, or copper, even for one small burr.</p></div><div class="card"><div class="k">Instead</div><p>Use a file, a deburring tool (the team calls it the chamfer tool), or the belt sander for aluminum burrs.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">What happens</div><p>Soft metal embeds in the wheel. That heats the wheel fast and can make it burst. A loaded wheel also stops cutting, which tempts people to push harder.</p></div><div class="card"><div class="k">The rule</div><p>Grind only the materials a wheel is meant for. Bench grinders aren&#x27;t for aluminum, brass, or copper, even for one small <button type="button" class="gl" data-term="burr" data-def="A sharp, rough edge left on metal after cutting or drilling." aria-expanded="false">burr</button>.</p></div><div class="card"><div class="k">Instead</div><p>Use a file, a <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburring</button> tool (the team calls it the <button type="button" class="gl" data-term="chamfer" data-def="A small angled edge cut on a corner or around a hole." aria-expanded="false">chamfer</button> tool), or the belt sander for aluminum burrs.</p></div></div>
   <div class="ft"><span>8.6 bank; Protohaven tool guide; Cornell EHS</span></div>
   <aside class="notes">Can&#x27;t-fail topic. To confirm in the shop: the team&#x27;s go-to tool for aluminum burrs.</aside>
 </section>
@@ -985,7 +999,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="bg-ppe" data-title="Before you grind">
   <div class="hd"><div class="chip">8.6</div><h2 class="t sm">Safety glasses plus a face shield, nothing loose, no gloves, and both gaps set</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Eyes and face</div><p>Team rule: safety glasses and a face shield for grinding. Sparks and wheel bits can hit your whole face, and glasses only protect your eyes.</p></div><div class="card"><div class="k">Loose things</div><p>Long hair up, bangs pinned, sleeves rolled.</p></div><div class="card"><div class="k">No gloves</div><p>A glove can catch the wheel and pull your hand in.</p></div><div class="card"><div class="k">The machine</div><p>Tool rest within 1/8 in. and tongue guard within 1/4 in., checked before you switch on.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Eyes and face</div><p>Team rule: safety glasses and a face shield for grinding. Sparks and wheel bits can hit your whole face, and glasses only protect your eyes.</p></div><div class="card"><div class="k">Loose things</div><p>Long hair up, bangs pinned, sleeves rolled.</p></div><div class="card"><div class="k">No gloves</div><p>A glove can catch the wheel and pull your hand in.</p></div><div class="card"><div class="k">The machine</div><p><button type="button" class="gl" data-term="tool rest" data-def="The small shelf in front of a grinder wheel that supports the part. Keep it about 1/8 inch from the wheel." aria-expanded="false">Tool rest</button> within 1/8 in. and tongue guard within 1/4 in., checked before you switch on.</p></div></div>
   <div class="ft"><span>8.6 bank; FIRST Safety Manual §4.1, §4.5, §6.1; team rule</span></div>
   <aside class="notes">Can&#x27;t-fail topic: face shield. Show where the face shields are kept.</aside>
 </section>
@@ -1018,13 +1032,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Set the tool rest and tongue guard</td><td>Unplugged and stopped, 1/8 in. and 1/4 in., both locked</td></tr><tr><td>Grind or shape a steel part</td><td>Stands aside at start-up, work on the rest, face of the wheel only, quenches often</td></tr><tr><td>Clean up a tool, like a punch or chisel tip</td><td>Light pressure, keeps the temper by quenching</td></tr><tr><td>Every use</td><td>Glasses and face shield, no gloves, hair and sleeves, no aluminum or other soft metals</td></tr></tbody></table></div>
-    <div class="stack"><div class="card tight"><div class="k">Certified</div><p>A mentor watches each use on real work, a personal project, or a small check station.</p></div><div class="card tight"><div class="k">Mentor only</div><p>Mounting a new wheel and the ring test stay with a mentor, so they aren&#x27;t on this list.</p></div></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Set the <button type="button" class="gl" data-term="tool rest" data-def="The small shelf in front of a grinder wheel that supports the part. Keep it about 1/8 inch from the wheel." aria-expanded="false">tool rest</button> and tongue guard</td><td>Unplugged and stopped, 1/8 in. and 1/4 in., both locked</td></tr><tr><td>Grind or shape a steel part</td><td>Stands aside at start-up, work on the rest, face of the wheel only, quenches often</td></tr><tr><td>Clean up a tool, like a punch or chisel tip</td><td>Light pressure, keeps the temper by quenching</td></tr><tr><td>Every use</td><td>Glasses and face shield, no gloves, hair and sleeves, no aluminum or other soft metals</td></tr></tbody></table></div>
+    <div class="stack"><div class="card tight"><div class="k">Certified</div><p>A mentor watches each use on real work, a personal project, or a small check station.</p></div><div class="card tight"><div class="k">Mentor only</div><p>Mounting a new wheel and the <button type="button" class="gl" data-term="ring test" data-def="Tapping a grinding wheel gently before mounting it. A clear ring means it&#x27;s sound; a dull thud means a crack." aria-expanded="false">ring test</button> stay with a mentor, so they aren&#x27;t on this list.</p></div></div>
   </div>
   <div class="ft"><span>Proposed uses from the 8.6 bank</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>burr</dt><dd>A sharp, rough edge left on metal after cutting or drilling.</dd></div><div class="gl-item"><dt>chamfer</dt><dd>A small angled edge cut on a corner or around a hole.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>ring test</dt><dd>Tapping a grinding wheel gently before mounting it. A clear ring means it&#x27;s sound; a dull thud means a crack.</dd></div><div class="gl-item"><dt>tool rest</dt><dd>The small shelf in front of a grinder wheel that supports the part. Keep it about 1/8 inch from the wheel.</dd></div></dl></div></div>
+  <div class="ft"><span>5 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1191,6 +1211,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2868,4 +2944,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 6 quick checks, 4 checkpoints.
   v1.1 (2026-11-05): Review fixes: checkpoint hints removed, since they show on screen and gave answers away; rewrote qc-worn, qc-rating, cp-soft, cp-startup, and cp-shield. Brand names kept to foot lines and notes.
   v1.1.1 (2026-11-05): Added a bench grinder photo (Openverse, CC BY-SA 2.0).
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

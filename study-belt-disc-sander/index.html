@@ -1,11 +1,11 @@
 <title>Belt and Disc Sander Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_belt_disc_sander_study_v1.1.html
-  version: 1.1
+  file: rambots_belt_disc_sander_study_v1.1.1.html
+  version: 1.1.1
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the Rambots 8.2 belt and disc sander written test: parts, the down half of the disc, the belt, holding the work, heat, angles, and dust and fire.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Belt and Disc Sander Study",
   "slug": "rambots_belt_disc_sander_study",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-belt-disc-sander-study-v1"
@@ -815,7 +829,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="sd-parts" data-title="Parts that matter">
   <div class="hd"><div class="chip">8.2</div><h2 class="t sm">Two sanding sides on one machine, each with a part that keeps the sanding true</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">Platen</div><p>The flat metal plate right behind the belt where you press the work. It keeps the belt flat, so you get a flat surface instead of a rounded one.</p></div><div class="card tight"><div class="k">Tracking knob</div><p>Tilts the top wheel so the belt runs centered. A belt that drifts off the wheels can tear or fly off.</p></div><div class="card tight"><div class="k">Table and miter gauge</div><p>The table holds the work in front of the disc or belt. The miter gauge rides in the table slot and holds an exact angle.</p></div></div>
+    <div class="stack"><div class="card tight"><div class="k">Platen</div><p>The flat metal plate right behind the belt where you press the work. It keeps the belt flat, so you get a flat surface instead of a rounded one.</p></div><div class="card tight"><div class="k">Tracking knob</div><p>Tilts the top wheel so the belt runs centered. A belt that drifts off the wheels can tear or fly off.</p></div><div class="card tight"><div class="k">Table and miter gauge</div><p>The table holds the work in front of the disc or belt. The <button type="button" class="gl" data-term="miter gauge" data-def="A guide that slides in a slot in the saw table and holds a board at a set angle as you push it through." aria-expanded="false">miter gauge</button> rides in the table slot and holds an exact angle.</p></div></div>
     <figure class="fig"><img src="img/belt_disc_sander.webp" alt="A benchtop belt and disc sander with the round disc and its table on the left and the belt on the right."><figcaption>A belt and disc sander. Photo: pmcall221, CC BY-SA 2.0.</figcaption></figure>
   </div>
   <div class="ft"><span>8.2 bank; JET IBDG manual</span></div>
@@ -905,7 +919,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="sd-small" data-title="Small parts and gloves">
   <div class="hd"><div class="chip">8.2</div><h2 class="t sm">Keep fingertips far from the abrasive: no tiny parts, no gloves, and no rags</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Too small to hold</div><p>Don&#x27;t sand a part too small to support safely. It puts your fingertips at the abrasive and can get pulled into the gap. Shape the end of a longer piece and cut the part off after, or file it by hand.</p></div><div class="card"><div class="k">No gloves or rags</div><p>A glove or rag can snag on the belt or disc and pull your hand in. Bare fingers feel the work and let go.</p></div><div class="card"><div class="k">Loose things</div><p>Hair up, bangs pinned, sleeves rolled. Loose sleeves at the wrist sit right at the abrasive.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Too small to hold</div><p>Don&#x27;t sand a part too small to support safely. It puts your fingertips at the <button type="button" class="gl" data-term="abrasive" data-def="Hard, gritty material that grinds or sands material away. Also means a filament or cut that wears tools down." aria-expanded="false">abrasive</button> and can get pulled into the gap. Shape the end of a longer piece and cut the part off after, or file it by hand.</p></div><div class="card"><div class="k">No gloves or rags</div><p>A glove or rag can snag on the belt or disc and pull your hand in. Bare fingers feel the work and let go.</p></div><div class="card"><div class="k">Loose things</div><p>Hair up, bangs pinned, sleeves rolled. Loose sleeves at the wrist sit right at the abrasive.</p></div></div>
   <div><p class="warnline">No gloves of any kind at spinning tools. That includes leather, knit, and nitrile.</p></div>
   <div class="ft"><span>8.2 bank; Delta 31-552 manual; FIRST Safety Manual §4.5, §6.1; team rule</span></div>
   <aside class="notes">Can&#x27;t-fail topic: no gloves or rags. Show a small part shaped on the end of a longer bar, then cut off.</aside>
@@ -945,7 +959,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="sd-heat" data-title="Heat and angles">
   <div class="hd"><div class="chip">8.2</div><h2 class="t sm">Light passes keep metal cool, and the miter gauge holds an angle better than your eye</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Hot metal</div><p>Aluminum carries heat to your fingers fast. When it gets too hot to hold, stop, set it down or dip it in water, and take lighter passes. Pressing harder only makes more heat.</p></div><div class="card"><div class="k">An exact angle</div><p>Set the miter gauge in the table slot. It holds the angle and keeps the work on the table.</p></div><div class="card"><div class="k">A bevel</div><p>Tilting the table makes a bevel across the thickness of the part. You still sand on the down half.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Hot metal</div><p>Aluminum carries heat to your fingers fast. When it gets too hot to hold, stop, set it down or dip it in water, and take lighter passes. Pressing harder only makes more heat.</p></div><div class="card"><div class="k">An exact angle</div><p>Set the <button type="button" class="gl" data-term="miter gauge" data-def="A guide that slides in a slot in the saw table and holds a board at a set angle as you push it through." aria-expanded="false">miter gauge</button> in the table slot. It holds the angle and keeps the work on the table.</p></div><div class="card"><div class="k">A bevel</div><p>Tilting the table makes a <button type="button" class="gl" data-term="bevel" data-def="An angled cut through the thickness of a board, made by tilting the blade." aria-expanded="false">bevel</button> across the thickness of the part. You still sand on the down half.</p></div></div>
   <div class="ft"><span>8.2 bank; JET IBDG manual</span></div>
   <aside class="notes">Keep a cup of water by the sander when sanding metal. Show the miter gauge and the table tilt. To confirm in the shop: that our sander has a miter gauge.</aside>
 </section>
@@ -1013,13 +1027,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Square or angle the end of a part on the disc</td><td>Down half, work flat on the table, miter gauge for an angle, gap 1/16 in. or less</td></tr><tr><td>Flatten or deburr an edge on the belt</td><td>Work on the table or rest against the platen, light passes, cools hot aluminum</td></tr><tr><td>Switch from metal to wood</td><td>Cleans the machine and empties the dust collection first</td></tr><tr><td>Change a belt or disc</td><td>Unplugged, belt direction right, tracking checked by hand, table gap reset</td></tr><tr><td>Every use</td><td>No gloves or rags, hair and sleeves, small parts handled another way, stays until it stops</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Square or angle the end of a part on the disc</td><td>Down half, work flat on the table, <button type="button" class="gl" data-term="miter gauge" data-def="A guide that slides in a slot in the saw table and holds a board at a set angle as you push it through." aria-expanded="false">miter gauge</button> for an angle, gap 1/16 in. or less</td></tr><tr><td>Flatten or <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburr</button> an edge on the belt</td><td>Work on the table or rest against the <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button>, light passes, cools hot aluminum</td></tr><tr><td>Switch from metal to wood</td><td>Cleans the machine and empties the dust collection first</td></tr><tr><td>Change a belt or disc</td><td>Unplugged, belt direction right, tracking checked by hand, table gap reset</td></tr><tr><td>Every use</td><td>No gloves or rags, hair and sleeves, small parts handled another way, stays until it stops</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Certified</div><p>A mentor watches each use on real work, a personal project, or a small check station.</p></div><div class="card tight"><div class="k">Stand-ins</div><p>A spot-the-problem check can stand in for one use.</p></div></div>
   </div>
   <div class="ft"><span>Proposed uses from the 8.2 bank</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>abrasive</dt><dd>Hard, gritty material that grinds or sands material away. Also means a filament or cut that wears tools down.</dd></div><div class="gl-item"><dt>bevel</dt><dd>An angled cut through the thickness of a board, made by tilting the blade.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>miter gauge</dt><dd>A guide that slides in a slot in the saw table and holds a board at a set angle as you push it through.</dd></div><div class="gl-item"><dt>platen</dt><dd>A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt.</dd></div></dl></div></div>
+  <div class="ft"><span>5 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1186,6 +1206,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2862,4 +2938,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 <!-- CHANGELOG
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 7 quick checks, 3 checkpoints.
   v1.1 (2026-11-05): Review fixes: checkpoint hints removed, since they show on screen and gave answers away; rewrote qc-coast, qc-small, and qc-angle. Brand names kept to foot lines and notes.
+  v1.1.1 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

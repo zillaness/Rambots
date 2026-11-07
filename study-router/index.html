@@ -1,11 +1,11 @@
 <title>Router Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_router_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_router_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the 7.13 handheld router quiz.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Router Study",
   "slug": "rambots_router_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-router-study-v1"
@@ -936,7 +950,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-change" data-title="Changing a bit">
   <div class="hd"><div class="chip">7.13 · Bit change</div><h2 class="t sm">Change bits unplugged, in the collet that matches the shank, with the shank in deep</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Unplug</h3><p>For every bit change. A switch can get bumped; a plug that&#x27;s out can&#x27;t start anything. Let the bit cool first.</p></div><div class="step"><div class="n">2</div><h3>Match the collet</h3><p>A collet only grips a shank its own size. A 1/4 in. shank needs the 1/4 in. collet, or the 1/4 in. sleeve that came with the router.</p></div><div class="step"><div class="n">3</div><h3>Shank in deep</h3><p>Push most of the shank in, as far as the manual says, without the bit&#x27;s cutting part touching the collet. Set the depth with the base, not the bit.</p></div><div class="step"><div class="n">4</div><h3>Tighten, then plug in</h3><p>Tighten the collet with the wrench, set and lock the depth, and plug in last.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Unplug</h3><p>For every bit change. A switch can get bumped; a plug that&#x27;s out can&#x27;t start anything. Let the bit cool first.</p></div><div class="step"><div class="n">2</div><h3>Match the collet</h3><p>A <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button> only grips a <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button> its own size. A 1/4 in. shank needs the 1/4 in. collet, or the 1/4 in. sleeve that came with the router.</p></div><div class="step"><div class="n">3</div><h3>Shank in deep</h3><p>Push most of the shank in, as far as the manual says, without the bit&#x27;s cutting part touching the collet. Set the depth with the base, not the bit.</p></div><div class="step"><div class="n">4</div><h3>Tighten, then plug in</h3><p>Tighten the collet with the wrench, set and lock the depth, and plug in last.</p></div></div></div>
   <div class="ft"><span>Bank: 7.13 Router</span></div>
   <aside class="notes">To confirm in the shop: the school router&#x27;s make and model, which collets it has, its speed control, and the manual&#x27;s minimum shank insertion. Also confirm any school rule for using its router.</aside>
 </section>
@@ -982,7 +996,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-bits" data-title="Bits and depth per pass">
   <div class="hd"><div class="chip">7.13 · Bits</div><h2 class="t sm">Take a deep cut in several shallow passes, with a bit that&#x27;s in good shape</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Passes</div><p>The manual limits how deep each pass can be. Divide the depth you need by that limit to get the fewest passes. Too deep in one pass overloads the bit and makes the router hard to hold.</p></div><div class="card"><div class="k">The math</div><p>A 3/8 in. groove with a 1/8 in. limit is 3/8 ÷ 1/8 = 3 passes. On the quiz you type the number.</p></div><div class="card"><div class="k">Check the bit</div><p>Carbide edges not chipped or cracked, the bearing on a guided bit spins freely, and the shank is clean and straight.</p></div><div class="card"><div class="k">Why</div><p>A damaged bit can break at speed. A seized bearing rubs and burns the edge of the work.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Passes</div><p>The manual limits how deep each pass can be. Divide the depth you need by that limit to get the fewest passes. Too deep in one pass overloads the bit and makes the router hard to hold.</p></div><div class="card"><div class="k">The math</div><p>A 3/8 in. groove with a 1/8 in. limit is 3/8 ÷ 1/8 = 3 passes. On the quiz you type the number.</p></div><div class="card"><div class="k">Check the bit</div><p>Carbide edges not chipped or cracked, the <button type="button" class="gl" data-term="bearing" data-def="A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide." aria-expanded="false">bearing</button> on a guided bit spins freely, and the <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button> is clean and straight.</p></div><div class="card"><div class="k">Why</div><p>A damaged bit can break at speed. A seized bearing rubs and burns the edge of the work.</p></div></div>
   <div class="ft"><span>Bank: 7.13 Router; router manual</span></div>
   <aside class="notes">To confirm in the shop: the depth-per-pass limit in the school router&#x27;s manual. Pass around a bit with a bearing and have students spin it.</aside>
 </section>
@@ -1042,7 +1056,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-climb" data-title="Climb cuts">
   <div class="hd"><div class="chip">7.13 · Climb cuts</div><h2 class="t sm">Moving with the bit&#x27;s spin makes the router pull itself along faster than you can hold it</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">What it is</div><p>A climb cut is moving the router the same way the bit spins. Some people do it on purpose for less tear-out.</p></div><div class="card"><div class="k">What happens</div><p>The bit grabs and pulls the router along on its own. It can run off the work or toward your hand.</p></div><div class="card"><div class="k">For us</div><p>Students don&#x27;t climb cut. Feed against the bit&#x27;s rotation every time.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">What it is</div><p>A <button type="button" class="gl" data-term="climb cut" data-def="Feeding so the bit&#x27;s teeth bite into the material in the same direction it&#x27;s moving. The tool can grab and pull itself along." aria-expanded="false">climb cut</button> is moving the router the same way the bit spins. Some people do it on purpose for less tear-out.</p></div><div class="card"><div class="k">What happens</div><p>The bit grabs and pulls the router along on its own. It can run off the work or toward your hand.</p></div><div class="card"><div class="k">For us</div><p>Students don&#x27;t climb cut. Feed against the bit&#x27;s rotation every time.</p></div></div>
   <div class="ft"><span>Bank: 7.13 Router; Woodcraft</span></div>
   <aside class="notes">To confirm in the shop: the no-climb-cuts rule for students is marked CONFIRM in the bank.</aside>
 </section>
@@ -1162,13 +1176,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Bit change and depth set</td><td>Unplugged, right collet, shank in far enough, depth locked</td></tr><tr><td>Round over or chamfer the outside edge of a clamped board</td><td>Clamps out of the path, counterclockwise feed, full speed before contact, bit stops before lifting</td></tr><tr><td>Groove or dado in several passes</td><td>Depth per pass within the manual&#x27;s limit, steady feed, edge guide or straightedge clamped</td></tr><tr><td>Inside cutout edge</td><td>Clockwise feed inside, both hands on the router</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Bit change and depth set</td><td>Unplugged, right <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button>, <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button> in far enough, depth locked</td></tr><tr><td>Round over or <button type="button" class="gl" data-term="chamfer" data-def="A small angled edge cut on a corner or around a hole." aria-expanded="false">chamfer</button> the outside edge of a clamped board</td><td>Clamps out of the path, counterclockwise feed, full speed before contact, bit stops before lifting</td></tr><tr><td>Groove or <button type="button" class="gl" data-term="dado" data-def="A flat-bottomed groove cut across a board." aria-expanded="false">dado</button> in several passes</td><td>Depth per pass within the manual&#x27;s limit, steady feed, edge guide or straightedge clamped</td></tr><tr><td>Inside cutout edge</td><td>Clockwise feed inside, both hands on the router</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Passing</div><p>The quiz gets you Supervised on 7.13.</p></div><div class="card tight"><div class="k">Certified</div><p>A mentor watches you do these on real work or at a small check station.</p></div></div>
   </div>
   <div class="ft"><span>From the bank&#x27;s Uses for Certified table (proposed).</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>bearing</dt><dd>A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide.</dd></div><div class="gl-item"><dt>chamfer</dt><dd>A small angled edge cut on a corner or around a hole.</dd></div><div class="gl-item"><dt>climb cut</dt><dd>Feeding so the bit&#x27;s teeth bite into the material in the same direction it&#x27;s moving. The tool can grab and pull itself along.</dd></div><div class="gl-item"><dt>collet</dt><dd>A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it.</dd></div><div class="gl-item"><dt>dado</dt><dd>A flat-bottomed groove cut across a board.</dd></div><div class="gl-item"><dt>shank</dt><dd>The smooth or hex end of a bit that the chuck or collet grips.</dd></div></dl></div></div>
+  <div class="ft"><span>6 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1335,6 +1355,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3012,4 +3088,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-gloves (sleeves and strings near the base) so it doesn't copy Q12.
   v1.1 (2026-11-05): Review fixes: rewrote qc-inside and the inside-cutout card, changed the passes example to 3/8 ÷ 1/8, rotated right-answer positions, added two photos.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 11 quick checks, 4 checkpoints. Checkpoint hint lines removed.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

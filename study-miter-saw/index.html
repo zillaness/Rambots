@@ -1,11 +1,11 @@
 <title>Miter Saw Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_miter_saw_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_miter_saw_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the Rambots 7.4 miter saw written test: cuts and saw types, wood only, hands, short pieces, clamping, start-up, stopping, blade changes, and the power chain, with checks along the way.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Miter Saw Study",
   "slug": "rambots_miter_saw_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-miter-saw-study-v1"
@@ -899,8 +913,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="m-parts" data-title="Parts of the miter saw">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">The turntable sets the miter, the head tilts for a bevel, and the clamp holds the work</h2></div>
   <div class="body split-l">
-    <figure class="fig"><img src="img/miter_turntable.webp" alt="A miter saw seen from the front, with the turntable, the fence on both sides, and the miter handle"><figcaption>Turntable in the middle, fence behind it. Photo: Puddin Tain, CC BY-SA 2.0</figcaption></figure>
-    <div class="defs"><div class="d"><b>Turntable and miter lock</b><p>The round table swings left and right for miter angles. Detents click in at common angles like 0° and 45°. The miter lock holds it there.</p></div><div class="d"><b>Bevel lock</b><p>Lets the head tilt for a bevel cut, then locks it.</p></div><div class="d"><b>Fence</b><p>The upright wall at the back. The work sits tight against it.</p></div><div class="d"><b>Hold-down clamp</b><p>Presses the work down against the table and fence so it can&#x27;t move or lift during the cut. Use it whenever the piece allows.</p></div><div class="d"><b>Head lock pin</b><p>Locks the head down for carrying and storage only.</p></div></div>
+    <figure class="fig"><img src="img/miter_turntable.webp" alt="A miter saw seen from the front, with the turntable, the fence on both sides, and the miter handle"><figcaption>Turntable in the middle, <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button> behind it. Photo: Puddin Tain, CC BY-SA 2.0</figcaption></figure>
+    <div class="defs"><div class="d"><b>Turntable and <button type="button" class="gl" data-term="miter" data-def="An angled cut across the face of a board, made by turning the saw left or right." aria-expanded="false">miter</button> lock</b><p>The round table swings left and right for miter angles. Detents click in at common angles like 0° and 45°. The miter lock holds it there.</p></div><div class="d"><b><button type="button" class="gl" data-term="bevel" data-def="An angled cut through the thickness of a board, made by tilting the blade." aria-expanded="false">Bevel</button> lock</b><p>Lets the head tilt for a bevel cut, then locks it.</p></div><div class="d"><b>Fence</b><p>The upright wall at the back. The work sits tight against it.</p></div><div class="d"><b>Hold-down clamp</b><p>Presses the work down against the table and fence so it can&#x27;t move or lift during the cut. Use it whenever the piece allows.</p></div><div class="d"><b>Head lock pin</b><p>Locks the head down for carrying and storage only.</p></div></div>
   </div>
   <div class="ft"><span>7.4 bank; miter saw manuals</span></div>
   <aside class="notes">Walk through the parts on our saw, unplugged. To confirm in the shop: which saw replaces the old Ryobi, whether it slides, whether it has its hold-down clamp, and its speed and arbor lock.</aside>
@@ -919,11 +933,11 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     </svg>
   </div>
   <div class="defs">
-    <div class="d"><b>Miter</b><p>Swing the turntable to the angle, usually to a detent like 45°, and lock it with the miter lock.</p></div>
-    <div class="d"><b>Bevel</b><p>Tilt the saw head with the bevel lock.</p></div>
+    <div class="d"><b><button type="button" class="gl" data-term="miter" data-def="An angled cut across the face of a board, made by turning the saw left or right." aria-expanded="false">Miter</button></b><p>Swing the turntable to the angle, usually to a detent like 45°, and lock it with the miter lock.</p></div>
+    <div class="d"><b><button type="button" class="gl" data-term="bevel" data-def="An angled cut through the thickness of a board, made by tilting the blade." aria-expanded="false">Bevel</button></b><p>Tilt the saw head with the bevel lock.</p></div>
     <div class="d"><b>Compound saw</b><p>Swings for miters and tilts for bevels. A plain miter (chop) saw only swings.</p></div>
     <div class="d"><b>Sliding compound</b><p>A compound saw whose head also slides on rails, so it can cut wider boards.</p></div>
-    <div class="d"><b>Never by hand</b><p>Don't angle the board against the fence to get a miter. The table and fence do the holding.</p></div>
+    <div class="d"><b>Never by hand</b><p>Don't angle the board against the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button> to get a miter. The table and fence do the holding.</p></div>
   </div>
 </div>
   <div class="ft"><span>7.4 bank; old team quizzes</span></div>
@@ -939,7 +953,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-woodonly" data-title="Wood only">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">At Rambots the miter saw is for wood only, and all aluminum goes on the Evolution</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">The rule</div><p>Our miter saw cuts wood. Aluminum tube, MAXTube, and hex shaft all go on the Evolution metal chop saw.</p></div><div class="card"><div class="k">The trap</div><p>Some shops do cut aluminum on a miter saw with a non-ferrous blade. Not ours, even if someone tells you it works.</p></div><div class="card"><div class="k">Why</div><p>The miter saw has no vise, carries a wood blade, and throws hot, sharp metal chips at the operator. The Evolution has a vise and an aluminum blade.</p></div><div class="card"><div class="k">Team history</div><p>The team used to cut aluminum, MAXTube included, on the old miter saw. A blade lost teeth there when stock moved or was pulled from a hand, and short pieces brought hands too close to the blade.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">The rule</div><p>Our <button type="button" class="gl" data-term="miter saw" data-def="A saw that chops straight down through a board and turns or tilts for angled cuts. Ours is for wood only." aria-expanded="false">miter saw</button> cuts wood. Aluminum tube, MAXTube, and hex shaft all go on the Evolution metal chop saw.</p></div><div class="card"><div class="k">The trap</div><p>Some shops do cut aluminum on a miter saw with a non-ferrous blade. Not ours, even if someone tells you it works.</p></div><div class="card"><div class="k">Why</div><p>The miter saw has no <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>, carries a wood blade, and throws hot, sharp metal chips at the operator. The Evolution has a vise and an aluminum blade.</p></div><div class="card"><div class="k">Team history</div><p>The team used to cut aluminum, MAXTube included, on the old miter saw. A blade lost teeth there when stock moved or was pulled from a hand, and short pieces brought hands too close to the blade.</p></div></div>
   <div><p class="warnline">No metal on the miter saw, no matter the blade or the line at the chop saw.</p></div>
   <div class="ft"><span>7.4 bank; team rule; team incident history</span></div>
   <aside class="notes"></aside>
@@ -992,7 +1006,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <div class="d"><b>4 in. rule</b><p>A hand holding the work stays at least 4 in. (100 mm) from either side of the blade, or outside the zone marked on the saw if that's bigger.</p></div>
     <div class="d"><b>No crossing</b><p>Never cross your arm over the cut line, in front of or behind the blade. If the work on the far side needs holding, the clamp holds it.</p></div>
     <div class="d"><b>The offcut</b><p>Don't hold the cut-off piece. Held, it can pinch the blade and kick. Let it fall free.</p></div>
-    <div class="d"><b>Behind the fence</b><p>Never reach behind the fence for an offcut while the blade spins down. Wait for it to stop.</p></div>
+    <div class="d"><b>Behind the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button></b><p>Never reach behind the fence for an offcut while the blade spins down. Wait for it to stop.</p></div>
     <div class="d"><b>Why the zone</b><p>Chips and small offcuts get thrown at a close hand. The sting makes you flinch and lose your grip, and a board that shifts or gets grabbed takes your hand with it. That's the team's most common near-miss at the saws.</p></div>
   </div>
 </div>
@@ -1074,7 +1088,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="m-holding" data-title="Holding the work">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">Clamp the work flat and tight to the fence, and support long boards at table height</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">Flat and tight</div><p>Flat on the table, tight against the fence. Never freehand, and never angle the board by hand.</p></div><div class="card tight"><div class="k">Clamp it</div><p>A clamp holds tighter than a hand, doesn&#x27;t flinch, and keeps you out of the zone. Hold by hand only when the clamp can&#x27;t reach, well outside the zone.</p></div><div class="card tight"><div class="k">Long boards</div><p>Support the far end at table height. A sagging board tips the cut and pinches the blade.</p></div><div class="card tight"><div class="k">Round and repeats</div><p>Round stock rolls and gets pulled into the blade: cradle it in a V-block or clamp it. For many same-length pieces, clamp each one against a stop block on the fence. A piece trapped between the blade and the stop has nowhere to go, so let the blade stop before you raise the head.</p></div></div>
+    <div class="stack"><div class="card tight"><div class="k">Flat and tight</div><p>Flat on the table, tight against the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button>. Never freehand, and never angle the board by hand.</p></div><div class="card tight"><div class="k">Clamp it</div><p>A clamp holds tighter than a hand, doesn&#x27;t flinch, and keeps you out of the zone. Hold by hand only when the clamp can&#x27;t reach, well outside the zone.</p></div><div class="card tight"><div class="k">Long boards</div><p>Support the far end at table height. A sagging board tips the cut and pinches the blade.</p></div><div class="card tight"><div class="k">Round and repeats</div><p>Round stock rolls and gets pulled into the blade: cradle it in a V-block or clamp it. For many same-length pieces, clamp each one against a stop block on the fence. A piece trapped between the blade and the stop has nowhere to go, so let the blade stop before you raise the head.</p></div></div>
     <figure class="fig"><img src="img/miter_station.webp" alt="A miter saw on a long bench with level supports on both sides, so long boards rest at table height"><figcaption>Long supports at table height on both sides. Photo: lmorchard, CC BY 2.0</figcaption></figure>
   </div>
   <div class="ft"><span>7.4 bank; Bosch 3918 and Ryobi miter saw manuals; team practice</span></div>
@@ -1097,7 +1111,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-start" data-title="Starting and running the cut">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">Start with the head up, hold the handle firmly through the jump, then lower at a steady pace</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Head up first</div><p>Pull the trigger with the blade above the work and let it reach full speed before it touches the wood. A blade that starts against the board can grab it.</p></div><div class="card"><div class="k">The jump</div><p>As the motor spins up, the head twists the other way, an equal and opposite reaction. Every saw does it, and many jerk again when the brake stops the blade. Expect it and hold the handle firmly.</p></div><div class="card"><div class="k">Steady feed</div><p>Lower the blade at a steady pace and let it do the work. A slow-spinning blade doesn&#x27;t cut; it grabs.</p></div><div class="card"><div class="k">Listen</div><p>If the motor bogs and the pitch drops, ease off. Too fast binds and throws pieces. Too slow burns the wood and heats the blade.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Head up first</div><p>Pull the trigger with the blade above the work and let it reach full speed before it touches the wood. A blade that starts against the board can grab it.</p></div><div class="card"><div class="k">The jump</div><p>As the motor spins up, the head twists the other way, an equal and opposite reaction. Every saw does it, and many jerk again when the brake stops the blade. Expect it and hold the handle firmly.</p></div><div class="card"><div class="k">Steady feed</div><p>Lower the blade at a steady pace and let it do the work. A slow-spinning blade doesn&#x27;t cut; it grabs.</p></div><div class="card"><div class="k">Listen</div><p>If the motor bogs and the pitch drops, ease off. Too fast <button type="button" class="gl" data-term="bind" data-def="When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back." aria-expanded="false">binds</button> and throws pieces. Too slow burns the wood and heats the blade.</p></div></div>
   <div class="ft"><span>7.4 bank; Ryobi miter saw manual; BU EHS miter saw reminder</span></div>
   <aside class="notes">Run the saw once with no wood so students see and hear the start-up jump before their first cut.</aside>
 </section>
@@ -1150,7 +1164,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-blade" data-title="Blade changes and reaching in">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">Pull the saw&#x27;s own plug before a blade change or any time your hands go near the blade</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Saw&#x27;s own plug</h3><p>Unplug the saw itself, or take its battery out. Keep the plug where you can see it.</p></div><div class="step"><div class="n">2</div><h3>Arbor lock</h3><p>Lock the arbor and use the wrench that came with the saw.</p></div><div class="step"><div class="n">3</div><h3>Right blade</h3><p>The new blade&#x27;s rated speed in revolutions per minute (RPM) must be at least the saw&#x27;s. A blade rated below the saw&#x27;s speed can come apart.</p></div><div class="step"><div class="n">4</div><h3>Check after</h3><p>Check that the guard moves freely and covers the blade before you plug back in.</p></div></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:18px"><div class="card tight"><div class="k">Not the vacuum</div><p>Turning the vacuum off doesn&#x27;t turn the saw off.</p></div><div class="card tight"><div class="k">Not the strip</div><p>Someone can flip a power strip back on without knowing you&#x27;re inside the saw.</p></div><div class="card tight"><div class="k">Same rule</div><p>Clearing a wedged offcut, adjusting near the blade, or changing it: the saw&#x27;s plug in your hand.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Saw&#x27;s own plug</h3><p>Unplug the saw itself, or take its battery out. Keep the plug where you can see it.</p></div><div class="step"><div class="n">2</div><h3>Arbor lock</h3><p>Lock the <button type="button" class="gl" data-term="arbor" data-def="The shaft that a saw blade or grinding wheel mounts on." aria-expanded="false">arbor</button> and use the wrench that came with the saw.</p></div><div class="step"><div class="n">3</div><h3>Right blade</h3><p>The new blade&#x27;s rated speed in revolutions per minute (<button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button>) must be at least the saw&#x27;s. A blade rated below the saw&#x27;s speed can come apart.</p></div><div class="step"><div class="n">4</div><h3>Check after</h3><p>Check that the guard moves freely and covers the blade before you plug back in.</p></div></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:18px"><div class="card tight"><div class="k">Not the vacuum</div><p>Turning the vacuum off doesn&#x27;t turn the saw off.</p></div><div class="card tight"><div class="k">Not the strip</div><p>Someone can flip a power strip back on without knowing you&#x27;re inside the saw.</p></div><div class="card tight"><div class="k">Same rule</div><p>Clearing a wedged offcut, adjusting near the blade, or changing it: the saw&#x27;s plug in your hand.</p></div></div></div>
   <div class="ft"><span>7.4 bank; Ryobi miter saw manual; team practice</span></div>
   <aside class="notes">To confirm in the shop: our saw&#x27;s speed and where its arbor lock is.</aside>
 </section>
@@ -1196,7 +1210,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-slide" data-title="Sliding saws">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">On a sliding saw, pull the head out first, then lower and push the blade back toward the fence</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">The steps</div><p>With the blade up, pull the head out toward you. Start it, lower it at the front edge of the board, then push it back toward the fence.</p></div><div class="card"><div class="k">Why push</div><p>Pulling the running blade through toward you is a climb cut. The teeth take bigger and bigger bites, and the blade can climb up onto the work and run out at you.</p></div><div class="card"><div class="k">Bonus</div><p>Pushing also leaves a cleaner cut, since the blade passes the edge only once.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">The steps</div><p>With the blade up, pull the head out toward you. Start it, lower it at the front edge of the board, then push it back toward the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button>.</p></div><div class="card"><div class="k">Why push</div><p>Pulling the running blade through toward you is a <button type="button" class="gl" data-term="climb cut" data-def="Feeding so the bit&#x27;s teeth bite into the material in the same direction it&#x27;s moving. The tool can grab and pull itself along." aria-expanded="false">climb cut</button>. The teeth take bigger and bigger bites, and the blade can climb up onto the work and run out at you.</p></div><div class="card"><div class="k">Bonus</div><p>Pushing also leaves a cleaner cut, since the blade passes the edge only once.</p></div></div>
   <div class="ft"><span>7.4 bank; Rockler, pull or push a miter saw cut</span></div>
   <aside class="notes">To decide: the bank keeps this question for the facilities DeWalt and future saws even if ours doesn&#x27;t slide.</aside>
 </section>
@@ -1210,7 +1224,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-ppe" data-title="What to wear and ready to cut">
   <div class="hd"><div class="chip">7.4</div><h2 class="t sm">Glasses, hearing protection, nothing loose, and no gloves at the saw</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Wear</div><p>Safety glasses and hearing protection. Long ponytails up, bangs pinned, sleeves rolled, no lanyard.</p></div><div class="card"><div class="k">No gloves</div><p>No gloves near a spinning blade; a glove can drag a hand in. Gloves are fine for carrying rough boards with the saw off.</p></div><div class="card"><div class="k">Ready check</div><p>Board flat on the table and tight to the fence, clamped. Hands outside the zone, no arm across the line. Glasses on. A saw stand is fine.</p></div><div class="card"><div class="k">Announce</div><p>Say &quot;using the miter saw,&quot; look around, and make sure people nearby know.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Wear</div><p>Safety glasses and hearing protection. Long ponytails up, bangs pinned, sleeves rolled, no lanyard.</p></div><div class="card"><div class="k">No gloves</div><p>No gloves near a spinning blade; a glove can drag a hand in. Gloves are fine for carrying rough boards with the saw off.</p></div><div class="card"><div class="k">Ready check</div><p>Board flat on the table and tight to the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button>, clamped. Hands outside the zone, no arm across the line. Glasses on. A saw stand is fine.</p></div><div class="card"><div class="k">Announce</div><p>Say &quot;using the <button type="button" class="gl" data-term="miter saw" data-def="A saw that chops straight down through a board and turns or tilts for angled cuts. Ours is for wood only." aria-expanded="false">miter saw</button>,&quot; look around, and make sure people nearby know.</p></div></div>
   <div class="ft"><span>7.4 bank; FIRST Safety Manual §7; team rules</span></div>
   <aside class="notes">Stage a setup with two mistakes, unplugged, and have students find them.</aside>
 </section>
@@ -1225,13 +1239,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Square crosscut of a 2x4 or 1x2 to a marked length</td><td>On the fence and clamped (or held well outside the zone when a clamp can&#x27;t reach), full speed before the cut, head down until the blade stops</td></tr><tr><td>45° miter</td><td>Turntable locked at the detent, clamp used</td></tr><tr><td>Several pieces to the same length with a stop block</td><td>Stop block clamped to the fence, offcut free to fall, never holds the offcut</td></tr><tr><td>Blade change</td><td>Unplugged, arbor lock, guard checked after</td></tr><tr><td>Setup from storage to first cut</td><td>Releases the head lock correctly, checks the power and dust chain, holds the handle firmly through the start-up jump</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Square <button type="button" class="gl" data-term="crosscut" data-def="A cut across the grain or across the short way of a board." aria-expanded="false">crosscut</button> of a 2x4 or 1x2 to a marked length</td><td>On the <button type="button" class="gl" data-term="fence" data-def="A straight guide the material sits or slides against, so cuts come out straight and square." aria-expanded="false">fence</button> and clamped (or held well outside the zone when a clamp can&#x27;t reach), full speed before the cut, head down until the blade stops</td></tr><tr><td>45° <button type="button" class="gl" data-term="miter" data-def="An angled cut across the face of a board, made by turning the saw left or right." aria-expanded="false">miter</button></td><td>Turntable locked at the detent, clamp used</td></tr><tr><td>Several pieces to the same length with a stop block</td><td>Stop block clamped to the fence, offcut free to fall, never holds the offcut</td></tr><tr><td>Blade change</td><td>Unplugged, <button type="button" class="gl" data-term="arbor" data-def="The shaft that a saw blade or grinding wheel mounts on." aria-expanded="false">arbor</button> lock, guard checked after</td></tr><tr><td>Setup from storage to first cut</td><td>Releases the head lock correctly, checks the power and dust chain, holds the handle firmly through the start-up jump</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Supervised first</div><p>Passing the test gets you Supervised, for wood. A mentor directly supervises every group 7 use.</p></div><div class="card tight"><div class="k">Certified</div><p>Comes from a mentor watching you do these uses well on real work or a check station.</p></div></div>
   </div>
   <div class="ft"><span>7.4 bank, Uses for Certified</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>arbor</dt><dd>The shaft that a saw blade or grinding wheel mounts on.</dd></div><div class="gl-item"><dt>bevel</dt><dd>An angled cut through the thickness of a board, made by tilting the blade.</dd></div><div class="gl-item"><dt>bind</dt><dd>When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back.</dd></div><div class="gl-item"><dt>climb cut</dt><dd>Feeding so the bit&#x27;s teeth bite into the material in the same direction it&#x27;s moving. The tool can grab and pull itself along.</dd></div><div class="gl-item"><dt>crosscut</dt><dd>A cut across the grain or across the short way of a board.</dd></div><div class="gl-item"><dt>fence</dt><dd>A straight guide the material sits or slides against, so cuts come out straight and square.</dd></div><div class="gl-item"><dt>miter</dt><dd>An angled cut across the face of a board, made by turning the saw left or right.</dd></div><div class="gl-item"><dt>miter saw</dt><dd>A saw that chops straight down through a board and turns or tilts for angled cuts. Ours is for wood only.</dd></div><div class="gl-item"><dt>RPM</dt><dd>Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>10 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1398,6 +1418,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3075,4 +3151,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 9 quick checks, 5 checkpoints.
   v1.1 (2026-11-05): Review fixes: rewrote cp-wood (sort the cut list by saw) and cp-unplug (power strip flipped back on); new scenarios for qc-jump (brake jerk), qc-flinch (clamp skipped at 3 in.), and qc-stop (block trapped against the stop); team history kept and reworded to the team record; switch-hands advice cut.
   v1.1.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

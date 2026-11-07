@@ -1,11 +1,11 @@
 <title>Heat Press Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_heat_press_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_heat_press_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
   created: 2026-11-03
-  last_updated: 2026-11-05
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots 2.1 heat press quiz: setup, burns, never unattended, iron-on vinyl, loading, settings, peeling, and shutdown, with quick checks, blocking checkpoints on can't-fail topics, and a downloadable score.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 /* Heat press only: the layer-stack diagram. */
 .stackdiag svg{width:100%;height:auto;display:block}
 .stackdiag .lbl{fill:var(--ink);font-size:19px;font-family:inherit}
@@ -541,7 +555,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Heat Press Study",
   "slug": "rambots_heat_press_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-heat-press-study-v1"
@@ -829,7 +843,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="h-press" data-title="The press">
   <div class="hd"><div class="chip">The press</div><h2 class="t sm">A heated top plate clamps down on the shirt with steady heat and pressure</h2></div>
   <div class="body split-l">
-    <figure class="fig"><img src="img/press_loading.webp" alt="A clamshell heat press with its top platen swung up and a black shirt laid over the lower platen"><figcaption>Top platen up, shirt on the lower platen. From Mrs. Kotlar's heat press guide.</figcaption></figure>
+    <figure class="fig"><img src="img/press_loading.webp" alt="A clamshell heat press with its top platen swung up and a black shirt laid over the lower platen"><figcaption>Top <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button> up, shirt on the lower platen. From Mrs. Kotlar's heat press guide.</figcaption></figure>
     <div class="defs">
       <div class="d"><b>Top platen</b><p>The heating plate. It swings up to load and clamps down to press. It burns on contact.</p></div>
       <div class="d"><b>Lower platen</b><p>A foam pad the shirt lies on. Lay shirts on and lift them off; dragging one off can pull the pad loose.</p></div>
@@ -845,7 +859,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Setup</div><h2 class="t sm">A sturdy, clear spot, plugged straight into the wall</h2></div>
   <div class="body split-wide">
     <div class="stack">
-      <div class="card tight"><div class="k">The spot</div><p>A sturdy, flat bench that can take the heat, away from the edge so it can't be bumped off. Clear space around the platen: shirts, paper towels, and transfer sheets stay on a separate table.</p></div>
+      <div class="card tight"><div class="k">The spot</div><p>A sturdy, flat bench that can take the heat, away from the edge so it can't be bumped off. Clear space around the <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button>: shirts, paper towels, and transfer sheets stay on a separate table.</p></div>
       <div class="card tight"><div class="k">Power</div><p>Plugged straight into a wall outlet, not a power strip or an extension cord.</p></div>
       <div class="card tight"><div class="k">The cord</div><p>Where nobody can trip on it or pull it, and where it can't touch the hot platen.</p></div>
     </div>
@@ -976,10 +990,10 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
       </svg>
     </div>
     <div class="defs">
-      <div class="d"><b>Cutting</b><p>Iron-on vinyl, also called heat transfer vinyl (HTV), is cut on the Cricut with the shiny side down on the mat and the design mirrored, because you're cutting it from the back.</p></div>
-      <div class="d"><b>Weeding</b><p>Peel away the vinyl you don't want, leaving the design on the clear carrier.</p></div>
+      <div class="d"><b>Cutting</b><p>Iron-on vinyl, also called heat transfer vinyl (<button type="button" class="gl" data-term="HTV" data-def="Heat transfer vinyl, also called iron-on: vinyl with heat-activated glue on the back. Cut it on the Cricut, then press it onto fabric with the heat press." aria-expanded="false">HTV</button>), is cut on the Cricut with the shiny side down on the mat and the design mirrored, because you're cutting it from the back.</p></div>
+      <div class="d"><b><button type="button" class="gl" data-term="weeding" data-def="Picking away the vinyl you don&#x27;t want after a cut, so only the design is left on the backing." aria-expanded="false">Weeding</button></b><p>Peel away the vinyl you don't want, leaving the design on the clear carrier.</p></div>
       <div class="d"><b>On the shirt</b><p>Flip it over: glue side against the fabric, shiny carrier facing up. Now it reads the right way.</p></div>
-      <div class="d"><b>Cover sheet</b><p>Parchment or a Teflon sheet over the top, so the shirt doesn't scorch and nothing sticks to the platen.</p></div>
+      <div class="d"><b>Cover sheet</b><p>Parchment or a <button type="button" class="gl" data-term="Teflon sheet" data-def="A nonstick sheet laid over a transfer so the vinyl doesn&#x27;t stick to the heat press platen." aria-expanded="false">Teflon sheet</button> over the top, so the shirt doesn't scorch and nothing sticks to the <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button>.</p></div>
     </div>
   </div>
   <div class="ft"><span>Cricut Help: Everyday Iron-On and mirroring your design. Diagram drawn for this deck.</span></div>
@@ -1004,7 +1018,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Loading</div><h2 class="t sm">Flat shirt, no metal on the platen, and a short pre-press first</h2></div>
   <div class="body split-wide">
     <div class="stack">
-      <div class="card tight"><div class="k">Lay it flat</div><p>Lay the shirt on the lower platen and line it up before you press. The spot for the design has to be flat: no folds, seams, or wrinkles under it.</p></div>
+      <div class="card tight"><div class="k">Lay it flat</div><p>Lay the shirt on the lower <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button> and line it up before you press. The spot for the design has to be flat: no folds, seams, or wrinkles under it.</p></div>
       <div class="card tight"><div class="k">Metal off</div><p>Zippers, grommets, buttons, and drawstring tips hang off the platen. They get hot, dent the pad, and hold the platen up so it can't press flat.</p></div>
       <div class="card tight"><div class="k">Pre-press</div><p>Close the press on the blank shirt for a few seconds first. It dries out moisture and flattens wrinkles, so the transfer sticks evenly.</p></div>
     </div>
@@ -1070,7 +1084,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="body cols-3">
     <div class="card"><div class="k">Off</div><p>Turn the press off and unplug it when the last shirt is done.</p></div>
     <div class="card"><div class="k">Cool</div><p>Let it cool completely before you cover it, move it, or put it away. A hot press in a cabinet is a fire and burn risk.</p></div>
-    <div class="card"><div class="k">Warn</div><p>Tell anyone nearby it's still hot. The platen looks the same hot or cold.</p></div>
+    <div class="card"><div class="k">Warn</div><p>Tell anyone nearby it's still hot. The <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button> looks the same hot or cold.</p></div>
   </div>
   <div class="ft"><span>Roland DGA heat press manual: cool completely before storing</span></div>
   <aside class="notes"></aside>
@@ -1090,7 +1104,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
       <thead><tr><th>Step</th><th>What the mentor watches for</th></tr></thead>
       <tbody>
         <tr><td>Set up and preheat</td><td>Safe spot, wall outlet, never left on alone</td></tr>
-        <tr><td>Pre-press and place</td><td>Shirt flat, metal off the platen, glue side down, hands clear of the plate</td></tr>
+        <tr><td>Pre-press and place</td><td>Shirt flat, metal off the <button type="button" class="gl" data-term="platen" data-def="A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt." aria-expanded="false">platen</button>, glue side down, hands clear of the plate</td></tr>
         <tr><td>Cover and press</td><td>Cover sheet on, settings from the transfer's instructions</td></tr>
         <tr><td>Peel</td><td>Peel matches the transfer</td></tr>
         <tr><td>Shut down</td><td>Off, unplugged, cooling, people warned</td></tr>
@@ -1104,6 +1118,12 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>HTV</dt><dd>Heat transfer vinyl, also called iron-on: vinyl with heat-activated glue on the back. Cut it on the Cricut, then press it onto fabric with the heat press.</dd></div><div class="gl-item"><dt>platen</dt><dd>A flat plate. On the heat press, it&#x27;s the heated plate that presses on the material; on a belt sander, it&#x27;s the flat backing behind the belt.</dd></div><div class="gl-item"><dt>Teflon sheet</dt><dd>A nonstick sheet laid over a transfer so the vinyl doesn&#x27;t stick to the heat press platen.</dd></div><div class="gl-item"><dt>weeding</dt><dd>Picking away the vinyl you don&#x27;t want after a cut, so only the design is left on the backing.</dd></div></dl></div></div>
+  <div class="ft"><span>4 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1278,6 +1298,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2955,4 +3031,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0 (2026-11-03): First version on engine v1.1.1. 3 blocking checkpoints on the can't-fail topics, 7 quick checks, results slide with CSV download, a layer diagram, 1 Openverse photo and 2 photos from Mrs. Kotlar's guide.
   v1.1 (2026-11-05): Matched to quiz bank v0.1.3: heat transfer vinyl (HTV) spelled out. Coverage file added. Review fixes: 305°F labeled as Siser's number with the team setting still to confirm; new scenarios for the peel and shutdown checks; reworded explanations that echoed the quiz bank.
   v1.1.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

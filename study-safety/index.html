@@ -1,11 +1,11 @@
 <title>Shop Safety Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_safety_study_v1.0.6.html
-  version: 1.0.6
+  file: rambots_safety_study_v1.0.7.html
+  version: 1.0.7
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots 1.28 shop safety quiz: PPE, conduct, shop and robot hazards, fire, first aid, and emergencies, with quick checks, blocking checkpoints, and a downloadable score.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Shop Safety Study",
   "slug": "rambots_safety_study",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-safety-study-v1"
@@ -1462,7 +1476,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p1-eyes" data-title="Eye protection">
   <div class="hd"><div class="chip">Part 1 · Eyes</div><h2 class="t sm">Safety glasses go on whenever anyone in the shop is working</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">When</div><p>Running a tool, watching someone else run one, or just walking through while anyone is working. Chips and broken bits hit bystanders too.</p></div><div class="card"><div class="k">Prescription glasses</div><p>Build members wear rated goggles or over-the-glasses safety glasses on top, or prescription safety glasses marked Z87. Everyday lenses can pop out of their frames, and clip-on side shields leave gaps.</p></div><div class="card"><div class="k">Fogging</div><p>Step back from the work, wipe them or swap for another pair, then go back. Never work with them off or pushed down your nose.</p></div><div class="card"><div class="k">Angle grinder</div><p>The grinder needs a face shield over your safety glasses, or over your prescription glasses. Glasses alone aren&#x27;t enough, even standing off to the side, and a shield is never eye protection by itself.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">When</div><p>Running a tool, watching someone else run one, or just walking through while anyone is working. Chips and broken bits hit bystanders too.</p></div><div class="card"><div class="k">Prescription glasses</div><p>Build members wear rated goggles or over-the-glasses safety glasses on top, or prescription safety glasses marked Z87. Everyday <button type="button" class="gl" data-term="lens" data-def="A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot." aria-expanded="false">lenses</button> can pop out of their frames, and clip-on side shields leave gaps.</p></div><div class="card"><div class="k">Fogging</div><p>Step back from the work, wipe them or swap for another pair, then go back. Never work with them off or pushed down your nose.</p></div><div class="card"><div class="k">Angle grinder</div><p>The grinder needs a face shield over your safety glasses, or over your prescription glasses. Glasses alone aren&#x27;t enough, even standing off to the side, and a shield is never eye protection by itself.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2 and the FIRST Safety Manual (4.1.3)</span></div>
   <aside class="notes">Show the shop&#x27;s spare safety glasses and over-the-glasses pairs. Side shields on everyday glasses are only for visiting parents and business members passing through. To confirm in the shop: is the rule &#x27;glasses on whenever anyone is working&#x27; or &#x27;always in the shop&#x27;?</aside>
 </section>
@@ -1508,7 +1522,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p1-ears-lungs" data-title="Ears and lungs">
   <div class="hd"><div class="chip">Part 1 · Ears and lungs</div><h2 class="t sm">Noise and dust reach you whether or not you&#x27;re the one working</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Hearing</div><p>If you have to raise your voice to talk to someone an arm&#x27;s length away, it&#x27;s loud enough for hearing protection, even if you&#x27;re only filing nearby.</p></div><div class="card"><div class="k">Foam earplugs</div><p>Roll them tight and thin, push them deep into the ear canal, and hold them while they expand to seal. Loose plugs barely block anything.</p></div><div class="card"><div class="k">When to mask up</div><p>Sanding wood, MDF, or 3D-printed parts. Sanding or cutting carbon fiber or fiberglass. Opening the laser lid while smoke is still clearing. Not for driving screws.</p></div><div class="card"><div class="k">The seal</div><p>If your glasses fog the moment the mask goes on, air is leaking over your nose, and dust gets in the same way. Pinch the nose clip and refit. Facial hair under the seal leaks too.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Hearing</div><p>If you have to raise your voice to talk to someone an arm&#x27;s length away, it&#x27;s loud enough for hearing protection, even if you&#x27;re only filing nearby.</p></div><div class="card"><div class="k">Foam earplugs</div><p>Roll them tight and thin, push them deep into the ear canal, and hold them while they expand to seal. Loose plugs barely block anything.</p></div><div class="card"><div class="k">When to mask up</div><p>Sanding wood, <button type="button" class="gl" data-term="MDF" data-def="Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut." aria-expanded="false">MDF</button>, or 3D-printed parts. Sanding or cutting carbon fiber or fiberglass. Opening the laser lid while smoke is still clearing. Not for driving screws.</p></div><div class="card"><div class="k">The seal</div><p>If your glasses fog the moment the mask goes on, air is leaking over your nose, and dust gets in the same way. Pinch the nose clip and refit. Facial hair under the seal leaks too.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2</span></div>
   <aside class="notes">Pass out foam plugs and have everyone roll and insert one.</aside>
 </section>
@@ -1575,7 +1589,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p1-workholding" data-title="Workholding and broken tools">
   <div class="hd"><div class="chip">Part 1 · Tools</div><h2 class="t sm">Clamp small parts, and pull broken tools out of use right away</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Small parts</div><p>A small bracket goes in a vise or gets clamped so it can&#x27;t move or spin. If the bit grabs, a part held by hand, a teammate, or pliers spins with it.</p></div><div class="card"><div class="k">A broken tool</div><p>A cut cord, a cracked handle, a wobbly blade: unplug it or pull the battery, tag it with blue tape so it can&#x27;t be used, and tell a mentor.</p></div><div class="card"><div class="k">Never back on the shelf</div><p>Don&#x27;t tape up a cut cord and keep going, and don&#x27;t quietly put the tool back. The next person won&#x27;t know.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Small parts</div><p>A small bracket goes in a <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button> or gets clamped so it can&#x27;t move or spin. If the bit grabs, a part held by hand, a teammate, or pliers spins with it.</p></div><div class="card"><div class="k">A broken tool</div><p>A cut cord, a cracked handle, a wobbly blade: unplug it or pull the battery, tag it with blue tape so it can&#x27;t be used, and tell a mentor.</p></div><div class="card"><div class="k">Never back on the shelf</div><p>Don&#x27;t tape up a cut cord and keep going, and don&#x27;t quietly put the tool back. The next person won&#x27;t know.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2, the FIRST Safety Manual (3.2.1), and team practice</span></div>
   <aside class="notes">Show how the team blue-tapes a broken tool: pliers or clamps taped shut, a screwdriver tip taped over.</aside>
 </section>
@@ -1667,7 +1681,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p1-chemicals" data-title="Chemicals and acid">
   <div class="hd"><div class="chip">Part 1 · Chemicals</div><h2 class="t sm">Spills follow the SDS, and acid on skin only ever gets water</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">The SDS</div><p>Every chemical has a Safety Data Sheet. Section 4 is first aid.</p></div><div class="card"><div class="k">A spill</div><p>Tell a mentor, then clean it up the way its SDS says, with gloves if it calls for them. Don&#x27;t just wipe it into the trash or hose it down.</p></div><div class="card"><div class="k">Acid on skin</div><p>Rinse with lots of water for at least 15 minutes, take off anything it soaked into, and tell a mentor.</p></div><div class="card"><div class="k">Baking soda</div><p>The team keeps baking soda to neutralize battery acid on the bench, the floor, or a leaking battery. Never on skin: it fizzes and heats on damaged skin, and every second mixing paste is a second not rinsing.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">The SDS</div><p>Every chemical has a Safety Data Sheet. Section 4 is first aid.</p></div><div class="card"><div class="k">A spill</div><p>Tell a mentor, then clean it up the way its <button type="button" class="gl" data-term="SDS" data-def="Safety data sheet: the maker&#x27;s sheet that lists a product&#x27;s hazards, how to handle it, and first aid." aria-expanded="false">SDS</button> says, with gloves if it calls for them. Don&#x27;t just wipe it into the trash or hose it down.</p></div><div class="card"><div class="k">Acid on skin</div><p>Rinse with lots of water for at least 15 minutes, take off anything it soaked into, and tell a mentor.</p></div><div class="card"><div class="k">Baking soda</div><p>The team keeps baking soda to neutralize battery acid on the bench, the floor, or a leaking battery. Never on skin: it fizzes and heats on damaged skin, and every second mixing paste is a second not rinsing.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2 and the FIRST Safety Manual (3.5.2 and 3.5.3)</span></div>
   <aside class="notes">The SDS binder&#x27;s location isn&#x27;t on the quiz until the binder is found.</aside>
 </section>
@@ -1700,7 +1714,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="p1-batteries" data-title="Battery hazards">
   <div class="hd"><div class="chip">Part 1 · Batteries</div><h2 class="t sm">An FRC battery can dump hundreds of amps through anything that touches both terminals</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">Shorts</div><p>A wrench, tool, or anything metal across both terminals is a short circuit: it can go red hot, throw sparks, and burn you. Carry tools separately from the battery, and never set one on top of it.</p></div><div class="card tight"><div class="k">Swollen or hot lithium</div><p>A puffed-up or warm lithium battery stops being used. Don&#x27;t charge it. Set it on a non-flammable surface away from anything that burns, and tell a mentor.</p></div><div class="card tight"><div class="k">On the charger</div><p>A battery that looks puffed up comes off the charger and gets reported.</p></div></div>
+    <div class="stack"><div class="card tight"><div class="k">Shorts</div><p>A wrench, tool, or anything metal across both terminals is a <button type="button" class="gl" data-term="short circuit" data-def="When current takes an unplanned shortcut, like positive touching negative. It can melt wires or start a fire." aria-expanded="false">short circuit</button>: it can go red hot, throw sparks, and burn you. Carry tools separately from the battery, and never set one on top of it.</p></div><div class="card tight"><div class="k">Swollen or hot lithium</div><p>A puffed-up or warm lithium battery stops being used. Don&#x27;t charge it. Set it on a non-flammable surface away from anything that burns, and tell a mentor.</p></div><div class="card tight"><div class="k">On the charger</div><p>A battery that looks puffed up comes off the charger and gets reported.</p></div></div>
     <figure class="fig"><img src="img/fire_extinguishers.webp" alt="Two red fire extinguishers mounted on a wall bracket"><figcaption>A battery fire is a fire. Know where the extinguisher is. Photo: Bruno Girin, CC BY-SA 2.0</figcaption></figure>
   </div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2</span></div>
@@ -1717,7 +1731,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="p1-rsl" data-title="The robot signal light">
   <div class="hd"><div class="chip">Part 1 · Robot</div><h2 class="t sm">The orange signal light tells you what the robot might do, but never that it&#x27;s safe</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Light</th><th>What it means</th><th>Safe to reach in?</th></tr></thead><tbody><tr><td><b>Solid</b></td><td>On and disabled</td><td>No. The main breaker is still on, and mechanisms can still drop.</td></tr><tr><td><b>Blinking</b></td><td>On and enabled: it can move at any moment</td><td>No</td></tr><tr><td><b>Off</b></td><td>Could be off, could be an unpowered roboRIO, could be an unplugged or broken light</td><td>Don&#x27;t bet on it. Check the main breaker yourself.</td></tr></tbody></table></div></div>
+    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Light</th><th>What it means</th><th>Safe to reach in?</th></tr></thead><tbody><tr><td><b>Solid</b></td><td>On and disabled</td><td>No. The main <button type="button" class="gl" data-term="breaker" data-def="A switch that cuts power. It trips on its own when too much current flows, protecting the wires. The robot&#x27;s main breaker is also how you turn the whole robot off." aria-expanded="false">breaker</button> is still on, and mechanisms can still drop.</td></tr><tr><td><b>Blinking</b></td><td>On and enabled: it can move at any moment</td><td>No</td></tr><tr><td><b>Off</b></td><td>Could be off, could be an unpowered roboRIO, could be an unplugged or broken light</td><td>Don&#x27;t bet on it. Check the main breaker yourself.</td></tr></tbody></table></div></div>
     <div class="stack"><div class="card tight"><div class="k">The RSL</div><p>The robot signal light is the orange light on the robot.</p></div><div class="card tight"><div class="k">Off proves nothing</div><p>A dark light doesn&#x27;t prove the robot is off. The roboRIO may refuse to enable without a working light, but don&#x27;t bet your hands on it.</p></div></div>
   </div>
   <div class="ft"><span>WPILib status light quick reference and the 1.28 safety quiz bank v0.2</span></div>
@@ -1758,7 +1772,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p1-bench" data-title="Enabling on the bench">
   <div class="hd"><div class="chip">Part 1 · Robot</div><h2 class="t sm">Before the robot is enabled, everyone&#x27;s hands are out of reach</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Before enabling</div><p>The robot is on blocks with its wheels off the surface. Someone at the Driver Station is ready to disable. Everyone is outside the mechanisms&#x27; reach, and nobody holds an arm or roller steady.</p></div><div class="card"><div class="k">Call it</div><p>Call out &quot;enabling&quot; and wait until every hand is clear.</p></div><div class="card"><div class="k">If it moves unexpectedly</div><p>Disable from the Driver Station, the laptop that drives the robot: Enter, or the space bar for an emergency stop. Call out &quot;disable.&quot; Hands stay out of a moving robot; open the main breaker once it has stopped.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Before enabling</div><p>The robot is on blocks with its wheels off the surface. Someone at the Driver Station is ready to disable. Everyone is outside the mechanisms&#x27; reach, and nobody holds an arm or roller steady.</p></div><div class="card"><div class="k">Call it</div><p>Call out &quot;enabling&quot; and wait until every hand is clear.</p></div><div class="card"><div class="k">If it moves unexpectedly</div><p>Disable from the Driver Station, the laptop that drives the robot: Enter, or the space bar for an emergency stop. Call out &quot;disable.&quot; Hands stay out of a moving robot; open the main <button type="button" class="gl" data-term="breaker" data-def="A switch that cuts power. It trips on its own when too much current flows, protecting the wires. The robot&#x27;s main breaker is also how you turn the whole robot off." aria-expanded="false">breaker</button> once it has stopped.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2</span></div>
   <aside class="notes">A safety radius around an enabled robot is still to be decided.</aside>
 </section>
@@ -1977,7 +1991,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="p2-locations" data-title="Where the safety gear is">
   <div class="hd"><div class="chip">Part 2 · Locations</div><h2 class="t sm">Know where the gear is before you need it</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Gear</th><th>Where</th></tr></thead><tbody><tr><td><b>Fire extinguishers</b></td><td>Two: one by the hallway door in room 104, and a Halotron (clean agent) next to the laser cutter</td></tr><tr><td><b>First aid kit</b></td><td>By the hallway door in room 104</td></tr><tr><td><b>Eyewash station</b></td><td>Room 103</td></tr><tr><td><b>AED</b></td><td>In the hallway toward the front entrance, between the reception lobby and the student union</td></tr><tr><td><b>Fire blanket</b></td><td>With the extinguisher by the hallway door in room 104 (there&#x27;s no blanket at the laser)</td></tr></tbody></table></div></div>
+    <div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Gear</th><th>Where</th></tr></thead><tbody><tr><td><b>Fire extinguishers</b></td><td>Two: one by the hallway door in room 104, and a <button type="button" class="gl" data-term="Halotron" data-def="A clean fire extinguisher agent that leaves no powder behind, so it&#x27;s safe for electronics and machines like the laser cutter." aria-expanded="false">Halotron</button> (clean agent) next to the laser cutter</td></tr><tr><td><b>First aid kit</b></td><td>By the hallway door in room 104</td></tr><tr><td><b>Eyewash station</b></td><td>Room 103</td></tr><tr><td><b><button type="button" class="gl" data-term="AED" data-def="Automated external defibrillator: a device that checks a heart&#x27;s rhythm and can shock it back to normal. It talks you through every step." aria-expanded="false">AED</button></b></td><td>In the hallway toward the front entrance, between the reception lobby and the student union</td></tr><tr><td><b>Fire blanket</b></td><td>With the extinguisher by the hallway door in room 104 (there&#x27;s no blanket at the laser)</td></tr></tbody></table></div></div>
     <div class="stack"><div class="card tight"><div class="k">The walk-around</div><p>A mentor walks you through the shop. You point to each item, say PASS at the extinguisher, turn on the eyewash, and walk every way out of 104.</p></div><figure class="fig"><img src="img/aed_cabinet.webp" alt="A white wall cabinet with a red AED label and the defibrillator inside" style="max-height:260px"><figcaption>An AED cabinet. Photo: Infrogmation, CC BY-SA 2.0</figcaption></figure></div>
   </div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2 walk-around checklist</span></div>
@@ -2035,7 +2049,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p2-unresponsive" data-title="An unresponsive person">
   <div class="hd"><div class="chip">Part 2 · First aid</div><h2 class="t sm">Tap and shout, then let their breathing decide what you do</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Check</div><p>Tap their shoulder and shout. If they don&#x27;t respond, look at their breathing.</p></div><div class="card"><div class="k">Not breathing normally</div><p>Not breathing at all and only gasping both count as not breathing normally. Call 911 or have someone call, send someone for the AED, start chest compressions, and get a mentor as soon as someone can go.</p></div><div class="card"><div class="k">Breathing normally</div><p>Call 911, roll them onto their side (the recovery position), and stay with them watching their breathing. If it stops or turns to gasping, start CPR.</p></div><div class="card"><div class="k">Compressions first</div><p>The old ABC order (airway, breathing, circulation) was replaced. Compressions come first.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Check</div><p>Tap their shoulder and shout. If they don&#x27;t respond, look at their breathing.</p></div><div class="card"><div class="k">Not breathing normally</div><p>Not breathing at all and only gasping both count as not breathing normally. Call 911 or have someone call, send someone for the <button type="button" class="gl" data-term="AED" data-def="Automated external defibrillator: a device that checks a heart&#x27;s rhythm and can shock it back to normal. It talks you through every step." aria-expanded="false">AED</button>, start chest compressions, and get a mentor as soon as someone can go.</p></div><div class="card"><div class="k">Breathing normally</div><p>Call 911, roll them onto their side (the recovery position), and stay with them watching their breathing. If it stops or turns to gasping, start <button type="button" class="gl" data-term="CPR" data-def="Chest compressions (and sometimes rescue breaths) that keep blood moving when someone&#x27;s heart has stopped." aria-expanded="false">CPR</button>.</p></div><div class="card"><div class="k">Compressions first</div><p>The old ABC order (airway, breathing, circulation) was replaced. Compressions come first.</p></div></div>
   <div class="ft"><span>AHA guidelines and the 1.28 safety quiz bank v0.2</span></div>
   <aside class="notes"></aside>
 </section>
@@ -2081,7 +2095,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p2-shock" data-title="Electrical injuries">
   <div class="hd"><div class="chip">Part 2 · First aid</div><h2 class="t sm">Never touch someone who&#x27;s still on the circuit</h2></div>
-  <div class="body cols-2"><div class="card"><div class="k">Stuck to a live cord</div><p>Cut the power first: unplug it or switch it off. If you can&#x27;t, push them free with something dry that doesn&#x27;t conduct, like a wooden broom handle, without touching them. Then check if they respond and are breathing, call 911, and start CPR if they&#x27;re not breathing normally.</p></div><div class="card"><div class="k">A strong shock, feels fine</div><p>Tell a mentor and get them checked out medically. A shock can upset the heart&#x27;s rhythm even when someone feels fine at first.</p></div></div>
+  <div class="body cols-2"><div class="card"><div class="k">Stuck to a live cord</div><p>Cut the power first: unplug it or switch it off. If you can&#x27;t, push them free with something dry that doesn&#x27;t conduct, like a wooden broom handle, without touching them. Then check if they respond and are breathing, call 911, and start <button type="button" class="gl" data-term="CPR" data-def="Chest compressions (and sometimes rescue breaths) that keep blood moving when someone&#x27;s heart has stopped." aria-expanded="false">CPR</button> if they&#x27;re not breathing normally.</p></div><div class="card"><div class="k">A strong shock, feels fine</div><p>Tell a mentor and get them checked out medically. A shock can upset the heart&#x27;s rhythm even when someone feels fine at first.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2</span></div>
   <aside class="notes"></aside>
 </section>
@@ -2212,7 +2226,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p2-reporting" data-title="Reporting">
   <div class="hd"><div class="chip">Part 2 · Emergencies</div><h2 class="t sm">Report every injury, and every near miss</h2></div>
-  <div class="body cols-2"><div class="card"><div class="k">Injuries</div><p>A cut that needed a bandage, a small burn, anything that hurt someone. Tell a mentor.</p></div><div class="card"><div class="k">Near misses</div><p>A part flying out of a vise, a tool that kicked back, even when nobody got hurt. Near misses show what to fix before someone does get hurt.</p></div></div>
+  <div class="body cols-2"><div class="card"><div class="k">Injuries</div><p>A cut that needed a bandage, a small burn, anything that hurt someone. Tell a mentor.</p></div><div class="card"><div class="k">Near misses</div><p>A part flying out of a <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>, a tool that kicked back, even when nobody got hurt. Near misses show what to fix before someone does get hurt.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2</span></div>
   <aside class="notes"></aside>
 </section>
@@ -2265,7 +2279,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p2-situations-tools" data-title="Spot it: the charging corner">
   <div class="hd"><div class="chip">Part 2 · Situations</div><h2 class="t sm">Damaged gear comes out of use, and blades only get touched with the power fully disconnected</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Power</div><p>One strip per outlet: never plug strips into each other. Cut insulation means the cord comes out of use; tape isn&#x27;t a repair.</p></div><div class="card"><div class="k">Batteries</div><p>A puffed-up battery comes off the charger. Metal never rests on an FRC battery, where it could bridge the terminals.</p></div><div class="card"><div class="k">Blades and cutters</div><p>If a bumped trigger could spin a blade or cutter, pull the battery or unplug the tool itself before your hands go near it. A switched-off strip can be switched back on.</p></div><div class="card"><div class="k">The exception</div><p>Drill/driver bits, impact bits, and ratchet sockets can be swapped with the battery in, with the direction switch locked in the center.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Power</div><p>One strip per outlet: never plug strips into each other. Cut insulation means the cord comes out of use; tape isn&#x27;t a repair.</p></div><div class="card"><div class="k">Batteries</div><p>A puffed-up battery comes off the charger. Metal never rests on an <button type="button" class="gl" data-term="FRC" data-def="FIRST Robotics Competition: the high school robotics program the Rambots compete in." aria-expanded="false">FRC</button> battery, where it could bridge the terminals.</p></div><div class="card"><div class="k">Blades and cutters</div><p>If a bumped trigger could spin a blade or cutter, pull the battery or unplug the tool itself before your hands go near it. A switched-off strip can be switched back on.</p></div><div class="card"><div class="k">The exception</div><p>Drill/driver bits, impact bits, and ratchet sockets can be swapped with the battery in, with the direction switch locked in the center.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2</span></div>
   <aside class="notes"></aside>
 </section>
@@ -2279,7 +2293,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="p2-situations-robot" data-title="Spot it: the robot">
   <div class="hd"><div class="chip">Part 2 · Situations</div><h2 class="t sm">Before hands go into the robot, take out every kind of stored energy</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Power</div><p>Open the main breaker and unplug the battery.</p></div><div class="card"><div class="k">Air</div><p>Open the vent valve and check that every gauge reads zero.</p></div><div class="card"><div class="k">Gravity</div><p>Lower the elevator or arm, or pin it so it can&#x27;t drop.</p></div><div class="card"><div class="k">The cart</div><p>Make sure the cart can&#x27;t roll and the robot can&#x27;t slide off it.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Power</div><p>Open the main <button type="button" class="gl" data-term="breaker" data-def="A switch that cuts power. It trips on its own when too much current flows, protecting the wires. The robot&#x27;s main breaker is also how you turn the whole robot off." aria-expanded="false">breaker</button> and unplug the battery.</p></div><div class="card"><div class="k">Air</div><p>Open the vent valve and check that every gauge reads zero.</p></div><div class="card"><div class="k">Gravity</div><p>Lower the elevator or arm, or pin it so it can&#x27;t drop.</p></div><div class="card"><div class="k">The cart</div><p>Make sure the cart can&#x27;t roll and the robot can&#x27;t slide off it.</p></div></div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2 and the FIRST Safety Manual (3.1)</span></div>
   <aside class="notes">To confirm: the team rule for working on a robot that&#x27;s on. Leaving the battery in to test right away isn&#x27;t one of the safe steps.</aside>
 </section>
@@ -2312,13 +2326,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Both parts plus the walk-around earn 1.28</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Walk-around item</th><th>What you show a mentor</th></tr></thead><tbody><tr><td>Fire extinguishers (by the hallway door in 104, and next to the laser cutter)</td><td>Point to it, say PASS, name the way out</td></tr><tr><td>Fire blanket (with the extinguisher by the hallway door)</td><td>Point to it, say how to pull it out</td></tr><tr><td>First aid kit (by the hallway door in 104)</td><td>Point to it, find the eyewash bottle inside</td></tr><tr><td>Eyewash station (room 103)</td><td>Walk there, show how to turn it on</td></tr><tr><td>AED (hallway toward the front entrance)</td><td>Walk there</td></tr><tr><td>Exit routes</td><td>Walk every way out of 104</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Walk-around item</th><th>What you show a mentor</th></tr></thead><tbody><tr><td>Fire extinguishers (by the hallway door in 104, and next to the laser cutter)</td><td>Point to it, say PASS, name the way out</td></tr><tr><td>Fire blanket (with the extinguisher by the hallway door)</td><td>Point to it, say how to pull it out</td></tr><tr><td>First aid kit (by the hallway door in 104)</td><td>Point to it, find the eyewash bottle inside</td></tr><tr><td>Eyewash station (room 103)</td><td>Walk there, show how to turn it on</td></tr><tr><td><button type="button" class="gl" data-term="AED" data-def="Automated external defibrillator: a device that checks a heart&#x27;s rhythm and can shock it back to normal. It talks you through every step." aria-expanded="false">AED</button> (hallway toward the front entrance)</td><td>Walk there</td></tr><tr><td>Exit routes</td><td>Walk every way out of 104</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Passing</div><p>100% on each part, plus the walk-around. Miss a question and you retake that part at a later meeting, after a mentor goes over every miss with you.</p></div></div>
   </div>
   <div class="ft"><span>From the 1.28 safety quiz bank v0.2, For mentors</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>AED</dt><dd>Automated external defibrillator: a device that checks a heart&#x27;s rhythm and can shock it back to normal. It talks you through every step.</dd></div><div class="gl-item"><dt>breaker</dt><dd>A switch that cuts power. It trips on its own when too much current flows, protecting the wires. The robot&#x27;s main breaker is also how you turn the whole robot off.</dd></div><div class="gl-item"><dt>CPR</dt><dd>Chest compressions (and sometimes rescue breaths) that keep blood moving when someone&#x27;s heart has stopped.</dd></div><div class="gl-item"><dt>FRC</dt><dd>FIRST Robotics Competition: the high school robotics program the Rambots compete in.</dd></div><div class="gl-item"><dt>Halotron</dt><dd>A clean fire extinguisher agent that leaves no powder behind, so it&#x27;s safe for electronics and machines like the laser cutter.</dd></div><div class="gl-item"><dt>lens</dt><dd>A clear piece of glass or plastic that light passes through. In the laser cutter, the lens focuses the beam to a tiny spot.</dd></div><div class="gl-item"><dt>MDF</dt><dd>Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut.</dd></div><div class="gl-item"><dt>SDS</dt><dd>Safety data sheet: the maker&#x27;s sheet that lists a product&#x27;s hazards, how to handle it, and first aid.</dd></div><div class="gl-item"><dt>short circuit</dt><dd>When current takes an unplanned shortcut, like positive touching negative. It can melt wires or start a fire.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>10 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -2485,6 +2505,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -4166,4 +4242,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.0.4 (2026-11-05): Fire blanket location filled in from Sam: with the extinguisher by the hallway door in 104 (safety Q40a).
   v1.0.5 (2026-11-05): Two extinguishers taught: by the hallway door, and a Halotron next to the laser cutter (Sam). Blanket stays by the hallway door only.
   v1.0.6 (2026-11-05): Walk-around (Certified) table adds the fire blanket, matching the quiz bank.
+  v1.0.7 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

@@ -1,11 +1,11 @@
 <title>Materials and FDM Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_materials_study_v1.0.1.html
-  version: 1.0.1
+  file: rambots_materials_study_v1.0.2.html
+  version: 1.0.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots Materials and FDM concept quiz: aluminum, polycarbonate, HDPE, MDF, and 3D printing strength, filaments, holes, and inserts, with quick checks, blocking checkpoints on can't-fail topics, and a downloadable score.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Materials and FDM Study",
   "slug": "rambots_materials_study",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-materials-study-v1"
@@ -973,7 +987,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-cutting" data-title="Cutting aluminum">
   <div class="hd"><div class="chip">Aluminum</div><h2 class="t sm">All aluminum gets cut on the Evolution metal chop saw, clamped</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">The saw</div><p>All aluminum, MAXTube included, is cut on the Evolution metal chop saw. The old Ryobi 7-1/4 in. miter saw is for wood only (and it&#x27;s being retired).</p></div><div class="card"><div class="k">Why</div><p>Aluminum on a wood saw is how blades lose teeth. Our last Diablo blade lost teeth when the stock moved or got pulled from a hand mid-cut.</p></div><div class="card"><div class="k">Never hold it</div><p>Clamp the piece or use the vise, even a short piece and even when the clamp is in the way. Find another way to clamp it.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">The saw</div><p>All aluminum, MAXTube included, is cut on the Evolution metal chop saw. The old Ryobi 7-1/4 in. <button type="button" class="gl" data-term="miter saw" data-def="A saw that chops straight down through a board and turns or tilts for angled cuts. Ours is for wood only." aria-expanded="false">miter saw</button> is for wood only (and it&#x27;s being retired).</p></div><div class="card"><div class="k">Why</div><p>Aluminum on a wood saw is how blades lose teeth. Our last Diablo blade lost teeth when the stock moved or got pulled from a hand mid-cut.</p></div><div class="card"><div class="k">Never hold it</div><p>Clamp the piece or use the <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button>, even a short piece and even when the clamp is in the way. Find another way to clamp it.</p></div></div>
   <div class="ft"><span>Team practice, Materials and FDM quiz bank v0.1.2</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1004,7 +1018,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-poly-laser" data-title="No polycarbonate on the laser">
   <div class="hd"><div class="chip">Polycarbonate</div><h2 class="t sm">Polycarbonate never goes on our laser. Cut it on a saw, the router, or the CNC router.</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">What happens</div><p>On a laser, polycarbonate melts and chars instead of cutting clean. The edges turn brown, and it can flame up.</p></div><div class="card"><div class="k">Acrylic is different</div><p>Acrylic cuts well on the laser. The two look almost the same, which is why only labeled material goes in.</p></div><div class="card"><div class="k">The right tools</div><p>Saws, the router, or the CNC router cut polycarbonate cleanly.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">What happens</div><p>On a laser, polycarbonate melts and chars instead of cutting clean. The edges turn brown, and it can flame up.</p></div><div class="card"><div class="k">Acrylic is different</div><p>Acrylic cuts well on the laser. The two look almost the same, which is why only labeled material goes in.</p></div><div class="card"><div class="k">The right tools</div><p>Saws, the router, or the <button type="button" class="gl" data-term="CNC" data-def="Computer numerical control: a machine that moves its cutter along a path that a computer sends it." aria-expanded="false">CNC</button> router cut polycarbonate cleanly.</p></div></div>
   <div class="ft"><span>Interstate Plastics, Universal Laser Systems polycarbonate guide, team rule</span></div>
   <aside class="notes">Universal Laser publishes a polycarbonate guide for high-power machines, so this is a team rule. To confirm: our PLS4.75&#x27;s wattage.</aside>
 </section>
@@ -1036,7 +1050,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-poly-chem" data-title="What cracks polycarbonate">
   <div class="hd"><div class="chip">Polycarbonate</div><h2 class="t sm">Some everyday shop chemicals crack polycarbonate, sometimes days later</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Keep these off it</div><p>WD-40, threadlocker (Loctite), acetone, and petroleum-based cutting oils.</p></div><div class="card"><div class="k">Who says so</div><p>The WD-40 Company says to avoid using it on polycarbonate. Henkel says threadlockers can stress crack thermoplastics. Interstate Plastics lists acetone and petroleum oils.</p></div><div class="card"><div class="k">The trap</div><p>WD-40 is a fine cutting fluid on aluminum, so it&#x27;s easy to grab for polycarbonate too. Plain water is fine.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Keep these off it</div><p>WD-40, <button type="button" class="gl" data-term="threadlocker" data-def="Liquid put on screw threads that hardens and keeps the screw from vibrating loose. Blue can be removed with hand tools; red needs heat." aria-expanded="false">threadlocker</button> (Loctite), acetone, and petroleum-based cutting oils.</p></div><div class="card"><div class="k">Who says so</div><p>The WD-40 Company says to avoid using it on polycarbonate. Henkel says threadlockers can stress crack thermoplastics. Interstate Plastics lists acetone and petroleum oils.</p></div><div class="card"><div class="k">The trap</div><p>WD-40 is a fine cutting fluid on aluminum, so it&#x27;s easy to grab for polycarbonate too. Plain water is fine.</p></div></div>
   <div><p class="warnline">The cracks can show up days later, after the part is on the robot.</p></div>
   <div class="ft"><span>WD-40 Company, Henkel Loctite 243 data sheet, Interstate Plastics</span></div>
   <aside class="notes"></aside>
@@ -1083,7 +1097,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-plastics-wood" data-title="HDPE and MDF">
   <div class="hd"><div class="chip">HDPE and wood</div><h2 class="t sm">HDPE for rub strips; MDF needs pilot holes and to stay dry</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">HDPE</div><p>High-density polyethylene. Smooth, slippery, takes hits, and cuts and drills with ordinary woodworking tools. Good for rub strips where game pieces drag.</p></div><div class="card"><div class="k">UHMW</div><p>Even more slippery and wear-resistant than HDPE, if a strip wears out fast.</p></div><div class="card"><div class="k">MDF</div><p>Medium-density fiberboard, for practice field elements. Drill a pilot hole about as long as the screw, keep edge screws at least 3 in. from the corners, and keep it dry; wet MDF swells.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">HDPE</div><p>High-density polyethylene. Smooth, slippery, takes hits, and cuts and drills with ordinary woodworking tools. Good for rub strips where game pieces drag.</p></div><div class="card"><div class="k">UHMW</div><p>Even more slippery and wear-resistant than <button type="button" class="gl" data-term="HDPE" data-def="High-density polyethylene: a slick, tough plastic, like a cutting board." aria-expanded="false">HDPE</button>, if a strip wears out fast.</p></div><div class="card"><div class="k">MDF</div><p>Medium-density fiberboard, for practice field elements. Drill a <button type="button" class="gl" data-term="pilot hole" data-def="A small hole drilled first to guide a bigger bit or a screw." aria-expanded="false">pilot hole</button> about as long as the screw, keep edge screws at least 3 in. from the corners, and keep it dry; wet <button type="button" class="gl" data-term="MDF" data-def="Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut." aria-expanded="false">MDF</button> swells.</p></div></div>
   <div class="ft"><span>Interstate Plastics, Weyerhaeuser MDF tip sheet</span></div>
   <aside class="notes">To confirm: whether field elements are MDF, plywood, or both.</aside>
 </section>
@@ -1104,7 +1118,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-layers" data-title="Layer lines">
   <div class="hd"><div class="chip">3D printing</div><h2 class="t sm">A print is weakest across its layers, in Z, so turn the load along them</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Why</div><p>FDM (fused deposition modeling, the kind of 3D printing we do) bonds each layer to the one below only by heat. A load that pulls the layers apart, straight up in Z, splits a print first.</p></div><div class="card"><div class="k">Strong directions</div><p>Along the layers, in X and Y (flat, along the bed), the plastic is continuous and much stronger.</p></div><div class="card"><div class="k">Orient for the load</div><p>Turn the part so its biggest loads run along the layers. A long lever arm pulled at its tip prints lying flat, so the layers run its full length. Standing up, every layer crosses it and the base peels apart.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Why</div><p><button type="button" class="gl" data-term="FDM" data-def="Fused deposition modeling: 3D printing by melting plastic filament and laying it down one thin layer at a time." aria-expanded="false">FDM</button> (fused deposition modeling, the kind of 3D printing we do) bonds each layer to the one below only by heat. A load that pulls the layers apart, straight up in Z, splits a print first.</p></div><div class="card"><div class="k">Strong directions</div><p>Along the layers, in X and Y (flat, along the bed), the plastic is continuous and much stronger.</p></div><div class="card"><div class="k">Orient for the load</div><p>Turn the part so its biggest loads run along the layers. A long lever arm pulled at its tip prints lying flat, so the layers run its full length. Standing up, every layer crosses it and the base peels apart.</p></div></div>
   <div class="ft"><span>Polymaker wiki: print orientation and strength</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1136,7 +1150,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-walls" data-title="Walls vs infill">
   <div class="hd"><div class="chip">3D printing</div><h2 class="t sm">Walls, not infill, carry most of a print&#x27;s strength</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Walls</div><p>The outer perimeters. Prusa: the strength of a model is mostly defined by the number of perimeters, not infill. Adding walls adds the most strength for the plastic and time it costs.</p></div><div class="card"><div class="k">Infill</div><p>Mostly helps a part resist being squeezed. You&#x27;ll rarely need more than about 30%.</p></div><div class="card"><div class="k">Not the fix</div><p>Printing faster or using thinner layers doesn&#x27;t make a weak part strong.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Walls</div><p>The outer perimeters. Prusa: the strength of a model is mostly defined by the number of perimeters, not <button type="button" class="gl" data-term="infill" data-def="The pattern printed inside a part&#x27;s outer walls. More infill makes a part stronger, heavier, and slower to print." aria-expanded="false">infill</button>. Adding walls adds the most strength for the plastic and time it costs.</p></div><div class="card"><div class="k">Infill</div><p>Mostly helps a part resist being squeezed. You&#x27;ll rarely need more than about 30%.</p></div><div class="card"><div class="k">Not the fix</div><p>Printing faster or using thinner layers doesn&#x27;t make a weak part strong.</p></div></div>
   <div class="ft"><span>Prusa knowledge base: infill and layers and perimeters</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1150,7 +1164,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-filaments" data-title="Choosing filament">
   <div class="hd"><div class="chip">3D printing</div><h2 class="t sm">Pick the filament for heat and hits, not just because PLA is loaded</h2></div>
-  <div class="body"><div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th>Filament</th><th>Good for</th><th>Watch out</th></tr></thead><tbody><tr><td><b>PLA</b></td><td>Easy prints, fit checks, most brackets</td><td>Softens around 50°C (122°F), so a hot car or a hot motor warps it</td></tr><tr><td><b>PETG</b></td><td>Parts that take hits (Bambu Lab rates it tougher than PLA); more heat than PLA</td><td>Takes less heat than ABS or ASA</td></tr><tr><td><b>ABS, ASA</b></td><td>Heat and impact</td><td>Need an enclosed printer</td></tr><tr><td><b>PLA-CF</b></td><td>Stiff parts that must not flex</td><td>Rated no tougher than PLA, so not for parts that get hit</td></tr></tbody></table></div></div></div>
+  <div class="body"><div class="stack"><div class="scroll-x"><table class="t2"><thead><tr><th><button type="button" class="gl" data-term="filament" data-def="The plastic wire, wound on a spool, that a 3D printer melts to print." aria-expanded="false">Filament</button></th><th>Good for</th><th>Watch out</th></tr></thead><tbody><tr><td><b><button type="button" class="gl" data-term="PLA" data-def="The easiest 3D printing plastic. It prints at low temperatures and is stiff, but it softens in heat, like a hot car." aria-expanded="false">PLA</button></b></td><td>Easy prints, fit checks, most brackets</td><td>Softens around 50°C (122°F), so a hot car or a hot motor <button type="button" class="gl" data-term="warping" data-def="When a flat part bends or curls out of shape. In 3D printing, a print&#x27;s corners curl up off the plate as the plastic cools and shrinks." aria-expanded="false">warps</button> it</td></tr><tr><td><b><button type="button" class="gl" data-term="PETG" data-def="A tough 3D printing plastic that bends a little before it breaks and handles more heat than PLA." aria-expanded="false">PETG</button></b></td><td>Parts that take hits (Bambu Lab rates it tougher than PLA); more heat than PLA</td><td>Takes less heat than <button type="button" class="gl" data-term="ABS" data-def="A tough plastic that handles heat well. It gives off fumes when printed, so it needs an enclosed, ventilated printer." aria-expanded="false">ABS</button> or <button type="button" class="gl" data-term="ASA" data-def="A plastic like ABS that holds up better outdoors in sunlight. It also needs an enclosed, ventilated printer." aria-expanded="false">ASA</button></td></tr><tr><td><b>ABS, ASA</b></td><td>Heat and impact</td><td>Need an enclosed printer</td></tr><tr><td><b>PLA-CF</b></td><td>Stiff parts that must not flex</td><td>Rated no tougher than PLA, so not for parts that get hit</td></tr></tbody></table></div></div></div>
   <div class="ft"><span>Bambu Lab wiki filament guide</span></div>
   <aside class="notes">To confirm: whether the team has a rule for prints near motors.</aside>
 </section>
@@ -1164,7 +1178,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-special" data-title="Special filaments">
   <div class="hd"><div class="chip">3D printing</div><h2 class="t sm">Some filaments need an enclosure, a hardened nozzle, or drying first</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">ABS and ASA</div><p>Need a warm bed and a warm chamber, or they warp and pop off the bed. Print them on an enclosed printer like the X1C. The open-frame A1 and A1 mini aren&#x27;t recommended for them.</p></div><div class="card"><div class="k">Carbon and glass fiber</div><p>PLA-CF, PA-CF, and GF filaments are abrasive and wear out brass and stainless nozzles. Use a hardened steel nozzle, 0.4 or 0.6 mm; a 0.2 mm nozzle will likely clog.</p></div><div class="card"><div class="k">Nylon (PA)</div><p>Soaks up water from the air, and wet nylon prints weak and stringy. Dry it first (Bambu Lab lists 80°C for 8 to 12 hours), then store it sealed with desiccant.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">ABS and ASA</div><p>Need a warm bed and a warm chamber, or they <button type="button" class="gl" data-term="warping" data-def="When a flat part bends or curls out of shape. In 3D printing, a print&#x27;s corners curl up off the plate as the plastic cools and shrinks." aria-expanded="false">warp</button> and pop off the bed. Print them on an enclosed printer like the X1C. The open-frame A1 and A1 mini aren&#x27;t recommended for them.</p></div><div class="card"><div class="k">Carbon and glass fiber</div><p>PLA-CF, <button type="button" class="gl" data-term="PA-CF" data-def="Nylon (PA) or PETG mixed with chopped carbon fiber. It&#x27;s stiffer, but the fibers wear out brass nozzles, so it needs a hardened steel nozzle." aria-expanded="false">PA-CF</button>, and GF <button type="button" class="gl" data-term="filament" data-def="The plastic wire, wound on a spool, that a 3D printer melts to print." aria-expanded="false">filaments</button> are <button type="button" class="gl" data-term="abrasive" data-def="Hard, gritty material that grinds or sands material away. Also means a filament or cut that wears tools down." aria-expanded="false">abrasive</button> and wear out brass and stainless <button type="button" class="gl" data-term="nozzle" data-def="The narrow opening something comes out of. On a 3D printer, it&#x27;s the heated metal tip that melted plastic comes out of." aria-expanded="false">nozzles</button>. Use a hardened steel nozzle, 0.4 or 0.6 mm; a 0.2 mm nozzle will likely clog.</p></div><div class="card"><div class="k">Nylon (PA)</div><p>Soaks up water from the air, and wet nylon prints weak and stringy. Dry it first (Bambu Lab lists 80°C for 8 to 12 hours), then store it sealed with desiccant.</p></div></div>
   <div class="ft"><span>Bambu Lab wiki filament guide</span></div>
   <aside class="notes">To confirm: whether the Centauri Carbon 2 is enclosed and approved for ABS and ASA, which printers have hardened nozzles, and whether we have a filament dryer.</aside>
 </section>
@@ -1185,7 +1199,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="m-holes" data-title="Holes and threads in prints">
   <div class="hd"><div class="chip">3D printing</div><h2 class="t sm">Printed holes come out small, and printed threads wear out</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Why holes shrink</div><p>The plastic shrinks as it cools, and the nozzle drags material toward the center of a circle. A hole drawn at 0.201 in. can come out too tight.</p></div><div class="card"><div class="k">Fixes</div><p>Print a test coupon with a few hole sizes and use the one that fits. Turn on X-Y hole compensation in Bambu Studio. Or drill the hole out to size. Never force the screw; it cracks the print.</p></div><div class="card"><div class="k">Heat-set inserts</div><p>Screws cut into plastic deform the threads every time they come out. For parts taken apart often, melt in brass heat-set inserts: metal threads you can use over and over. Install them straight, in a hole sized to the insert maker&#x27;s spec.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Why holes shrink</div><p>The plastic shrinks as it cools, and the <button type="button" class="gl" data-term="nozzle" data-def="The narrow opening something comes out of. On a 3D printer, it&#x27;s the heated metal tip that melted plastic comes out of." aria-expanded="false">nozzle</button> drags material toward the center of a circle. A hole drawn at 0.201 in. can come out too tight.</p></div><div class="card"><div class="k">Fixes</div><p>Print a test coupon with a few hole sizes and use the one that fits. Turn on X-Y hole compensation in Bambu Studio. Or drill the hole out to size. Never force the screw; it cracks the print.</p></div><div class="card"><div class="k">Heat-set inserts</div><p>Screws cut into plastic deform the threads every time they come out. For parts taken apart often, melt in brass heat-set inserts: metal threads you can use over and over. Install them straight, in a hole sized to the insert maker&#x27;s spec.</p></div></div>
   <div class="ft"><span>Bambu Lab wiki, Slic3r manual, CNC Kitchen</span></div>
   <aside class="notes">To confirm: the hole compensation value we use on each printer.</aside>
 </section>
@@ -1197,6 +1211,12 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>abrasive</dt><dd>Hard, gritty material that grinds or sands material away. Also means a filament or cut that wears tools down.</dd></div><div class="gl-item"><dt>ABS</dt><dd>A tough plastic that handles heat well. It gives off fumes when printed, so it needs an enclosed, ventilated printer.</dd></div><div class="gl-item"><dt>ASA</dt><dd>A plastic like ABS that holds up better outdoors in sunlight. It also needs an enclosed, ventilated printer.</dd></div><div class="gl-item"><dt>CNC</dt><dd>Computer numerical control: a machine that moves its cutter along a path that a computer sends it.</dd></div><div class="gl-item"><dt>FDM</dt><dd>Fused deposition modeling: 3D printing by melting plastic filament and laying it down one thin layer at a time.</dd></div><div class="gl-item"><dt>filament</dt><dd>The plastic wire, wound on a spool, that a 3D printer melts to print.</dd></div><div class="gl-item"><dt>HDPE</dt><dd>High-density polyethylene: a slick, tough plastic, like a cutting board.</dd></div><div class="gl-item"><dt>infill</dt><dd>The pattern printed inside a part&#x27;s outer walls. More infill makes a part stronger, heavier, and slower to print.</dd></div><div class="gl-item"><dt>MDF</dt><dd>Medium-density fiberboard: a flat sheet made of wood fibers pressed together with glue. Smooth and cheap, but it makes fine dust when cut.</dd></div><div class="gl-item"><dt>miter saw</dt><dd>A saw that chops straight down through a board and turns or tilts for angled cuts. Ours is for wood only.</dd></div><div class="gl-item"><dt>nozzle</dt><dd>The narrow opening something comes out of. On a 3D printer, it&#x27;s the heated metal tip that melted plastic comes out of.</dd></div><div class="gl-item"><dt>PA-CF</dt><dd>Nylon (PA) or PETG mixed with chopped carbon fiber. It&#x27;s stiffer, but the fibers wear out brass nozzles, so it needs a hardened steel nozzle.</dd></div><div class="gl-item"><dt>PETG</dt><dd>A tough 3D printing plastic that bends a little before it breaks and handles more heat than PLA.</dd></div><div class="gl-item"><dt>pilot hole</dt><dd>A small hole drilled first to guide a bigger bit or a screw.</dd></div><div class="gl-item"><dt>PLA</dt><dd>The easiest 3D printing plastic. It prints at low temperatures and is stiff, but it softens in heat, like a hot car.</dd></div><div class="gl-item"><dt>threadlocker</dt><dd>Liquid put on screw threads that hardens and keeps the screw from vibrating loose. Blue can be removed with hand tools; red needs heat.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div><div class="gl-item"><dt>warping</dt><dd>When a flat part bends or curls out of shape. In 3D printing, a print&#x27;s corners curl up off the plate as the plastic cools and shrinks.</dd></div></dl></div></div>
+  <div class="ft"><span>18 words; scroll the list to see them all. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1363,6 +1383,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3039,4 +3115,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 <!-- CHANGELOG
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 12 quick checks, 3 checkpoints.
   v1.0.1 (2026-11-05): Checkpoint choices no longer show hint lines under them, because the hints often pointed to the right answer.
+  v1.0.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

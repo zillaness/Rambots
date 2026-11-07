@@ -1,11 +1,11 @@
 <title>CNC Router Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_cnc_router_study_v1.1.5.html
-  version: 1.1.5
+  file: rambots_cnc_router_study_v1.1.6.html
+  version: 1.1.6
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the Rambots 8.7 CNC router written test: tooling and collets, never unattended, workholding, zeroing, feeds and chip load, metal and dust, stopping, and gear.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "CNC Router Study",
   "slug": "rambots_cnc_router_study",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-cnc-router-study-v1"
@@ -828,14 +842,14 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-parts" data-title="Parts that matter">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">The spindle spins, the nut squeezes the collet, and the collet grips the bit</h2></div>
-  <div class="body"><div class="defs"><div class="d"><b>Spindle</b><p>The motor that spins the collet, nut, and bit.</p></div><div class="d"><b>Collet and nut</b><p>The collet is the slotted sleeve inside the nut that grips the end mill&#x27;s shank. Tightening the nut squeezes the collet.</p></div><div class="d"><b>End mill</b><p>The cutter. The shank is the smooth part the collet grips; the flutes are the sharp cutting part.</p></div><div class="d"><b>Touch plate</b><p>A metal plate you probe with to find where the part and the bit tip are.</p></div><div class="d"><b>Wasteboard</b><p>The sacrificial board under the work that the bit can cut into a little.</p></div></div></div>
+  <div class="body"><div class="defs"><div class="d"><b><button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">Spindle</button></b><p>The motor that spins the <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button>, nut, and bit.</p></div><div class="d"><b>Collet and nut</b><p>The collet is the slotted sleeve inside the nut that grips the <button type="button" class="gl" data-term="end mill" data-def="A cutting bit that cuts on its side and its tip, used in the CNC router." aria-expanded="false">end mill</button>&#x27;s <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button>. Tightening the nut squeezes the collet.</p></div><div class="d"><b>End mill</b><p>The cutter. The shank is the smooth part the collet grips; the <button type="button" class="gl" data-term="flute" data-def="A spiral groove on a bit that forms a cutting edge and carries chips out of the cut." aria-expanded="false">flutes</button> are the sharp cutting part.</p></div><div class="d"><b>Touch plate</b><p>A metal plate you probe with to find where the part and the bit tip are.</p></div><div class="d"><b>Wasteboard</b><p>The sacrificial board under the work that the bit can cut into a little.</p></div></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill docs</span></div>
   <aside class="notes">The router isn&#x27;t bought yet. Bring a collet, nut, and end mill if you have them. To confirm in the shop once it arrives: the collet type and sizes in our kit, and whether the order includes Sienci&#x27;s physical e-stop (the shop has no e-stops yet). Decide whether 8.7 also needs CAM training first.</aside>
 </section>
 
 <section class="slide" data-id="cn-collet" data-title="Installing an end mill">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Click the collet into the nut first, then the bit, then tighten with both wrenches</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Collet into nut</h3><p>Press the ER collet into the nut until it clicks. A collet not captured by the nut causes cutting and noise problems.</p></div><div class="step"><div class="n">2</div><h3>Bit in</h3><p>Slide the end mill&#x27;s shank into the collet.</p></div><div class="step"><div class="n">3</div><h3>Hand-tighten</h3><p>Thread the nut onto the spindle by hand.</p></div><div class="step"><div class="n">4</div><h3>Both wrenches</h3><p>Finish with both wrenches. A loose bit can pull out mid-cut.</p></div></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px"><div class="card tight"><div class="k">Match the shank</div><p>The collet must match the shank size exactly. A 1/4 in. shank is 6.35 mm (1/4 x 25.4), so a 6 mm collet is wrong for it.</p></div><div class="card tight"><div class="k">Why</div><p>A collet that doesn&#x27;t match grips badly, and the bit can slip or pull out.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Collet into nut</h3><p>Press the ER <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button> into the nut until it clicks. A collet not captured by the nut causes cutting and noise problems.</p></div><div class="step"><div class="n">2</div><h3>Bit in</h3><p>Slide the <button type="button" class="gl" data-term="end mill" data-def="A cutting bit that cuts on its side and its tip, used in the CNC router." aria-expanded="false">end mill</button>&#x27;s <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button> into the collet.</p></div><div class="step"><div class="n">3</div><h3>Hand-tighten</h3><p>Thread the nut onto the <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> by hand.</p></div><div class="step"><div class="n">4</div><h3>Both wrenches</h3><p>Finish with both wrenches. A loose bit can pull out mid-cut.</p></div></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px"><div class="card tight"><div class="k">Match the shank</div><p>The collet must match the shank size exactly. A 1/4 in. shank is 6.35 mm (1/4 x 25.4), so a 6 mm collet is wrong for it.</p></div><div class="card tight"><div class="k">Why</div><p>A collet that doesn&#x27;t match grips badly, and the bit can slip or pull out.</p></div></div></div>
   <div class="ft"><span>8.7 bank; Sienci spindle quick start guide</span></div>
   <aside class="notes">Do this with the spindle stopped and the machine locked out. Show the click of the collet into the nut.</aside>
 </section>
@@ -856,7 +870,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-bits" data-title="Handling end mills">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Hold a bit by its shank, set aside any damaged one, and change bits only with the spindle stopped</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">By the shank</div><p>Handle end mills by the shank, not the flutes. Never touch the flutes while the bit spins, even slowly.</p></div><div class="card"><div class="k">Damaged bits</div><p>A chipped or damaged end mill can shatter in a cut. Set it aside.</p></div><div class="card"><div class="k">Bit changes</div><p>Change bits with the spindle stopped and the machine locked out.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">By the shank</div><p>Handle <button type="button" class="gl" data-term="end mill" data-def="A cutting bit that cuts on its side and its tip, used in the CNC router." aria-expanded="false">end mills</button> by the <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button>, not the <button type="button" class="gl" data-term="flute" data-def="A spiral groove on a bit that forms a cutting edge and carries chips out of the cut." aria-expanded="false">flutes</button>. Never touch the flutes while the bit spins, even slowly.</p></div><div class="card"><div class="k">Damaged bits</div><p>A chipped or damaged end mill can shatter in a cut. Set it aside.</p></div><div class="card"><div class="k">Bit changes</div><p>Change bits with the <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> stopped and the machine locked out.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill 4x8 safety page</span></div>
   <aside class="notes">To confirm in the shop: how we lock out the machine for bit changes.</aside>
 </section>
@@ -870,7 +884,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-attend" data-title="Never unattended">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Someone trained stays at the machine for the whole job, within reach of the e-stop, or the job waits</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">The rule</div><p>Never leave the router running unattended. A trained person stays at the machine the whole time, within reach of the e-stop.</p></div><div class="card"><div class="k">Why</div><p>Chips can catch fire, a bit can break, or a part can come loose, and nobody is there to stop it.</p></div><div class="card"><div class="k">If nobody can stay</div><p>The job waits. A locked door or checking back in a few minutes doesn&#x27;t count.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">The rule</div><p>Never leave the router running unattended. A trained person stays at the machine the whole time, within reach of the <button type="button" class="gl" data-term="E-stop" data-def="Emergency stop: a big button that cuts power to a machine right away." aria-expanded="false">e-stop</button>.</p></div><div class="card"><div class="k">Why</div><p>Chips can catch fire, a bit can break, or a part can come loose, and nobody is there to stop it.</p></div><div class="card"><div class="k">If nobody can stay</div><p>The job waits. A locked door or checking back in a few minutes doesn&#x27;t count.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill 4x8 safety page</span></div>
   <aside class="notes">Can&#x27;t-fail topic. To confirm before this goes live: the shop has no e-stops yet, so the AltMill order needs Sienci&#x27;s physical e-stop mounted within reach.</aside>
 </section>
@@ -902,7 +916,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-hold" data-title="Holding the work">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Hold the work with clamps or screws outside the toolpath, never by hand</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Outside the path</div><p>Clamps or screws sit outside the toolpath. An end mill that hits a clamp breaks.</p></div><div class="card"><div class="k">Check clearance</div><p>Check that the gantry and spindle won&#x27;t hit any clamp anywhere on the whole job.</p></div><div class="card"><div class="k">Never by hand</div><p>Never hold the work down by hand while the machine cuts. A part that comes loose gets thrown.</p></div><div class="card"><div class="k">Tabs</div><p>Small parts get tabs so they don&#x27;t break free at the end of the cut. There&#x27;s no vacuum table, so nothing holds plate down on its own.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Outside the path</div><p>Clamps or screws sit outside the <button type="button" class="gl" data-term="toolpath" data-def="The route the CNC cutter follows, made by the CAM software." aria-expanded="false">toolpath</button>. An <button type="button" class="gl" data-term="end mill" data-def="A cutting bit that cuts on its side and its tip, used in the CNC router." aria-expanded="false">end mill</button> that hits a clamp breaks.</p></div><div class="card"><div class="k">Check clearance</div><p>Check that the gantry and <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> won&#x27;t hit any clamp anywhere on the whole job.</p></div><div class="card"><div class="k">Never by hand</div><p>Never hold the work down by hand while the machine cuts. A part that comes loose gets thrown.</p></div><div class="card"><div class="k">Tabs</div><p>Small parts get tabs so they don&#x27;t break free at the end of the cut. There&#x27;s no vacuum table, so nothing holds plate down on its own.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci docs</span></div>
   <aside class="notes">Can&#x27;t-fail topic. To confirm in the shop: our workholding (clamps, screws, tape).</aside>
 </section>
@@ -935,8 +949,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="cn-zero" data-title="Zeroing">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">X and Y mark where the part sits, Z marks the bit tip, so every bit change means probing Z again</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">X and Y</div><p>Where the part sits on the machine. They don&#x27;t change when you swap bits.</p></div><div class="card tight"><div class="k">Z</div><p>Where the tip of the bit is. A new bit sticks out a different length, so probe Z again after every bit change. A wrong Z drives the bit into the part or the wasteboard.</p></div><div class="card tight"><div class="k">Using the touch plate</div><p>Pick the right corner in the probing settings first. Check the plate&#x27;s position and clip. Keep a hand near the stop in case the bit heads the wrong way. The spindle stays off while probing.</p></div></div>
-    <figure class="fig"><img src="img/cnc_router_gantry.webp" alt="A hobby CNC router with a trim router mounted on a gantry over the bed"><figcaption>A hobby CNC router: the spindle rides a gantry over the bed. Photo: Alexanderpf, CC BY 2.0, cropped</figcaption></figure>
+    <div class="stack"><div class="card tight"><div class="k">X and Y</div><p>Where the part sits on the machine. They don&#x27;t change when you swap bits.</p></div><div class="card tight"><div class="k">Z</div><p>Where the tip of the bit is. A new bit sticks out a different length, so probe Z again after every bit change. A wrong Z drives the bit into the part or the wasteboard.</p></div><div class="card tight"><div class="k">Using the touch plate</div><p>Pick the right corner in the probing settings first. Check the plate&#x27;s position and clip. Keep a hand near the stop in case the bit heads the wrong way. The <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> stays off while probing.</p></div></div>
+    <figure class="fig"><img src="img/cnc_router_gantry.webp" alt="A hobby CNC router with a trim router mounted on a gantry over the bed"><figcaption>A hobby <button type="button" class="gl" data-term="CNC" data-def="Computer numerical control: a machine that moves its cutter along a path that a computer sends it." aria-expanded="false">CNC</button> router: the spindle rides a gantry over the bed. Photo: Alexanderpf, CC BY 2.0, cropped</figcaption></figure>
   </div>
   <div class="ft"><span>8.7 bank; Sienci forum</span></div>
   <aside class="notes">On the Sienci forum, a new user broke a bit when the probe ran toward the wrong corner. To confirm in the shop: our probe kit.</aside>
@@ -951,14 +965,14 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-warm" data-title="Spindle break-in and warm-up">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">A new spindle gets a long break-in run, and a cold spindle gets a short warm-up</h2></div>
-  <div class="body cols-2"><div class="card"><div class="k">Break-in</div><p>The spindle setup guide calls for a break-in run of about 1 hour 40 minutes on a brand-new spindle.</p></div><div class="card"><div class="k">Warm-up</div><p>The maker recommends a short warm-up program when the spindle has been sitting in a cold shop, before the first job of the day.</p></div></div>
+  <div class="body cols-2"><div class="card"><div class="k">Break-in</div><p>The <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> setup guide calls for a break-in run of about 1 hour 40 minutes on a brand-new spindle.</p></div><div class="card"><div class="k">Warm-up</div><p>The maker recommends a short warm-up program when the spindle has been sitting in a cold shop, before the first job of the day.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill spindle kit setup; Sienci forum</span></div>
   <aside class="notes">To confirm in the shop: the team rule for warm-ups is still to be decided.</aside>
 </section>
 
 <section class="slide" data-id="cn-feed" data-title="Feeds and chip load">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Feed rate equals RPM times flutes times chip load, and too small a chip load melts plastic</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">The formula</div><p>Feed rate (in./min) = RPM x number of flutes x chip load (in.). Example: 10,000 RPM x 2 flutes x 0.002 in. = 40 in./min. Double the flutes and the feed doubles.</p></div><div class="card"><div class="k">Rubbing</div><p>A chip load that&#x27;s too small rubs instead of cutting. Most of the heat leaves with the chips, so rubbing keeps the heat in the part.</p></div><div class="card"><div class="k">Melting plastic</div><p>If polycarbonate melts and gums onto the bit, raise the chip load: feed faster or lower the RPM. Slowing the feed is the trap; it makes melting worse.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">The formula</div><p><button type="button" class="gl" data-term="feed rate" data-def="How fast the cutter moves through the material." aria-expanded="false">Feed rate</button> (in./min) = <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> x number of <button type="button" class="gl" data-term="flute" data-def="A spiral groove on a bit that forms a cutting edge and carries chips out of the cut." aria-expanded="false">flutes</button> x <button type="button" class="gl" data-term="chip load" data-def="How thick a chip each cutting edge takes per turn. Too small rubs and burns; too big breaks bits." aria-expanded="false">chip load</button> (in.). Example: 10,000 RPM x 2 flutes x 0.002 in. = 40 in./min. Double the flutes and the feed doubles.</p></div><div class="card"><div class="k">Rubbing</div><p>A chip load that&#x27;s too small rubs instead of cutting. Most of the heat leaves with the chips, so rubbing keeps the heat in the part.</p></div><div class="card"><div class="k">Melting plastic</div><p>If polycarbonate melts and gums onto the bit, raise the chip load: feed faster or lower the RPM. Slowing the feed is the trap; it makes melting worse.</p></div></div>
   <div class="ft"><span>8.7 bank; MIT feeds and speeds: chip load</span></div>
   <aside class="notes">Work one more example on the board with different numbers. Students will need to do the math on the quiz.</aside>
 </section>
@@ -979,7 +993,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-metal" data-title="Metal chips and dust">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Clear aluminum chips as you go, and turn dust collection off for metal, because hot chips can light sawdust</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Clear the chips</div><p>Clear aluminum chips with an air blast or mist as the job runs, so the bit doesn&#x27;t recut them. Recut chips ruin the finish and can break the bit.</p></div><div class="card"><div class="k">Packed chips</div><p>Chips packing into a slot are a warning to pause the job. Hands stay out while the spindle spins.</p></div><div class="card"><div class="k">Dust collection and metal</div><p>Turn the dust collection off for metal, and clean out the wood dust first. Hot aluminum chips can light the sawdust in the bin, and materials can catch in the dust system.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Clear the chips</div><p>Clear aluminum chips with an air blast or mist as the job runs, so the bit doesn&#x27;t recut them. Recut chips ruin the finish and can break the bit.</p></div><div class="card"><div class="k">Packed chips</div><p>Chips packing into a slot are a warning to pause the job. Hands stay out while the <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> spins.</p></div><div class="card"><div class="k">Dust collection and metal</div><p>Turn the dust collection off for metal, and clean out the wood dust first. Hot aluminum chips can light the sawdust in the bin, and materials can catch in the dust system.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill 4x8 safety page; MSC: milling aluminum</span></div>
   <aside class="notes">Can&#x27;t-fail topic: dust collection and metal. To confirm in the shop: our air blast or mist setup.</aside>
 </section>
@@ -1011,7 +1025,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-stop" data-title="Stopping a job">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">Hit the physical e-stop in an emergency; use pause for everything else</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">E-stop</div><p>In any emergency, like the spindle about to hit a clamp, a part breaking loose, or a fire, press the physical e-stop. It stops the spindle right away.</p></div><div class="card"><div class="k">Pause</div><p>For a problem that isn&#x27;t an emergency, like chips packing a slot: pause the job, let the spindle stop, clear the chips with a brush or air, then resume.</p></div><div class="card"><div class="k">After an e-stop</div><p>Clear the alarms and check the machine&#x27;s position before anything runs again.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">E-stop</div><p>In any emergency, like the <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> about to hit a clamp, a part breaking loose, or a fire, press the physical <button type="button" class="gl" data-term="E-stop" data-def="Emergency stop: a big button that cuts power to a machine right away." aria-expanded="false">e-stop</button>. It stops the spindle right away.</p></div><div class="card"><div class="k">Pause</div><p>For a problem that isn&#x27;t an emergency, like chips packing a slot: pause the job, let the spindle stop, clear the chips with a brush or air, then resume.</p></div><div class="card"><div class="k">After an e-stop</div><p>Clear the alarms and check the machine&#x27;s position before anything runs again.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill spindle kit setup; Sienci forum</span></div>
   <aside class="notes">Can&#x27;t-fail topic: the e-stop. To confirm in the shop: whether gSender&#x27;s pause stops the spindle or you stop it separately, and that a physical e-stop is mounted within reach (the shop has none yet).</aside>
 </section>
@@ -1050,7 +1064,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="cn-ppe" data-title="Gear">
   <div class="hd"><div class="chip">8.7</div><h2 class="t sm">While the router runs: glasses, hearing protection, a dust mask when it&#x27;s dusty, nothing loose, no gloves</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Protect</div><p>Safety glasses. Hearing protection. A dust mask when cutting makes dust.</p></div><div class="card"><div class="k">Nothing loose</div><p>Hair up, sleeves rolled, no loose clothing or jewelry. No gloves near a spinning bit.</p></div><div class="card"><div class="k">Announce it</div><p>Say &quot;using the CNC,&quot; then look around and make sure people nearby know.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Protect</div><p>Safety glasses. Hearing protection. A dust mask when cutting makes dust.</p></div><div class="card"><div class="k">Nothing loose</div><p>Hair up, sleeves rolled, no loose clothing or jewelry. No gloves near a spinning bit.</p></div><div class="card"><div class="k">Announce it</div><p>Say &quot;using the <button type="button" class="gl" data-term="CNC" data-def="Computer numerical control: a machine that moves its cutter along a path that a computer sends it." aria-expanded="false">CNC</button>,&quot; then look around and make sure people nearby know.</p></div></div>
   <div class="ft"><span>8.7 bank; Sienci AltMill 4x8 safety page; FIRST Safety Manual §4.5, §6.1; team rule</span></div>
   <aside class="notes">Sienci&#x27;s safety page found is for the AltMill 4x8. To confirm: whether the 4x4 page matches.</aside>
 </section>
@@ -1058,13 +1072,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Install an end mill</td><td>Matching collet clicked into the nut, both wrenches, spindle stopped</td></tr><tr><td>Hold down stock</td><td>Clamps or screws outside the toolpath, gantry clearance checked, tabs on small parts</td></tr><tr><td>Zero X, Y, and Z with the probe</td><td>Right corner selected, plate placed, re-probes Z after every bit change</td></tr><tr><td>Run a polycarbonate job</td><td>Chip load right (no melting), stays at the machine the whole time</td></tr><tr><td>Run an aluminum job</td><td>Dust collection off and cleaned out, air blast or mist on, pauses for packed chips</td></tr><tr><td>Stop a job</td><td>Knows pause from e-stop, never reaches in while the spindle turns</td></tr><tr><td>Every use</td><td>Glasses, hearing protection, dust mask when needed, nothing loose, no gloves</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Install an <button type="button" class="gl" data-term="end mill" data-def="A cutting bit that cuts on its side and its tip, used in the CNC router." aria-expanded="false">end mill</button></td><td>Matching <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button> clicked into the nut, both wrenches, <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button> stopped</td></tr><tr><td>Hold down stock</td><td>Clamps or screws outside the <button type="button" class="gl" data-term="toolpath" data-def="The route the CNC cutter follows, made by the CAM software." aria-expanded="false">toolpath</button>, gantry clearance checked, tabs on small parts</td></tr><tr><td>Zero X, Y, and Z with the probe</td><td>Right corner selected, plate placed, re-probes Z after every bit change</td></tr><tr><td>Run a polycarbonate job</td><td><button type="button" class="gl" data-term="chip load" data-def="How thick a chip each cutting edge takes per turn. Too small rubs and burns; too big breaks bits." aria-expanded="false">Chip load</button> right (no melting), stays at the machine the whole time</td></tr><tr><td>Run an aluminum job</td><td>Dust collection off and cleaned out, air blast or mist on, pauses for packed chips</td></tr><tr><td>Stop a job</td><td>Knows pause from <button type="button" class="gl" data-term="E-stop" data-def="Emergency stop: a big button that cuts power to a machine right away." aria-expanded="false">e-stop</button>, never reaches in while the spindle turns</td></tr><tr><td>Every use</td><td>Glasses, hearing protection, dust mask when needed, nothing loose, no gloves</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Certified</div><p>A mentor watches each use on real work, a personal project, or a small check station.</p></div><div class="card tight"><div class="k">Check station</div><p>The first few jobs are a good check station: one polycarbonate part and one aluminum part, start to finish.</p></div></div>
   </div>
   <div class="ft"><span>Proposed uses from the 8.7 bank; waits until the router is bought</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>chip load</dt><dd>How thick a chip each cutting edge takes per turn. Too small rubs and burns; too big breaks bits.</dd></div><div class="gl-item"><dt>CNC</dt><dd>Computer numerical control: a machine that moves its cutter along a path that a computer sends it.</dd></div><div class="gl-item"><dt>collet</dt><dd>A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it.</dd></div><div class="gl-item"><dt>E-stop</dt><dd>Emergency stop: a big button that cuts power to a machine right away.</dd></div><div class="gl-item"><dt>end mill</dt><dd>A cutting bit that cuts on its side and its tip, used in the CNC router.</dd></div><div class="gl-item"><dt>feed rate</dt><dd>How fast the cutter moves through the material.</dd></div><div class="gl-item"><dt>flute</dt><dd>A spiral groove on a bit that forms a cutting edge and carries chips out of the cut.</dd></div><div class="gl-item"><dt>RPM</dt><dd>Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute.</dd></div><div class="gl-item"><dt>shank</dt><dd>The smooth or hex end of a bit that the chuck or collet grips.</dd></div><div class="gl-item"><dt>spindle</dt><dd>The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part.</dd></div><div class="gl-item"><dt>toolpath</dt><dd>The route the CNC cutter follows, made by the CAM software.</dd></div></dl></div></div>
+  <div class="ft"><span>11 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1231,6 +1251,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2912,4 +2988,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.3 (2026-11-05): Quiz footer points to bank v0.1.2.
   v1.1.4 (2026-11-05): E-stop checkpoint uses new situations (snapped bit, hand near the gantry, depth check) so it no longer rehearses Q14 and Q15.
   v1.1.5 (2026-11-05): Added a hobby CNC router photo (Openverse, CC BY 2.0).
+  v1.1.6 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

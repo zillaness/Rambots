@@ -1,11 +1,11 @@
 <title>Rotary Tool Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_rotary_tool_study_v1.1.1.html
-  version: 1.1.1
+  file: rambots_rotary_tool_study_v1.1.2.html
+  version: 1.1.2
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Study deck for the 7.10 rotary tool quiz, including cut-off wheels.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Rotary Tool Study",
   "slug": "rambots_rotary_tool_study",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-rotary-tool-study-v1"
@@ -869,8 +883,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="t-collet" data-title="Collets and shanks">
   <div class="hd"><div class="chip">7.10 · Collets</div><h2 class="t sm">The collet has to match the bit&#x27;s shank, and the shank goes in deep</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">The collet</div><p>The small sleeve inside the collet nut that squeezes the bit&#x27;s shank. Each collet fits one shank size.</p></div><div class="card tight"><div class="k">Match it</div><p>A 1/8 in. shank needs the 1/8 in. collet. A collet that&#x27;s too big can&#x27;t grip, so the bit wobbles or flies out at full speed. Cranking the nut harder doesn&#x27;t fix it.</p></div><div class="card tight"><div class="k">Go deep</div><p>Push the shank in as far as it goes, or as far as the manual says, so the collet grips most of it. A bit held by just its tip bends and whips.</p></div></div>
-    <figure class="fig"><img src="img/rotary_burrs.webp" alt="Close-up of three small diamond burr bits on thin shanks."><figcaption>Small burr bits on thin shanks, the kind a rotary tool&#x27;s collet grips. Photo: &quot;Macro Mondays: Three...&quot; by Max_G6, CC BY 2.0.</figcaption></figure>
+    <div class="stack"><div class="card tight"><div class="k">The collet</div><p>The small sleeve inside the <button type="button" class="gl" data-term="collet nut" data-def="The nut that squeezes the collet tight around the bit." aria-expanded="false">collet nut</button> that squeezes the bit&#x27;s <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button>. Each <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button> fits one shank size.</p></div><div class="card tight"><div class="k">Match it</div><p>A 1/8 in. shank needs the 1/8 in. collet. A collet that&#x27;s too big can&#x27;t grip, so the bit wobbles or flies out at full speed. Cranking the nut harder doesn&#x27;t fix it.</p></div><div class="card tight"><div class="k">Go deep</div><p>Push the shank in as far as it goes, or as far as the manual says, so the collet grips most of it. A bit held by just its tip bends and whips.</p></div></div>
+    <figure class="fig"><img src="img/rotary_burrs.webp" alt="Close-up of three small diamond burr bits on thin shanks."><figcaption>Small <button type="button" class="gl" data-term="burr bit" data-def="A small rotary cutting bit covered in teeth, used in a rotary tool to shape or grind." aria-expanded="false">burr bits</button> on thin shanks, the kind a rotary tool&#x27;s collet grips. Photo: &quot;Macro Mondays: Three...&quot; by Max_G6, CC BY 2.0.</figcaption></figure>
   </div>
   <div class="ft"><span>Bank: 7.10 Rotary Tool</span></div>
   <aside class="notes">Show the collets the team has and how to read their sizes. To confirm in the shop: which tool we have (the old Addendum showed a cordless cut-out tool), which collets we own, and the manual&#x27;s minimum shank insertion.</aside>
@@ -892,7 +906,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-change" data-title="Changing an accessory">
   <div class="hd"><div class="chip">7.10 · Accessory change</div><h2 class="t sm">Take the battery out for every bit or wheel change, and only lock a shaft that has stopped</h2></div>
-  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Power out</h3><p>Take the battery out, or unplug it. The speed dial is not a power switch, and zero on the dial doesn&#x27;t make it safe.</p></div><div class="step"><div class="n">2</div><h3>Let it cool</h3><p>Bits and wheels are hot right after cutting.</p></div><div class="step"><div class="n">3</div><h3>Hold the shaft</h3><p>Press the spindle lock, or use the second wrench if the tool has two, then loosen the collet nut. Never press the lock while the shaft is turning.</p></div><div class="step"><div class="n">4</div><h3>Seat and tighten</h3><p>Right collet, shank in deep, nut snug. Power goes back in last.</p></div></div></div>
+  <div class="body"><div class="steps"><div class="step"><div class="n">1</div><h3>Power out</h3><p>Take the battery out, or unplug it. The speed dial is not a power switch, and zero on the dial doesn&#x27;t make it safe.</p></div><div class="step"><div class="n">2</div><h3>Let it cool</h3><p>Bits and wheels are hot right after cutting.</p></div><div class="step"><div class="n">3</div><h3>Hold the shaft</h3><p>Press the <button type="button" class="gl" data-term="spindle lock" data-def="A button that keeps the spindle from turning, so you can loosen or tighten the blade, wheel, or collet." aria-expanded="false">spindle lock</button>, or use the second wrench if the tool has two, then loosen the <button type="button" class="gl" data-term="collet nut" data-def="The nut that squeezes the collet tight around the bit." aria-expanded="false">collet nut</button>. Never press the lock while the shaft is turning.</p></div><div class="step"><div class="n">4</div><h3>Seat and tighten</h3><p>Right <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button>, <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button> in deep, nut snug. Power goes back in last.</p></div></div></div>
   <div class="ft"><span>Bank: 7.10 Rotary Tool; Dremel manual</span></div>
   <aside class="notes">To confirm in the shop: whether our tool has a spindle lock or uses two wrenches.</aside>
 </section>
@@ -931,7 +945,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-wheels" data-title="Cut-off wheels">
   <div class="hd"><div class="chip">7.10 · Cut-off wheels</div><h2 class="t sm">Thin cut-off wheels are brittle, so check the rating, toss damaged ones, and stay out of their line</h2></div>
-  <div class="body cols-4"><div class="card"><div class="k">Speed rating</div><p>The wheel&#x27;s rated RPM (revolutions per minute) must be at least the tool&#x27;s maximum. Someone always bumps the dial, and a wheel spun past its rating can burst.</p></div><div class="card"><div class="k">Damage</div><p>Thin wheels are brittle. A chipped or cracked wheel can burst at speed. Fiberglass-reinforced wheels hold up better, but a damaged wheel is still trash.</p></div><div class="card"><div class="k">First minute</div><p>After mounting, run it at full speed for a minute with everyone out of the wheel&#x27;s plane. A bad wheel usually breaks then.</p></div><div class="card"><div class="k">While cutting</div><p>Keep your face, and everyone else&#x27;s, out of line with the wheel. Use the tool&#x27;s wheel guard if it has one.</p></div></div>
+  <div class="body cols-4"><div class="card"><div class="k">Speed rating</div><p>The wheel&#x27;s rated <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> (revolutions per minute) must be at least the tool&#x27;s maximum. Someone always bumps the dial, and a wheel spun past its rating can burst.</p></div><div class="card"><div class="k">Damage</div><p>Thin wheels are brittle. A chipped or cracked wheel can burst at speed. Fiberglass-reinforced wheels hold up better, but a damaged wheel is still trash.</p></div><div class="card"><div class="k">First minute</div><p>After mounting, run it at full speed for a minute with everyone out of the wheel&#x27;s plane. A bad wheel usually breaks then.</p></div><div class="card"><div class="k">While cutting</div><p>Keep your face, and everyone else&#x27;s, out of line with the wheel. Use the tool&#x27;s wheel guard if it has one.</p></div></div>
   <div class="ft"><span>Bank: 7.10 Rotary Tool; Dremel manual</span></div>
   <aside class="notes">To confirm in the shop: our tool&#x27;s maximum RPM, whether it has a wheel guard, and which cut-off wheels we stock. Show a plain wheel and a reinforced one.</aside>
 </section>
@@ -1010,7 +1024,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="t-use" data-title="Holding and moving">
   <div class="hd"><div class="chip">7.10 · Using it</div><h2 class="t sm">Clamp small parts and push the tool forward, because small parts are where fingers get cut</h2></div>
   <div class="body split-wide">
-    <div class="stack"><div class="card tight"><div class="k">Clamp it</div><p>Never hold what you&#x27;re cutting. Put it in a vise or clamp it. Small parts are where people cut their fingers, because the wheel is right next to them.</p></div><div class="card tight"><div class="k">Push forward</div><p>Move the tool forward through the cut, steady, with light pressure. That makes the wheel less likely to grab and kick.</p></div><div class="card tight"><div class="k">No twisting</div><p>Don&#x27;t twist the tool or saw it back and forth. Twisting side-loads the wheel and breaks it.</p></div></div>
+    <div class="stack"><div class="card tight"><div class="k">Clamp it</div><p>Never hold what you&#x27;re cutting. Put it in a <button type="button" class="gl" data-term="vise" data-def="A bench clamp with two jaws that holds a part still while you work on it." aria-expanded="false">vise</button> or clamp it. Small parts are where people cut their fingers, because the wheel is right next to them.</p></div><div class="card tight"><div class="k">Push forward</div><p>Move the tool forward through the cut, steady, with light pressure. That makes the wheel less likely to grab and kick.</p></div><div class="card tight"><div class="k">No twisting</div><p>Don&#x27;t twist the tool or saw it back and forth. Twisting side-loads the wheel and breaks it.</p></div></div>
     <figure class="fig"><img src="img/rotary_tool_bench.webp" alt="A corded rotary tool lying on a wooden workbench next to a basket of small tools."><figcaption>A corded rotary tool on a workbench. Photo: &quot;Preparing to shuck..&quot; by theducks, CC BY-SA 2.0.</figcaption></figure>
   </div>
   <div class="ft"><span>Bank: 7.10 Rotary Tool; FIRST Safety Manual §3.2.1; Dremel manual</span></div>
@@ -1055,13 +1069,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Bit or wheel change</td><td>Battery out, right collet, shank in far enough, RPM rating checked</td></tr><tr><td>Cut-off wheel cut in a clamped part</td><td>One-minute run, out of the plane, pushes forward, no side load</td></tr><tr><td>Grind, sand, or deburr a small part with a stone or drum</td><td>Part clamped, light pressure, hair and strings secured</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Bit or wheel change</td><td>Battery out, right <button type="button" class="gl" data-term="collet" data-def="A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it." aria-expanded="false">collet</button>, <button type="button" class="gl" data-term="shank" data-def="The smooth or hex end of a bit that the chuck or collet grips." aria-expanded="false">shank</button> in far enough, <button type="button" class="gl" data-term="RPM" data-def="Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute." aria-expanded="false">RPM</button> rating checked</td></tr><tr><td>Cut-off wheel cut in a clamped part</td><td>One-minute run, out of the plane, pushes forward, no side load</td></tr><tr><td>Grind, sand, or <button type="button" class="gl" data-term="deburr" data-def="To remove a burr with a file, a deburring tool, or a countersink." aria-expanded="false">deburr</button> a small part with a stone or drum</td><td>Part clamped, light pressure, hair and strings secured</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Passing</div><p>The quiz gets you Supervised on 7.10, including cut-off wheels.</p></div><div class="card tight"><div class="k">Certified</div><p>A mentor watches you do these on real work or at a small check station.</p></div></div>
   </div>
   <div class="ft"><span>From the bank&#x27;s Uses for Certified table (proposed).</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>burr bit</dt><dd>A small rotary cutting bit covered in teeth, used in a rotary tool to shape or grind.</dd></div><div class="gl-item"><dt>collet</dt><dd>A slotted sleeve that squeezes tight around a bit&#x27;s shank to hold it.</dd></div><div class="gl-item"><dt>collet nut</dt><dd>The nut that squeezes the collet tight around the bit.</dd></div><div class="gl-item"><dt>deburr</dt><dd>To remove a burr with a file, a deburring tool, or a countersink.</dd></div><div class="gl-item"><dt>RPM</dt><dd>Revolutions per minute: how many full turns a spinning blade, bit, or wheel makes in one minute.</dd></div><div class="gl-item"><dt>shank</dt><dd>The smooth or hex end of a bit that the chuck or collet grips.</dd></div><div class="gl-item"><dt>spindle lock</dt><dd>A button that keeps the spindle from turning, so you can loosen or tighten the blade, wheel, or collet.</dd></div><div class="gl-item"><dt>vise</dt><dd>A bench clamp with two jaws that holds a part still while you work on it.</dd></div></dl></div></div>
+  <div class="ft"><span>8 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1228,6 +1248,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -2905,4 +2981,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.1 (2026-11-05): Second review sweep: Rewrote qc-insert so it doesn't copy Q5.
   v1.1 (2026-11-05): Review fixes: rewrote qc-clamp, rotated right-answer positions, added two photos.
   v1.0 (2026-11-05): First version, generated from src/spec.py on engine v1.1.1. 9 quick checks, 3 checkpoints. Checkpoint hint lines removed.
+  v1.1.2 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->

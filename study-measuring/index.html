@@ -1,11 +1,11 @@
 <title>Measuring and Layout Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: rambots_measuring_study_v1.1.5.html
-  version: 1.1.5
+  file: rambots_measuring_study_v1.1.6.html
+  version: 1.1.6
   author: Sam Cao
-  created: 2026-11-05
-  last_updated: 2026-11-05
+  created: 2026-11-07
+  last_updated: 2026-11-07
   description: Interactive study deck for the Rambots group 3 measuring, marking, and layout quiz: tapes, calipers, the micrometer, marking and punches, the thread checker, the robot scale, precision, fits, and shop math.
   ai_update: Update last_updated and version here and in deck.version inside #deck-data (src/data.py). Rename file to match. Append changelog comment at bottom. Change slides, #deck-data, #deck-custom-css and #deck-custom only; keep #deck-engine-css and #deck-engine exactly as shipped.
   engine: interactive-slide-deck-builder engine v1.1.1 (assets/deck_engine_template_v1.1.1.html)
@@ -520,6 +520,20 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 .app.flow .qz-q{font-size:22px}
 .app.flow .qz-o{font-size:18px;grid-template-columns:32px 1fr}
 .app.flow .fig img{max-height:none}
+/* Glossary pop-ups (glossary_build.py) */
+button.gl{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;display:inline;cursor:help;text-align:inherit;letter-spacing:inherit;line-height:inherit;text-transform:inherit;text-decoration:underline dotted var(--accent);text-decoration-thickness:.09em;text-underline-offset:.2em;-webkit-tap-highlight-color:transparent}
+button.gl:hover,button.gl[aria-expanded="true"]{text-decoration-style:solid;color:var(--accent)}
+button.gl:focus-visible{outline:2px solid var(--focus,var(--accent));outline-offset:2px;border-radius:2px}
+#gl-pop{position:fixed;z-index:2147483000;left:0;top:0;max-width:min(360px,calc(100vw - 16px));padding:12px 14px;border-radius:10px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);box-shadow:0 12px 32px rgba(0,0,0,.28);font-size:16px;line-height:1.4;text-align:left}
+#gl-pop .gl-t{display:block;font-weight:700;color:var(--accent);margin-bottom:3px}
+.gl-body{grid-template-rows:minmax(0,1fr);align-content:stretch}
+.gl-scroll{min-height:0;height:100%;overflow:auto;padding-right:8px}
+.gl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gl-item{padding:10px 0;border-top:1px solid var(--rule)}
+.gl-item dt{font-weight:700;font-size:21px}
+.gl-item dd{margin:3px 0 0;font-size:18px;line-height:1.35;color:var(--ink-2)}
+.app.flow .gl-grid{grid-template-columns:minmax(0,1fr)}
+.app.flow .gl-scroll{height:auto;overflow:visible;padding-right:0}
 </style>
 <!-- @@/CUSTOM_CSS@@ -->
 <!-- @@DECK_DATA@@ -->
@@ -528,7 +542,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Measuring and Layout Study",
   "slug": "rambots_measuring_study",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "author": "Sam Cao",
   "start": "cover",
   "storageKey": "rambots-measuring-study-v1"
@@ -1276,7 +1290,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-caliper" data-title="Caliper parts">
   <div class="hd"><div class="chip">Group 3 · Calipers</div><h2 class="t sm">One caliper takes four kinds of measurements</h2></div>
-  <div class="body"><div class="defs"><div class="d"><b>Outside</b><p>The main jaws: a shaft diameter, a plate&#x27;s thickness, hex across the flats.</p></div><div class="d"><b>Inside</b><p>The small upper jaws: a hole or a bore.</p></div><div class="d"><b>Depth</b><p>The rod that slides out the end: a pocket or a blind hole.</p></div><div class="d"><b>Step</b><p>The end faces of the jaws: a shoulder, where a shaft steps down to a smaller size.</p></div><div class="d"><b>Not these</b><p>Thread pitch needs the thread checker. Flatness needs a straightedge.</p></div></div></div>
+  <div class="body"><div class="defs"><div class="d"><b>Outside</b><p>The main jaws: a shaft diameter, a plate&#x27;s thickness, hex across the flats.</p></div><div class="d"><b>Inside</b><p>The small upper jaws: a hole or a bore.</p></div><div class="d"><b>Depth</b><p>The rod that slides out the end: a pocket or a blind hole.</p></div><div class="d"><b>Step</b><p>The end faces of the jaws: a shoulder, where a shaft steps down to a smaller size.</p></div><div class="d"><b>Not these</b><p>Thread pitch needs the <button type="button" class="gl" data-term="thread checker" data-def="A gauge with labeled threaded holes and studs, for finding a screw&#x27;s size and thread." aria-expanded="false">thread checker</button>. Flatness needs a straightedge.</p></div></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3 and Mitutoyo caliper guides</span></div>
   <aside class="notes">Have each student take all four kinds of measurement on one part.</aside>
 </section>
@@ -1367,7 +1381,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-mic" data-title="Reading a micrometer">
   <div class="hd"><div class="chip">Group 3 · Micrometer</div><h2 class="t sm">Add the sleeve&#x27;s big lines, its small lines, and the thimble</h2></div>
-  <div class="body"><div class="defs"><div class="d"><b>Numbered sleeve lines</b><p>Each is 0.100 in. Read the last number fully uncovered.</p></div><div class="d"><b>Small sleeve lines</b><p>Each is 0.025 in. Count how many show past that number.</p></div><div class="d"><b>Thimble lines</b><p>25 lines, numbered 0 to 24, each 0.001 in., so one full turn moves 0.025 in. (one small sleeve line). Read the line on the sleeve&#x27;s center line.</p></div><div class="d"><b>Example</b><p>3 uncovered, two small lines, thimble on 7: 0.300 + 0.050 + 0.007 = 0.357 in.</p></div><div class="d"><b>Why use it</b><p>It measures in line with its spindle, so it has no jaw-tip error. Use the ratchet stop so the pressure is the same every time.</p></div></div></div>
+  <div class="body"><div class="defs"><div class="d"><b>Numbered sleeve lines</b><p>Each is 0.100 in. Read the last number fully uncovered.</p></div><div class="d"><b>Small sleeve lines</b><p>Each is 0.025 in. Count how many show past that number.</p></div><div class="d"><b>Thimble lines</b><p>25 lines, numbered 0 to 24, each 0.001 in., so one full turn moves 0.025 in. (one small sleeve line). Read the line on the sleeve&#x27;s center line.</p></div><div class="d"><b>Example</b><p>3 uncovered, two small lines, thimble on 7: 0.300 + 0.050 + 0.007 = 0.357 in.</p></div><div class="d"><b>Why use it</b><p>It measures in line with its <button type="button" class="gl" data-term="spindle" data-def="The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part." aria-expanded="false">spindle</button>, so it has no jaw-tip error. Use the ratchet stop so the pressure is the same every time.</p></div></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3</span></div>
   <aside class="notes">To confirm in the shop: whether the team owns a micrometer, and whether it has a vernier scale.</aside>
 </section>
@@ -1397,7 +1411,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="hd"><div class="chip">Group 3 · Punches</div><h2 class="t sm">A punch dimple keeps the drill from walking, and a matching transfer punch copies holes exactly</h2></div>
   <div class="body split-wide">
     <div class="stack"><div class="card tight"><div class="k">Center punch</div><h3>Why</h3><p>A twist drill&#x27;s tip wanders on a flat surface. A small dimple gives it a place to sit.</p></div><div class="card tight"><div class="k">Center punch</div><h3>How</h3><p>Put the point exactly where your two layout lines cross, with the part on a solid surface, and strike once.</p></div><div class="card tight"><div class="k">Transfer punch</div><h3>Copying holes</h3><p>Clamp the old part to the new one and tap a transfer punch through each hole. Use the punch that matches the hole size, so it centers itself.</p></div></div>
-    <figure class="fig"><img src="img/center_punches.webp" alt="A spring-loaded automatic center punch above a plain steel punch"><figcaption>An automatic center punch (top) and a plain punch you strike with a hammer. Photo: SSC-Aviation, CC BY-SA 2.0</figcaption></figure>
+    <figure class="fig"><img src="img/center_punches.webp" alt="A spring-loaded automatic center punch above a plain steel punch"><figcaption>An automatic <button type="button" class="gl" data-term="center punch" data-def="A pointed punch that makes a small dimple, so a drill bit starts exactly where you want." aria-expanded="false">center punch</button> (top) and a plain punch you strike with a hammer. Photo: SSC-Aviation, CC BY-SA 2.0</figcaption></figure>
   </div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3</span></div>
   <aside class="notes">To confirm in the shop: our transfer punch set&#x27;s sizes.</aside>
@@ -1412,7 +1426,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-thread" data-title="Thread checker">
   <div class="hd"><div class="chip">Group 3 · Thread checker</div><h2 class="t sm">A screw that starts and then binds is usually the wrong thread, so never force it</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Same size, different thread</div><h3>#10-24 vs #10-32</h3><p>Both are 0.190 in. across, so they look alike and both start in the same hole. A #10-24 has 24 threads per inch and a #10-32 has 32, so the threads fall out of step and bind within a turn or two. 1/4-20 and 1/4-28 mix up the same way.</p></div><div class="card"><div class="k">Mixed bins</div><h3>It happens</h3><p>#10-24 screws have ended up in our #10-32 bins before. Forcing one ruins the tapped hole.</p></div><div class="card"><div class="k">The checker</div><h3>How to use it</h3><p>Try the screw in the checker&#x27;s holes or on its studs. It should spin in freely. Never force a screw or a gauge.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Same size, different thread</div><h3>#10-24 vs #10-32</h3><p>Both are 0.190 in. across, so they look alike and both start in the same hole. A #10-24 has 24 threads per inch and a #10-32 has 32, so the threads fall out of step and <button type="button" class="gl" data-term="bind" data-def="When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back." aria-expanded="false">bind</button> within a turn or two. 1/4-20 and 1/4-28 mix up the same way.</p></div><div class="card"><div class="k">Mixed bins</div><h3>It happens</h3><p>#10-24 screws have ended up in our #10-32 bins before. Forcing one ruins the tapped hole.</p></div><div class="card"><div class="k">The checker</div><h3>How to use it</h3><p>Try the screw in the checker&#x27;s holes or on its studs. It should spin in freely. Never force a screw or a gauge.</p></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3</span></div>
   <aside class="notes">To confirm in the shop: whether our thread checker does inch and metric, or inch only.</aside>
 </section>
@@ -1472,7 +1486,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-precision" data-title="Precision">
   <div class="hd"><div class="chip">Group 3 · Precision</div><h2 class="t sm">Record only the digits you can trust, and pick a tool much finer than the tolerance</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Resolution</div><h3>What it shows</h3><p>The smallest step the display can show. A caliper might show 0.0001 or 0.0005.</p></div><div class="card"><div class="k">Accuracy</div><h3>What it&#x27;s worth</h3><p>How close the reading is to the truth. On a caliper rated to ±0.001 in. (plus or minus), the fourth decimal place is noise. Write the thousandth.</p></div><div class="card"><div class="k">The 10 times rule</div><h3>Picking a tool</h3><p>The tool should be about 10 times finer than the tolerance. Calipers (±0.001) are fine for ±0.010 work. A ±0.0005 fit needs a micrometer.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Resolution</div><h3>What it shows</h3><p>The smallest step the display can show. A caliper might show 0.0001 or 0.0005.</p></div><div class="card"><div class="k">Accuracy</div><h3>What it&#x27;s worth</h3><p>How close the reading is to the truth. On a caliper rated to ±0.001 in. (plus or minus), the fourth decimal place is noise. Write the thousandth.</p></div><div class="card"><div class="k">The 10 times rule</div><h3>Picking a tool</h3><p>The tool should be about 10 times finer than the <button type="button" class="gl" data-term="tolerance" data-def="How far a size can be from the target and still be OK." aria-expanded="false">tolerance</button>. Calipers (±0.001) are fine for ±0.010 work. A ±0.0005 fit needs a micrometer.</p></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3 and Mitutoyo specifications</span></div>
   <aside class="notes">To confirm in the shop: our calipers&#x27; accuracy spec.</aside>
 </section>
@@ -1507,7 +1521,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-fits" data-title="Fits">
   <div class="hd"><div class="chip">Group 3 · Fits</div><h2 class="t sm">How a hole and a shaft fit depends on which one is bigger</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Clearance</div><h3>Slides together</h3><p>The hole is always bigger than the part. Clearance is the hole minus the shaft: a 0.257 hole on a 0.250 shaft has 0.007 in. of clearance.</p></div><div class="card"><div class="k">Transition</div><h3>Could go either way</h3><p>The tolerances let it come out slightly loose or slightly tight.</p></div><div class="card"><div class="k">Interference</div><h3>Pressed in</h3><p>The part is bigger than the hole, so it has to be pressed. A press fit is one kind of interference fit, not a separate category.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Clearance</div><h3>Slides together</h3><p>The hole is always bigger than the part. Clearance is the hole minus the shaft: a 0.257 hole on a 0.250 shaft has 0.007 in. of clearance.</p></div><div class="card"><div class="k">Transition</div><h3>Could go either way</h3><p>The <button type="button" class="gl" data-term="tolerance" data-def="How far a size can be from the target and still be OK." aria-expanded="false">tolerances</button> let it come out slightly loose or slightly tight.</p></div><div class="card"><div class="k">Interference</div><h3>Pressed in</h3><p>The part is bigger than the hole, so it has to be pressed. A <button type="button" class="gl" data-term="press fit" data-def="A fit where the part is a hair bigger than the hole, so it has to be pressed in and stays put." aria-expanded="false">press fit</button> is one kind of interference fit, not a separate category.</p></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1545,7 +1559,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-stack" data-title="Tolerance stackup">
   <div class="hd"><div class="chip">Group 3 · Shop math</div><h2 class="t sm">Small extras on every part add up across a stack</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">The problem</div><h3>Paper vs. real</h3><p>A drawing might add to exactly the gap. But a spacer sold as 0.125 in. might measure 0.127, so eight of them add 0.016 in.</p></div><div class="card"><div class="k">The fix</div><h3>Measure the parts</h3><p>Add the real measured sizes, not the nominal ones. Then measure the whole stack and pull or swap a spacer.</p></div><div class="card"><div class="k">Don&#x27;t force it</div><h3>Why</h3><p>A long stack forced together pushes on the bearings along the shaft and bows the walls, so the bearings bind and wear out fast.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">The problem</div><h3>Paper vs. real</h3><p>A drawing might add to exactly the gap. But a spacer sold as 0.125 in. might measure 0.127, so eight of them add 0.016 in.</p></div><div class="card"><div class="k">The fix</div><h3>Measure the parts</h3><p>Add the real measured sizes, not the nominal ones. Then measure the whole stack and pull or swap a spacer.</p></div><div class="card"><div class="k">Don&#x27;t force it</div><h3>Why</h3><p>A long stack forced together pushes on the <button type="button" class="gl" data-term="bearing" data-def="A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide." aria-expanded="false">bearings</button> along the shaft and bows the walls, so the bearings <button type="button" class="gl" data-term="bind" data-def="When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back." aria-expanded="false">bind</button> and wear out fast.</p></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3. Stackup is a can&#x27;t-fail topic.</span></div>
   <aside class="notes">Bring a handful of real spacers and have students measure them.</aside>
 </section>
@@ -1584,7 +1598,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 
 <section class="slide" data-id="t-kerf" data-title="Kerf">
   <div class="hd"><div class="chip">Group 3 · Shop math</div><h2 class="t sm">Every saw cut eats a blade&#x27;s width of material</h2></div>
-  <div class="body cols-3"><div class="card"><div class="k">Kerf</div><h3>What it is</h3><p>The slot a blade cuts. A 1/8 in. blade turns 1/8 in. of tube into chips on every cut.</p></div><div class="card"><div class="k">Planning</div><h3>Count the cuts</h3><p>Each part uses its length plus one kerf. Four 6 in. parts with a 1/8 in. blade use 4 × 6 1/8 = 24 1/2 in.</p></div><div class="card"><div class="k">Cutting</div><h3>Which side</h3><p>Cut on the scrap side of the line, and measure each new part from the freshly cut end.</p></div></div>
+  <div class="body cols-3"><div class="card"><div class="k">Kerf</div><h3>What it is</h3><p>The slot a blade cuts. A 1/8 in. blade turns 1/8 in. of tube into chips on every cut.</p></div><div class="card"><div class="k">Planning</div><h3>Count the cuts</h3><p>Each part uses its length plus one <button type="button" class="gl" data-term="kerf" data-def="The width of material a blade, bit, or laser removes as it cuts." aria-expanded="false">kerf</button>. Four 6 in. parts with a 1/8 in. blade use 4 × 6 1/8 = 24 1/2 in.</p></div><div class="card"><div class="k">Cutting</div><h3>Which side</h3><p>Cut on the scrap side of the line, and measure each new part from the freshly cut end.</p></div></div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3</span></div>
   <aside class="notes"></aside>
 </section>
@@ -1599,13 +1613,19 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
 <section class="slide" data-id="certified" data-title="What Certified takes">
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Passing gets you Supervised; Certified comes from real work</h2></div>
   <div class="body split-wide">
-    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Measure and mark a cut length to 1/16 in.</td><td>Hook on the end, reads the fraction right, tick mark</td></tr><tr><td>Lay out marks from one reference</td><td>Hooks once, marks every point from the same zero</td></tr><tr><td>Zero and confirm units</td><td>Wipes and closes the jaws, zeroes, checks in. vs. mm</td></tr><tr><td>Outside and inside measurements</td><td>Deep in the jaws, square, light; rocks for the biggest bore reading</td></tr><tr><td>Mark with a square, then punch</td><td>Square tight to the stock; punch on the line crossing</td></tr><tr><td>Identify an unknown fastener</td><td>Tries the thread checker without forcing</td></tr><tr><td>Weigh the robot</td><td>Tares first, whole robot on, nobody touching</td></tr></tbody></table></div>
+    <div class="scroll-x"><table class="t2"><thead><tr><th>Use, watched by a mentor</th><th>What they watch for</th></tr></thead><tbody><tr><td>Measure and mark a cut length to 1/16 in.</td><td>Hook on the end, reads the fraction right, tick mark</td></tr><tr><td>Lay out marks from one reference</td><td>Hooks once, marks every point from the same zero</td></tr><tr><td>Zero and confirm units</td><td>Wipes and closes the jaws, zeroes, checks in. vs. mm</td></tr><tr><td>Outside and inside measurements</td><td>Deep in the jaws, square, light; rocks for the biggest bore reading</td></tr><tr><td>Mark with a square, then punch</td><td>Square tight to the stock; punch on the line crossing</td></tr><tr><td>Identify an unknown fastener</td><td>Tries the <button type="button" class="gl" data-term="thread checker" data-def="A gauge with labeled threaded holes and studs, for finding a screw&#x27;s size and thread." aria-expanded="false">thread checker</button> without forcing</td></tr><tr><td>Weigh the robot</td><td>Tares first, whole robot on, nobody touching</td></tr></tbody></table></div>
     <div class="stack"><div class="card tight"><div class="k">Full list</div><p>The quiz bank lists 23 uses. Whether group 3 is one Certified mark or per tool is still being decided.</p></div></div>
   </div>
   <div class="ft"><span>From the group 3 quiz bank v0.2.3, Uses for Certified (proposed)</span></div>
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" data-id="glossary" data-title="Words in this guide">
+  <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Words in this guide</h2></div>
+  <div class="body gl-body"><div class="scroll gl-scroll"><dl class="gl-grid"><div class="gl-item"><dt>bearing</dt><dd>A part with balls or rollers that lets something spin smoothly. On a router bit, it rides the edge as a guide.</dd></div><div class="gl-item"><dt>bind</dt><dd>When parts jam and squeeze instead of moving freely. In a saw cut, the cut closes on the blade, and the tool can stall or kick back.</dd></div><div class="gl-item"><dt>center punch</dt><dd>A pointed punch that makes a small dimple, so a drill bit starts exactly where you want.</dd></div><div class="gl-item"><dt>kerf</dt><dd>The width of material a blade, bit, or laser removes as it cuts.</dd></div><div class="gl-item"><dt>press fit</dt><dd>A fit where the part is a hair bigger than the hole, so it has to be pressed in and stays put.</dd></div><div class="gl-item"><dt>spindle</dt><dd>The shaft that turns. On a machine, it spins and holds the bit, blade, or wheel; on a micrometer, it&#x27;s the rod that screws in to touch the part.</dd></div><div class="gl-item"><dt>thread checker</dt><dd>A gauge with labeled threaded holes and studs, for finding a screw&#x27;s size and thread.</dd></div><div class="gl-item"><dt>tolerance</dt><dd>How far a size can be from the target and still be OK.</dd></div></dl></div></div>
+  <div class="ft"><span>8 words. Tap or hover any underlined word in this guide to see what it means.</span></div>
+  <aside class="notes">Built from the shared Rambots glossary (tools/make_glossary.py). Words are underlined the first time they appear on each teaching slide, never on quick checks or checkpoints.</aside>
+</section>
 <section class="slide" data-id="results" data-title="Your score" data-end>
   <div class="hd"><div class="chip">Finish</div><h2 class="t sm">Your score: download it and turn it in</h2></div>
   <div class="body"><div data-chart="results"></div></div>
@@ -1772,6 +1792,62 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     live.push(render);
     return {render:render};
   });
+});
+
+/* Glossary pop-ups: tap, click, hover, or keyboard on an underlined word (built by glossary_build.py). */
+(window.DECK_CUSTOM = window.DECK_CUSTOM || []).push(function(Deck){
+  let pop = null, cur = null, hoverT = null;
+  const canHover = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function ensure(){
+    if (pop) return pop;
+    pop = document.createElement('div'); pop.id = 'gl-pop'; pop.setAttribute('role', 'tooltip'); pop.hidden = true;
+    pop.innerHTML = '<span class="gl-t"></span><span class="gl-d"></span>';
+    document.body.appendChild(pop);
+    pop.addEventListener('mouseenter', () => clearTimeout(hoverT));
+    pop.addEventListener('mouseleave', () => { if (canHover) hoverT = setTimeout(close, 200); });
+    return pop;
+  }
+  function place(btn){
+    const p = ensure(), r = btn.getBoundingClientRect();
+    p.hidden = false; p.style.left = '0px'; p.style.top = '0px';
+    const pw = p.offsetWidth, ph = p.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    let x = Math.min(Math.max(8, r.left + r.width / 2 - pw / 2), vw - pw - 8);
+    let y = r.bottom + 8; if (y + ph > vh - 8) y = r.top - ph - 8; if (y < 8) y = 8;
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+  }
+  function open(btn){
+    if (cur && cur !== btn) close();
+    const p = ensure();
+    p.querySelector('.gl-t').textContent = btn.dataset.term || btn.textContent;
+    p.querySelector('.gl-d').textContent = btn.dataset.def || '';
+    cur = btn; btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'gl-pop');
+    place(btn);
+  }
+  function close(){
+    clearTimeout(hoverT);
+    if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); cur = null; }
+    if (pop) pop.hidden = true;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('button.gl');
+    if (b) { e.preventDefault(); if (cur === b) close(); else open(b); return; }
+    if (pop && pop.contains(e.target)) return;
+    close();
+  });
+  if (canHover) {
+    document.addEventListener('mouseover', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(() => open(b), 120);
+    });
+    document.addEventListener('mouseout', e => {
+      const b = e.target.closest && e.target.closest('button.gl'); if (!b) return;
+      clearTimeout(hoverT); hoverT = setTimeout(close, 200);
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  Deck.on('slide', close);
 });
 </script>
 <!-- @@/CUSTOM_JS@@ -->
@@ -3453,4 +3529,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
   v1.1.3 (2026-11-05): Re-verification fix: kerf follow-up line says every part needs its own cut when the leftover is scrap.
   v1.1.4 (2026-11-05): Inches-to-mm example now 0.394 in. = 10 mm, so it no longer matches a quiz question.
   v1.1.5 (2026-11-05): Tape-reading quick check moved to 4 13/16 so it no longer sits next to the quiz's 7 11/16 reading.
+  v1.1.6 (2026-11-07): Word pop-ups: tap or hover an underlined word for its meaning (teaching slides only), and a Words in this guide slide before the score.
 -->
