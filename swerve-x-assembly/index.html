@@ -1,8 +1,8 @@
 <title>Swerve X Module Build</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <!--
-  file: swerve_x_assembly_sop_v1.0.html
-  version: 1.0
+  file: swerve_x_assembly_sop_v1.1.html
+  version: 1.1
   author: Sam Cao
   created: 2026-11-09
   last_updated: 2026-11-09
@@ -487,7 +487,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
  "deck": {
   "title": "Swerve X Module Build",
   "slug": "swerve_x_assembly",
-  "version": "1.0",
+  "version": "1.1",
   "author": "Sam Cao",
   "start": "start",
   "storageKey": "sop-swerve-x-assembly-v1",
@@ -515,7 +515,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "w716": "7/16 in wrench (1/4-20 locknut)",
    "deadblow": "Dead-blow hammer",
    "snapring": "Snap-ring pliers",
-   "threadlock": "Vibra-TITE VC-3 threadlocker"
+   "threadlock": "Vibra-TITE VC-3 threadlocker",
+   "grease": "Lucas Red \"N\" Tacky grease"
   }
  },
  "widgets": {
@@ -532,7 +533,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "w716",
     "deadblow",
     "snapring",
-    "threadlock"
+    "threadlock",
+    "grease"
    ]
   },
   "readyChecks": {
@@ -569,7 +571,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "w716",
     "deadblow",
     "snapring",
-    "threadlock"
+    "threadlock",
+    "grease"
    ]
   },
   "finish": {
@@ -623,7 +626,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "Printed spacer (C10) and 15T bevel gear (C11) on the wheel-module shaft",
     "Shaft passed up through the ThunderHex bearing from below",
     "22T gear (C7) and top cap (C8) on the top of the shaft",
-    "#8-32 x 1/2 in screw (C9) in the shaft end, with threadlocker"
+    "#8-32 x 1/2 in screw (C9) in the shaft end, with threadlocker",
+    "Greased the teeth of the 72T rotation gear, the 15T bevel gear and the 22T gear"
    ]
   },
   "c_forks": {
@@ -639,6 +643,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
    "items": [
     "24T gear (E4) on the centre shaft (E1)",
     "Shaft seated in the centre bearing of the rotation gear, 24T meshing with the 22T",
+    "Greased the teeth of the 24T gear",
     "Pulley plate (C13) on with three #4-40 x 7/8 in screws, snug only"
    ]
   },
@@ -650,6 +655,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "Motor plate (G5) over the idler shaft, bearing flange facing the top plate",
     "Four 1/2 in spacers (G6) between the top plate and the motor plate",
     "Four #10-32 x 1-1/4 in bolts (G7) from above, through plate and spacers into the motor, with threadlocker",
+    "Greased the teeth of the 12T pinion and the 42T idler gear",
     "Turned the pinion by hand: the idler gear follows freely"
    ]
   },
@@ -661,6 +667,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "Motor plate (H4) over the idler shaft, bearing flange facing the top plate",
     "Four 1/2 in spacers (H5) between the top plate and the motor plate",
     "Four #10-32 x 1-1/4 in bolts (H6) from above into the motor, with threadlocker",
+    "Greased the teeth of the pinion and the idler gear",
     "Turned the pinion by hand: the idler gear follows freely"
    ]
   },
@@ -671,7 +678,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "Rotation shaft (F1) with its 24T gear (F2) seated in the bottom-plate bearing, 14T end meshing with the 72T gear",
     "Printed spacer (I4) in place for the sensor shaft",
     "Belt (I3) looped on the shaft pulley (I2), then slid over the pulley plate",
-    "Sensor shaft (I1) through the pulley and spacer, seated in its bottom-plate bearing"
+    "Sensor shaft (I1) through the pulley and spacer, seated in its bottom-plate bearing",
+    "Greased the teeth of the 42T gear, the 24T gear and the 14T end of the rotation shaft"
    ]
   },
   "c_join": {
@@ -705,7 +713,8 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "Six #10-32 x 3/8 in bolts (D4) in from the far side of the wheel, with threadlocker",
     "Second bearing (D5) seated in the bevel gear",
     "Axle tube (D6) through both bearings, a snap ring (D7) on each end",
-    "Tread (D1) on the wheel"
+    "Tread (D1) on the wheel",
+    "Greased the teeth of the 45T bevel gear"
    ]
   },
   "c_wheel_in": {
@@ -714,6 +723,15 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     "Wheel in with the 45T gear on the same side as the 15T gear",
     "1/4-20 x 3 in bolt (D8) through both forks and the axle tube",
     "Thin locknut (D9) on; wheel spins and the bevel gears mesh without binding"
+   ]
+  },
+  "c_final_check": {
+   "type": "checks",
+   "items": [
+    "Went over every bolt: all tight",
+    "No gaps between plates, spacers and bearings anywhere in the module",
+    "Turned each motor pinion by hand: the gears mesh along the whole train",
+    "Turned the wheel fork and spun the wheel by hand: both move smoothly"
    ]
   }
  },
@@ -733,7 +751,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
     <p class="sub">WCP Swerve X, Corner Mount, Flipped, Gears Below. One module from loose parts to a rolling wheel.</p>
   </div>
   <div data-widget="run"></div>
-  <div class="meta"><div>Bench with an arbor press &middot; draft 1.0, not yet checked on a real build</div></div>
+  <div class="meta"><div>Bench with an arbor press &middot; draft 1.1, not yet checked on a real build</div></div>
   <aside class="notes">Follows WCP's own guide for this variant, with pictures drawn from the team CAD. Anything marked "Not yet checked" has not been confirmed on a real module.</aside>
 </section>
 
@@ -744,6 +762,7 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <div class="sx-key"><span><i style="background:#D55E00"></i>Bolts, nuts, snap rings</span><span><i style="background:#0072B2"></i>Bearings</span><span><i style="background:#E69F00"></i>Gears and pinions</span><span><i style="background:#009E73"></i>Shafts and axle</span><span><i style="background:#F0E442"></i>Spacers and standoffs</span><span><i style="background:#CC79A7"></i>Plates, forks, wheel</span><span><i style="background:#56B4E9"></i>3D-printed parts</span><span><i style="background:#4D5560"></i>Motors and CANcoder</span><span><i style="background:#7A5C3E"></i>Belt and tread</span></div>
   <p class="note">This follows WCP's guide for this variant: <a href="https://docs.wcproducts.com/welcome/gearboxes/wcp-swerve-x/misc/other-configurations/getting-started/flipped-gears-below" target="_blank" rel="noopener">Swerve X, Other Configurations, Flipped (Gears Below)</a>. Each step links to the matching WCP step. Labels such as <b>G7</b> are the part names in the team's Fusion file.</p>
   <p class="note">WCP recommends Vibra-TITE VC-3 threadlocker on every bolt that threads into a tapped hole. WCP publishes no bolt torques.</p>
+  <p class="note">Grease every gear as it goes on. WCP names the grease, Lucas Red "N" Tacky, in its <a href="https://docs.wcproducts.com/welcome/gearboxes/wcp-swerve-x/general-info/maintenance" target="_blank" rel="noopener">Maintenance page</a>, but not how much to use.</p>
   <div data-widget="readyTools"></div>
   <div data-widget="readyChecks"></div>
   <aside class="notes">Planning ahead (WCP): the drive motor is the one farthest from the sensor shaft and the rotation motor is the closest. A 12T pinion is the largest that clears in this layout.</aside>
@@ -957,11 +976,30 @@ table.t2 .min input{width:76px;font-size:17px;padding:4px 6px}
   <aside class="notes">Parts are pulled apart along the direction they go on. Source: WCP step 14 plus the team CAD.</aside>
 </section>
 
+<section class="slide" data-id="final-check" data-title="Final check">
+  <div class="hd"><div class="chip">Final check &middot; <a href="https://docs.wcproducts.com/welcome/gearboxes/wcp-swerve-x/general-info/maintenance" target="_blank" rel="noopener">WCP maintenance, first-time assembly</a></div><h2 class="t">Go over the whole module before it leaves the bench</h2>
+    <p class="lede">These are WCP's first-time-assembly checks. Every gear should already be greased from the steps before.</p></div>
+  <figure class="sx-fig"><img src="img/overview.jpg" width="1219" height="1018" alt="The finished module with every part coloured by type" loading="lazy"></figure>
+  <div class="sx-key"><span><i style="background:#D55E00"></i>Bolts, nuts, snap rings</span><span><i style="background:#0072B2"></i>Bearings</span><span><i style="background:#E69F00"></i>Gears and pinions</span><span><i style="background:#009E73"></i>Shafts and axle</span><span><i style="background:#F0E442"></i>Spacers and standoffs</span><span><i style="background:#CC79A7"></i>Plates, forks, wheel</span><span><i style="background:#56B4E9"></i>3D-printed parts</span><span><i style="background:#4D5560"></i>Motors and CANcoder</span><span><i style="background:#7A5C3E"></i>Belt and tread</span></div>
+  <div data-widget="c_final_check"></div>
+  <aside class="notes">Source: WCP Swerve X docs, General Info, Maintenance. If anything binds, find it now; it is much harder once the module is on the robot.</aside>
+</section>
+
 <section class="slide" data-id="frame" data-title="Mounting to the frame">
   <div class="hd"><div class="chip">Next job</div><h2 class="t">The module is built. Mounting it to the frame is a separate job</h2>
     <p class="lede">The support plate is not part of the module: it goes on when the MAXTube is sandwiched between it and the module.</p></div>
   <p class="note">WCP covers corner mounting here: <a href="https://docs.wcproducts.com/welcome/gearboxes/wcp-swerve-x/applications/corner-mounting" target="_blank" rel="noopener">Swerve X, Corner Mounting</a>. The 3 in corner bolt (J3) fitted earlier is the one that takes a #10-32 nut on top of the support plate.</p>
   <p class="note sx-open"><b>Not yet checked on a real module:</b> which support plate the team uses in this orientation, and the bolts for it.</p>
+</section>
+
+<section class="slide" data-id="maintenance" data-title="Looking after it">
+  <div class="hd"><div class="chip">After the build &middot; <a href="https://docs.wcproducts.com/welcome/gearboxes/wcp-swerve-x/general-info/maintenance" target="_blank" rel="noopener">WCP maintenance</a></div><h2 class="t">Keep it greased, and tear it down once a year</h2>
+    <p class="lede">This is WCP's schedule. Nothing to tick here.</p></div>
+  <div class="cols-2">
+    <div class="card"><div class="k">General maintenance</div><h3>Whenever the module is checked</h3><p>Reapply grease to the gears. Look for excessive gear wear. Check everything still spins smoothly. Check the printed encoder parts and the belt for damage.</p></div>
+    <div class="card"><div class="k">Yearly</div><h3>Full teardown</h3><p>Take the module apart. Replace worn gears. Clean and inspect every component. Reassemble with new bolts and Vibra-TITE VC-3, and grease all gears.</p></div>
+  </div>
+  <p class="note sx-open"><b>WCP does not say:</b> how often general maintenance should happen, how much grease to use, how to clean or degrease parts, or anything about the bearings. Those are the team's calls.</p>
 </section>
 
 <section class="slide" data-id="cleanup" data-title="Clean up">
@@ -2664,4 +2702,5 @@ else start((window.claude && window.claude.hot && window.claude.hot.data) || nul
 </script>
 <!-- CHANGELOG
 - v1.0 (2026-11-09): First draft. Follows WCP's Flipped (Gears Below) steps 1 to 14 with images rendered from the team CAD; not yet checked on a real build.
+- v1.1 (2026-11-09): Added WCP's greasing (a check on every step that adds gears, grease in the tool list), a final-check step with WCP's first-time-assembly checks, and a maintenance schedule screen.
 -->
