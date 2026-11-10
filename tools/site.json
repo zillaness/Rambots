@@ -1,18 +1,18 @@
 {
   "_metadata": {
     "file": "site.json",
-    "version": "1.6.2",
+    "version": "1.7.0",
     "author": "Sam Cao",
     "created": "2026-10-14",
-    "last_updated": "2026-11-07",
+    "last_updated": "2026-11-09",
     "description": "Manifest of every item on the presentations site; tools/build_site.py builds the site from it.",
     "ai_update": "Update last_updated and version. Append to _changelog array. Bump an item's version when its file changes."
   },
   "title": "Presentations & Study Materials",
   "description": "Slide decks, study sheets, games, and handouts I've made for teaching robotics and engineering.",
   "footer": "Made by <a href=\"https://github.com/zillaness\">zillaness</a>",
-  "version": "1.6.2",
-  "updated": "2026-11-07",
+  "version": "1.7.0",
+  "updated": "2026-11-09",
   "topics": [
     "FRC Basics",
     "Design & CAD",
@@ -87,6 +87,26 @@
           "label": "Source",
           "url": "https://github.com/zillaness/DriveTypeShowdown"
         }
+      ]
+    },
+    {
+      "slug": "swerve-x-assembly",
+      "title": "Swerve X Module Build",
+      "topic": "FRC Basics",
+      "kind": "html",
+      "type": "handout",
+      "label": "Work instruction · draft",
+      "version": "1.0",
+      "description": "Step-by-step build of one WCP Swerve X module (Corner Mount, Flipped, Gears Below): exploded views drawn from the team CAD, parts colour-coded by type, a checklist on every step and a build log. Draft: not yet checked on a real build.",
+      "tags": [
+        "swerve",
+        "swerve x",
+        "wcp",
+        "drivetrain",
+        "assembly",
+        "work instruction",
+        "kraken",
+        "cancoder"
       ]
     },
     {
@@ -1127,6 +1147,11 @@
       "version": "1.6.2",
       "date": "2026-11-07",
       "note": "Study guides: glossary v1.2 (other names like Allen key and Loctite, every acronym spelled out, new words)."
+    },
+    {
+      "version": "1.7.0",
+      "date": "2026-11-09",
+      "note": "Added the Swerve X Module Build work instruction (draft)."
     }
   ]
 }

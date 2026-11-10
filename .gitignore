@@ -1,0 +1,5 @@
+# Work-instruction run logs can hold names; keep them out of this public branch
+*_log_*.csv
+*_run_*.csv
+*_summary_*.md
+*_decisions_*.md
